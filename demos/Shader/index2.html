@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Basic map types</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+    
+    
+    var canvas, ctx;
+ function test () {
+   zoom = 8;
+   lat = 47.968056;
+   lon = 7.909167;
+   
+   canvas = document.getElementById ("map-canvas");
+   ctx = canvas.getContext("2d");
+   
+   getTileNumber (lat, lon, zoom);
+//   console.log ("http://tile.openstreetmap.org/" + getTileNumber(lat, lon, zoom) + ".png");
+}
+
+
+function getTileNumber (lat, lon, zoom) {
+  var base_tilex = long2tile (lon, zoom), tilex;
+  var base_tiley = lat2tile (lat, zoom), tiley;
+  var dx = 0; dy = 0, i = 0, j = 0;
+  
+  tiley = base_tiley;
+  for (j = 0; j < 2; j++) {
+    dx = 0;
+    tilex = base_tilex;
+    for (i = 0; i < 3; i++) {
+      var img = document.createElement ('img');
+      img._x = dx + i * (256 + 0);
+      img._y = dy + j * 256;
+//      img.src = "http://tile.openstreetmap.org/" +  zoom + "/" + tilex + "/" + tiley + ".png";
+      img.src = "/openstreetmap/" +  zoom + "/" + tilex + "/" + tiley + ".png";
+//      img.src = "http://www.corsproxy.com/tile.openstreetmap.org/" +  zoom + "/" + tilex + "/" + tiley + ".png";
+      img.onload = function () {
+        ctx.drawImage (this, this._x, this._y, 256, 256);
+      }
+      tilex++;
+    }
+    tiley++;
+  }
+}
+
+function long2tile (lon, zoom) {
+  return (Math.floor((lon+180)/360*Math.pow(2,zoom)));
+}
+
+function lat2tile (lat, zoom)  {
+  return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom)));
+}   
+
+    </script>
+  </head>
+  <body onload="test()">
+    <canvas id="map-canvas" width=800 height=800 style="width:800px;height:800px;"></canvas>
+  </body>
+</html>
