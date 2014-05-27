@@ -670,11 +670,9 @@ Chronometer.prototype = {
    * @function
    * @private
    */
-  _clock : function ()
+  _clock : function (currTime)
   {
     if (this._state !== vs.core.Task.STARTED) return;
-    
-    var currTime = performance.now ();
     
     if (currTime >= this.__end_time)
     {
