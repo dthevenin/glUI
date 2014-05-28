@@ -575,6 +575,8 @@ var Chronometer = function (params) {
   if (params.begin) this._begin = params.begin;
 //  if (params.steps) this._steps = params.steps;
   if (params.repeat) this._repeat = params.repeat;
+  
+  this.__timings__ = [];
 }
 
 Chronometer.prototype = {
@@ -594,7 +596,9 @@ Chronometer.prototype = {
   __pause_time: 0,
   /** @protected */
   __end_time: 0,
-
+  /** @protected */
+  __timings__: null,
+  
   /**
    *  Starts the task
    *
@@ -622,6 +626,8 @@ Chronometer.prototype = {
       var begin = this._begin || 0;
       this.__time_decl = 0;
       this.__pause_time = 0;
+      
+      var now = performance.now ();
     
       // manage delayed chronometer
       if (begin > 0)
@@ -630,8 +636,11 @@ Chronometer.prototype = {
 
         this.__time_decl = 0;
         this.__repeat_dur = this._repeat;
-
         this._begin = 0;
+        this.__timings__.unshift (now + begin);
+        for (var i = 0; i < this.__repeat_dur; i++) {
+          this.__timings__.unshift (now + this._duration * (i + 1) + begin);
+        }
         return;
       }
     
@@ -646,6 +655,11 @@ Chronometer.prototype = {
       var r_dec = Math.floor (-begin / this._duration);
        
       this.__repeat_dur = this._repeat - r_dec;
+
+      this.__timings__.unshift (now - this.__time_decl);
+      for (var i = 0; i < this.__repeat_dur; i++) {
+        this.__timings__.unshift (now + this._duration * (i + 1) - this.__time_decl);
+      }
     }
     
     _start.call (this);
@@ -700,18 +714,22 @@ Chronometer.prototype = {
    */
   _start_clock: function ()
   {
-    if (this._state === vs.core.Task.PAUSED)
-    {
-      var pause_dur = performance.now () - this.__pause_time;
-      this.__start_time += pause_dur;
-      this.__end_time += pause_dur;
-      this._state = vs.core.Task.STARTED;
-      return;
-    }
+//     if (this._state === vs.core.Task.PAUSED)
+//     {
+//       var pause_dur = currTime - this.__pause_time;
+//       this.__start_time += pause_dur;
+//       this.__end_time += pause_dur;
+//       this._state = vs.core.Task.STARTED;
+//       return;
+//     }
     
-    this.__start_time = performance.now () - this.__time_decl;
+    this.__start_time = this.__timings__ [this.__repeat_dur];
     this.__time_decl = 0;
-    this.__end_time = this.__start_time + this._duration;
+    this.__end_time = this.__timings__ [this.__repeat_dur - 1];
+    
+     console.log ("__________ _start_clock _______");
+     console.log ("__start_time : " + this.__start_time);
+     console.log ("__end_time : " + this.__end_time);
     
     if (vs.util.isFunction (this.__param)) this.__clb = this.__param;
 
@@ -793,6 +811,7 @@ Chronometer.prototype = {
   {
     this._state = vs.core.Task.STOPPED;
     this.__pause_time = 0;
+    this.__timings__.length = 0;
 
     this._tick = 1;
     if (this.__clb) this.__clb (this._tick);
