@@ -572,7 +572,8 @@ var Chronometer = function (params) {
   this._state = vs.core.Task.STOPPED;
   
   if (params.duration) this._duration = params.duration;
-  if (params.begin) this._begin = params.begin;
+//  if (params.begin) this._begin = params.begin;
+  if (params.delay) this._delay = params.delay;
 //  if (params.steps) this._steps = params.steps;
   if (params.repeat) this._repeat = params.repeat;
 }
@@ -581,7 +582,9 @@ Chronometer.prototype = {
   /** @protected */
   _duration: 300,
   /** @protected */
-  _begin: 0,
+//  _begin: 0,
+  /** @protected */
+  _delay: 0,
   /** @protected */
 //  _steps: 0,
   /** @protected */
@@ -617,28 +620,34 @@ Chronometer.prototype = {
     
     if (this._state === vs.core.Task.STOPPED)
     {
-      var begin = this._begin || 0;
+//      var begin = this._begin || 0;
+      var delay = this._delay || 0;
       this.__time_decl = 0;
       this.__pause_time = 0;
     
       // manage delayed chronometer
-      if (begin > 0)
+//      if (begin + delay > 0)
+      if (delay > 0)
       {
-        vs.scheduleAction (_start.bind (this), begin);
+        vs.scheduleAction (_start.bind (this), delay);
+//        this._begin = 0;
+        this._delay = 0;
         return;
       }
     
       // manage ended chronometer before started
-      if (-begin > this._repeat * this._duration)
-      {
-        this.stop ();
-        return;
-      }
+//       if (-begin > this._repeat * this._duration)
+//       {
+//         this.stop ();
+//         return;
+//       }
     
-      this.__time_decl = -begin % this._duration;
-      var r_dec = Math.floor (-begin / this._duration);
-      
-      this.__repeat_dur = this._repeat - r_dec;
+//      this.__time_decl = -begin % this._duration;
+      this.__time_decl = 0;
+//       var r_dec = Math.floor (-begin / this._duration);
+//       
+//       this.__repeat_dur = this._repeat - r_dec;
+      this.__repeat_dur = this._repeat;
       this.__param = param;
     }
     
@@ -682,7 +691,7 @@ Chronometer.prototype = {
     else {
       // schedule a new tick
 //      this._tick = (currTime - this.__start_time - this.begin) / this._duration;
-      this._tick = (currTime - this.__start_time - this._begin) / this._duration;
+      this._tick = (currTime - this.__start_time) / this._duration;
       if (this._tick < 0) this._tick = 0;
       if (this._tick > 1) this._tick = 1;
       if (this.__clb) this.__clb (this._tick);
