@@ -485,7 +485,7 @@ var Vector1D = function (values) {
 util.extendClass (Vector1D, Trajectory);
   
 Vector1D.prototype.compute = function (tick) {
-  if (!vs.util.isNumber (tick)) return false;
+//  if (!vs.util.isNumber (tick)) return false;
 
   var
     nb_values = this._values.length - 1, // int [0, n]
@@ -502,13 +502,13 @@ Vector1D.prototype.compute = function (tick) {
 var Vector2D = function (values) {
   Trajectory.call (this);  
   this._values = values;
-  this.out = [2];
+  this.out = new glMatrixArrayType (2);
 }
 util.extendClass (Vector2D, Trajectory);
   
 Vector2D.prototype.compute = function (tick)
 {
-  if (!vs.util.isNumber (tick)) return false;
+//  if (!vs.util.isNumber (tick)) return false;
   
   var
     values = this._values,
@@ -535,13 +535,13 @@ Vector2D.prototype.compute = function (tick)
 var Vector3D = function (values) {
   Trajectory.call (this);  
   this._values = values;
-  this.out = [3];
+  this.out = new glMatrixArrayType (3);
 }
 util.extendClass (Vector3D, Trajectory);
   
 Vector3D.prototype.compute = function (tick)
 {
-  if (!vs.util.isNumber (tick)) return false;
+//  if (!vs.util.isNumber (tick)) return false;
   
   var
     values = this._values,
