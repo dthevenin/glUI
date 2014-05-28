@@ -800,7 +800,7 @@ Chronometer.prototype = {
     this._state = vs.core.Task.STOPPED;
     this.__pause_time = 0;
 
-    this._tick = 0;
+    this._tick = 1;
     if (this.__clb) this.__clb (this._tick);
     if (this.__clb_end) this.__clb_end ();
   },
