@@ -615,6 +615,8 @@ Chronometer.prototype = {
 //       else this._start_steps ();
     }
     
+    this.__param = param;
+
     if (this._state === vs.core.Task.STOPPED)
     {
       var begin = this._begin || 0;
@@ -625,6 +627,11 @@ Chronometer.prototype = {
       if (begin > 0)
       {
         vs.scheduleAction (_start.bind (this), begin);
+
+        this.__time_decl = 0;
+        this.__repeat_dur = this._repeat;
+
+        this._begin = 0;
         return;
       }
     
@@ -637,9 +644,8 @@ Chronometer.prototype = {
     
       this.__time_decl = -begin % this._duration;
       var r_dec = Math.floor (-begin / this._duration);
-      
+       
       this.__repeat_dur = this._repeat - r_dec;
-      this.__param = param;
     }
     
     _start.call (this);
@@ -681,8 +687,7 @@ Chronometer.prototype = {
     }
     else {
       // schedule a new tick
-//      this._tick = (currTime - this.__start_time - this.begin) / this._duration;
-      this._tick = (currTime - this.__start_time - this._begin) / this._duration;
+      this._tick = (currTime - this.__start_time) / this._duration;
       if (this._tick < 0) this._tick = 0;
       if (this._tick > 1) this._tick = 1;
       if (this.__clb) this.__clb (this._tick);
