@@ -573,7 +573,7 @@ var Chronometer = function (params) {
   
   if (params.duration) this._duration = params.duration;
   if (params.begin) this._begin = params.begin;
-  if (params.steps) this._steps = params.steps;
+//  if (params.steps) this._steps = params.steps;
   if (params.repeat) this._repeat = params.repeat;
 }
 
@@ -583,7 +583,7 @@ Chronometer.prototype = {
   /** @protected */
   _begin: 0,
   /** @protected */
-  _steps: 0,
+//  _steps: 0,
   /** @protected */
   _repeat: 1,
   /** @protected */
@@ -610,8 +610,9 @@ Chronometer.prototype = {
     // schedule a chronometer cycle
     function _start ()
     {
-      if (this._steps === 0) this._start_clock ();
-      else this._start_steps ();
+      this._start_clock ();
+//       if (this._steps === 0) this._start_clock ();
+//       else this._start_steps ();
     }
     
     if (this._state === vs.core.Task.STOPPED)
@@ -673,7 +674,7 @@ Chronometer.prototype = {
   _clock : function (currTime)
   {
     if (this._state !== vs.core.Task.STARTED) return;
-    
+
     if (currTime >= this.__end_time)
     {
       this._tick = 1;
@@ -692,7 +693,10 @@ Chronometer.prototype = {
     }
     else {
       // schedule a new tick
-      this._tick = (currTime - this.__start_time) / this._duration;
+//      this._tick = (currTime - this.__start_time - this.begin) / this._duration;
+      this._tick = (currTime - this.__start_time - this._begin) / this._duration;
+      if (this._tick < 0) this._tick = 0;
+      if (this._tick > 1) this._tick = 1;
       if (this.__clb) this.__clb (this._tick);
     }
   },
@@ -726,62 +730,62 @@ Chronometer.prototype = {
    * @function
    * @private
    */
-  _step : function ()
-  {
-    if (this._state !== vs.core.Task.STARTED) return;
-    
-    var step = (this._steps - this.__steps)
-    this.__steps --;
-
-    if (step === this._steps)
-    {
-      this._tick = 1;
-      if (this.__clb) this.__clb (this._tick);
-      if (this.__repeat_dur > 1)
-      {
-        this.__repeat_dur --;
-        this._start_steps ();
-      }
-      else
-      {
-        this._state = vs.core.Task.STOPPED;
-        if (this.__clb_end) this.__clb_end ();
-      }
-    }
-    else {
-      this._tick = step / (this._steps - 1);
-      if (this.__clb) this.__clb (this._tick);
-      var step_dur = this._duration / this._steps
-      vs.scheduleAction (this._step.bind (this), step_dur);
-    }
-  },
+//   _step : function ()
+//   {
+//     if (this._state !== vs.core.Task.STARTED) return;
+//     
+//     var step = (this._steps - this.__steps)
+//     this.__steps --;
+// 
+//     if (step === this._steps)
+//     {
+//       this._tick = 1;
+//       if (this.__clb) this.__clb (this._tick);
+//       if (this.__repeat_dur > 1)
+//       {
+//         this.__repeat_dur --;
+//         this._start_steps ();
+//       }
+//       else
+//       {
+//         this._state = vs.core.Task.STOPPED;
+//         if (this.__clb_end) this.__clb_end ();
+//       }
+//     }
+//     else {
+//       this._tick = step / (this._steps - 1);
+//       if (this.__clb) this.__clb (this._tick);
+//       var step_dur = this._duration / this._steps
+//       vs.scheduleAction (this._step.bind (this), step_dur);
+//     }
+//   },
   
   /**
    * @function
    * @private
    */
-  _start_steps: function ()
-  {
-    // step chronometer implement a simplistic time management and pause.
-    if (this._state === vs.core.Task.PAUSED)
-    {
-      this._state = vs.core.Task.STARTED;
-      this._step ();
-      return;
-    }
-
-    if (vs.util.isFunction (this.__param)) this.__clb = this.__param;
-
-    this._state = vs.core.Task.STARTED;
-    this._tick = 0;
-    if (this.__clb) this.__clb (this._tick);
-    
-    var step_dur = this._duration / this._steps;
-    this.__steps = this._steps - 1 - Math.floor (this.__time_decl / step_dur);
-    this.__time_decl = 0;
-    
-    vs.scheduleAction (this._step.bind (this), step_dur);
-  },
+//   _start_steps: function ()
+//   {
+//     // step chronometer implement a simplistic time management and pause.
+//     if (this._state === vs.core.Task.PAUSED)
+//     {
+//       this._state = vs.core.Task.STARTED;
+//       this._step ();
+//       return;
+//     }
+// 
+//     if (vs.util.isFunction (this.__param)) this.__clb = this.__param;
+// 
+//     this._state = vs.core.Task.STARTED;
+//     this._tick = 0;
+//     if (this.__clb) this.__clb (this._tick);
+//     
+//     var step_dur = this._duration / this._steps;
+//     this.__steps = this._steps - 1 - Math.floor (this.__time_decl / step_dur);
+//     this.__time_decl = 0;
+//     
+//     vs.scheduleAction (this._step.bind (this), step_dur);
+//   },
 
   /**
    *  Stops the task.<br />
