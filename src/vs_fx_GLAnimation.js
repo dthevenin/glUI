@@ -727,10 +727,6 @@ Chronometer.prototype = {
     this.__time_decl = 0;
     this.__end_time = this.__timings__ [this.__repeat_dur - 1];
     
-     console.log ("__________ _start_clock _______");
-     console.log ("__start_time : " + this.__start_time);
-     console.log ("__end_time : " + this.__end_time);
-    
     if (vs.util.isFunction (this.__param)) this.__clb = this.__param;
 
     this._state = vs.core.Task.STARTED;
