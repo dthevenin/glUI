@@ -916,10 +916,10 @@ GLView.prototype = {
   },
 
   __gl_update_animation : function (now) {
-    if (this.__animations.length) {
-      this.__animations.forEach (function (chrono) {
-        chrono._clock (now);
-      });
+    var i = 0, l = this.__animations.length, anim;
+    for (;i<l; i++) {
+      anim = this.__animations [i];
+      anim._clock (now);
     }
   },
 
