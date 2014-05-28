@@ -631,19 +631,7 @@ Chronometer.prototype = {
       // manage ended chronometer before started
       if (-begin > this._repeat * this._duration)
       {
-        this._tick = 1;
-        if (this.__clb) this.__clb (this._tick);
-
-        if (this.delegate && this.delegate.taskDidEnd) {
-          try {
-            this.delegate.taskDidEnd (this);
-          }
-          catch (e) {
-            if (e.stack) console.log (e.stack)
-            console.error (e);
-          }
-        }
-      
+        this.stop ();
         return;
       }
     
@@ -802,6 +790,16 @@ Chronometer.prototype = {
 
     this._tick = 1;
     if (this.__clb) this.__clb (this._tick);
+
+    if (this.delegate && this.delegate.taskDidEnd) {
+      try {
+        this.delegate.taskDidEnd (this);
+      }
+      catch (e) {
+        if (e.stack) console.log (e.stack)
+        console.error (e);
+      }
+    }
     if (this.__clb_end) this.__clb_end ();
   },
 
