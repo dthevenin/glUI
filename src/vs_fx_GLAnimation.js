@@ -704,7 +704,8 @@ Chronometer.prototype = {
       return;
     }
     
-    this.__start_time = performance.now () - this.__time_decl; this.__time_decl = 0
+    this.__start_time = performance.now () - this.__time_decl;
+    this.__time_decl = 0;
     this.__end_time = this.__start_time + this._duration;
     
     if (vs.util.isFunction (this.__param)) this.__clb = this.__param;
