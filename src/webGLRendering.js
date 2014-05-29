@@ -572,7 +572,7 @@ function render () {
       if (alpha === 0) {
         return;
       }
-      
+
       var boundaries = boundaries_stack [level];
       /*================= Update view matrixes ================= */ 
       var o_matrix = gl_view.__gl_matrix;
@@ -643,8 +643,7 @@ function render () {
       entry [2] = alpha;
       
       // End culling algorithm
-      
-      
+
       // manage children
       children = gl_view.__children;
       l = children.length;
