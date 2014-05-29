@@ -552,12 +552,12 @@ function render () {
   // Configure view and projection matrix of programes
   updateProgramsMatrix ();
   
-  function setupGLViews (now) {
+  function calculateViewsInFrustum (now) {
     var apps = vs.Application_applications, key;
     gl_stack_length = 0;
     gl_views_index = 0;
 
-    function _getGLViews (gl_view, p_transform, new_p_matrix, p_alpha, level) {
+    function _calculateViewsInFrustum (gl_view, p_transform, new_p_matrix, p_alpha, level) {
       var key, i, l, child, children, style, alpha;
       
       if (!gl_view._visible && !gl_view.__is_hidding) {
@@ -651,7 +651,7 @@ function render () {
       for (i = 0; i < l; i++) {
         child = children [i];
         if (child.__gl_object) {
-          _getGLViews (child, p_matrix, new_p_matrix, alpha, level + 1);
+          _calculateViewsInFrustum (child, p_matrix, new_p_matrix, alpha, level + 1);
         }
       }
     }
@@ -664,7 +664,7 @@ function render () {
   
     for (key in apps) {
       var app = apps[key];
-      _getGLViews (app, null, false, 1, 0);
+      _calculateViewsInFrustum (app, null, false, 1, 0);
     }
     
     gl_stack_length = gl_views_index;
@@ -905,7 +905,7 @@ function render () {
       cancelAnimationFrame (next_rendering_id);
     }
 
-    setupGLViews (now);
+    calculateViewsInFrustum (now);
     GLView.__should_render = false;
     
 //    console.log (gl_stack_length);
