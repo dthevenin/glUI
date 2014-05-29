@@ -46,25 +46,22 @@ function GLView (config)
   this.__pointer_recognizers = [];
   
   this.__gl_matrix = mat4.create ();
-  mat4.identity (this.__gl_matrix);
-  
   this.__gl_p_matrix = mat4.create ();
   this.__gl_m_matrix = mat4.create ();
   
-
   this.__gl_id = __unique_gl_id ++;
   GL_VIEWS [this.__gl_id] = this;
   
   // contains position vertices
   this.__gl_vertices = new Float32Array (12);
   this.__gl_vertices_buffer = gl_ctx.createBuffer ();
+  
   this.__vertex_1 = vec3.create ();
   this.__vertex_2 = vec3.create ();
   this.__vertex_3 = vec3.create ();
   this.__vertex_4 = vec3.create ();
 
   this.__children = [];
-  this._pointerevent_handlers = [];
   
   this.view = this;
 
@@ -120,12 +117,6 @@ GLView.prototype = {
    * @type {boolean}
    */
   _visible: true,
-
-  /**
-   * @protected
-   * @type {Object}
-   */
-  _pointerevent_handlers: null,
 
   /**
    *
@@ -259,6 +250,7 @@ GLView.prototype = {
     this._translation [1] = 0;
     this._translation [2] = 0;
     
+    this.__should_update_gl_vertices = true;
     this.__should_update_gl_matrix = true;
   },
 
@@ -564,110 +556,6 @@ GLView.prototype = {
     }
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /**
-   * @name vs.ui.View#clone
-   * @function
-   * @private
-   *
-   * @param {vs.core.Object} obj The cloned object
-   * @param {Object} map Map of cloned objects
-   */
-  clone : function (config, cloned_map)
-  {
-//     function _getPaths (root, nodes)
-//     {
-//       var paths = [], i = 0, l = nodes.length, node;
-//       for (; i < l; i++)
-//       {
-//         node = nodes[i];
-//         paths.push ([node, _getPath (root, node)]);
-//       }
-//       return paths;
-//     }
-// 
-//     function _evalPaths (root, paths, clonedViews)
-//     {
-//       var nodes = [], i = 0, l = paths.length, path;
-//       for (; i < l; i++)
-//       {
-//         path = paths[i];
-//         if (!path.id) path.id = core.createId ();
-//         clonedViews [path[0].id] = _evalPath (root, path[1]);
-//       }
-//     }
-// 
-//     function makeClonedNodeMap (comp, clonedViews)
-//     {
-//       var
-//         clonedNode = comp.view.cloneNode (true),
-//         nodes = [], paths;
-//         
-//       function manageChild (child)
-//       {
-//         if (child.__gui_object__hack_view__)
-//         { nodes.push (child.__gui_object__hack_view__); }
-//         else if (child.view) { nodes.push (child.view); }
-//       
-//         retreiveChildNodes (child);
-//       }
-//         
-//       function retreiveChildNodes (comp)
-//       {
-//         var key, a, i, l, child;
-//         for (key in comp.__children)
-//         {
-//           a = comp.__children [key];
-//           if (!a) { continue; }
-//           
-//           if (util.isArray (a))
-//           {
-//             l = a.length;
-//             for (i = 0; i < l; i++)
-//             {
-//               manageChild (a [i]);
-//             }
-//           }
-//           else manageChild (a);
-//         }
-//       }
-//       
-//       retreiveChildNodes (comp);
-//       
-//       paths = _getPaths (comp.view, nodes);
-//       _evalPaths (clonedNode, paths, clonedViews);
-//       
-//       return clonedNode;
-//     }
-    
-    if (!cloned_map) { cloned_map = {}; }
-//    if (!cloned_map.__views__) { cloned_map.__views__ = {}; }    
-    if (!config) { config = {}; }
-//     if (!config.node)
-//     {
-//       var node = cloned_map.__views__ [this.view.id];
-//       if (!node)
-//       {
-//         node = makeClonedNodeMap (this, cloned_map.__views__);
-//       }
-//       config.node = node;
-//     }
-
-    return GLEventSource.prototype.clone.call (this, config, cloned_map);
-  },
-
   /**
    * @name vs.ui.View#_clone
    * @function
@@ -681,7 +569,6 @@ GLView.prototype = {
     var anim, a, key, child, l, hole, cloned_comp;
 
     GLEventSource.prototype._clone.call (this, obj, cloned_map);
-
 
     if (this._style) {
       if (!obj._style) {
@@ -715,30 +602,6 @@ GLView.prototype = {
       obj.add (cloned_child);
     });
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   /**
    *  Hides the GUI Object
