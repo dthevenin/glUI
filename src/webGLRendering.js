@@ -530,12 +530,13 @@ function initWebGLRendering () {
 
 var rendering = true;
 var next_rendering_id = 0;
+var gl_stack_length = 0;
+var gl_stack_for_renter = [1024];
 
 function render () {
 
   var v1, v2, v3, v4, v_temp = vec3.create ();
-    
-  var gl_stack_for_renter = [1024], gl_stack_length = 0;
+
   for (var i = 0; i < 1024; i ++) {
     gl_stack_for_renter [i] = new Array (3);
     // [0] - rendering type
