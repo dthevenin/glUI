@@ -28,7 +28,7 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
     setupTrajectory (trajs, comp, property, animation._trajectories [property]);
   }
   
-  animation.steps = Math.floor (animation.steps);
+  animation.steps = animation.steps | 0;
   if (animation.steps <= 1) animation.steps = 0;
   
   var chrono = new Chronometer (animation)
@@ -490,7 +490,7 @@ Vector1D.prototype.compute = function (tick) {
   var
     nb_values = this._values.length - 1, // int [0, n]
     ti = tick * nb_values, // float [0, n]
-    index = Math.floor (ti), // int [0, n]
+    index = ti | 0, // int [0, n]
     d = ti - index, // float [0, 1]
     out = getValuesIndex (this._values, tick, function (v1, v2, d) {
       return v1 + (v2 - v1) * d;
@@ -514,7 +514,7 @@ Vector2D.prototype.compute = function (tick)
     values = this._values,
     nb_values = values.length - 1, // int [0, n]
     ti = tick * nb_values, // float [0, n]
-    index = Math.floor (ti), // int [0, n]
+    index = ti | 0, // int [0, n]
     d = ti - index, // float [0, 1]
     out = this.out,
     result = getValuesIndex (values, tick, function (v1, v2, d) {
@@ -547,7 +547,7 @@ Vector3D.prototype.compute = function (tick)
     values = this._values,
     nb_values = values.length - 1, // int [0, n]
     ti = tick * nb_values, // float [0, n]
-    index = Math.floor (ti), // int [0, n]
+    index = ti | 0, // int [0, n]
     d = ti - index, // float [0, 1]
     out = this.out,
     result = getValuesIndex (values, tick, function (v1, v2, d) {
@@ -652,7 +652,7 @@ Chronometer.prototype = {
       }
     
       this.__time_decl = -begin % this._duration;
-      var r_dec = Math.floor (-begin / this._duration);
+      var r_dec = (-begin / this._duration) | 0;
        
       this.__repeat_dur = this._repeat - r_dec;
 

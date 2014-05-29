@@ -763,9 +763,9 @@ function render () {
     var r = 0, g = 0, b = 0, a = 1;
     
     r = (gl_id % 256) / 255;
-    gl_id = Math.floor (gl_id / 255);
+    gl_id = (gl_id / 255) | 0;
     g = (gl_id % 256) / 255;
-    gl_id = Math.floor (gl_id / 255);
+    gl_id = (gl_id / 255) | 0;
     b = (gl_id % 256) / 255;
  
     color_id_array [0] = r;
