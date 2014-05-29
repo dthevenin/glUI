@@ -95,96 +95,6 @@ GLView.__should_render = true;
 GLView.__nb_animation = 0;
 
 /********************************************************************
-                    Layout constant
-*********************************************************************/
-
-/**
- * No particular layout
- * @see vs.ui.GLView#layout
- * @name vs.ui.GLView.DEFAULT_LAYOUT
- * @const
- */
-GLView.DEFAULT_LAYOUT = null;
-
-/**
- * Horizontal layout
- * @see vs.ui.GLView#layout
- * @name vs.ui.GLView.HORIZONTAL_LAYOUT
- * @const
- */
-GLView.HORIZONTAL_LAYOUT = 'horizontal';
-
-/**
- * Vertical layout
- * @see vs.ui.GLView#layout
- * @name vs.ui.GLView.VERTICAL_LAYOUT
- * @const
- */
-GLView.VERTICAL_LAYOUT = 'vertical';
-
-/**
- * Absolute layout
- * @see vs.ui.GLView#layout
- * @name vs.ui.GLView.ABSOLUTE_LAYOUT
- * @const
- */
-GLView.ABSOLUTE_LAYOUT = 'absolute';
-
-/**
- * Html flow layout
- * @see vs.ui.GLView#layout
- * @name vs.ui.GLView.FLOW_LAYOUT
- * @const
- */
-GLView.FLOW_LAYOUT = 'flow';
-
-/********************************************************************
-                    Magnet contants
-*********************************************************************/
-
-/**
- * No magnet
- * @name vs.ui.GLView.MAGNET_NONE
- * @const
- */
-GLView.MAGNET_NONE = 0;
-
-/**
- * The widget will be fixed on left
- * @name vs.ui.GLView.MAGNET_LEFT
- * @const
- */
-GLView.MAGNET_LEFT = 3;
-
-/**
- * The widget will be fixed on bottom
- * @name vs.ui.GLView.MAGNET_BOTTOM
- * @const
- */
-GLView.MAGNET_BOTTOM = 2;
-
-/**
- * The widget will be fixed on top
- * @name vs.ui.GLView.MAGNET_TOP
- * @const
- */
-GLView.MAGNET_TOP = 1;
-
-/**
- * The widget will be fixed on right
- * @name vs.ui.GLView.MAGNET_RIGHT
- * @const
- */
-GLView.MAGNET_RIGHT = 4;
-
-/**
- * The widget will centered
- * @name vs.ui.GLView.MAGNET_CENTER
- * @const
- */
-GLView.MAGNET_CENTER = 5;
-
-/********************************************************************
 
 *********************************************************************/
 
@@ -227,12 +137,6 @@ GLView.prototype = {
    * @type {boolean}
    */
   _visible: true,
-
-  /**
-   * @protected
-   * @type {number}
-   */
-  _magnet: GLView.MAGNET_NONE,
 
   /**
    * @private
@@ -372,21 +276,6 @@ GLView.prototype = {
     this._translation [0] = 0;
     this._translation [1] = 0;
     this._translation [2] = 0;
-  },
-
-  /**
-   * @protected
-   * @function
-   */
-  componentDidInitialize : function ()
-  {
-    core.EventSource.prototype.componentDidInitialize.call (this);
-
-    if (this._magnet === GLView.MAGNET_CENTER)
-    {
-      this._updateSizeAndPos ();
-//      this._applyTransformation ();
-    }
   },
 
   /**
@@ -686,18 +575,6 @@ GLView.prototype = {
 /********************************************************************
                   GUI Utilities
 ********************************************************************/
-
-  /**
-   * @protected
-   * @function
-   */
-  _setMagnet : function (code)
-  {
-    this._magnet = code;
-    
-    this._updateSizeAndPos ();
- //   this._applyTransformation ();
-  },
 
   /**
    * @protected
@@ -1435,22 +1312,6 @@ util.defineClassProperties (GLView, {
       this._autosizing [1] = v [1];
 
       this._updateSizeAndPos ();
-    }
-  },
-
-  'magnet': {
-
-    /**
-     * Set magnet
-     * @name vs.ui.GLView#magnet
-     *
-     * @type Number
-     */
-    set : function (code)
-    {
-      if (this._magnet === code) return;
-      if (!util.isNumber (code) || code < 0 || code > 5) return;
-      this._setMagnet (code);
     }
   },
 
