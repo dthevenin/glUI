@@ -298,14 +298,7 @@ GLView.prototype = {
    * @protected
    * @type {number}
    */
-  _rotation : null,
-
-   /**
-   * @protected
-   * @type {String}
-   */
-  _layout: null,
-  
+  _rotation : null,  
   
   _constraint: null,
   _style: null,
@@ -321,20 +314,6 @@ GLView.prototype = {
    * @type {vs.CSSMatrix}
    */
   _transforms_stack: null,
-
-  /**
-   * @protected
-   * @type {vs.fx.Animation}
-   */
-  _show_animation: null,
-  __show_clb: null,
-
-  /**
-   * @protected
-   * @type {vs.fx.Animation}
-   */
-  _hide_animation: null,
-  __hide_clb: null,
 
   /*****************************************************************
    *
@@ -796,14 +775,7 @@ GLView.prototype = {
     this.__is_hidding = false;
     this.__is_showing = true;
 
-    if (this._show_animation) {
-      this._show_animation.process (this, function () {
-        this._show_object (clb);
-      }, this);
-    }
-    else {
-      this._show_object (clb);
-    }
+    this._show_object (clb);
   },
 
   /**
@@ -828,91 +800,11 @@ GLView.prototype = {
     var self = this;
 
     this.propertyChange ();
-    if (this.__show_clb || clb) {
-      if (this._show_animation) {
-        if (this.__show_clb) this.__show_clb.call (this);
-        if (clb) clb.call (this);
-      }
-      else {
-        if (this.__show_clb) {
-          vs.scheduleAction (function () {self.__show_clb.call (self);});
-        }
-        if (clb) {
-          vs.scheduleAction (function () {clb.call (self);});
-        }
+    if (clb) {
+      if (clb) {
+        vs.scheduleAction (function () {clb.call (self);});
       }
     }
-  },
-
-  /**
-   *  Set the animation used when the view will be shown.
-   *  <br/>
-   * Options :
-   * <ul>
-   *   <li /> duration: animation duration for all properties
-   *   <li /> timing: animation timing for all properties
-   *   <li /> origin: Specifies the number of times an animation iterates.
-   *   <li /> iterationCount: Sets the origin for the transformations
-   *   <li /> delay: The time to begin executing an animation after it
-   *          is applied
-   * </ul>
-   *
-   *  Ex:
-   *  @example
-   *  myComp.setShowAnimation ([['translate', '0,0,0'], ['opacity', '1']]);
-   *
-   *  @example
-   *  myAnim = new ABTranslateAnimation (50, 50);
-   *  myComp.setShowAnimation (myAnim);
-   *
-   * @name vs.ui.GLView#setShowAnimation
-   * @function
-   *
-   * @param animations {Array|vs.fx.Animation} array of animation <property,
-   *        value>, or an vs.fx.Animation object
-   * @param options {Object} list of animation options
-   * @param clb {Function} the method to call when the animation end
-   * @return {String} return the identifier of the animation process. You can
-   *       use it to stop the animation.
-   */
-  setShowAnimation:function (animations, options, clb)
-  {
-    if (typeof animations === "undefined" || animations === null)
-    {
-      this._show_animation = null;
-    }
-    else
-    {
-      if (animations instanceof vs.fx.Animation)
-      {
-        this._show_animation = animations.clone ();
-      }
-      else if (util.isArray (animations))
-      {
-        this._show_animation = new vs.fx.Animation ();
-        this._show_animation.setAnimations (animations);
-      }
-      else
-      {
-        console.warn ('vs.ui.GLView.setShowAnimation invalid parameters!');
-        return;
-      }
-      if (options)
-      {
-        if (options.duration)
-        { this._show_animation.duration = options.duration; }
-        if (options.timing)
-        { this._show_animation.timing = options.timing; }
-        if (options.origin)
-        { this._show_animation.origin = options.origin; }
-        if (options.iterationCount)
-        { this._show_animation.iterationCount = options.iterationCount; }
-        if (options.delay)
-        { this._show_animation.delay = options.delay; }
-      }
-    }
-    if (util.isFunction (clb)) { this.__show_clb = clb; }
-    else { this.__show_clb = clb; }
   },
 
   __gl_update_animation : function (now) {
@@ -1041,27 +933,6 @@ GLView.prototype = {
 
     core.EventSource.prototype._clone.call (this, obj, cloned_map);
 
-    // animations clone
-//     if (this._show_animation)
-//     {
-//       anim = cloned_map [this._show_animation._id];
-//       if (anim)
-//         obj._show_animation = anim;
-//       else
-//         obj._show_animation = this._show_animation.clone ();
-// 
-//       obj.__show_clb = this.__show_clb;
-//     }
-//     if (this._hide_animation)
-//     {
-//       anim = cloned_map [this._hide_animation._id];
-//       if (anim)
-//         obj._hide_animation = anim;
-//       else
-//         obj._hide_animation = this._hide_animation.clone ();
-// 
-//       obj.__hide_clb = this.__hide_clb;
-//     }
 
     if (this._style) {
       if (!obj._style) {
@@ -1136,15 +1007,8 @@ GLView.prototype = {
     
     this.__is_showing = false;
     this.__is_hidding = true;
-    
-    if (this._hide_animation) {
-      this._hide_animation.process (this, function () {
-        this._hide_object (clb);
-      }, this);
-    }
-    else {
-      this._hide_object (clb);
-    }
+
+    this._hide_object (clb);
   },
 
   /**
@@ -1165,92 +1029,12 @@ GLView.prototype = {
     if (!this.__is_hidding) { return; }
     
     this.__is_hidding = false;
-    if (this.__hide_clb || clb) {
-      if (this._show_animation) {
-        if (this.__hide_clb) this.__hide_clb.call (this);
-        if (clb) clb.call (this);
-      }
-      else {
-        if (this.__hide_clb) {
-          vs.scheduleAction (function () {self.__hide_clb.call (self);});
-        }
+    if (clb) {
         if (clb) {
           vs.scheduleAction (function () {clb.call (self);});
         }
-      }
     }
     this.propertyChange ();
-  },
-
-  /**
-   *  Set the animation used when the view will be hidden.
-   * <br/>
-   * Options :
-   * <ul>
-   *   <li /> duration: animation duration for all properties
-   *   <li /> timing: animation timing for all properties
-   *   <li /> origin: Specifies the number of times an animation iterates.
-   *   <li /> iterationCount: Sets the origin for the transformations
-   *   <li /> delay: The time to begin executing an animation after it
-   *          is applied
-   * </ul>
-   *
-   *  Ex:
-   *  @example
-   *  myComp.setHideAnimation ([['translate', '100px,0,0'], ['opacity', '0']], options);
-   *
-   *  @example
-   *  myAnim = new ABTranslateAnimation (50, 50);
-   *  myComp.setHideAnimation (myAnim, t);
-   *
-   * @name vs.ui.GLView#setHideAnimation
-   * @function
-   *
-   * @param animations {Array|vs.fx.Animation} array of animation <property,
-   *        value>, or an vs.fx.Animation object
-   * @param options {Object} list of animation options
-   * @param clb {Function} the method to call when the animation end
-   * @return {String} return the identifier of the animation process. You can
-   *       use it to stop the animation.
-   */
-  setHideAnimation: function (animations, options, clb)
-  {
-    if (typeof animations === "undefined" || animations === null)
-    {
-      this._hide_animation = null;
-    }
-    else
-    {
-      if (animations instanceof vs.fx.Animation)
-      {
-        this._hide_animation = animations.clone ();
-      }
-      else if (util.isArray (animations))
-      {
-        this._hide_animation = new vs.fx.Animation ();
-        this._hide_animation.setAnimations (animations);
-      }
-      else
-      {
-        console.warn ('vs.ui.GLView.setHideAnimation invalid parameters!');
-        return;
-      }
-      if (options)
-      {
-        if (options.duration)
-        { this._hide_animation.duration = options.duration; }
-        if (options.timing)
-        { this._hide_animation.timing = options.timing; }
-        if (options.origin)
-        { this._hide_animation.origin = options.origin; }
-        if (options.iterationCount)
-        { this._hide_animation.iterationCount = options.iterationCount; }
-        if (options.delay)
-        { this._hide_animation.delay = options.delay; }
-      }
-    }
-    if (util.isFunction (clb)) { this.__hide_clb = clb; }
-    else { this.__hide_clb = clb; }
   },
 
 /********************************************************************
@@ -2000,64 +1784,6 @@ util.defineClassProperties (GLView, {
     {
       return this._transform_origin.slice ();
     }
-  },
-
-  'showAnimmation': {
-
-    /**
-     * Set the Animation when the view is shown
-     * @name vs.ui.GLView#showAnimmation
-     * @type {vs.fx.Animation}
-     */
-    set : function (v)
-    {
-      this.setShowAnimation (v);
-    }
-  },
-
-  'hideAnimation': {
-
-    /**
-     * Set the Animation when the view is hidden
-     * @name vs.ui.GLView#hideAnimation
-     * @type {vs.fx.Animation}
-     */
-    set : function (v)
-    {
-      this.setHideAnimation (v);
-    }
-  },
-
-  'layout': {
-
-    /**
-     * This property allows you to specify a layout for the children
-     * <p>
-     * <ul>
-     *    <li /> vs.ui.GLView.DEFAULT_LAYOUT
-     *    <li /> vs.ui.GLView.HORIZONTAL_LAYOUT
-     *    <li /> vs.ui.GLView.VERTICAL_LAYOUT
-     *    <li /> vs.ui.GLView.ABSOLUTE_LAYOUT
-     *    <li /> vs.ui.GLView.FLOW_LAYOUT
-     * </ul>
-     * @name vs.ui.GLView#layout
-     * @type String
-     */
-    set : function (v)
-    {
-      if (v !== GLView.HORIZONTAL_LAYOUT &&
-          v !== GLView.DEFAULT_LAYOUT &&
-          v !== GLView.ABSOLUTE_LAYOUT &&
-          v !== GLView.VERTICAL_LAYOUT &&
-          v !== GLView.FLOW_LAYOUT && v)
-      {
-        console.error ("Unsupported layout '" + v + "'!");
-        return;
-      }
-
-      if (!v || v.indexOf ("_layout") !== -1) this._layout = v;
-      else this._layout = v + "_layout";
-    },
   }
 });
 
