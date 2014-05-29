@@ -94,6 +94,8 @@ vs_gl_engine.js:
 	$(CAT) vs_ui_GLConstraint.js >> $@
 	$(CAT) vs_ui_GLColor.js >> $@
 	$(CAT) vs_ui_GLStyle.js >> $@
+	$(CAT) MainLoop.js >> $@
+	$(CAT) vs_core_GLEventSource.js >> $@
 	$(CAT) vs_ui_GLView.js >> $@
 	$(CAT) vs_ui_GLApplication.js >> $@
 	$(CAT) vs_ui_GLText.js >> $@
