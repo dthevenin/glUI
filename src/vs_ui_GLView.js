@@ -76,7 +76,7 @@ function GLView (config)
   this._pointer_move = [];
   this._pointer_end = [];
 
-  // position and size : according autosizing rules, can change
+  // position and size : according constraints rules, can change
   // automaticaly if the parent container is resized
   this._position = vec3.create ();
   this._size = vec2.create ();
@@ -85,9 +85,6 @@ function GLView (config)
   this._translation = vec3.create ();
   this._transform_origin = vec2.create ();
 
-  // rules for positionning a object
-  this._autosizing = [4,4];
-  
   this.__animations = [];
 }
 
@@ -129,12 +126,6 @@ GLView.prototype = {
    * @type {boolean}
    */
   _visible: true,
-
-  /**
-   * @private
-   * @type {Array.<int>}
-   */
-  _autosizing: null,
 
   /**
    * @protected
@@ -1133,30 +1124,6 @@ util.defineClassProperties (GLView, {
     }
   },
 
-  'autosizing': {
-
-    /**
-     * Set size and position behavior according parent size.
-     * @name vs.ui.GLView#autosizing
-     *
-     * @type Array
-     */
-    set : function (v)
-    {
-      if (!v) { return; }
-      if ((!util.isArray (v) && !(v instanceof Float32Array)) || v.length != 2) { return; }
-      if (!util.isNumber (v[0]) || !util.isNumber(v[1])) { return; }
-
-      if (this._autosizing [0] === v [0] && this._autosizing [1] === v [1])
-      { return; }
-
-      this._autosizing [0] = v [0];
-      this._autosizing [1] = v [1];
-
-      this._updateSizeAndPos ();
-    }
-  },
-
   'visible': {
 
     /**
@@ -1313,7 +1280,6 @@ util.defineClassProperties (GLView, {
     }
   },
 
-
   'rotation': {
 
     /**
@@ -1357,7 +1323,6 @@ util.defineClassProperties (GLView, {
       return this._scaling;
     }
   },
-
 
   'opacity': {
 
