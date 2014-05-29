@@ -1303,18 +1303,14 @@ GLView.prototype = {
     matrix = this.__gl_matrix;
     // apply current transformation
     mat4.identity (matrix);
-    mat4.translate (matrix, [
-      tx + this.__view_t_x,
-      ty + this.__view_t_y,
-      0]
-    );
+    mat4.translateXYZ (matrix, tx + this.__view_t_x, ty + this.__view_t_y, 0);
   
     if (rot[0]) mat4.rotateX (matrix, rot[0] * Math.PI / 180);
     if (rot[1]) mat4.rotateY (matrix, rot[1] * Math.PI / 180);
     if (rot[2]) mat4.rotateZ (matrix, rot[2] * Math.PI / 180);
     
-    mat4.scale (matrix, [this._scaling, this._scaling, 1]);
-    mat4.translate (matrix, [-tx, -ty, 0]);
+    mat4.scaleXY (matrix, this._scaling);
+    mat4.translateXYZ (matrix, -tx, -ty, 0);
 
     /*====================================================== */
     // Update vertices vectors for the culling algorithm
