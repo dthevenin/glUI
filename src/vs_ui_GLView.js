@@ -258,6 +258,8 @@ GLView.prototype = {
     this._translation [0] = 0;
     this._translation [1] = 0;
     this._translation [2] = 0;
+    
+    this.__should_update_gl_matrix = true;
   },
 
   /**
@@ -481,28 +483,8 @@ GLView.prototype = {
       this._constraint.__update_view (this);
     }
 
-    this.__update_gl_vertices ();
-    this.__update_transform_gl_matrix ();
-  },
-  
-  __update_gl_vertices : function () {
-    var
-      obj_size = this._size,
-      obj_pos = this._position,
-      x = obj_pos[0],
-      y = obj_pos[1],
-      w = obj_size [0],
-      h = obj_size [1],
-      m = this.__gl_vertices;
-          
-    // setup position vertices
-    m[0] = x; m[1] = y; m[2] = 0;
-    m[3] = x; m[4] = y + h; m[5] = 0;
-    m[6] = x + w; m[7] = y; m[8] = 0;
-    m[9] = x + w; m[10] = y + h; m[11] = 0;
-    
-    gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this.__gl_vertices_buffer);
-    gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW); 
+    this.__should_update_gl_vertices = true;
+    this.__should_update_gl_matrix = true;
   },
   
 /********************************************************************
@@ -851,7 +833,7 @@ GLView.prototype = {
    * @name vs.ui.GLView#_didEnable
    * @protected
    */
-   _didEnable : function () {},
+  _didEnable : function () {},
 
   /*****************************************************************
    *                Animation methods
@@ -899,7 +881,7 @@ GLView.prototype = {
     this._translation[1] = y;
     this._translation[2] = z;
 
-    this.__update_transform_gl_matrix ();
+    this.__should_update_gl_matrix = true;
   },
 
   /**
@@ -921,7 +903,7 @@ GLView.prototype = {
     this._rotation [1] = ry;
     this._rotation [2] = rz;
 
-    this.__update_transform_gl_matrix ();
+    this.__should_update_gl_matrix = true;
   },
 
   /**
@@ -942,70 +924,8 @@ GLView.prototype = {
 
     this._scaling = s;
 
-    this.__update_transform_gl_matrix ();
-  },
-
-  /**
-   * @protected
-   * @function
-   */
-  __update_transform_gl_matrix: function ()
-  {
-    var
-      matrix,
-      pos = this._position,
-      tx = this._transform_origin [0] + pos [0],
-      ty = this._transform_origin [1] + pos [1],
-      rot = this._rotation,
-      trans = this._translation,
-      m = this.__gl_vertices;
-      
-    matrix = this.__gl_matrix;
-    // apply current transformation
-    mat4.identity (matrix);
-    mat4.translateXYZ (matrix, tx + trans[0], ty + trans[1], trans[2]);
-  
-    if (rot[0]) mat4.rotateX (matrix, rot[0] * angle2rad);
-    if (rot[1]) mat4.rotateY (matrix, rot[1] * angle2rad);
-    if (rot[2]) mat4.rotateZ (matrix, rot[2] * angle2rad);
-    
-    mat4.scaleXY (matrix, this._scaling);
-    mat4.translateXYZ (matrix, -tx, -ty, 0);
-
-    /*====================================================== */
-    // Update vertices vectors for the culling algorithm
-    this.__update_envelop_vertices ();
-
-    this.__invalid_matrixes = true;
-    GLView.__should_render = true;
-  },
-  
-  /**
-   * Update vertices vectors for the culling algorithm
-   * @protected
-   * @function
-   */
-  __update_envelop_vertices : function ()
-  {
-    var
-      matrix = this.__gl_matrix,
-      obj_size = this._size,
-      obj_pos = this._position,
-      x = obj_pos[0],
-      y = obj_pos[1],
-      w = obj_size [0],
-      h = obj_size [1];
-
-    vec3.set_p (x    , y    , 0, this.__vertex_1);
-    vec3.set_p (x    , y + h, 0, this.__vertex_2);
-    vec3.set_p (x + w, y    , 0, this.__vertex_3);
-    vec3.set_p (x + w, y + h, 0, this.__vertex_4);
-    
-    mat4.multiplyVec3 (matrix, this.__vertex_1);
-    mat4.multiplyVec3 (matrix, this.__vertex_2);
-    mat4.multiplyVec3 (matrix, this.__vertex_3);
-    mat4.multiplyVec3 (matrix, this.__vertex_4);
-  }  
+    this.__should_update_gl_matrix = true;
+  } 
 };
 util.extend (GLView.prototype, vs.ui.RecognizerManager);
 util.extendClass (GLView, GLEventSource);

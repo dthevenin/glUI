@@ -528,6 +528,87 @@ function initWebGLRendering () {
   vs.requestAnimationFrame (render);
 }
 
+function update_gl_vertices (gl_view) {
+  var
+    obj_size = gl_view._size,
+    obj_pos = gl_view._position,
+    x = obj_pos[0],
+    y = obj_pos[1],
+    w = obj_size [0],
+    h = obj_size [1],
+    m = gl_view.__gl_vertices;
+        
+  // setup position vertices
+  m[0] = x; m[1] = y; m[2] = 0;
+  m[3] = x; m[4] = y + h; m[5] = 0;
+  m[6] = x + w; m[7] = y; m[8] = 0;
+  m[9] = x + w; m[10] = y + h; m[11] = 0;
+  
+  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, gl_view.__gl_vertices_buffer);
+  gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW); 
+};
+
+
+/**
+ * @protected
+ * @function
+ */
+function update_transform_gl_matrix (gl_view)
+{
+  var
+    matrix = gl_view.__gl_matrix,
+    pos = gl_view._position,
+    tx = gl_view._transform_origin [0] + pos [0],
+    ty = gl_view._transform_origin [1] + pos [1],
+    rot = gl_view._rotation,
+    trans = gl_view._translation;
+    
+  // apply current transformation
+  mat4.identity (matrix);
+  mat4.translateXYZ (matrix, tx + trans[0], ty + trans[1], trans[2]);
+
+  if (rot[0]) mat4.rotateX (matrix, rot[0] * angle2rad);
+  if (rot[1]) mat4.rotateY (matrix, rot[1] * angle2rad);
+  if (rot[2]) mat4.rotateZ (matrix, rot[2] * angle2rad);
+  
+  mat4.scaleXY (matrix, gl_view._scaling);
+  mat4.translateXYZ (matrix, -tx, -ty, 0);
+
+  /*====================================================== */
+  // Update vertices vectors for the culling algorithm
+  update_envelop_vertices (gl_view);
+
+  gl_view.__invalid_matrixes = true;
+  GLView.__should_render = true;
+}
+
+/**
+ * Update vertices vectors for the culling algorithm
+ * @protected
+ * @function
+ */
+function update_envelop_vertices (gl_view)
+{
+  var
+    matrix = gl_view.__gl_matrix,
+    obj_size = gl_view._size,
+    obj_pos = gl_view._position,
+    x = obj_pos[0],
+    y = obj_pos[1],
+    w = obj_size [0],
+    h = obj_size [1];
+
+  vec3.set_p (x    , y    , 0, gl_view.__vertex_1);
+  vec3.set_p (x    , y + h, 0, gl_view.__vertex_2);
+  vec3.set_p (x + w, y    , 0, gl_view.__vertex_3);
+  vec3.set_p (x + w, y + h, 0, gl_view.__vertex_4);
+  
+  mat4.multiplyVec3 (matrix, gl_view.__vertex_1);
+  mat4.multiplyVec3 (matrix, gl_view.__vertex_2);
+  mat4.multiplyVec3 (matrix, gl_view.__vertex_3);
+  mat4.multiplyVec3 (matrix, gl_view.__vertex_4);
+} 
+
 var rendering = true;
 var next_rendering_id = 0;
 var gl_stack_length = 0;
@@ -560,12 +641,15 @@ function render () {
     function _calculateViewsInFrustum (gl_view, p_transform, new_p_matrix, p_alpha, level) {
       var key, i, l, child, children, style, alpha;
       
+      // Views visibility
       if (!gl_view._visible && !gl_view.__is_hidding) {
         return;
       }
       
+      // animate view
       gl_view.__gl_update_animation (now);
 
+      // Views opacity
       style = gl_view._style;
       if (style) alpha = p_alpha * style._opacity;
       else alpha = p_alpha;
@@ -575,7 +659,10 @@ function render () {
       }
 
       var boundaries = boundaries_stack [level];
-      /*================= Update view matrixes ================= */ 
+      /*================= Update view matrixes ================= */
+      if (gl_view.__should_update_gl_matrix) {
+        update_transform_gl_matrix (gl_view);
+      }
       var o_matrix = gl_view.__gl_matrix;
       var m_matrix = gl_view.__gl_m_matrix;
       var p_matrix = gl_view.__gl_p_matrix;
@@ -850,6 +937,10 @@ function render () {
     attribute.stride = 0;
     attribute.offset = 0;
 
+    if (gl_view.__should_update_gl_vertices) {
+      if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices ();
+      else update_gl_vertices (gl_view);
+    }
     attribute.buffer = gl_view.__gl_vertices_buffer;
     attribute.numComponents = 3;
     program.attrib.position (attribute);
