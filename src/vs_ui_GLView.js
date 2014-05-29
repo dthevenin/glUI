@@ -56,7 +56,6 @@ function GLView (config)
   this.__gl_p_matrix = mat4.create ();
   this.__gl_m_matrix = mat4.create ();
   
-  this._rotation = vec3.create ();
 
   this.__gl_id = __unique_gl_id ++;
   GL_VIEWS [this.__gl_id] = this;
@@ -81,6 +80,9 @@ function GLView (config)
   // automaticaly if the parent container is resized
   this._position = vec3.create ();
   this._size = [0, 0];
+
+  this._rotation = vec3.create ();
+  this._translation = vec3.create ();
   this._transform_origin = vec3.create ();
 
   // rules for positionning a object
@@ -258,20 +260,6 @@ GLView.prototype = {
   _position : null,
 
   /**
-   * Translate value on x
-   * @private
-   * @type {number}
-   */
-  __view_t_x : 0,
-
-  /**
-   * Translate value on y
-   * @private
-   * @type {number}
-   */
-  __view_t_y : 0,
-
-  /**
    * @protected
    * @type {Array}
    */
@@ -298,7 +286,8 @@ GLView.prototype = {
    * @protected
    * @type {number}
    */
-  _rotation : null,  
+  _rotation : null,
+  _translation : null,
   
   _constraint: null,
   _style: null,
@@ -375,6 +364,14 @@ GLView.prototype = {
     this._transform_origin [0] = 0;
     this._transform_origin [1] = 0;
     this._transform_origin [2] = 0;
+
+    this._rotation [0] = 0;
+    this._rotation [1] = 0;
+    this._rotation [2] = 0;
+
+    this._translation [0] = 0;
+    this._translation [1] = 0;
+    this._translation [2] = 0;
   },
 
   /**
@@ -1201,14 +1198,16 @@ GLView.prototype = {
    *
    * @param x {int} translation over the x axis
    * @param y {int} translation over the y axis
+   * @param z {int} translation over the x axis
    */
-  translate: function (x, y)
+  translate: function (x, y, z)
   {
     if (!util.isNumber (x) || !util.isNumber (y)) { return };
-    if (this.__view_t_x === x && this.__view_t_y === y) { return; }
+    if (!util.isNumber (z)) z = 0;
 
-    this.__view_t_x = x;
-    this.__view_t_y = y;
+    this._translation[0] = x;
+    this._translation[1] = y;
+    this._translation[2] = z;
 
     this.__update_transform_gl_matrix ();
   },
@@ -1298,12 +1297,13 @@ GLView.prototype = {
       tx = this._transform_origin [0] + pos [0],
       ty = this._transform_origin [1] + pos [1],
       rot = this._rotation,
+      trans = this._translation,
       m = this.__gl_vertices;
       
     matrix = this.__gl_matrix;
     // apply current transformation
     mat4.identity (matrix);
-    mat4.translateXYZ (matrix, tx + this.__view_t_x, ty + this.__view_t_y, 0);
+    mat4.translateXYZ (matrix, tx + trans[0], ty + trans[1], trans[2]);
   
     if (rot[0]) mat4.rotateX (matrix, rot[0] * Math.PI / 180);
     if (rot[1]) mat4.rotateY (matrix, rot[1] * Math.PI / 180);
@@ -1538,9 +1538,9 @@ util.defineClassProperties (GLView, {
      */
     set : function (v)
     {
-      if ((!util.isArray (v) && !(v instanceof Float32Array)) || v.length !== 2) { return };
+      if (!util.isArray (v) && !(v instanceof Float32Array)) { return };
 
-      this.translate (v[0], v[1]);
+      this.translate (v[0], v[1], v[2]);
     },
 
     /**
@@ -1549,7 +1549,8 @@ util.defineClassProperties (GLView, {
      */
     get : function ()
     {
-      return [this.__view_t_x, this.__view_t_y];
+      //return [this.__view_t_x, this.__view_t_y];
+      return this._translation;
     }
   },
 
