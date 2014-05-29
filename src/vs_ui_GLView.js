@@ -81,7 +81,7 @@ function GLView (config)
   // automaticaly if the parent container is resized
   this._position = vec3.create ();
   this._size = [0, 0];
-  this._transform_origin = [0, 0];
+  this._transform_origin = vec3.create ();
 
   // rules for positionning a object
   this._autosizing = [4,4];
@@ -309,12 +309,6 @@ GLView.prototype = {
    */
   _transform_origin: null,
 
-  /**
-   * @protected
-   * @type {vs.CSSMatrix}
-   */
-  _transforms_stack: null,
-
   /*****************************************************************
    *
    ****************************************************************/
@@ -376,6 +370,11 @@ GLView.prototype = {
 
     if (!this.__config__) this.__config__ = {};
     this.__config__.id = this.id;
+    
+    
+    this._transform_origin [0] = 0;
+    this._transform_origin [1] = 0;
+    this._transform_origin [2] = 0;
   },
 
   /**
@@ -1269,81 +1268,9 @@ GLView.prototype = {
   {
     if (!origin) { return; }
     if (!util.isNumber (origin.x) || !util.isNumber (origin.y)) { return; }
-
-    this.flushTransformStack ();
     
     this._transform_origin[0] = origin.x;
     this._transform_origin[1] = origin.y;
-    
-    GLView.__should_render = true;
-  },
-
-  /**
-   *  Flush all current transformation, into the transformation stack.
-   * @public
-   * @function
-   */
-  flushTransformStack : function ()
-  {
-    // Save current transform into a matrix
-    var matrix = new vs.CSSMatrix ();
-    matrix = matrix.translate
-      (this._transform_origin [0], this._transform_origin [1], 0);
-    matrix = matrix.translate (this.__view_t_x, this.__view_t_y, 0);
-    matrix = matrix.rotate (this._rotation[0], this._rotation[1], this._rotation[2]);
-    matrix = matrix.scale (this._scaling, this._scaling, 1);
-    matrix = matrix.translate
-      (-this._transform_origin [0], -this._transform_origin [1], 0);
-
-    if (!this._transforms_stack) this._transforms_stack = matrix;
-    {
-      this._transforms_stack = matrix.multiply (this._transforms_stack);
-      delete (matrix);
-    }
-
-    // Init a new transform space
-    this.__view_t_x = 0;
-    this.__view_t_y = 0;
-    this._scaling = 1;
-    this._rotation [0] = 0;
-    this._rotation [1] = 0;
-    this._rotation [2] = 0;
-
-    this._transform_origin[0] = 0;
-    this._transform_origin[1] = 0;
-    
-    GLView.__should_render = true;
-  },
-
-  /**
-   * Push a new transformation matrix into your component transformation
-   * stack.
-   *
-   * @public
-   * @function
-   *
-   * @param {vs.CSSMatrix} matrix the matrix you want to add
-   */
-  pushNewTransform : function (matrix)
-  {
-    if (!matrix) { return; }
-
-    if (!this._transforms_stack) this._transforms_stack = matrix;
-    else
-    {
-      this._transforms_stack = matrix.multiply (this._transforms_stack);
-    }
-  },
-
-  /**
-   *  Remove all previous transformations set for this view
-   * @public
-   * @function
-   */
-  clearTransformStack : function ()
-  {
-    if (this._transforms_stack) delete (this._transforms_stack);
-    this._transforms_stack = undefined;
     
     GLView.__should_render = true;
   },
@@ -1782,7 +1709,7 @@ util.defineClassProperties (GLView, {
      */
     get : function ()
     {
-      return this._transform_origin.slice ();
+      return this._transform_origin;
     }
   }
 });
