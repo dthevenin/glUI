@@ -1,8 +1,3 @@
-var
-  util = vs.util,
-  core = vs.core,
-  ui = vs.ui;
-
 
 var __unique_gl_id = 1;
 var GL_VIEWS = [];
@@ -43,7 +38,7 @@ var GL_VIEWS = [];
  */
 function GLView (config)
 {
-  this.parent = core.EventSource;
+  this.parent = GLEventSource;
   this.parent (config);
   this.constructor = GLView;
   
@@ -72,9 +67,6 @@ function GLView (config)
   this._pointerevent_handlers = [];
   
   this.view = this;
-  this._pointer_start = [];
-  this._pointer_move = [];
-  this._pointer_end = [];
 
   // position and size : according constraints rules, can change
   // automaticaly if the parent container is resized
@@ -90,6 +82,8 @@ function GLView (config)
 
 GLView.__should_render = true;
 GLView.__nb_animation = 0;
+
+var angle2rad = Math.PI / 180;
 
 /********************************************************************
 
@@ -213,7 +207,7 @@ GLView.prototype = {
       this.__gl_texture = null;
     }
 
-    core.EventSource.prototype.destructor.call (this);
+    GLEventSource.prototype.destructor.call (this);
   },
 
   /**
@@ -239,7 +233,7 @@ GLView.prototype = {
    */
   initComponent : function ()
   {
-    core.EventSource.prototype.initComponent.call (this);
+    GLEventSource.prototype.initComponent.call (this);
 
     this._style = new GLStyle ();
     this._constraint = null;
@@ -285,50 +279,6 @@ GLView.prototype = {
    */
   notify : function (event) {},
   
-  _pointer_start : null,
-  _pointer_move : null,
-  _pointer_end : null,
-  
-  addEventListener: function (type, handler, useCapture) {
-    switch (type) {
-      case vs.POINTER_START:
-        this._pointer_start.push (handler);
-        __gl_activate_pointer_start ()
-        break;
-    
-      case vs.POINTER_MOVE:
-        this._pointer_move.push (handler);
-        __gl_activate_pointer_move ()
-        break;
-    
-      case vs.POINTER_END:
-        this._pointer_end.push (handler);
-        __gl_activate_pointer_end ()
-        break;
-    }
-//    console.log ("addEventListener:" + type);  
-  },
-
-  removeEventListener: function (type, handler, useCapture) {
-    switch (type) {
-      case vs.POINTER_START:
-        this._pointer_start.remove (handler);
-        __gl_deactivate_pointer_start ()
-        break;
-    
-      case vs.POINTER_MOVE:
-        this._pointer_move.remove (handler);
-        __gl_deactivate_pointer_move ()
-        break;
-    
-      case vs.POINTER_END:
-        this._pointer_end.remove (handler);
-        __gl_deactivate_pointer_end ()
-        break;
-    }
-//    console.log ("removeEventListener: " + type);  
-  },
-
   /**
    *  Instantiate, init and add the specified child component to this component.
    *  <p>
@@ -407,7 +357,7 @@ GLView.prototype = {
    * @name vs.ui.GLView#isChild
    * @function
    *
-   * @param {vs.core.EventSource} child The component to be removed.
+   * @param {vs.GLEventSource} child The component to be removed.
    * @return {boolean}
    */
   isChild : function (child)
@@ -425,7 +375,7 @@ GLView.prototype = {
    *  Add the specified child component to this component.
    *  <p>
    *  The component can be a graphic component (vs.ui.GLView) or
-   *  a non graphic component (vs.core.EventSource).
+   *  a non graphic component (vs.GLEventSource).
    *  In case of vs.ui.GLView its mandatory to set the extension.
    *  <p>
    *  The add is a lazy add! The child's view can be already in
@@ -438,7 +388,7 @@ GLView.prototype = {
    * @name vs.ui.GLView#add
    * @function
    *
-   * @param {vs.core.EventSource} child The component to be added.
+   * @param {vs.GLEventSource} child The component to be added.
    * @param {String} extension [optional] The hole into a vs.ui.GLView will be
    *       insert.
    */
@@ -469,7 +419,7 @@ GLView.prototype = {
    * @name vs.ui.GLView#remove
    * @function
    *
-   * @param {vs.core.EventSource} child The component to be removed.
+   * @param {vs.GLEventSource} child The component to be removed.
    */
   remove : function (child)
   {
@@ -733,7 +683,7 @@ GLView.prototype = {
 //       config.node = node;
 //     }
 
-    return core.EventSource.prototype.clone.call (this, config, cloned_map);
+    return GLEventSource.prototype.clone.call (this, config, cloned_map);
   },
 
   /**
@@ -748,7 +698,7 @@ GLView.prototype = {
   {
     var anim, a, key, child, l, hole, cloned_comp;
 
-    core.EventSource.prototype._clone.call (this, obj, cloned_map);
+    GLEventSource.prototype._clone.call (this, obj, cloned_map);
 
 
     if (this._style) {
@@ -1015,9 +965,9 @@ GLView.prototype = {
     mat4.identity (matrix);
     mat4.translateXYZ (matrix, tx + trans[0], ty + trans[1], trans[2]);
   
-    if (rot[0]) mat4.rotateX (matrix, rot[0] * Math.PI / 180);
-    if (rot[1]) mat4.rotateY (matrix, rot[1] * Math.PI / 180);
-    if (rot[2]) mat4.rotateZ (matrix, rot[2] * Math.PI / 180);
+    if (rot[0]) mat4.rotateX (matrix, rot[0] * angle2rad);
+    if (rot[1]) mat4.rotateY (matrix, rot[1] * angle2rad);
+    if (rot[2]) mat4.rotateZ (matrix, rot[2] * angle2rad);
     
     mat4.scaleXY (matrix, this._scaling);
     mat4.translateXYZ (matrix, -tx, -ty, 0);
@@ -1058,7 +1008,7 @@ GLView.prototype = {
   }  
 };
 util.extend (GLView.prototype, vs.ui.RecognizerManager);
-util.extendClass (GLView, core.EventSource);
+util.extendClass (GLView, GLEventSource);
 
 /********************************************************************
                   Define class properties
@@ -1090,7 +1040,7 @@ util.defineClassProperties (GLView, {
      */
     get : function ()
     {
-      return this._size.slice ();
+      return this._size;
     }
   },
 
