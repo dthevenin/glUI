@@ -796,9 +796,6 @@ GLView.prototype = {
    */
   _propagateToParent : function (e)
   {
-    var to_propatate = this._bubbling;
-    if (!to_propatate) return;
-    
     if (this.__parent) {
       
       if (this.__parent.handleEvent) {
@@ -1018,20 +1015,6 @@ util.defineClassProperties (GLView, {
     get : function ()
     {
       return this._visible;
-    }
-  },
-
-  'bubbling': {
-
-    /**
-     * Allow pointer event bubbling between views (by default set to false)
-     * @name vs.ui.GLView#bubbling
-     * @type boolean
-     */
-    set : function (v)
-    {
-      if (v) { this._bubbling = true; }
-      else { this._bubbling = false; }
     }
   },
 
