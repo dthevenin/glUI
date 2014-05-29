@@ -35,6 +35,54 @@ if(typeof Float32Array != 'undefined') {
 	glMatrixArrayType = Array;
 }
 
+
+/*
+ * vec2 - 2 Dimensional Vector
+ */
+var vec2 = {};
+
+/*
+ * vec2.create
+ * Creates a new instance of a vec2 using the default array type
+ * Any javascript array containing at least 3 numeric elements can serve as a vec2
+ *
+ * Params:
+ * vec - Optional, vec2 containing values to initialize with
+ *
+ * Returns:
+ * New vec2
+ */
+vec2.create = function(vec) {
+	var dest = new glMatrixArrayType(2);
+	
+	if(vec) {
+		dest[0] = vec[0];
+		dest[1] = vec[1];
+	}
+	
+	return dest;
+};
+
+/*
+ * vec2.set
+ * Copies the values of one vec2 to another
+ *
+ * Params:
+ * vec - vec2 containing values to copy
+ * dest - vec2 receiving copied values
+ *
+ * Returns:
+ * dest
+ */
+vec2.set = function(vec, dest) {
+	dest[0] = vec[0];
+	dest[1] = vec[1];
+	
+	return dest;
+};
+
+
+
 /*
  * vec3 - 3 Dimensional Vector
  */
