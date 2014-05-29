@@ -94,41 +94,33 @@ GLEventSource.prototype =
   _pointer_end : null,
   
   addEventListener: function (type, handler, useCapture) {
-    switch (type) {
-      case vs.POINTER_START:
-        this._pointer_start.push (handler);
-        __gl_activate_pointer_start ()
-        break;
-    
-      case vs.POINTER_MOVE:
-        this._pointer_move.push (handler);
-        __gl_activate_pointer_move ()
-        break;
-    
-      case vs.POINTER_END:
-        this._pointer_end.push (handler);
-        __gl_activate_pointer_end ()
-        break;
+    if (type === vs.POINTER_START) {
+      this._pointer_start.push (handler);
+      __gl_activate_pointer_start ();
+    }
+    else if (type === vs.POINTER_MOVE) {
+      this._pointer_move.push (handler);
+      __gl_activate_pointer_move ();
+    }
+    else if (type === vs.POINTER_END) {
+      this._pointer_end.push (handler);
+      __gl_activate_pointer_end ();
     }
 //    console.log ("addEventListener:" + type);  
   },
 
   removeEventListener: function (type, handler, useCapture) {
-    switch (type) {
-      case vs.POINTER_START:
-        this._pointer_start.remove (handler);
-        __gl_deactivate_pointer_start ()
-        break;
-    
-      case vs.POINTER_MOVE:
-        this._pointer_move.remove (handler);
-        __gl_deactivate_pointer_move ()
-        break;
-    
-      case vs.POINTER_END:
-        this._pointer_end.remove (handler);
-        __gl_deactivate_pointer_end ()
-        break;
+    if (type === vs.POINTER_START) {
+      this._pointer_start.remove (handler);
+      __gl_deactivate_pointer_start ()
+    }
+    else if (type === vs.POINTER_MOVE) {
+      this._pointer_move.remove (handler);
+      __gl_deactivate_pointer_move ()
+    }
+    else if (type === vs.POINTER_END) {
+      this._pointer_end.remove (handler);
+      __gl_deactivate_pointer_end ()
     }
 //    console.log ("removeEventListener: " + type);  
   },

@@ -763,25 +763,23 @@ __iscroll.prototype = {
   },
   
   handleEvent: function (e) {
-    switch ( e.type ) {
-      case vs.POINTER_START:
-        this._start(e);
-        break;
-      case vs.POINTER_MOVE:
-        this._move(e);
-        break;
-      case vs.POINTER_END:
-      case vs.POINTER_CANCEL:
-        this._end(e);
-        break;
-      case 'wheel':
-      case 'DOMMouseScroll':
-      case 'mousewheel':
-        this._wheel(e);
-        break;
-      case 'keydown':
-        this._key(e);
-        break;
+    var type = e.type;
+    if (type === vs.POINTER_MOVE) {
+      this._move(e);
+    }
+    else if (type === vs.POINTER_START) {
+      this._start(e);
+    }
+    else if (type === vs.POINTER_END || type === vs.POINTER_CANCEL) {
+      this._end(e);
+    }
+    else if (type === 'wheel' ||
+             type === 'DOMMouseScroll' ||
+             type === 'mousewheel') {
+      this._wheel(e);
+    }
+    else if (type === 'keydown') {
+      this._key(e);
     }
   }
 };
