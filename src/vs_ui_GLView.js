@@ -853,76 +853,7 @@ GLView.prototype = {
         obj [key] = cloned_map [this [key]._id];
       }
     }
-  },
-  
-  /*****************************************************************
-   *                Transformation methods
-   ****************************************************************/
-
-  /**
-   *  Move the view in x, y.
-   *
-   * @name vs.ui.GLView#translate
-   * @function
-   *
-   * @param x {int} translation over the x axis
-   * @param y {int} translation over the y axis
-   * @param z {int} translation over the x axis
-   */
-  translate: function (x, y, z)
-  {
-    if (!util.isNumber (x) || !util.isNumber (y)) { return };
-    if (!util.isNumber (z)) z = 0;
-
-    this._translation[0] = x;
-    this._translation[1] = y;
-    this._translation[2] = z;
-
-    this.__should_update_gl_matrix = true;
-  },
-
-  /**
-   *  Rotate the view about the horizontal and vertical axes.
-   *  <p/>The angle units is radians.
-   *
-   * @name vs.ui.GLView#rotate
-   * @function
-   *
-   * @param r {float} rotion angle
-   */
-  rotate: function (rx, ry, rz)
-  {
-    if (!util.isNumber (rx)) { return };
-    if (!util.isNumber (ry)) { return };
-    if (!util.isNumber (rz)) { return };
-
-    this._rotation [0] = rx;
-    this._rotation [1] = ry;
-    this._rotation [2] = rz;
-
-    this.__should_update_gl_matrix = true;
-  },
-
-  /**
-   *  Scale the view
-   *  <p/>The scale is limited by a max and min scale value.
-   *
-   * @name vs.ui.GLView#scale
-   * @function
-   *
-   * @param s {float} scale value
-   */
-  scale: function (s)
-  {
-    if (!util.isNumber (s)) { return };
-
-    if (s < 0) { s = 0; }
-    if (this._scaling === s) { return; }
-
-    this._scaling = s;
-
-    this.__should_update_gl_matrix = true;
-  } 
+  }
 };
 util.extend (GLView.prototype, vs.ui.RecognizerManager);
 util.extendClass (GLView, GLEventSource);
@@ -1061,9 +992,11 @@ util.defineClassProperties (GLView, {
      */
     set : function (v)
     {
-      if (!util.isArray (v) && !(v instanceof Float32Array)) { return };
+      this._translation[0] = v[0];
+      this._translation[1] = v[1];
+      this._translation[2] = v[2] || 0;
 
-      this.translate (v[0], v[1], v[2]);
+      this.__should_update_gl_matrix = true;
     },
 
     /**
@@ -1077,62 +1010,6 @@ util.defineClassProperties (GLView, {
     }
   },
 
-  'style': {
-
-    /**
-     * Rotation angle in degre
-     * @name vs.ui.GLView#style
-     * @type {GLStyle}
-     */
-    set : function (v)
-    {
-      if (!(v instanceof GLStyle)) return; 
-      this._style = v;
-      GLView.__should_render = true;
-    },
-
-    /**
-     * @ignore
-     * @type {GLStyle}
-     */
-    get : function ()
-    {
-      return this._style;
-    }
-  },
-
-  'constraint': {
-
-    /**
-     * Rotation angle in degre
-     * @name vs.ui.GLView#constraint
-     * @type {GLStyle}
-     */
-    set : function (v)
-    {
-      if (!(v instanceof GLConstraint)) return; 
-      
-      if (this._constraint) {
-        delete (this._constraint);
-      }
-      
-      this._constraint = v;
-      GLView.__should_render = true;
-    },
-
-    /**
-     * @ignore
-     * @type {GLStyle}
-     */
-    get : function ()
-    {
-      if (!this._constraint) {
-        this._constraint = new GLConstraint ();
-      }
-      return this._constraint;
-    }
-  },
-
   'rotation': {
 
     /**
@@ -1142,7 +1019,11 @@ util.defineClassProperties (GLView, {
      */
     set : function (v)
     {
-      this.rotate (v[0], v[1], v[2]);
+      this._rotation[0] = v[0] || 0;
+      this._rotation[1] = v[1] || 0;
+      this._rotation[2] = v[2] || 0;
+
+      this.__should_update_gl_matrix = true;
     },
 
     /**
@@ -1164,7 +1045,9 @@ util.defineClassProperties (GLView, {
      */
     set : function (v)
     {
-      this.scale (v);
+      this._scaling = s || 1;
+
+      this.__should_update_gl_matrix = true;
     },
 
     /**
@@ -1228,6 +1111,62 @@ util.defineClassProperties (GLView, {
     get : function ()
     {
       return this._transform_origin;
+    }
+  },
+  
+  'style': {
+
+    /**
+     * Rotation angle in degre
+     * @name vs.ui.GLView#style
+     * @type {GLStyle}
+     */
+    set : function (v)
+    {
+      if (!(v instanceof GLStyle)) return; 
+      this._style = v;
+      GLView.__should_render = true;
+    },
+
+    /**
+     * @ignore
+     * @type {GLStyle}
+     */
+    get : function ()
+    {
+      return this._style;
+    }
+  },
+
+  'constraint': {
+
+    /**
+     * Rotation angle in degre
+     * @name vs.ui.GLView#constraint
+     * @type {GLStyle}
+     */
+    set : function (v)
+    {
+      if (!(v instanceof GLConstraint)) return; 
+      
+      if (this._constraint) {
+        delete (this._constraint);
+      }
+      
+      this._constraint = v;
+      GLView.__should_render = true;
+    },
+
+    /**
+     * @ignore
+     * @type {GLStyle}
+     */
+    get : function ()
+    {
+      if (!this._constraint) {
+        this._constraint = new GLConstraint ();
+      }
+      return this._constraint;
     }
   }
 });
