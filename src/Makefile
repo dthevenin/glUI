@@ -93,11 +93,11 @@ vs_core.js:
 	$(CAT) core/vs_ui_GLConstraint.js >> $@
 	$(CAT) core/vs_ui_GLColor.js >> $@
 	$(CAT) core/vs_ui_GLStyle.js >> $@
-	$(CAT) core/vs_ui_GLView.js >> $@
-	$(CAT) core/vs_ui_GLScrollView.js >> $@
-	$(CAT) core/vs_ui_GLApplication.js >> $@
-	$(CAT) core/vs_ui_GLText.js >> $@
-	$(CAT) core/vs_ui_GLImage.js >> $@
+	$(CAT) core/view/vs_ui_GLView.js >> $@
+	$(CAT) core/view/vs_ui_GLScrollView.js >> $@
+	$(CAT) core/view/vs_ui_GLApplication.js >> $@
+	$(CAT) core/view/vs_ui_GLText.js >> $@
+	$(CAT) core/view/vs_ui_GLImage.js >> $@
 	
 vs_gl_widget.js:
 	$(CAT) widget/vs_ui_GLButton.js >> $@
