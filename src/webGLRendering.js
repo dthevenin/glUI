@@ -545,7 +545,9 @@ function update_gl_vertices (gl_view) {
   m[9] = x + w; m[10] = y + h; m[11] = 0;
   
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, gl_view.__gl_vertices_buffer);
-  gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW); 
+  gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
+  
+  gl_view.__should_update_gl_vertices = false;
 };
 
 
@@ -580,6 +582,8 @@ function update_transform_gl_matrix (gl_view)
 
   gl_view.__invalid_matrixes = true;
   GLView.__should_render = true;
+  
+  gl_view.__should_update_gl_matrix = false;
 }
 
 /**

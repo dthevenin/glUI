@@ -122,6 +122,8 @@ var GLMap = vs.core.createClass ({
 
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this.__gl_vertices_buffer);
     gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, this.__gl_user_vertices, gl_ctx.STATIC_DRAW);
+    
+    gl_view.__should_update_gl_vertices = false;
   },
   
   setZoom : function (zoom) {
