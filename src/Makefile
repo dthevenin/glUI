@@ -94,8 +94,10 @@ vs_core.js:
 	$(CAT) core/vs_ui_GLColor.js >> $@
 	$(CAT) core/vs_ui_GLStyle.js >> $@
 	$(CAT) core/vs_ui_GLView.js >> $@
+	$(CAT) core/vs_ui_GLScrollView.js >> $@
 	$(CAT) core/vs_ui_GLApplication.js >> $@
 	$(CAT) core/vs_ui_GLText.js >> $@
+	$(CAT) core/vs_ui_GLImage.js >> $@
 	
 vs_gl_widget.js:
 	$(CAT) widget/vs_ui_GLButton.js >> $@
@@ -107,8 +109,8 @@ vs_gl_animation.js:
 	$(CAT) animation/vs_fx_GLAnimation.js >> $@
 	
 vs_gl_engine.js: vs_core.js vs_event.js vs_gl_animation.js vs_gl_widget.js vs_webcomponent.js
-	$(CAT) vs_core.js >> $@
 	$(CAT) vs_event.js >> $@
+	$(CAT) vs_core.js >> $@
 	$(CAT) vs_gl_animation.js >> $@
 	$(CAT) vs_gl_widget.js >> $@
 	$(CAT) vs_webcomponent.js >> $@
