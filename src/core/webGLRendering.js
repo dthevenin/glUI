@@ -1,4 +1,3 @@
-var vs = vs || {};
 
 vs.log = console.log.bind (console);
 vs.error = console.error.bind (console);
