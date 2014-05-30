@@ -89,6 +89,7 @@ vs_event.js:
 	
 vs_core.js:
 	$(CAT) core/glMatrix.js >> $@
+	$(CAT) core/gl_object.js >> $@
 	$(CAT) core/webGLRendering.js >> $@
 	$(CAT) core/vs_ui_GLConstraint.js >> $@
 	$(CAT) core/vs_ui_GLColor.js >> $@

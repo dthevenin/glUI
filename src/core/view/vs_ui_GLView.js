@@ -1,7 +1,3 @@
-
-var __unique_gl_id = 1;
-var GL_VIEWS = [];
-
 /**
  *  The vs.ui.GLView class
  *
@@ -45,22 +41,6 @@ function GLView (config)
   // init recognizer support
   this.__pointer_recognizers = [];
   
-  this.__gl_matrix = mat4.create ();
-  this.__gl_p_matrix = mat4.create ();
-  this.__gl_m_matrix = mat4.create ();
-  
-  this.__gl_id = __unique_gl_id ++;
-  GL_VIEWS [this.__gl_id] = this;
-  
-  // contains position vertices
-  this.__gl_vertices = new Float32Array (12);
-  this.__gl_vertices_buffer = gl_ctx.createBuffer ();
-  
-  this.__vertex_1 = vec3.create ();
-  this.__vertex_2 = vec3.create ();
-  this.__vertex_3 = vec3.create ();
-  this.__vertex_4 = vec3.create ();
-
   this.__children = [];
   
   this.view = this;
@@ -75,12 +55,12 @@ function GLView (config)
   this._transform_origin = vec2.create ();
 
   this.__animations = [];
+  
+  createGLObject (this);
 }
 
 GLView.__should_render = true;
 GLView.__nb_animation = 0;
-
-var angle2rad = Math.PI / 180;
 
 /********************************************************************
 
@@ -102,11 +82,6 @@ GLView.prototype = {
    * @protected
    * @type {boolean}
    */
-  __gl_context: null,
-  __gl_object: true,
-  __gl_texture: null,
-  __gl_vertices_buffer: null,
-  __gl_id: null,
   __invalid_matrixes: true,
 
   /*****************************************************************
@@ -137,15 +112,6 @@ GLView.prototype = {
    */
   _size : null,
   
-  /**
-   * @protected
-   * @type {Array}
-   */
-  __gl_vertices: null,
-  __gl_matrix: null,
-  __gl_m_matrix: null,
-  __gl_p_matrix: null,
-
    /**
    * Scale value
    * @protected
@@ -192,11 +158,8 @@ GLView.prototype = {
     delete (this.__children);
 
     this.clearTransformStack ();
-    
-    if (this.__gl_texture) {
-      gl_ctx.deleteTexture (this.__gl_texture);
-      this.__gl_texture = null;
-    }
+  
+    deleteGLObject (this);
 
     GLEventSource.prototype.destructor.call (this);
   },

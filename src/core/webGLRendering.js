@@ -449,6 +449,49 @@ function initBuffers () {
     gl_ctx.STATIC_DRAW);
 }
 
+var __unique_gl_id = 1;
+var GL_VIEWS = [];
+
+function createGLObject (gl_view) {
+
+  var id = __unique_gl_id ++;
+  gl_view.__gl_id = id ;
+  GL_VIEWS [id] = this;
+
+  new glObject (gl_view.__gl_id);
+}
+
+function deleteGLObject (gl_view) {
+
+  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  
+  if (gl_object.texture) {
+    gl_ctx.deleteTexture (gl_object.texture);
+    gl_object.texture = null;
+  }
+}
+
+function clean_image_texture (gl_view) {
+  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  
+  if (gl_object.image_texture) {
+    gl_object.image_texture = null;
+  }
+}
+
+function set_image_texture (gl_view, texture) {
+  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  
+  gl_object.image_texture = texture;
+}
+
+
+function update_texture (gl_view, image) {
+  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  
+  gl_object.texture = __copy_image_into_webgl_texture (image, gl_object.texture);
+}
+
 var GL_CANVAS, stats;
 var init_functions = [];
 
@@ -504,8 +547,6 @@ function initWebGLRendering () {
     return;
   }
   
-  vs.ui.GLView.prototype.__gl_context = gl_ctx;
-
   /*========================= SHADERS ========================= */
   initPrograms ();
   initMainMatrix ();
@@ -529,13 +570,14 @@ function initWebGLRendering () {
 
 function update_gl_vertices (gl_view) {
   var
+    gl_object = GL_OBJECTS [gl_view.__gl_id],
     obj_size = gl_view._size,
     obj_pos = gl_view._position,
     x = obj_pos[0],
     y = obj_pos[1],
     w = obj_size [0],
     h = obj_size [1],
-    m = gl_view.__gl_vertices;
+    m = gl_object.vertices;
         
   // setup position vertices
   m[0] = x; m[1] = y; m[2] = 0;
@@ -543,12 +585,13 @@ function update_gl_vertices (gl_view) {
   m[6] = x + w; m[7] = y; m[8] = 0;
   m[9] = x + w; m[10] = y + h; m[11] = 0;
   
-  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, gl_view.__gl_vertices_buffer);
+  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, gl_object.vertices_buffer);
   gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
   
   gl_view.__should_update_gl_vertices = false;
 };
 
+var angle2rad = Math.PI / 180;
 
 /**
  * @protected
@@ -557,7 +600,8 @@ function update_gl_vertices (gl_view) {
 function update_transform_gl_matrix (gl_view)
 {
   var
-    matrix = gl_view.__gl_matrix,
+    gl_object = GL_OBJECTS [gl_view.__gl_id],
+    matrix = gl_object.matrix,
     pos = gl_view._position,
     tx = gl_view._transform_origin [0] + pos [0],
     ty = gl_view._transform_origin [1] + pos [1],
@@ -593,7 +637,8 @@ function update_transform_gl_matrix (gl_view)
 function update_envelop_vertices (gl_view)
 {
   var
-    matrix = gl_view.__gl_matrix,
+    gl_object = GL_OBJECTS [gl_view.__gl_id],
+    matrix = gl_object.matrix,
     obj_size = gl_view._size,
     obj_pos = gl_view._position,
     x = obj_pos[0],
@@ -601,15 +646,15 @@ function update_envelop_vertices (gl_view)
     w = obj_size [0],
     h = obj_size [1];
 
-  vec3.set_p (x    , y    , 0, gl_view.__vertex_1);
-  vec3.set_p (x    , y + h, 0, gl_view.__vertex_2);
-  vec3.set_p (x + w, y    , 0, gl_view.__vertex_3);
-  vec3.set_p (x + w, y + h, 0, gl_view.__vertex_4);
+  vec3.set_p (x    , y    , 0, gl_object.vertex_1);
+  vec3.set_p (x    , y + h, 0, gl_object.vertex_2);
+  vec3.set_p (x + w, y    , 0, gl_object.vertex_3);
+  vec3.set_p (x + w, y + h, 0, gl_object.vertex_4);
   
-  mat4.multiplyVec3 (matrix, gl_view.__vertex_1);
-  mat4.multiplyVec3 (matrix, gl_view.__vertex_2);
-  mat4.multiplyVec3 (matrix, gl_view.__vertex_3);
-  mat4.multiplyVec3 (matrix, gl_view.__vertex_4);
+  mat4.multiplyVec3 (matrix, gl_object.vertex_1);
+  mat4.multiplyVec3 (matrix, gl_object.vertex_2);
+  mat4.multiplyVec3 (matrix, gl_object.vertex_3);
+  mat4.multiplyVec3 (matrix, gl_object.vertex_4);
 } 
 
 var rendering = true;
@@ -666,9 +711,10 @@ function render () {
       if (gl_view.__should_update_gl_matrix) {
         update_transform_gl_matrix (gl_view);
       }
-      var o_matrix = gl_view.__gl_matrix;
-      var m_matrix = gl_view.__gl_m_matrix;
-      var p_matrix = gl_view.__gl_p_matrix;
+      var gl_object = GL_OBJECTS [gl_view.__gl_id];
+      var o_matrix = gl_object.matrix;
+      var m_matrix = gl_object.m_matrix;
+      var p_matrix = gl_object.p_matrix;
       var scroll_vec = gl_view.__gl_scroll;
       var p_size_vec = gl_view._size;
             
@@ -695,8 +741,8 @@ function render () {
       /*================= Culling allgorithm ================= */
       // Update matrixes
 
-      v1 = gl_view.__vertex_1; v2 = gl_view.__vertex_2; 
-      v3 = gl_view.__vertex_3; v4 = gl_view.__vertex_4; 
+      v1 = gl_object.vertex_1; v2 = gl_object.vertex_2; 
+      v3 = gl_object.vertex_3; v4 = gl_object.vertex_4; 
 
       if ((v1[0]>boundaries[2] && v2[0]>boundaries[2] &&
            v3[0]>boundaries[2] && v4[0]>boundaries[2]) ||
@@ -740,7 +786,7 @@ function render () {
       l = children.length;
       for (i = 0; i < l; i++) {
         child = children [i];
-        if (child.__gl_object) {
+        if (child.__gl_id) {
           _calculateViewsInFrustum (child, p_matrix, new_p_matrix, alpha, level + 1);
         }
       }
@@ -781,14 +827,14 @@ function render () {
   var previous_program = null;
   var attribute = {}, texture1 = {}, texture2 = {};
   
-  function bindToUnitTEXTURE0_1 (unit, gl_view) {
+  function bindToUnitTEXTURE0_1 (gl_object) {
     gl_ctx.activeTexture (gl_ctx.TEXTURE0 + unit);
-    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, gl_view.__gl_texture);
+    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, gl_object.texture);
   };
   
-  function bindToUnitTEXTURE0_2 (unit, gl_view) {
+  function bindToUnitTEXTURE0_2 (unit, gl_object) {
     gl_ctx.activeTexture (gl_ctx.TEXTURE0 + unit);
-    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, gl_view.__gl_image_texture);
+    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, gl_object.image_texture);
   };
   
   function bindToUnitTEXTURE0_3 (unit, style) {
@@ -799,6 +845,7 @@ function render () {
   function renderOneView (gl_view, alpha, mode) {
 
     var program;
+    var gl_object = GL_OBJECTS [gl_view.__gl_id];
        
     if (mode === 1) {
 
@@ -834,7 +881,7 @@ function render () {
           program.configureParameters (gl_view, style);
         }
       }
-      else if (gl_view.__gl_image_texture) {
+      else if (gl_object.image_texture) {
         program = imageShaderProgram;
         if (previous_program !== imageShaderProgram) {
           program.useIt ();
@@ -850,9 +897,9 @@ function render () {
         }
             
         texture1.bindToUnit = bindToUnitTEXTURE0_2;
-        program.textures.uMainTexture (texture1, gl_view);
+        program.textures.uMainTexture (texture1, gl_object);
       }
-      else if (gl_view.__gl_texture && style.__gl_texture_bck_image) {
+      else if (gl_object.texture && style.__gl_texture_bck_image) {
         program = twoTexturesShaderProgram;
         if (previous_program !== twoTexturesShaderProgram) {
           program.useIt ();
@@ -868,7 +915,7 @@ function render () {
         }
 
         texture1.bindToUnit = bindToUnitTEXTURE0_1;
-        program.textures.uMainTexture (texture1, gl_view);
+        program.textures.uMainTexture (texture1, gl_object);
       
         attribute.buffer = object_bck_image_uv_buffer;
         attribute.numComponents = 2;
@@ -880,7 +927,7 @@ function render () {
 
         program.uniform.color (c_buffer);
       }
-      else if (gl_view.__gl_texture) {
+      else if (gl_object.texture) {
         program = oneTextureShaderProgram;
         if (previous_program !== oneTextureShaderProgram) {
           program.useIt ();
@@ -898,7 +945,7 @@ function render () {
         program.uniform.color (c_buffer);
 
         texture1.bindToUnit = bindToUnitTEXTURE0_1;
-        program.textures.uMainTexture (texture1, gl_view);
+        program.textures.uMainTexture (texture1, gl_object);
       }
       else if (style.__gl_texture_bck_image) {
         program = oneTextureShaderProgram;
@@ -932,7 +979,7 @@ function render () {
       }
     }
 
-    program.uniform.Mmatrix (gl_view.__gl_m_matrix);
+    program.uniform.Mmatrix (gl_object.m_matrix);
     program.uniform.uAlpha (alpha);
 
     attribute.normalize = false;
@@ -944,7 +991,7 @@ function render () {
       if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices ();
       else update_gl_vertices (gl_view);
     }
-    attribute.buffer = gl_view.__gl_vertices_buffer;
+    attribute.buffer = gl_object.vertices_buffer;
     attribute.numComponents = 3;
     program.attrib.position (attribute);
     

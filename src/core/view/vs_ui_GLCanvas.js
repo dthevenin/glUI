@@ -114,8 +114,7 @@ GLCanvas.prototype = {
   },
   
   __update_texture : function () {
-    this.__gl_texture =
-      __copy_image_into_webgl_texture (this.__canvas_node, this.__gl_texture);
+    update_texture (this, this.__canvas_node);
   },
   
   /**

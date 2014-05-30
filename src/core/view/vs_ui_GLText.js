@@ -263,8 +263,7 @@ var __text_management = {
   },
   
   __update_texture : function () {
-    this.__gl_texture =
-      __copy_image_into_webgl_texture (this.__text_canvas_node, this.__gl_texture);
+    update_texture (this, this.__text_canvas_node);
   }
 }
 

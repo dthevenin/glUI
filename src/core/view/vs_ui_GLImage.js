@@ -116,7 +116,6 @@ GLImage.prototype = {
    * @type {string}
    */
   _src: null,
-  __gl_image_texture: null,
   
   /*****************************************************************
    *
@@ -131,7 +130,6 @@ GLImage.prototype = {
     GLView.prototype.destructor.call (this);
     
     gl_free_texture_image (this._src);
-    this.__gl_image_texture = null;
   },
 
   /**
@@ -167,14 +165,14 @@ util.defineClassProperties (GLImage, {
 
       if (this._src) {
         gl_free_texture_image (this._src);
-        this.__gl_image_texture = null;
+        clean_image_texture (this);
       }
       this._src = v;
 
       var self = this;
       gl_get_texture_from_image_url (
         self._src, function (texture, image_size) {
-          self.__gl_image_texture = texture;
+          set_image_texture (self, texture);
           if (self._size [0] === 0 && self._size [1] === 0) {
             self.size = image_size;
           }
