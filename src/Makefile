@@ -56,16 +56,14 @@ all :: release
 Debug :: debug
 Release :: release
 
-release :: clean vs_webcomponent.js vs_events.js vs_gl_engine.js
+release :: clean vs_gl_engine.js
 	-$(MV) vs_gl_engine.js vs_gl_engine_tmp.js
 	-$(COMPILE) --js=vs_gl_engine_tmp.js --js_output_file=vs_gl_engine.js
 	-$(RM_F) vs_gl_engine_tmp.js
 
-debug :: clean vs_webcomponent.js vs_events.js vs_gl_engine.js
+debug :: clean vs_gl_engine.js
 
 clean ::
-	-$(RM_RF) vs_webcomponent.js
-	-$(RM_RF) vs_events.js
 	-$(RM_RF) vs_gl_engine.js
 
 vs_webcomponent.js:
@@ -76,36 +74,46 @@ vs_webcomponent.js:
 	$(CAT) customElement/polymer/CustomElements.js >> $@
 	$(CAT) customElement/CustomElement.js >> $@
 
-vs_events.js:
-	$(CAT) Events/GLPicking.js >> $@
-	$(CAT) Events/GLPointerEvent.js >> $@
-	$(CAT) Events/MouseEvent.js >> $@
-	$(CAT) Events/TouchEvent.js >> $@
-	$(CAT) Events/PointerEvent.js >> $@
-	$(CAT) Events/Recognizers/DragRecognizer.js >> $@
-	$(CAT) Events/Recognizers/PinchRecognizer.js >> $@
-	$(CAT) Events/Recognizers/RotationRecognizer.js >> $@
-	$(CAT) Events/Recognizers/TapRecognizer.js >> $@
+vs_event.js:
+	$(CAT) core/event/MainLoop.js >> $@
+	$(CAT) core/event/vs_core_GLEventSource.js >> $@
+	$(CAT) core/event/GLPicking.js >> $@
+	$(CAT) core/event/GLPointerEvent.js >> $@
+	$(CAT) core/event/MouseEvent.js >> $@
+	$(CAT) core/event/TouchEvent.js >> $@
+	$(CAT) core/event/PointerEvent.js >> $@
+	$(CAT) core/event/recognizer/DragRecognizer.js >> $@
+	$(CAT) core/event/recognizer/PinchRecognizer.js >> $@
+	$(CAT) core/event/recognizer/RotationRecognizer.js >> $@
+	$(CAT) core/event/recognizer/TapRecognizer.js >> $@
 	
-vs_gl_engine.js:	
-	$(CAT) glMatrix.js >> $@
-#	$(CAT) vsUIExtentions.js >> $@
-	$(CAT) webGLRendering.js >> $@
-	$(CAT) vs_ui_GLConstraint.js >> $@
-	$(CAT) vs_ui_GLColor.js >> $@
-	$(CAT) vs_ui_GLStyle.js >> $@
-	$(CAT) MainLoop.js >> $@
-	$(CAT) vs_core_GLEventSource.js >> $@
-	$(CAT) vs_ui_GLView.js >> $@
-	$(CAT) vs_ui_GLApplication.js >> $@
-	$(CAT) vs_ui_GLText.js >> $@
-	$(CAT) vs_ui_GLButton.js >> $@
-	$(CAT) vs_ui_GLImage.js >> $@
-	$(CAT) vs_ui_GLCanvas.js >> $@
-	$(CAT) vs_ui_GLScrollView.js >> $@
-	$(CAT) vs_ui_GLAbstractList.js >> $@
-	$(CAT) vs_ui_GLTemplate.js >> $@
-	$(CAT) vs_ui_GLList.js >> $@
-	$(CAT) vs_fx_GLAnimation.js >> $@
-	$(CAT) vs_events.js >> $@
+vs_core.js:
+	$(CAT) core/glMatrix.js >> $@
+	$(CAT) core/webGLRendering.js >> $@
+	$(CAT) core/vs_ui_GLConstraint.js >> $@
+	$(CAT) core/vs_ui_GLColor.js >> $@
+	$(CAT) core/vs_ui_GLStyle.js >> $@
+	$(CAT) core/vs_ui_GLView.js >> $@
+	$(CAT) core/vs_ui_GLApplication.js >> $@
+	$(CAT) core/vs_ui_GLText.js >> $@
+	
+vs_gl_widget.js:
+	$(CAT) widget/vs_ui_GLButton.js >> $@
+	$(CAT) widget/vs_ui_GLAbstractList.js >> $@
+	$(CAT) widget/vs_ui_GLTemplate.js >> $@
+	$(CAT) widget/vs_ui_GLList.js >> $@
+	
+vs_gl_animation.js:
+	$(CAT) animation/vs_fx_GLAnimation.js >> $@
+	
+vs_gl_engine.js: vs_core.js vs_event.js vs_gl_animation.js vs_gl_widget.js vs_webcomponent.js
+	$(CAT) vs_core.js >> $@
+	$(CAT) vs_event.js >> $@
+	$(CAT) vs_gl_animation.js >> $@
+	$(CAT) vs_gl_widget.js >> $@
 	$(CAT) vs_webcomponent.js >> $@
+	-$(RM_RF) vs_core.js
+	-$(RM_RF) vs_event.js
+	-$(RM_RF) vs_gl_animation.js
+	-$(RM_RF) vs_gl_widget.js
+	-$(RM_RF) vs_webcomponent.js
