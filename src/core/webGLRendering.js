@@ -336,5 +336,10 @@ function initWebGLRendering () {
   
   init_functions.forEach (function (func) { func (); });
 
-  vs.requestAnimationFrame (render);
+  // Configure view and projection matrix of programes
+  updateProgramsMatrix ();
+  
+  initRendering ()
+
+  vs.requestAnimationFrame (startRendering);
 }

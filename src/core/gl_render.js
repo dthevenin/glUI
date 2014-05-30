@@ -91,10 +91,140 @@ var rendering = true;
 var next_rendering_id = 0;
 var gl_stack_length = 0;
 var gl_stack_for_renter = [1024];
+var gl_boundaries_stack = [256];
+var v_temp = vec3.create ();
 
-function render () {
+function isInFrustum (gl_object, level, p_size_vec, scroll_vec) {
+  // Update matrixes
+  var
+    boundaries = gl_boundaries_stack [level],
+    v1 = gl_object.vertex_1, v2 = gl_object.vertex_2,
+    v3 = gl_object.vertex_3, v4 = gl_object.vertex_4;
 
-  var v1, v2, v3, v4, v_temp = vec3.create ();
+  if ((v1[0]>boundaries[2] && v2[0]>boundaries[2] &&
+       v3[0]>boundaries[2] && v4[0]>boundaries[2]) ||
+      (v1[0]<boundaries[0] && v2[0]<boundaries[0] &&
+       v3[0]<boundaries[0] && v4[0]<boundaries[0]) ||
+      (v1[1]>boundaries[3] && v2[1]>boundaries[3] &&
+       v3[1]>boundaries[3] && v4[1]>boundaries[3]) || 
+      (v1[1]<boundaries[1] && v2[1]<boundaries[1] &&
+       v3[1]<boundaries[1] && v4[1]<boundaries[1])) { 
+    return false;
+  }
+
+  // Set the new boundaries for the children
+  boundaries = gl_boundaries_stack [level+1];
+  if (scroll_vec) {
+    vec3.subtract ([0,0,0], scroll_vec, v_temp);
+    boundaries[0] = v_temp[0];
+    boundaries[1] = v_temp[1];
+    
+    vec3.subtract ([p_size_vec [0], p_size_vec [1], 0], scroll_vec, v_temp);       
+    boundaries[2] = v_temp [0];
+    boundaries[3] = v_temp [1];
+  }
+  else 
+  {
+    boundaries[0] = 0;
+    boundaries[1] = 0;
+    boundaries[2] = p_size_vec [0];
+    boundaries[3] = p_size_vec [1];
+  }
+  
+  return true;
+}
+
+function calculateViewsInFrustum (now) {
+  var apps = vs.Application_applications, key;
+  gl_stack_length = 0;
+  gl_views_index = 0;
+
+  function _calculateViewsInFrustum (gl_view, p_transform, new_p_matrix, p_alpha, level) {
+    var key, i, l, child, children, style, alpha;
+    
+    // Views visibility
+    if (!gl_view._visible && !gl_view.__is_hidding) {
+      return;
+    }
+    
+    // animate view
+    gl_view.__gl_update_animation (now);
+
+    // Views opacity
+    style = gl_view._style;
+    if (style) alpha = p_alpha * style._opacity;
+    else alpha = p_alpha;
+
+    if (alpha === 0) {
+      return;
+    }
+    
+    /*================= Update view matrixes ================= */
+    if (gl_view.__should_update_gl_matrix) {
+      update_transform_gl_matrix (gl_view);
+    }
+    var gl_object = GL_OBJECTS [gl_view.__gl_id];
+    var o_matrix = gl_object.matrix;
+    var m_matrix = gl_object.m_matrix;
+    var p_matrix = gl_object.p_matrix;
+    var p_size_vec = gl_view._size;
+    var scroll_vec = gl_view.__gl_scroll;
+          
+    if (new_p_matrix || gl_view.__invalid_matrixes) {
+      if (p_transform) {
+        mat4.multiply (p_transform, o_matrix, m_matrix);
+      }
+      else {
+        mat4.set (o_matrix, m_matrix);
+      }
+    }
+
+    if (new_p_matrix || gl_view.__invalid_matrixes || gl_view.__is_scrolling) {
+      mat4.translate (m_matrix, gl_view._position, p_matrix);
+    
+      if (scroll_vec) {
+        gl_view.__gl_update_scroll (now);
+        mat4.translate (p_matrix, scroll_vec);
+      }
+      new_p_matrix = true;
+    }
+    gl_view.__invalid_matrixes = false;
+    
+    /*================= Culling allgorithm ================= */
+    if (!isInFrustum (gl_object, level, p_size_vec, scroll_vec)) return;
+    
+    var entry = gl_stack_for_renter [gl_views_index++];
+    entry [0] = 1; // normal view to render
+    entry [1] = gl_view;
+    entry [2] = alpha;
+     // End culling algorithm
+
+    /*================== Manage children ================== */
+    children = gl_view.__children;
+    l = children.length;
+    for (i = 0; i < l; i++) {
+      child = children [i];
+      if (child.__gl_id) {
+        _calculateViewsInFrustum (child, p_matrix, new_p_matrix, alpha, level + 1);
+      }
+    }
+  }
+
+  var boundaries = gl_boundaries_stack [0];
+  boundaries [0] = 0;
+  boundaries [1] = 0;
+  boundaries [2] = frame_size[0];
+  boundaries [3] = frame_size[1];
+
+  for (key in apps) {
+    var app = apps[key];
+    _calculateViewsInFrustum (app, null, false, 1, 0);
+  }
+  
+  gl_stack_length = gl_views_index;
+}
+
+function initRendering () {
 
   for (var i = 0; i < 1024; i ++) {
     gl_stack_for_renter [i] = new Array (3);
@@ -103,138 +233,13 @@ function render () {
     // [2] - alpha
   }
   
-  var boundaries_stack = [256];
   for (var i = 0; i < 256; i ++) {
-    boundaries_stack [i] = new glMatrixArrayType (4);
+    gl_boundaries_stack [i] = new glMatrixArrayType (4);
   }
+}
 
-  // Configure view and projection matrix of programes
-  updateProgramsMatrix ();
-  
-  function calculateViewsInFrustum (now) {
-    var apps = vs.Application_applications, key;
-    gl_stack_length = 0;
-    gl_views_index = 0;
 
-    function _calculateViewsInFrustum (gl_view, p_transform, new_p_matrix, p_alpha, level) {
-      var key, i, l, child, children, style, alpha;
-      
-      // Views visibility
-      if (!gl_view._visible && !gl_view.__is_hidding) {
-        return;
-      }
-      
-      // animate view
-      gl_view.__gl_update_animation (now);
-
-      // Views opacity
-      style = gl_view._style;
-      if (style) alpha = p_alpha * style._opacity;
-      else alpha = p_alpha;
-
-      if (alpha === 0) {
-        return;
-      }
-
-      var boundaries = boundaries_stack [level];
-      /*================= Update view matrixes ================= */
-      if (gl_view.__should_update_gl_matrix) {
-        update_transform_gl_matrix (gl_view);
-      }
-      var gl_object = GL_OBJECTS [gl_view.__gl_id];
-      var o_matrix = gl_object.matrix;
-      var m_matrix = gl_object.m_matrix;
-      var p_matrix = gl_object.p_matrix;
-      var scroll_vec = gl_view.__gl_scroll;
-      var p_size_vec = gl_view._size;
-            
-      if (new_p_matrix || gl_view.__invalid_matrixes) {
-        if (p_transform) {
-          mat4.multiply (p_transform, o_matrix, m_matrix);
-        }
-        else {
-          mat4.set (o_matrix, m_matrix);
-        }
-      }
-
-      if (new_p_matrix || gl_view.__invalid_matrixes || gl_view.__is_scrolling) {
-        mat4.translate (m_matrix, gl_view._position, p_matrix);
-      
-        if (scroll_vec) {
-          gl_view.__gl_update_scroll (now);
-          mat4.translate (p_matrix, scroll_vec);
-        }
-        new_p_matrix = true;
-      }
-      gl_view.__invalid_matrixes = false;
-
-      /*================= Culling allgorithm ================= */
-      // Update matrixes
-
-      v1 = gl_object.vertex_1; v2 = gl_object.vertex_2; 
-      v3 = gl_object.vertex_3; v4 = gl_object.vertex_4; 
-
-      if ((v1[0]>boundaries[2] && v2[0]>boundaries[2] &&
-           v3[0]>boundaries[2] && v4[0]>boundaries[2]) ||
-          (v1[0]<boundaries[0] && v2[0]<boundaries[0] &&
-           v3[0]<boundaries[0] && v4[0]<boundaries[0]) ||
-          (v1[1]>boundaries[3] && v2[1]>boundaries[3] &&
-           v3[1]>boundaries[3] && v4[1]>boundaries[3]) || 
-          (v1[1]<boundaries[1] && v2[1]<boundaries[1] &&
-           v3[1]<boundaries[1] && v4[1]<boundaries[1])) { 
-        return;
-      }
-
-      // Set the new boundaries for the children
-      boundaries = boundaries_stack [level+1];
-      if (scroll_vec) {
-        vec3.subtract ([0,0,0], scroll_vec, v_temp);
-        boundaries[0] = v_temp[0];
-        boundaries[1] = v_temp[1];
-        
-        vec3.subtract ([p_size_vec [0], p_size_vec [1], 0], scroll_vec, v_temp);       
-        boundaries[2] = v_temp [0];
-        boundaries[3] = v_temp [1];
-      }
-      else 
-      {
-        boundaries[0] = 0;
-        boundaries[1] = 0;
-        boundaries[2] = p_size_vec [0];
-        boundaries[3] = p_size_vec [1];
-      }
-
-      var entry = gl_stack_for_renter [gl_views_index++];
-      entry [0] = 1; // normal view to render
-      entry [1] = gl_view;
-      entry [2] = alpha;
-      
-      // End culling algorithm
-
-      // manage children
-      children = gl_view.__children;
-      l = children.length;
-      for (i = 0; i < l; i++) {
-        child = children [i];
-        if (child.__gl_id) {
-          _calculateViewsInFrustum (child, p_matrix, new_p_matrix, alpha, level + 1);
-        }
-      }
-    }
-
-    var boundaries = boundaries_stack [0];
-    boundaries [0] = 0;
-    boundaries [1] = 0;
-    boundaries [2] = frame_size[0];
-    boundaries [3] = frame_size[1];
-  
-    for (key in apps) {
-      var app = apps[key];
-      _calculateViewsInFrustum (app, null, false, 1, 0);
-    }
-    
-    gl_stack_length = gl_views_index;
-  }
+function startRendering () {
 
   var color_id_array = new Float32Array ([0,0,0,0])
     
