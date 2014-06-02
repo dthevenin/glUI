@@ -43,6 +43,16 @@ Action.releaseAction = function (action) {
   Action.__pool.push (action);
 }
 
+var main_actions_queue = [];
+var tmp_actions_queue = [];
+
+function queueAction (func, ctx) {
+  var action = Action.getAction ();
+  action.configure (func, ctx);
+  
+  main_actions_queue.push (action);
+}
+
 /**
  * doAction, execute one action. This method is called with our setImmediate
  * implementation.
@@ -51,17 +61,6 @@ Action.releaseAction = function (action) {
  */
 function doOneAction (action) {
   action.func.call (action.ctx);
-}
-
-var main_actions_queue = [];
-var tmp_actions_queue = [];
-
-
-function queueAction (func, ctx) {
-  var action = Action.getAction ();
-  action.configure (func, ctx);
-  
-  main_actions_queue.push (action);
 }
 
 /**
