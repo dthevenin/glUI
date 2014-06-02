@@ -18,29 +18,36 @@
  
 var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var duration = 300;
+var timing = GLAnimation.EASE_OUT;
 
 var weekLineOut = new GLAnimation (["translation", [0,0,0]]);
 weekLineOut.addKeyFrame (0, [[0,0,0]]);
 weekLineOut.duration = duration;
+weekLineOut.timing = timing;
 
 var weekLineIn = new GLAnimation (["translation", [0,0,0]]);
 weekLineIn.duration = duration;
+weekLineIn.timing = timing;
 
 var day1LineIn = new GLAnimation (["rotation", [0,0,0]]);
 day1LineIn.addKeyFrame (0, [[-90,0,0]]);
 day1LineIn.duration = duration;
+day1LineIn.timing = timing;
 
 var day1LineOut = new GLAnimation (["rotation", [-90,0,0]]);
 day1LineOut.addKeyFrame (0, [[0,0,0]]);
 day1LineOut.duration = duration;
+day1LineOut.timing = timing;
 
 var day2LineIn = new GLAnimation (["rotation", [0,0,0]], ["translation", [0,0,0]]);
 day2LineIn.addKeyFrame (0, [[90,0,0], [0,0,0]]);
 day2LineIn.duration = duration;
+day2LineIn.timing = timing;
 
 var day2LineOut = new GLAnimation (["rotation", [90,0,0]], ["translation", [0,0,0]]);
 day2LineOut.addKeyFrame (0, [[0,0,0], [0,0,0]]);
 day2LineOut.duration = duration;
+day2LineOut.timing = timing;
 
 var dayStyle, dateStyle, hourStyle, textStyle;
 
@@ -183,9 +190,10 @@ var Peek = vs.core.createClass ({
   },
   
   openWeek : function (index) {
-    var dy = 208;
+    var dy = 208, self = this;
   
     this._week_opened = index
+    this._is_animating = true;
     for (var i = index + 1; i < this._week_view.length; i++) {
       var line = this._week_view [i];
       weekLineOut.addKeyFrame (1, [[0,208,0]]);
@@ -194,7 +202,9 @@ var Peek = vs.core.createClass ({
     
     this.day1.translation = [0, (index + 1) * 105];
     this.day1.show ();
-    day1LineIn.process (this.day1);
+    day1LineIn.process (this.day1, function () {
+      self._is_animating = false;
+    });
     
     this.day2.show ();
     day2LineIn.addKeyFrame (0, [[90,0,0], [0, (index ) * 105,0]]);
@@ -210,16 +220,22 @@ var Peek = vs.core.createClass ({
     
     for (var i = this._week_opened + 1; i < this._week_view.length; i++) {
       var line = this._week_view [i];
+      weekLineIn.addKeyFrame (0, [[0,208,0]]);
       weekLineIn.process (line);
     }
     
-    var nbEndAnim = 0;
+    var nbEndAnim = 0, self = this;
+    
+    function endClose () {
+      self._is_animating = false;
+      if (clb) clb ();
+    }
 
     var day1 = this.day1;
     day1LineOut.process (day1, function () {
       day1.hide ();
       nbEndAnim ++;
-      if (nbEndAnim === 2 && clb) clb ();
+      if (nbEndAnim === 2) endClose ();
     });
     
     var day2 = this.day2;
@@ -228,13 +244,16 @@ var Peek = vs.core.createClass ({
     day2LineOut.process (day2, function () {
       day2.hide ();
       nbEndAnim ++;
-      if (nbEndAnim === 2 && clb) clb ();
+      if (nbEndAnim === 2) endClose ();
     });
 
     this._week_opened = undefined;
+    this._is_animating = true;
   },
 
   didTap : function (nb, elem) {
+    if (this._is_animating) return;
+    
     var index = elem.index, self = this;
     if (this._week_opened === index) {
       this.closeWeek ();
