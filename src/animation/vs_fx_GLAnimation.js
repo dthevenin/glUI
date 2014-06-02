@@ -56,6 +56,8 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.start ();
   
   if (animation.steps === 0) {
+    // TODO this modification make we lose the first frame !!!
+    // because the queueAction will schedule the animation on the next rendering.
     queueAction (function () {
       var animations = ANIMATIONS [comp.__gl_id];
       if (!animations) {
