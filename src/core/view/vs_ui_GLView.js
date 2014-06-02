@@ -823,6 +823,7 @@ util.defineClassProperties (GLView, {
       this._translation[2] = v[2] || 0;
 
       this.__should_update_gl_matrix = true;
+      GLView.__should_render = true;
     },
 
     /**
@@ -850,6 +851,7 @@ util.defineClassProperties (GLView, {
       this._rotation[2] = v[2] || 0;
 
       this.__should_update_gl_matrix = true;
+      GLView.__should_render = true;
     },
 
     /**
@@ -874,6 +876,7 @@ util.defineClassProperties (GLView, {
       this._scaling = v || 1;
 
       this.__should_update_gl_matrix = true;
+      GLView.__should_render = true;
     },
 
     /**
@@ -896,6 +899,8 @@ util.defineClassProperties (GLView, {
     set : function (v)
     {
       this._style.opacity = v
+      
+      GLView.__should_render = true;
     },
 
     /**
