@@ -15,9 +15,9 @@ var Text = vs.core.createClass ({
     this.view1.style.backgroundColor = GLColor.red;
 
     this.add (this.view1);
+    this._tmp_translation = vec3.create ();
  
     var algo = 3;
- 
  
     if (algo === 1) {
       // algo1    
@@ -46,8 +46,7 @@ var Text = vs.core.createClass ({
       this._screenX = e.screenX;
       this._screenY = e.screenY;
 
-      this._tmp_matrix = mat4.create ();
-      mat4.set (this.view1.__gl_matrix, this._tmp_matrix);
+      vec3.set (this.view1.translation, this._tmp_translation);
     }
     else if (e.type === POINTER_MOVE) {
 
@@ -55,9 +54,12 @@ var Text = vs.core.createClass ({
         dx = e.screenX - this._screenX,
         dy = e.screenY - this._screenY;
       
-      mat4.translate (this._tmp_matrix, [dx, dy, 0], this.view1.__gl_matrix);
-      this.view1.__invalid_matrixes = true;
-      GLView.__should_render = true;
+      var t = this.view1.translation;
+      t[0] = this._tmp_translation [0] + dx;
+      t[1] = this._tmp_translation [1] + dy;
+
+      // update position and will force graphic update
+      this.view1.translation = t;
     }
     else if (e.type === POINTER_END) {
       document.removeEventListener (POINTER_MOVE, this);
@@ -81,7 +83,12 @@ var Text = vs.core.createClass ({
       this.dy = e.screenY - this._screenY;
       
       
-      this.view1.translation = [this.dx + this.tx, this.dy + this.ty];
+      var t = this.view1.translation;
+      t[0] = this.dx + this.tx;
+      t[1] = this.dy + this.ty;
+
+      // update position and will force graphic update
+      this.view1.translation = t;
 //      window.render_ui (performance.now ());
     }
     else if (e.type === POINTER_END) {
@@ -95,8 +102,7 @@ var Text = vs.core.createClass ({
 
   didDragStart : function () {
     console.profile("drag algo3");
-    this._tmp_matrix = mat4.create ();
-    mat4.set (this.view1.__gl_matrix, this._tmp_matrix);
+    vec3.set (this.view1.translation, this._tmp_translation);
   },
 
   didDrag : function (drag_info, event) {
@@ -104,9 +110,12 @@ var Text = vs.core.createClass ({
       dy = drag_info.dy,
       dx = drag_info.dx;
       
-    mat4.translate (this._tmp_matrix, [dx, dy, 0], this.view1.__gl_matrix);
-    this.view1.__invalid_matrixes = true;
-    GLView.__should_render = true;
+    var t = this.view1.translation;
+    t[0] = this._tmp_translation [0] + dx;
+    t[1] = this._tmp_translation [1] + dy;
+
+    // update position and will force graphic update
+    this.view1.translation = t;
   },
 
   didDragEnd : function (drag_info, event) {
