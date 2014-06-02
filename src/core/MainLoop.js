@@ -18,6 +18,11 @@
 
 var render_ui;
 
+/********************************************************************
+      Actions Management
+*********************************************************************/
+
+
 /**
  *  Structure used for managing events
  *  @private
@@ -46,11 +51,18 @@ Action.releaseAction = function (action) {
 var main_actions_queue = [];
 var tmp_actions_queue = [];
 
+var is_actions_are_scheduled = false;
+
 function queueAction (func, ctx) {
   var action = Action.getAction ();
   action.configure (func, ctx);
   
   main_actions_queue.push (action);
+  
+  if (!is_actions_are_scheduled) {
+    is_actions_are_scheduled = true;
+    delay_do_actions ();
+  }
 }
 
 /**
@@ -69,7 +81,11 @@ function doOneAction (action) {
 function doAllActions (now) {
   var queue = main_actions_queue;
   
+  is_actions_are_scheduled = false;
+  
   if (queue.length) {
+    if (!now) now = performance.now ();
+    
     // switch queues
     main_actions_queue = tmp_actions_queue;
     tmp_actions_queue = queue;
@@ -91,6 +107,64 @@ function doAllActions (now) {
     queue.length = 0;
   }
 }
+
+
+/********************************************************************
+      setImmediate Polyfill (based on the Action management)
+*********************************************************************/
+
+
+/**
+ * Install our awn setImmediate implementation, if needs
+ *
+ * @private
+ */
+var setImmediate, delay_do_actions;
+if (!window.setImmediate) {
+
+  /**
+   * doAction, execute one action. This method is called with our setImmediate
+   * implementation.
+   *
+   * @private
+   */
+  function installPostMessageImplementation () {
+
+    var MESSAGE_PREFIX = "vs.scheduler" + Math.random ();
+
+    function onGlobalMessage (event) {
+      if (event.data === MESSAGE_PREFIX) {
+        doAllActions ();
+      }
+    }
+  
+    if (window.addEventListener) {
+      window.addEventListener ("message", onGlobalMessage, false);
+    }
+
+    return function () {
+      window.postMessage (MESSAGE_PREFIX, "*");
+    };
+  }
+
+  delay_do_actions = (window.postMessage)?
+    installPostMessageImplementation():
+    function () { setTimeout (doAllActions, 0) };
+
+
+  setImmediate = queueAction;
+  window.setImmediate = setImmediate;
+}
+else {
+  setImmediate = window.setImmediate.bind (window);
+  delay_do_actions = function () { setImmediate (doAllActions) };
+}
+
+
+/********************************************************************
+      Mainloop code
+*********************************************************************/
+
 
 /**
  * Mainloop core
