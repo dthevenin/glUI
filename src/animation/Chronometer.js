@@ -125,8 +125,7 @@ Chronometer.prototype = {
       }
       else
       {
-        this._state = vs.core.Task.STOPPED;
-        if (this.__clb_end) this.__clb_end ();
+        this.stop ();
       }
     }
     else {
@@ -186,8 +185,7 @@ Chronometer.prototype = {
 //       }
 //       else
 //       {
-//         this._state = vs.core.Task.STOPPED;
-//         if (this.__clb_end) this.__clb_end ();
+//         this.stop ()
 //       }
 //     }
 //     else {
