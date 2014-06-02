@@ -7,7 +7,7 @@ function createGLObject (gl_view) {
 
   var id = __unique_gl_id ++;
   gl_view.__gl_id = id ;
-  GL_VIEWS [id] = this;
+  GL_VIEWS [id] = gl_view;
 
   new glObject (gl_view.__gl_id);
 }
