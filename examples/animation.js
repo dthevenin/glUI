@@ -28,12 +28,12 @@ var Test = vs.core.createClass ({
 //     });
 //     FadeOutRight.process (v1);
 
-anim.process (v1,function () {
-  FadeOutRight.process (v1, function () {
-      console.log ("c'estfinit");
+    anim.process (v1,function () {
+      FadeOutRight.process (v1, function () {
+        console.log ("c'est finit");
+      });
     });
-});
-anim2.process (v2);
+    anim2.process (v2);
    
 // 
 //     slider.connect ("value").to (this.glView1, "rotation")
