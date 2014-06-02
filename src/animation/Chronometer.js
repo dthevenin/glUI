@@ -249,7 +249,6 @@ Chronometer.prototype = {
         console.error (e);
       }
     }
-    if (this.__clb_end) this.__clb_end ();
   },
 
   /**

@@ -39,7 +39,8 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.__clb = function (i) {
     trajs.compute (timing (i));
   }
-  chrono.__clb_end = function () {
+  chrono.delegate = {};
+  chrono.delegate.taskDidEnd = function () {
     if (animation.steps === 0) {
       var animations = ANIMATIONS [comp.__gl_id];
       animations.remove (chrono)
