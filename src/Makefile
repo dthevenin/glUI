@@ -101,6 +101,7 @@ vs_core.js:
 	$(CAT) core/view/vs_ui_GLApplication.js >> $@
 	$(CAT) core/view/vs_ui_GLText.js >> $@
 	$(CAT) core/view/vs_ui_GLImage.js >> $@
+	$(CAT) core/view/vs_ui_GLCanvas.js >> $@
 	
 vs_gl_widget.js:
 	$(CAT) widget/vs_ui_GLButton.js >> $@
