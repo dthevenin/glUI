@@ -54,8 +54,6 @@ function GLView (config)
   this._translation = vec3.create ();
   this._transform_origin = vec2.create ();
 
-  this.__animations = [];
-  
   createGLObject (this);
 }
 
@@ -508,14 +506,6 @@ GLView.prototype = {
       if (clb) {
         vs.scheduleAction (function () {clb.call (self);});
       }
-    }
-  },
-
-  __gl_update_animation : function (now) {
-    var i = 0, l = this.__animations.length, anim;
-    for (;i<l; i++) {
-      anim = this.__animations [i];
-      anim._clock (now);
     }
   },
 

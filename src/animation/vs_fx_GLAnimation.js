@@ -16,6 +16,10 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+var ANIMATIONS = [];
+
+
 var procesAnimation = function (comp, animation, clb, ctx, now) {
   for (var key in AnimationDefaultOption) {
     if (!animation [key]) animation [key] = AnimationDefaultOption [key];
@@ -37,7 +41,8 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   }
   chrono.__clb_end = function () {
     if (animation.steps === 0) {
-      comp.__animations.remove (chrono)
+      var animations = ANIMATIONS [comp.__gl_id];
+      animations.remove (chrono)
       GLView.__nb_animation --;
     }
     
@@ -49,11 +54,27 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.start ();
   
   if (animation.steps === 0) {
-    comp.__animations.push (chrono);
+    var animations = ANIMATIONS [comp.__gl_id];
+    if (!animations) {
+      animations = [];
+      ANIMATIONS [comp.__gl_id] = animations;
+    }
+    
+    animations.push (chrono);
     GLView.__nb_animation ++;
   }
 }
 
+function gl_update_animation (comp, now) {
+  var
+    animations = ANIMATIONS [comp.__gl_id],
+    i = 0, l = animations?animations.length:0, anim;
+    
+  for (;i<l; i++) {
+    anim = animations [i];
+    anim._clock (now);
+  }
+}
 
 var setupTrajectory = function (trajs, obj, property, traj)
 {
