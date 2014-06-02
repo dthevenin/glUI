@@ -262,7 +262,7 @@ function startRendering () {
   var previous_program = null;
   var attribute = {}, texture1 = {}, texture2 = {};
   
-  function bindToUnitTEXTURE0_1 (gl_object) {
+  function bindToUnitTEXTURE0_1 (unit, gl_object) {
     gl_ctx.activeTexture (gl_ctx.TEXTURE0 + unit);
     gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, gl_object.texture);
   };
