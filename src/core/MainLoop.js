@@ -64,12 +64,9 @@ function doOneAction (action) {
 }
 
 /**
- * Mainloop core
- *
  * @private
  */
-function serviceLoopBis (now) {
-  
+function doAllActions (now) {
   var queue = main_actions_queue;
   
   if (queue.length) {
@@ -77,17 +74,32 @@ function serviceLoopBis (now) {
     main_actions_queue = tmp_actions_queue;
     tmp_actions_queue = queue;
     
-    // execute actions
-    var i = 0, l = queue.length, action;
-    for (; i < l; i++) {
-      action = queue [i];
-      doOneAction (action, now)
-      Action.releaseAction (action);
+    try {
+      // execute actions
+      var i = 0, l = queue.length, action;
+      for (; i < l; i++) {
+        action = queue [i];
+        doOneAction (action, now)
+        Action.releaseAction (action);
+      }
     }
-    
+    catch (e) {
+      if (e.stack) console.error (e.stack);
+      else console.error (e);
+    }    
     // clean the queue
     queue.length = 0;
   }
+}
+
+/**
+ * Mainloop core
+ *
+ * @private
+ */
+function serviceLoopBis (now) {
+  
+  doAllActions (now);
   
   render_ui (now);
 
