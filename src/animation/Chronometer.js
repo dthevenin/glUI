@@ -39,6 +39,8 @@ Chronometer.prototype = {
    */
   start: function (param)
   {
+    var delegate = this.delegate, self = this;
+    
     if (this._state === vs.core.Task.STARTED) return;
 
     // schedule a chronometer cycle
@@ -94,9 +96,9 @@ Chronometer.prototype = {
     
     _start.call (this);
 
-    if (this.delegate && this.delegate.taskDidStart) {
+    if (delegate && delegate.taskDidStart) {
       try {
-        this.delegate.taskDidStart (this);
+        delegate.taskDidStart (self);
       }
       catch (e) {
         if (e.stack) console.log (e.stack)
@@ -233,6 +235,8 @@ Chronometer.prototype = {
    */
   stop: function ()
   {
+    var delegate = this.delegate, self = this;
+    
     this._state = vs.core.Task.STOPPED;
     this.__pause_time = 0;
     this.__timings__.length = 0;
@@ -240,9 +244,9 @@ Chronometer.prototype = {
     this._tick = 1;
     if (this.__clb) this.__clb (this._tick);
 
-    if (this.delegate && this.delegate.taskDidEnd) {
+    if (delegate && delegate.taskDidEnd) {
       try {
-        this.delegate.taskDidEnd (this);
+        delegate.taskDidEnd (self);
       }
       catch (e) {
         if (e.stack) console.log (e.stack)

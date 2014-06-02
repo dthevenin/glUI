@@ -341,5 +341,5 @@ function initWebGLRendering () {
   
   initRendering ()
 
-  vs.requestAnimationFrame (startRendering);
+  vs.requestAnimationFrame (serviceLoopBis);
 }

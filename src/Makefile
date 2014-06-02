@@ -88,6 +88,7 @@ vs_event.js:
 	$(CAT) core/event/recognizer/TapRecognizer.js >> $@
 	
 vs_core.js:
+	$(CAT) core/MainLoop.js >> $@
 	$(CAT) core/glMatrix.js >> $@
 	$(CAT) core/gl_object.js >> $@
 	$(CAT) core/gl_program.js >> $@

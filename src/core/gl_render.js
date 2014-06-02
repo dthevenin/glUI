@@ -236,10 +236,6 @@ function initRendering () {
   for (var i = 0; i < 256; i ++) {
     gl_boundaries_stack [i] = new glMatrixArrayType (4);
   }
-}
-
-
-function startRendering () {
 
   var color_id_array = new Float32Array ([0,0,0,0])
     
@@ -464,22 +460,22 @@ function startRendering () {
     previous_program = program;
   }
 
-  var animate = window.render_ui = function (now, mode) {
+  render_ui = function (now, mode) {
     if (!rendering) {
-      next_rendering_id = vs.requestAnimationFrame (animate);
+//      next_rendering_id = vs.requestAnimationFrame (animate);
       return
     }
 
     if (mode !== 1 && (!GLView.__should_render && !GLView.__nb_animation)) {
-      next_rendering_id = vs.requestAnimationFrame (animate);
+//      next_rendering_id = vs.requestAnimationFrame (animate);
       return
     }
 
     if (stats) stats.begin ();
     
-    if (mode === 1 && next_rendering_id) {
-      cancelAnimationFrame (next_rendering_id);
-    }
+//     if (mode === 1 && next_rendering_id) {
+//       cancelAnimationFrame (next_rendering_id);
+//     }
 
     calculateViewsInFrustum (now);
     GLView.__should_render = false;
@@ -506,12 +502,12 @@ function startRendering () {
 
       gl_ctx.flush();
     }
-    next_rendering_id = vs.requestAnimationFrame (animate);
+//    next_rendering_id = vs.requestAnimationFrame (animate);
 //    if (mode !== 1) vs.scheduleAction(animate, 300);
 
     if (stats) stats.end ();
   }
   
-  animate (performance.now ());
+//  animate (performance.now ());
 //  vs.scheduleAction(animate, 100);
 }

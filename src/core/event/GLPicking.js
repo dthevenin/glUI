@@ -55,9 +55,7 @@ function initPickBuffer()  {
 }
 
 function pickUp (event) {
-  if (!window.render_ui) return;
-  
-  if (!event) return;
+  if (!render_ui || !event) return;
   
   var x = event.clientX;
   var y = event.clientY;
