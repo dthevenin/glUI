@@ -19,7 +19,6 @@
 
 var ANIMATIONS = [];
 
-
 var procesAnimation = function (comp, animation, clb, ctx, now) {
   for (var key in AnimationDefaultOption) {
     if (!animation [key]) animation [key] = AnimationDefaultOption [key];
@@ -42,9 +41,11 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.delegate = {};
   chrono.delegate.taskDidEnd = function () {
     if (animation.steps === 0) {
-      var animations = ANIMATIONS [comp.__gl_id];
-      animations.remove (chrono)
-      GLView.__nb_animation --;
+      queueAction (function () {
+        var animations = ANIMATIONS [comp.__gl_id];
+        animations.remove (chrono)
+        GLView.__nb_animation --;
+      });
     }
     
     if (clb) {
@@ -55,21 +56,64 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.start ();
   
   if (animation.steps === 0) {
-    var animations = ANIMATIONS [comp.__gl_id];
-    if (!animations) {
-      animations = [];
-      ANIMATIONS [comp.__gl_id] = animations;
-    }
+    queueAction (function () {
+      var animations = ANIMATIONS [comp.__gl_id];
+      if (!animations) {
+        animations = [];
+        ANIMATIONS [comp.__gl_id] = animations;
+      }
     
-    animations.push (chrono);
-    GLView.__nb_animation ++;
+      animations.push (chrono);
+      GLView.__nb_animation ++;
+    });
   }
 }
 
+function setupAnimations (comp) {
+  var
+    animations_to_add = ANIMATIONS_TO_ADD [comp.__gl_id],
+    i = 0, l = animations_to_add?animations_to_add.length:0, anim;
+
+  if (!l) return;
+
+  var animations = ANIMATIONS [comp.__gl_id];
+  if (!animations) {
+    animations = [];
+    ANIMATIONS [comp.__gl_id] = animations;
+  }
+    
+  for (;i<l; i++) {
+    anim = animations_to_add [i];
+    animations.push (anim);
+  }
+  
+  animations_to_add.length = 0;
+}
+
+function cleanAnimations (comp) {
+  var
+    animations_to_remove = ANIMATIONS_TO_REMOVE [comp.__gl_id],
+    i = 0, l = animations_to_remove?animations_to_remove.length:0, anim;
+
+  if (!l) return;
+
+  var animations = ANIMATIONS [comp.__gl_id];
+    
+  for (;i<l; i++) {
+    anim = animations_to_remove [i];
+    animations.remove (anim)
+  }
+  
+  animations_to_remove.length = 0;
+}
+
 function gl_update_animation (comp, now) {
+ 
   var
     animations = ANIMATIONS [comp.__gl_id],
     i = 0, l = animations?animations.length:0, anim;
+    
+  if (!l) return;
     
   for (;i<l; i++) {
     anim = animations [i];
