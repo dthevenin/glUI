@@ -71,44 +71,6 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   }
 }
 
-function setupAnimations (comp) {
-  var
-    animations_to_add = ANIMATIONS_TO_ADD [comp.__gl_id],
-    i = 0, l = animations_to_add?animations_to_add.length:0, anim;
-
-  if (!l) return;
-
-  var animations = ANIMATIONS [comp.__gl_id];
-  if (!animations) {
-    animations = [];
-    ANIMATIONS [comp.__gl_id] = animations;
-  }
-    
-  for (;i<l; i++) {
-    anim = animations_to_add [i];
-    animations.push (anim);
-  }
-  
-  animations_to_add.length = 0;
-}
-
-function cleanAnimations (comp) {
-  var
-    animations_to_remove = ANIMATIONS_TO_REMOVE [comp.__gl_id],
-    i = 0, l = animations_to_remove?animations_to_remove.length:0, anim;
-
-  if (!l) return;
-
-  var animations = ANIMATIONS [comp.__gl_id];
-    
-  for (;i<l; i++) {
-    anim = animations_to_remove [i];
-    animations.remove (anim)
-  }
-  
-  animations_to_remove.length = 0;
-}
-
 function gl_update_animation (comp, now) {
  
   var
