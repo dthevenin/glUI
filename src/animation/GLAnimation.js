@@ -20,9 +20,9 @@ function GLAnimation (animations)
 {
   this.constructor = GLAnimation;
 
-  if (arguments.length)
+  if (animations)
   {
-    this.setAnimations (arguments);
+    this.setAnimations (animations);
   }
 };
 
@@ -74,7 +74,7 @@ GLAnimation.prototype = {
    * @example
    * // define a animation with two transformations
    * animation = new vs.fx.GLAnimation ()
-   * animation.setAnimations ([[‘width’, '100px'], ['opacity', '0']]);
+   * animation.setAnimations ({‘width’: 100, 'opacity': 0});
    *
    * @name vs.fx.GLAnimation#setAnimations
    * @function
@@ -83,20 +83,14 @@ GLAnimation.prototype = {
    */
   setAnimations : function (animations)
   {
-    var i, property, value, option, traj;
+    var i, property, value, traj, values;
 
     this.timing = GLAnimation.EASE;
     this._trajectories = {};
 
-    for (i = 0 ; i < animations.length; i++)
+    for (property in animations)
     {
-      option = animations [i];
-      if (!util.isArray (option) || option.length !== 2)
-      {
-        console.warn ('vs.fx.GLAnimation, invalid animations');
-        continue;
-      }
-      property = option [0]; value = option [1];
+      value = animations [property];
       if (!util.isString (property))
       {
         console.warn ('vs.fx.GLAnimation, invalid constructor argument option: [' +
@@ -104,25 +98,10 @@ GLAnimation.prototype = {
         continue;
       }
       
-      switch (property) {
-        case "tick": 
-        case "opacity": 
-        case "fontSize": 
-        case "scaling":
-          traj = new TrajectoryVect1D ([[0], [1, value]]);
-          break;
-    
-        case "translation": 
-        case "rotation": 
-          traj = new TrajectoryVect3D ([[0], [1, value]]);
-          break;
- 
-        default:
-          console.log ("NOT SUPPORTED PROPERTY: " + property);
-          return;
-      }      
+      values = [];
+      values.push ([1, deepArrayClone (value)]);     
       
-      this._trajectories [property] = traj;
+      this._trajectories [property] = values;
     }
   },
 
@@ -137,16 +116,12 @@ GLAnimation.prototype = {
    *  @example
    *  var translate = new vs.fx.TranslateAnimation (130, 150);
    *
-   *  translate.addKeyFrame ('from', {x:0, y: 0, z:0});
-   *  translate.addKeyFrame (20, {x:50, y: 0, z: 0});
-   *  translate.addKeyFrame (40, {x:50, y: 50, z: 0});
-   *
    *  @example
-   *  var translate = new vs.fx.GLAnimation (['translateY','100px'],['opacity', '0']);
+   *  var translate = new vs.fx.GLAnimation ({'translation' : [100,10,0], 'opacity' : 0});
    *
-   *  translate.addKeyFrame ('from', ['0px', '1']);
-   *  translate.addKeyFrame (20, ['50px', '1']);
-   *  translate.addKeyFrame (40, ['80px', '1']);
+   *  translate.keyFrame (0.2, {translation [50,50,0], 'opacity' : 0.5});
+   *  translate.keyFrame (0.4, {translation [80,10,0]});
+   *  translate.keyFrame (0.6, {'opacity' : 1});
    *
    * @name vs.fx.GLAnimation#addKeyFrame
    * @function
@@ -154,32 +129,33 @@ GLAnimation.prototype = {
    * @param {Object | Array} values the object containing values for
    *         the animation
    */
-  addKeyFrame : function (pos, datas)
+  keyFrame : function (pos, datas)
   {
     var traj, property, values, i, value, index = 0;
     
     if (!datas) { return; }
     if (!util.isNumber (pos) || pos < 0 || pos > 1) { return; }
     
-    function updateValues (values, pos, data) {
+    function updateValues (values, pos, new_value) {
       var i = 0, l = values.length, value;
       
       for (; i < l; i++) {
         value = values[i];
         if (value[0] === pos) {
-          value[1] = deepArrayClone (data);
+          value[1] = deepArrayClone (new_value);
           return;
         }
       }
       
-      values.push ([pos, deepArrayClone (data)]);
+      values.push ([pos, deepArrayClone (new_value)]);
       values.sort (function(a, b) {return a[0] - b[0];});
     }
     
-    
-    for (property in this._trajectories) {
-      traj = this._trajectories [property];      
-      updateValues (traj._values, pos, datas [index++]);
+    for (property in datas) {
+      value = datas [property];
+      values = this._trajectories [property];    
+      if (!values) continue;
+      updateValues (values, pos, value);
     }
   },
 

@@ -20,27 +20,30 @@
 var ANIMATIONS = [];
 
 var procesAnimation = function (comp, animation, clb, ctx, now) {
+
+  var data_anim = {};
   for (var key in AnimationDefaultOption) {
-    if (!animation [key]) animation [key] = AnimationDefaultOption [key];
+    if (animation [key]) data_anim [key] = animation [key];
+    else data_anim [key] = AnimationDefaultOption [key];
   }
 
   var trajs = new TrajectoriesData ();
-  var timing = animation.timing;
+  var timing = data_anim.timing;
   
   for (var property in animation._trajectories) {
     setupTrajectory (trajs, comp, property, animation._trajectories [property]);
   }
+    
+  data_anim.steps = animation.steps | 0;
+  if (data_anim.steps <= 1) data_anim.steps = 0;
   
-  animation.steps = animation.steps | 0;
-  if (animation.steps <= 1) animation.steps = 0;
-  
-  var chrono = new Chronometer (animation)
+  var chrono = new Chronometer (data_anim)
   chrono.__clb = function (i) {
     trajs.compute (timing (i));
   }
   chrono.delegate = {};
   chrono.delegate.taskDidEnd = function () {
-    if (animation.steps === 0) {
+    if (data_anim.steps === 0) {
       queueAction (function () {
         var animations = ANIMATIONS [comp.__gl_id];
         animations.remove (chrono)
@@ -55,7 +58,7 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   }
   chrono.start ();
   
-  if (animation.steps === 0) {
+  if (data_anim.steps === 0) {
     // TODO this modification make we lose the first frame !!!
     // because the queueAction will schedule the animation on the next rendering.
     queueAction (function () {
@@ -85,7 +88,7 @@ function gl_update_animation (comp, now) {
   }
 }
 
-var setupTrajectory = function (trajs, obj, property, traj)
+var setupTrajectory = function (trajs, obj, property, traj_values)
 {
   switch (property) {
     case "opacity": 
@@ -94,10 +97,34 @@ var setupTrajectory = function (trajs, obj, property, traj)
       break;
   }
 
-  if (vs.util.isUndefined (traj._values [0][1])) {
-    traj._values [0][1] = obj[property];
+  var value = traj_values [0];
+  if (!value) return;
+  
+  if (value [0] !== 0) {
+    // add the miss the beginning value
+    value = [0, deepArrayClone (obj[property])];
+    traj_values = traj_values.slice ();
+    traj_values.unshift (value);
   }
 
+  switch (property) {
+    case "tick": 
+    case "opacity": 
+    case "fontSize": 
+    case "scaling":
+      traj = new TrajectoryVect1D (traj_values);
+      break;
+
+    case "translation": 
+    case "rotation": 
+      traj = new TrajectoryVect3D (traj_values);
+      break;
+
+    default:
+      console.log ("NOT SUPPORTED PROPERTY: " + property);
+      return;
+  }      
+  
   trajs.add (obj, property, traj);
 }
 
