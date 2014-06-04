@@ -77,8 +77,6 @@ var Vector1D = function (values) {
 util.extendClass (Vector1D, Trajectory);
   
 Vector1D.prototype.compute = function (tick) {
-//  if (!vs.util.isNumber (tick)) return false;
-
   var
     nb_values = this._values.length - 1, // int [0, n]
     ti = tick * nb_values, // float [0, n]
@@ -100,8 +98,6 @@ util.extendClass (Vector2D, Trajectory);
   
 Vector2D.prototype.compute = function (tick)
 {
-//  if (!vs.util.isNumber (tick)) return false;
-  
   var
     values = this._values,
     nb_values = values.length - 1, // int [0, n]
@@ -133,8 +129,6 @@ util.extendClass (Vector3D, Trajectory);
   
 Vector3D.prototype.compute = function (tick)
 {
-//  if (!vs.util.isNumber (tick)) return false;
-  
   var
     values = this._values,
     nb_values = values.length - 1, // int [0, n]
