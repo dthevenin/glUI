@@ -50,9 +50,29 @@ function getValuesIndex (values, t, operation) {
   }
 }
 
+function deepClone (data) {
+  var result, len, i;
+  
+  if (data instanceof window.Float32Array) {
+    result = new Float32Array (data.length);
+    result.set(data);
+  }
+  else if (data instanceof Array) {
+    len = data.length
+    result = new Array (len);
+
+    for (i = 0; i < len; i++) {
+      result [i] = deepClone (data [i]);
+    }
+  }
+  else result = data;
+
+  return result;
+}
+
 var Vector1D = function (values) {
   Trajectory.call (this);  
-  this._values = values;
+  this._values = deepClone (values);
 }
 util.extendClass (Vector1D, Trajectory);
   
@@ -73,7 +93,7 @@ Vector1D.prototype.compute = function (tick) {
 
 var Vector2D = function (values) {
   Trajectory.call (this);  
-  this._values = values;
+  this._values = deepClone (values);
   this.out = new glMatrixArrayType (2);
 }
 util.extendClass (Vector2D, Trajectory);
@@ -106,7 +126,7 @@ Vector2D.prototype.compute = function (tick)
 
 var Vector3D = function (values) {
   Trajectory.call (this);  
-  this._values = values;
+  this._values = deepClone (values);
   this.out = new glMatrixArrayType (3);
 }
 util.extendClass (Vector3D, Trajectory);
@@ -126,7 +146,7 @@ Vector3D.prototype.compute = function (tick)
       out[0] = v1[0] + (v2[0] - v1[0]) * d;
       out[1] = v1[1] + (v2[1] - v1[1]) * d;
       out[2] = v1[2] + (v2[2] - v1[2]) * d;
-      
+
       return out;
     });
     
