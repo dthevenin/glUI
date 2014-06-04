@@ -130,11 +130,11 @@ var ThingList = vs.core.createClass ({
     
     // Hide list animation
     this.hide_list_anim = new GLAnimation (["translation", [0, size[1]]]);
-    this.hide_list_anim.addKeyFrame (0, [[0,0]]);
+    this.hide_list_anim.keyFrame (0, [[0,0]]);
     this.hide_list_anim.duration = 200;
     
     this.show_list_anim = new GLAnimation (["translation", [0, 0]]);
-    this.show_list_anim.addKeyFrame (0, [[0, size[1]]]);
+    this.show_list_anim.keyFrame (0, [[0, size[1]]]);
     this.show_list_anim.duration = 200;
   }
 });

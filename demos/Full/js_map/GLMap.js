@@ -34,23 +34,23 @@ var GLMap = vs.core.createClass ({
     var self = this;
 
     // Show list animation
-    this.show_anim = new GLAnimation (
-      ['tick', 0],
-      ['scaling', 1],
-      ['rotation', [0, 0, 0]]
-    );
-    this.show_anim.addKeyFrame (0, [1, 0.1, [30, 40, 0]]);
-    this.show_anim.addKeyFrame (0.3, [1, 1, [30, 40, 0]]);
+    this.show_anim = new GLAnimation ({
+      'tick': 0,
+      'scaling': 1,
+      'rotation': [0, 0, 0]
+    });
+    this.show_anim.keyFrame (0, [1, 0.1, [30, 40, 0]]);
+    this.show_anim.keyFrame (0.3, [1, 1, [30, 40, 0]]);
     this.show_anim.duration = 1000;
 
     // Hide list animation
-    this.hide_anim = new GLAnimation (
-      ['tick', 1],
-      ['scaling', 0.1],
-      ['rotation', [30, 40, 0]]
-    );
-    this.hide_anim.addKeyFrame (0, [0, 1, [0, 0, 0]]);
-    this.hide_anim.addKeyFrame (0.7, [1, 1, [30, 40, 0]]);
+    this.hide_anim = new GLAnimation ({
+      'tick': 1,
+      'scaling': 0.1,
+      'rotation': [30, 40, 0]
+    });
+    this.hide_anim.keyFrame (0, [0, 1, [0, 0, 0]]);
+    this.hide_anim.keyFrame (0.7, [1, 1, [30, 40, 0]]);
     this.hide_anim.duration = 1000;
     
     this._dx = 0;

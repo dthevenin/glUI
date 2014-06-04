@@ -32,19 +32,19 @@ var CoverFlow = vs.core.createClass ({
     window.app = this;     
     this.buildList ();
 
-    var nb = 0, t = Date.now (), iteration = 2500;
-    function animate () {
-      list.__scroll__.scrollBy (0,-3);
-      nb++
-      if (nb < iteration)
-        vs.requestAnimationFrame (animate);
-      else {
-        console.profileEnd ("List");
-        t = Date.now () - t;
-        
-        console.log ((t / 1000) + 's, ' + (iteration / (t / 1000)) + 'fps');
-      }
-    }
+//     var nb = 0, t = Date.now (), iteration = 2500;
+//     function animate () {
+//       list.__scroll__.scrollBy (0,-3);
+//       nb++
+//       if (nb < iteration)
+//         vs.requestAnimationFrame (animate);
+//       else {
+//         console.profileEnd ("List");
+//         t = Date.now () - t;
+//         
+//         console.log ((t / 1000) + 's, ' + (iteration / (t / 1000)) + 'fps');
+//       }
+//     }
 //    vs.requestAnimationFrame (animate);
 //    console.profile ("List");
 
@@ -87,7 +87,7 @@ var CoverFlow = vs.core.createClass ({
       }
       
       if (open_item) {
-        this.hideItem ();
+        this.closeItem ();
       }
       
       if (item === open_item) {
@@ -95,73 +95,105 @@ var CoverFlow = vs.core.createClass ({
         return;
       }
       
-      this.showItem (item.__index);
+      this.openItem (item.__index);
       open_item = item;
     };
     
-    var outTopAnimation = new GLAnimation (['translation', [0,0,0]]);
-    var outBottomAnimation = new GLAnimation (['translation', [0,0,0]]);
-    var inAnimation = new GLAnimation (['translation', [0,0,0]]);
     
-    list.showItem = function (index) {
-      var item, pos = list.__gl_scroll;
+    var duration = 300;
+    var timing = GLAnimation.LINEAR;
+    
+    var animationPageOut = new GLAnimation ({
+        'rotation': [-40, 0, 0],
+        'translation': [0, 0, 0]
+      });
+    animationPageOut.duration = duration;
+    animationPageOut.timing = timing;
+    
+    list.openItem = function (index) {
+      var item, scrollPos = list.__gl_scroll;
       
       list.__index = index;
       
-      outBottomAnimation.addKeyFrame (1, [0, size[1] - pos [1]]);
-      
-      for (var i = 0; i < index; i ++) {
+      for (var i = 1; i < index; i ++) {
         item = this.__children [i];
 
-        var animation = new GLAnimation (
-          ['translation', [0, -300 - pos [1] - item.position[1]]]);
-        animation.process (item);
+        itemPos = item.position;
+        ty = - (itemPos [1] - i * 10);
+
+        var animation = new GLAnimation ({'translation': [0, ty, 0]});
+//        animation.keyFrame (0, {'translation': [0, 0, 0]});
+        animation.duration = duration;
+        animation.timing = timing;
+//        animation.process (item);
       }
      
       item = this.__children [index];
-//      item.position = [0, (size[1] - 300) / 2 - pos [1]];    
 
-      var animation = new GLAnimation (
-        ['rotation', [0, 0, 0]],
-        ['translation', [0, (size[1] - 300) / 2  - pos [1] - item.position [1]]]
-      );
+      var animation = new GLAnimation ({
+        'rotation': [0, 0, 0],
+        'translation': [0, (size[1] - 300) / 2  - scrollPos [1] - item.position [1]]
+      });
+      animation.keyFrame (0, {
+        'rotation': [-40, 0, 0],
+        'translation': [0, 0, 0]
+      });
+      animation.duration = duration;
+      animation.timing = timing;
       animation.process (item);
 
       index++;
-      for (index; index < this.__children.length; index ++) {
+      var l = this.__children.length;
+      for (index; index < l; index ++) {
         item = this.__children [index];
         
-        var animation = new GLAnimation (['translation', [0, size[1]]]);
+        itemPos = item.position;
+        ty = size[1] - itemPos [1] - (l - index) * 10;
+
+        var animation = new GLAnimation ({'translation': [0, ty, 0]});
+//        animation.keyFrame (0, {'translation': [0, 0, 0]});
+        animation.duration = duration;
+        animation.timing = timing;
         animation.process (item);
       }
       
       list.scroll = false;
     }
     
-    list.hideItem = function () {
+    list.closeItem = function () {
       var item, index = list.__index;
       
+      var animation = new GLAnimation ({'translation': [0,0,0]});
+      animation.duration = duration;
+      animation.timing = timing;      
+
       for (var i = 0; i < index; i ++) {
         item = this.__children [i];
+        console.log (item.translation);
+        
+//        animation = new GLAnimation ({'translation': [0,0,0]});
+//        animation.keyFrame (0, {'translation': item.translation});
 
-        var inAnimation = new GLAnimation (['translation', [0,0,0]]);
-        inAnimation.process (item);
+        animation.process (item);
       }
      
       item = this.__children [index];
-      var animation = new GLAnimation (
-        ['rotation', [-40, 0, 0]],
-        ['translation', [0, 0]]
-      );
-      animation.process (item);
+
+      animationPageOut.keyFrame (0, {
+        'rotation': [0, 0, 0],
+        'translation': item.translation
+      });
+      animationPageOut.process (item);
     
       index++;
       
       for (index; index < this.__children.length; index ++) {
         item = this.__children [index];
-
-        var inAnimation = new GLAnimation (['translation', [0,0,0]]);
-        inAnimation.process (item);  
+        
+//        animation = new GLAnimation ({'translation': [0,0,0]});
+//        animation.keyFrame (0, {'translation': item.translation});
+        
+        animation.process (item);  
       }
       
       list.scroll = true;
@@ -267,36 +299,3 @@ var Data = [
     "rating": 2.9
   }
 ]
-
-//window.ACTIVATE_STATS = true;
-
-function animate () {
-//  _pickUp (20, 20);
-  app.openSettings ();
-}
-
-function test () {
-  console.profile("webgl");
-  vs.scheduleAction (animate);
-  vs.scheduleAction (animate, 1000);
-  vs.scheduleAction (animate, 2000);
-  vs.scheduleAction (animate, 3000);
-  vs.scheduleAction (animate, 4000);
-  vs.scheduleAction (animate, 5000);
-//   vs.scheduleAction (animate, 6000);
-//   vs.scheduleAction (animate, 7000);
-//   vs.scheduleAction (animate, 8000);
-//   vs.scheduleAction (animate, 9000);
-//   vs.scheduleAction (animate, 10000);
-//   vs.scheduleAction (animate, 11000);
-//   vs.scheduleAction (animate, 12000);
-//   vs.scheduleAction (animate, 13000);
-//   vs.scheduleAction (animate, 14000);
-//   vs.scheduleAction (animate, 15000);
-//   vs.scheduleAction (animate, 16000);
-//   vs.scheduleAction (animate, 17000);
-//   vs.scheduleAction (animate, 18000);
-  vs.scheduleAction (function () {
-    console.profileEnd("webgl");
-  }, 6000);
-}

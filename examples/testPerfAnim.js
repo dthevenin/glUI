@@ -9,11 +9,11 @@ var testPerfAnim = vs.core.createClass ({
     this.style.backgroundColor = GLColor.white;
     this.style.backgroundImage = "background.jpg";
 
-    var animation = new GLAnimation (['translation', [00,0]]);
-    animation.addKeyFrame (0, [[0, 0]]);
-    animation.addKeyFrame (0.25, [[600, 0]]);
-    animation.addKeyFrame (0.50, [[600, 400]]);
-    animation.addKeyFrame (0.75, [[0, 400]]);
+    var animation = new GLAnimation ({'translation': [0,0,0]});
+    animation.keyFrame (0, {'translation': [0, 0, 0]});
+    animation.keyFrame (0.25, {'translation': [600, 0, 0]});
+    animation.keyFrame (0.50, {'translation': [600, 400, 0]});
+    animation.keyFrame (0.75, {'translation': [0, 400, 0]});
     animation.duration = 20000;
     animation.timing = GLAnimation.LINEAR;
     animation.repeat = 200;
@@ -21,8 +21,8 @@ var testPerfAnim = vs.core.createClass ({
 
     function setDiv (parent, dec) {
       var delay = 0;
-//      for (var i = 0; i < 100; i++) {
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 100; i++) {
+//      for (var i = 0; i < 3; i++) {
         var img = new vs.ui.GLImage ({
           position: [100 + dec, 100 + dec],
           size: [135, 126],

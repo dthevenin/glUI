@@ -53,24 +53,24 @@ function loadApplication () {
 
 
 // var anim = new GLAnimation (['rotation', [0,0,20]], ['opacity', 1], ['translation', [100, 200]]);
-// anim.addKeyFrame (0, [[0,0,0], 1, [0,0]]);
-// anim.addKeyFrame (0.5, [[0,0,10], 0.5, [50,100]]);
+// anim.keyFrame (0, [[0,0,0], 1, [0,0]]);
+// anim.keyFrame (0.5, [[0,0,10], 0.5, [50,100]]);
 
 
-var anim = new GLAnimation (['rotation', [0,0,20]]);
-anim.addKeyFrame (0, [[0,0,0]]);
-anim.addKeyFrame (0.5, [[0,0,10]]);
+var anim = new GLAnimation ({'rotation': [0,0,20]});
+anim.keyFrame (0, {'rotation':[0,0,0]});
+anim.keyFrame (0.5, {'rotation':[0,0,10]});
 
 //   var anim = new GLAnimation (['opacity', 0.1]);
-//   anim.addKeyFrame (0, [1]);
+//   anim.keyFrame (0, [1]);
 //    var anim = new GLAnimation (['translation', [100, 200]]);
 anim.duration = 1000;
 //anim.repeat = 3;
 //anim.steps = 10;
-//    anim.addKeyFrame (0, [[-100, -100]]);
+//    anim.keyFrame (0, [[-100, -100]]);
 
 
-var anim2 = new GLAnimation (['translation', [0,200,0]]);
-anim2.addKeyFrame (0, [[0,0,0]]);
-anim2.addKeyFrame (0.5, [[100,0,10]]);
+var anim2 = new GLAnimation ({'translation': [0,200,0]});
+anim2.keyFrame (0, {'translation':[0,0,0]});
+anim2.keyFrame (0.5, {'translation':[100,0,10]});
 anim2.duration = 1000;

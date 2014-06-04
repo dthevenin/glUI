@@ -20,32 +20,32 @@ var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "A
 var duration = 300;
 var timing = GLAnimation.EASE_OUT;
 
-var weekLineOut = new GLAnimation (["translation", [0,0,0]]);
-weekLineOut.addKeyFrame (0, [[0,0,0]]);
+var weekLineOut = new GLAnimation ({"translation": [0,0,0]});
+weekLineOut.keyFrame (0, {"translation": [0,0,0]});
 weekLineOut.duration = duration;
 weekLineOut.timing = timing;
 
-var weekLineIn = new GLAnimation (["translation", [0,0,0]]);
+var weekLineIn = new GLAnimation ({"translation": [0,0,0]});
 weekLineIn.duration = duration;
 weekLineIn.timing = timing;
 
-var day1LineIn = new GLAnimation (["rotation", [0,0,0]]);
-day1LineIn.addKeyFrame (0, [[-90,0,0]]);
+var day1LineIn = new GLAnimation ({"rotation": [0,0,0]});
+day1LineIn.keyFrame (0, {"rotation": [-90,0,0]});
 day1LineIn.duration = duration;
 day1LineIn.timing = timing;
 
-var day1LineOut = new GLAnimation (["rotation", [-90,0,0]]);
-day1LineOut.addKeyFrame (0, [[0,0,0]]);
+var day1LineOut = new GLAnimation ({"rotation": [-90,0,0]});
+day1LineOut.keyFrame (0, {"translation": [0,0,0]});
 day1LineOut.duration = duration;
 day1LineOut.timing = timing;
 
-var day2LineIn = new GLAnimation (["rotation", [0,0,0]], ["translation", [0,0,0]]);
-day2LineIn.addKeyFrame (0, [[90,0,0], [0,0,0]]);
+var day2LineIn = new GLAnimation ({"rotation": [0,0,0], "translation": [0,0,0]});
+day2LineIn.keyFrame (0, {"rotation": [90,0,0], "translation": [0,0,0]});
 day2LineIn.duration = duration;
 day2LineIn.timing = timing;
 
-var day2LineOut = new GLAnimation (["rotation", [90,0,0]], ["translation", [0,0,0]]);
-day2LineOut.addKeyFrame (0, [[0,0,0], [0,0,0]]);
+var day2LineOut = new GLAnimation ({"rotation": [90,0,0], "translation": [0,0,0]});
+day2LineOut.keyFrame (0, {"rotation": [0,0,0], "translation": [0,0,0]});
 day2LineOut.duration = duration;
 day2LineOut.timing = timing;
 
@@ -196,7 +196,7 @@ var Peek = vs.core.createClass ({
     this._is_animating = true;
     for (var i = index + 1; i < this._week_view.length; i++) {
       var line = this._week_view [i];
-      weekLineOut.addKeyFrame (1, [[0,208,0]]);
+      weekLineOut.keyFrame (1, {"translation": [0,208,0]});
       weekLineOut.process (line);
     }
     
@@ -207,8 +207,8 @@ var Peek = vs.core.createClass ({
     });
     
     this.day2.show ();
-    day2LineIn.addKeyFrame (0, [[90,0,0], [0, (index ) * 105,0]]);
-    day2LineIn.addKeyFrame (1, [[0,0,0], [0, (index + 2) * 105,0]]);
+    day2LineIn.keyFrame (0, {"rotation": [90,0,0], "translation": [0, (index ) * 105,0]});
+    day2LineIn.keyFrame (1, {"rotation": [0,0,0], "translation": [0, (index + 2) * 105,0]});
     day2LineIn.process (this.day2);
   },
 
@@ -220,7 +220,7 @@ var Peek = vs.core.createClass ({
     
     for (var i = this._week_opened + 1; i < this._week_view.length; i++) {
       var line = this._week_view [i];
-      weekLineIn.addKeyFrame (0, [[0,208,0]]);
+      weekLineIn.keyFrame (0, {"translation": [0,208,0]});
       weekLineIn.process (line);
     }
     
@@ -239,8 +239,8 @@ var Peek = vs.core.createClass ({
     });
     
     var day2 = this.day2;
-    day2LineOut.addKeyFrame (0, [[0,0,0], [0, (this._week_opened + 2) * 105,0]]);
-    day2LineOut.addKeyFrame (1, [[90,0,0], [0, (this._week_opened ) * 105,0]]);
+    day2LineOut.keyFrame (0, {"rotation": [0,0,0], "translation": [0, (this._week_opened + 2) * 105,0]});
+    day2LineOut.keyFrame (1, {"rotation": [90,0,0], "translation": [0, (this._week_opened ) * 105,0]});
     day2LineOut.process (day2, function () {
       day2.hide ();
       nbEndAnim ++;

@@ -20,26 +20,26 @@ var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "A
 var duration = 300;
 
 var weekLineOut = new GLAnimation (["translation", [0,0,0]]);
-weekLineOut.addKeyFrame (0, [[0,0,0]]);
+weekLineOut.keyFrame (0, [[0,0,0]]);
 weekLineOut.duration = duration;
 
 var weekLineIn = new GLAnimation (["translation", [0,0,0]]);
 weekLineIn.duration = duration;
 
 var day1LineIn = new GLAnimation (["rotation", [0,0,0]]);
-day1LineIn.addKeyFrame (0, [[-90,0,0]]);
+day1LineIn.keyFrame (0, [[-90,0,0]]);
 day1LineIn.duration = duration;
 
 var day1LineOut = new GLAnimation (["rotation", [-90,0,0]]);
-day1LineOut.addKeyFrame (0, [[0,0,0]]);
+day1LineOut.keyFrame (0, [[0,0,0]]);
 day1LineOut.duration = duration;
 
 var day2LineIn = new GLAnimation (["rotation", [0,0,0]], ["translation", [0,0,0]]);
-day2LineIn.addKeyFrame (0, [[90,0,0], [0,0,0]]);
+day2LineIn.keyFrame (0, [[90,0,0], [0,0,0]]);
 day2LineIn.duration = duration;
 
 var day2LineOut = new GLAnimation (["rotation", [90,0,0]], ["translation", [0,0,0]]);
-day2LineOut.addKeyFrame (0, [[0,0,0], [0,0,0]]);
+day2LineOut.keyFrame (0, [[0,0,0], [0,0,0]]);
 day2LineOut.duration = duration;
 
 var dayStyle, dateStyle, hourStyle, textStyle;
@@ -199,7 +199,7 @@ var Peek = vs.core.createClass ({
     this._week_opened = index
     for (var i = index + 1; i < this._week_view.length; i++) {
       var line = this._week_view [i];
-      weekLineOut.addKeyFrame (1, [[0,208,0]]);
+      weekLineOut.keyFrame (1, [[0,208,0]]);
       weekLineOut.process (line);
     }
     
@@ -208,8 +208,8 @@ var Peek = vs.core.createClass ({
     day1LineIn.process (this.day1);
     
     this.day2.show ();
-    day2LineIn.addKeyFrame (0, [[90,0,0], [0, (index ) * 105,0]]);
-    day2LineIn.addKeyFrame (1, [[0,0,0], [0, (index + 2) * 105,0]]);
+    day2LineIn.keyFrame (0, [[90,0,0], [0, (index ) * 105,0]]);
+    day2LineIn.keyFrame (1, [[0,0,0], [0, (index + 2) * 105,0]]);
     day2LineIn.process (this.day2);
   },
 
@@ -234,8 +234,8 @@ var Peek = vs.core.createClass ({
     });
     
     var day2 = this.day2;
-    day2LineOut.addKeyFrame (0, [[0,0,0], [0, (this._week_opened + 2) * 105,0]]);
-    day2LineOut.addKeyFrame (1, [[90,0,0], [0, (this._week_opened ) * 105,0]]);
+    day2LineOut.keyFrame (0, [[0,0,0], [0, (this._week_opened + 2) * 105,0]]);
+    day2LineOut.keyFrame (1, [[90,0,0], [0, (this._week_opened ) * 105,0]]);
     day2LineOut.process (day2, function () {
       day2.hide ();
       nbEndAnim ++;

@@ -29,22 +29,22 @@ function getStyle () {
   return iconStyle;
 }
 
-var showTitle = new GLAnimation (["scaling", 1]);
-showTitle.addKeyFrame (0, [0.3]);
+var showTitle = new GLAnimation ({"scaling": 1});
+showTitle.keyFrame (0, {"scaling": 0.3});
 showTitle.duration = 300;
 showTitle.begin = 100;
 
-var hideTitle = new GLAnimation (["scaling", 0]);
-hideTitle.addKeyFrame (0, [1]);
+var hideTitle = new GLAnimation ({"scaling": 0});
+hideTitle.keyFrame (0, {"scaling": 1});
 hideTitle.duration = 400;
 
-var showIcon = new GLAnimation (["scaling", 1]);
-showIcon.addKeyFrame (0, [0.3]);
+var showIcon = new GLAnimation ({"scaling": 1});
+showIcon.keyFrame (0, {"scaling": 0.3});
 showIcon.duration = 300;
 showIcon.begin = 100;
 
-var hideIcon = new GLAnimation (["scaling", 0]);
-hideIcon.addKeyFrame (0, [1]);
+var hideIcon = new GLAnimation ({"scaling": 0});
+hideIcon.keyFrame (0, {"scaling": 1});
 hideIcon.duration = 400;
 
 var ConfigIcon = vs.core.createClass ({
