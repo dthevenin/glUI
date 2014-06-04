@@ -89,7 +89,8 @@ vs_event.js:
 	
 vs_core.js:
 	$(CAT) core/MainLoop.js >> $@
-	$(CAT) core/glMatrix.js >> $@
+	$(CAT) core/math/vector.js >> $@
+	$(CAT) core/math/matrix.js >> $@
 	$(CAT) core/gl_object.js >> $@
 	$(CAT) core/gl_program.js >> $@
 	$(CAT) core/gl_render.js >> $@
