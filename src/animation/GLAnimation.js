@@ -19,11 +19,7 @@
 function GLAnimation (animations)
 {
   this.constructor = GLAnimation;
-
-  if (animations)
-  {
-    this.setAnimations (animations);
-  }
+  this.setAnimations (animations);
 };
 
 /**
@@ -87,6 +83,8 @@ GLAnimation.prototype = {
 
     this.timing = GLAnimation.EASE;
     this._trajectories = {};
+    
+    if (!animations) return;
 
     for (property in animations)
     {
@@ -154,7 +152,10 @@ GLAnimation.prototype = {
     for (property in datas) {
       value = datas [property];
       values = this._trajectories [property];    
-      if (!values) continue;
+      if (!values) {
+        values = [];
+        this._trajectories [property] = values;
+      }
       updateValues (values, pos, value);
     }
   },
