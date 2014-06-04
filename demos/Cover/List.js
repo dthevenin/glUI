@@ -31,23 +31,6 @@ var CoverFlow = vs.core.createClass ({
 
     window.app = this;     
     this.buildList ();
-
-//     var nb = 0, t = Date.now (), iteration = 2500;
-//     function animate () {
-//       list.__scroll__.scrollBy (0,-3);
-//       nb++
-//       if (nb < iteration)
-//         vs.requestAnimationFrame (animate);
-//       else {
-//         console.profileEnd ("List");
-//         t = Date.now () - t;
-//         
-//         console.log ((t / 1000) + 's, ' + (iteration / (t / 1000)) + 'fps');
-//       }
-//     }
-//    vs.requestAnimationFrame (animate);
-//    console.profile ("List");
-
   },
   
   buildList: function () {
@@ -81,7 +64,7 @@ var CoverFlow = vs.core.createClass ({
     
     var open_item;
     list._updateSelectItem = function (item) {
-      console.log (item.__index);
+
       if (item.__index === undefined) {
         return;
       }
@@ -99,62 +82,77 @@ var CoverFlow = vs.core.createClass ({
       open_item = item;
     };
     
-    
-    var duration = 300;
+    var duration = 200;
     var timing = GLAnimation.LINEAR;
-    
+  
+    var animationPanelShow = new GLAnimation ();
+    animationPanelShow.keyFrame (0, {
+      'rotation': [-40, 0, 0],
+      'translation': [0, 0, 0]
+    });
+    animationPanelShow.duration = duration;
+    animationPanelShow.timing = timing;
+
     var animationPageOut = new GLAnimation ({
-        'rotation': [-40, 0, 0],
-        'translation': [0, 0, 0]
-      });
+      'rotation': [-40, 0, 0],
+      'translation': [0, 0, 0]
+    });
     animationPageOut.duration = duration;
     animationPageOut.timing = timing;
+    
+    var movebackPanel = new GLAnimation ({'translation': [0,0,0]});
+    movebackPanel.duration = duration;
+    movebackPanel.timing = timing;      
+
+    var hidePanelAnim = new GLAnimation ();
+    hidePanelAnim.duration = duration;
+    hidePanelAnim.timing = timing;
     
     list.openItem = function (index) {
       var item, scrollPos = list.__gl_scroll;
       
       list.__index = index;
+      var dy = 0;
       
       for (var i = 1; i < index; i ++) {
         item = this.__children [i];
 
         itemPos = item.position;
-        ty = - (itemPos [1] - i * 10);
+        
+        // do not animate not visible panel
+        if (itemPos [1] < - scrollPos [1]) continue;
+        
+        ty = - (itemPos [1] - dy) - scrollPos [1];
+        dy += 10;
 
-        var animation = new GLAnimation ({'translation': [0, ty, 0]});
-//        animation.keyFrame (0, {'translation': [0, 0, 0]});
-        animation.duration = duration;
-        animation.timing = timing;
-//        animation.process (item);
+        hidePanelAnim.keyFrame (1, {'translation': [0, ty, 0]});
+        hidePanelAnim.process (item);
       }
      
       item = this.__children [index];
 
-      var animation = new GLAnimation ({
+      animationPanelShow.keyFrame (1, {
         'rotation': [0, 0, 0],
         'translation': [0, (size[1] - 300) / 2  - scrollPos [1] - item.position [1]]
       });
-      animation.keyFrame (0, {
-        'rotation': [-40, 0, 0],
-        'translation': [0, 0, 0]
-      });
-      animation.duration = duration;
-      animation.timing = timing;
-      animation.process (item);
+      animationPanelShow.process (item);
 
       index++;
+      dy = 0;
       var l = this.__children.length;
-      for (index; index < l; index ++) {
-        item = this.__children [index];
+      while (index < l) {
+        item = this.__children [--l];
         
         itemPos = item.position;
-        ty = size[1] - itemPos [1] - (l - index) * 10;
 
-        var animation = new GLAnimation ({'translation': [0, ty, 0]});
-//        animation.keyFrame (0, {'translation': [0, 0, 0]});
-        animation.duration = duration;
-        animation.timing = timing;
-        animation.process (item);
+        // do not animate not visible panel
+        if (itemPos [1] > size[1] - scrollPos [1]) continue;
+
+        ty = size[1] - itemPos [1] - dy - scrollPos [1];
+        dy += 10;
+
+        hidePanelAnim.keyFrame (1, {'translation': [0, ty, 0]});
+        hidePanelAnim.process (item);
       }
       
       list.scroll = false;
@@ -163,37 +161,26 @@ var CoverFlow = vs.core.createClass ({
     list.closeItem = function () {
       var item, index = list.__index;
       
-      var animation = new GLAnimation ({'translation': [0,0,0]});
-      animation.duration = duration;
-      animation.timing = timing;      
-
       for (var i = 0; i < index; i ++) {
         item = this.__children [i];
-        console.log (item.translation);
         
-//        animation = new GLAnimation ({'translation': [0,0,0]});
-//        animation.keyFrame (0, {'translation': item.translation});
-
-        animation.process (item);
+        // do not animate not moved panels
+        if (item.translation [1] === 0) continue;
+        
+        movebackPanel.process (item);
       }
      
       item = this.__children [index];
-
-      animationPageOut.keyFrame (0, {
-        'rotation': [0, 0, 0],
-        'translation': item.translation
-      });
       animationPageOut.process (item);
     
       index++;
-      
       for (index; index < this.__children.length; index ++) {
         item = this.__children [index];
+
+        // do not animate not moved panels
+        if (item.translation [1] === 0) continue;
         
-//        animation = new GLAnimation ({'translation': [0,0,0]});
-//        animation.keyFrame (0, {'translation': item.translation});
-        
-        animation.process (item);  
+        movebackPanel.process (item);  
       }
       
       list.scroll = true;
@@ -219,7 +206,6 @@ var CoverFlow = vs.core.createClass ({
     }
     
     window.list = list;
-//    list.rotation = 1
     return;
   }
 });
