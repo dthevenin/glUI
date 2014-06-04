@@ -18,8 +18,6 @@
 
 function GLAnimation (animations)
 {
-//   this.parent = core.Task;
-//   this.parent ();
   this.constructor = GLAnimation;
 
   if (arguments.length)
@@ -220,7 +218,6 @@ GLAnimation.prototype = {
     return procesAnimation (comp, this, clb, ctx, now);
   },
 };
-util.extendClass (GLAnimation, core.Task);
 
 
 /*************************************************************
