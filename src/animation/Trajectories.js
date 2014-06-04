@@ -50,26 +50,6 @@ function getValuesIndex (values, t, operation) {
   }
 }
 
-function deepArrayClone (data) {
-  var result, len, i;
-  
-  if (data instanceof window.Float32Array) {
-    result = new Float32Array (data.length);
-    result.set(data);
-  }
-  else if (data instanceof Array) {
-    len = data.length
-    result = new Array (len);
-
-    for (i = 0; i < len; i++) {
-      result [i] = deepArrayClone (data [i]);
-    }
-  }
-  else result = data;
-
-  return result;
-}
-
 var TrajectoryVect1D = function (values) {
   Trajectory.call (this);  
   this._values = deepArrayClone (values);

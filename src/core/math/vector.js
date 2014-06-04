@@ -26,13 +26,6 @@
  *    distribution.
  */
 
-// Fallback for systems that don't support WebGL
-if(typeof Float32Array != 'undefined') {
-	glMatrixArrayType = Float32Array;
-} else {
-	glMatrixArrayType = Array;
-}
-
 /*
  * vec2 - 2 Dimensional Vector
  */

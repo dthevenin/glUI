@@ -88,6 +88,7 @@ vs_event.js:
 	$(CAT) core/event/recognizer/TapRecognizer.js >> $@
 	
 vs_core.js:
+	$(CAT) core/util.js >> $@
 	$(CAT) core/MainLoop.js >> $@
 	$(CAT) core/math/vector.js >> $@
 	$(CAT) core/math/matrix.js >> $@
