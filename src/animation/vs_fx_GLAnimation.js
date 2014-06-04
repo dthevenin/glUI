@@ -257,13 +257,10 @@ GLAnimation.prototype = {
           break;
     
         case "translation": 
-          traj = new Vector2D ([[0], [1, value]]);
+        case "rotation": 
+          traj = new Vector3D ([[0], [1, value]]);
           break;
  
-         case "rotation": 
-           traj = new Vector3D ([[0], [1, value]]);
-          break;
-
         default:
           console.log ("NOT SUPPORTED PROPERTY: " + property);
           return;
