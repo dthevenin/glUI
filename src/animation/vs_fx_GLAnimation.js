@@ -311,12 +311,12 @@ GLAnimation.prototype = {
       for (; i < l; i++) {
         value = values[i];
         if (value[0] === pos) {
-          value[1] = deepClone (data);
+          value[1] = deepArrayClone (data);
           return;
         }
       }
       
-      values.push ([pos, deepClone (data)]);
+      values.push ([pos, deepArrayClone (data)]);
       values.sort (function(a, b) {return a[0] - b[0];});
     }
     
