@@ -29,8 +29,6 @@
 // Fallback for systems that don't support WebGL
 if(typeof Float32Array != 'undefined') {
 	glMatrixArrayType = Float32Array;
-} else if(typeof WebGLFloatArray != 'undefined') {
-	glMatrixArrayType = WebGLFloatArray; // This is officially deprecated and should dissapear in future revisions.
 } else {
 	glMatrixArrayType = Array;
 }
