@@ -267,15 +267,14 @@ GLAbstractList.prototype = {
   didTap : function (nb_tap, target, e)
   {
     var self = this;
-    this.__elem_to_unselect = this.__elem;
-    if (this.__elem) {
-      this._updateSelectItem (this.__elem);
+    this.__elem_to_unselect = target;
+    if (target) {
+      this._updateSelectItem (target);
 
       this.__list_time_out = setTimeout (function () {
-        if (self.__elem_to_unselect) {
-          self._untouchItemFeedback (self.__elem_to_unselect);
+        if (target) {
+          self._untouchItemFeedback (target);
         }
-        self.__elem_to_unselect = null;
         self.__list_time_out = 0;
       }, vs.ui.View.UNSELECT_DELAY);
     }
