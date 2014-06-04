@@ -87,8 +87,6 @@ GLAnimation.prototype = {
 
     this.timing = GLAnimation.EASE;
     this._trajectories = {};
-//     this.origin = null;
-//     this.duration = null;
 
     for (i = 0 ; i < animations.length; i++)
     {
