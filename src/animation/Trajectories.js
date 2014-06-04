@@ -70,13 +70,13 @@ function deepClone (data) {
   return result;
 }
 
-var Vector1D = function (values) {
+var TrajectoryVect1D = function (values) {
   Trajectory.call (this);  
   this._values = deepClone (values);
 }
-util.extendClass (Vector1D, Trajectory);
+util.extendClass (TrajectoryVect1D, Trajectory);
   
-Vector1D.prototype.compute = function (tick) {
+TrajectoryVect1D.prototype.compute = function (tick) {
   var
     nb_values = this._values.length - 1, // int [0, n]
     ti = tick * nb_values, // float [0, n]
@@ -89,14 +89,14 @@ Vector1D.prototype.compute = function (tick) {
   return out;
 };
 
-var Vector2D = function (values) {
+var TrajectoryVect2D = function (values) {
   Trajectory.call (this);  
   this._values = deepClone (values);
   this.out = new glMatrixArrayType (2);
 }
-util.extendClass (Vector2D, Trajectory);
+util.extendClass (TrajectoryVect2D, Trajectory);
   
-Vector2D.prototype.compute = function (tick)
+TrajectoryVect2D.prototype.compute = function (tick)
 {
   var
     values = this._values,
@@ -120,14 +120,14 @@ Vector2D.prototype.compute = function (tick)
   return out;
 };
 
-var Vector3D = function (values) {
+var TrajectoryVect3D = function (values) {
   Trajectory.call (this);  
   this._values = deepClone (values);
   this.out = new glMatrixArrayType (3);
 }
-util.extendClass (Vector3D, Trajectory);
+util.extendClass (TrajectoryVect3D, Trajectory);
   
-Vector3D.prototype.compute = function (tick)
+TrajectoryVect3D.prototype.compute = function (tick)
 {
   var
     values = this._values,

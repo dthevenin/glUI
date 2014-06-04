@@ -33,7 +33,6 @@ if(typeof Float32Array != 'undefined') {
 	glMatrixArrayType = Array;
 }
 
-
 /*
  * vec2 - 2 Dimensional Vector
  */

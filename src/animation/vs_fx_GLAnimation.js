@@ -253,12 +253,12 @@ GLAnimation.prototype = {
         case "opacity": 
         case "fontSize": 
         case "scaling":
-          traj = new Vector1D ([[0], [1, value]]);
+          traj = new TrajectoryVect1D ([[0], [1, value]]);
           break;
     
         case "translation": 
         case "rotation": 
-          traj = new Vector3D ([[0], [1, value]]);
+          traj = new TrajectoryVect3D ([[0], [1, value]]);
           break;
  
         default:
