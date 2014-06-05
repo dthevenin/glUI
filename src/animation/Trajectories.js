@@ -15,6 +15,27 @@ TrajectoriesData.prototype.compute = function (tick) {
   }
 };
 
+TrajectoriesData.prototype.removeProperty = function (prop_name) {
+  var i = 0, l = this._data.length, data;
+  
+  for (; i < l;) {
+    data = this._data [i];
+    if (data[1] === prop_name) {
+      this._data.remove (i);
+      l--;
+    }
+    else i++;
+  }
+};
+
+TrajectoriesData.prototype.mixData = function (traj) {
+  var l = traj._data.length, data;
+  
+  while (l--) {
+    data = traj._data [l];
+    this.removeProperty (data[1]);
+  }
+};
 
 var Trajectory = function () {
   this._values = null;

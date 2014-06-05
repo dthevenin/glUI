@@ -19,6 +19,14 @@
 
 var ANIMATIONS = [];
 
+function mixAnimations (animations, new_anim) {
+  var i = 0, l = animations.length, anim;
+  for (; i < l; i++) {
+    anim = animations [i];
+    anim.__trajs.mixData (new_anim.__trajs);
+  }
+}
+
 var procesAnimation = function (comp, animation, clb, ctx, now) {
 
   var data_anim = {};
@@ -33,11 +41,12 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   for (var property in animation._trajectories) {
     setupTrajectory (trajs, comp, property, animation._trajectories [property]);
   }
-    
+  
   data_anim.steps = animation.steps | 0;
   if (data_anim.steps <= 1) data_anim.steps = 0;
   
-  var chrono = new Chronometer (data_anim)
+  var chrono = new Chronometer (data_anim);
+  chrono.__trajs = trajs;
   chrono.__clb = function (i) {
     trajs.compute (timing (i));
   }
@@ -59,18 +68,17 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.start ();
   
   if (data_anim.steps === 0) {
-    // TODO this modification make we lose the first frame !!!
-    // because the queueAction will schedule the animation on the next rendering.
-    setImmediate (function () {
-      var animations = ANIMATIONS [comp.__gl_id];
-      if (!animations) {
-        animations = [];
-        ANIMATIONS [comp.__gl_id] = animations;
-      }
+    var animations = ANIMATIONS [comp.__gl_id];
+    if (!animations) {
+      animations = [];
+      ANIMATIONS [comp.__gl_id] = animations;
+    }
+    else {
+      mixAnimations (animations, chrono);
+    }
     
-      animations.push (chrono);
-      GLView.__nb_animation ++;
-    });
+    animations.push (chrono);
+    GLView.__nb_animation ++;
   }
 }
 
