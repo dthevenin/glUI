@@ -94,8 +94,8 @@ vs_core.js:
 	$(CAT) core/math/matrix.js >> $@
 	$(CAT) core/sprite.js >> $@
 	$(CAT) core/program.js >> $@
-	$(CAT) core/gl_render.js >> $@
-	$(CAT) core/webGLRendering.js >> $@
+	$(CAT) core/engineInit.js >> $@
+	$(CAT) core/engine.js >> $@
 	$(CAT) core/vs_ui_GLConstraint.js >> $@
 	$(CAT) core/vs_ui_GLColor.js >> $@
 	$(CAT) core/vs_ui_GLStyle.js >> $@
