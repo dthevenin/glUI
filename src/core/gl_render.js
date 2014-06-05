@@ -1,6 +1,6 @@
 function update_gl_vertices (gl_view) {
   var
-    gl_object = GL_OBJECTS [gl_view.__gl_id],
+    gl_object = SPRITES [gl_view.__gl_id],
     obj_size = gl_view._size,
     obj_pos = gl_view._position,
     x = obj_pos[0],
@@ -30,7 +30,7 @@ var angle2rad = Math.PI / 180;
 function update_transform_gl_matrix (gl_view)
 {
   var
-    gl_object = GL_OBJECTS [gl_view.__gl_id],
+    gl_object = SPRITES [gl_view.__gl_id],
     matrix = gl_object.matrix,
     pos = gl_view._position,
     tx = gl_view._transform_origin [0] + pos [0],
@@ -67,7 +67,7 @@ function update_transform_gl_matrix (gl_view)
 function update_envelop_vertices (gl_view)
 {
   var
-    gl_object = GL_OBJECTS [gl_view.__gl_id],
+    gl_object = SPRITES [gl_view.__gl_id],
     matrix = gl_object.matrix,
     obj_size = gl_view._size,
     obj_pos = gl_view._position,
@@ -163,7 +163,7 @@ function calculateViewsInFrustum (now) {
     if (gl_view.__should_update_gl_matrix) {
       update_transform_gl_matrix (gl_view);
     }
-    var gl_object = GL_OBJECTS [gl_view.__gl_id];
+    var gl_object = SPRITES [gl_view.__gl_id];
     var o_matrix = gl_object.matrix;
     var m_matrix = gl_object.m_matrix;
     var p_matrix = gl_object.p_matrix;
@@ -276,7 +276,7 @@ function initRendering () {
   function renderOneView (gl_view, alpha, mode) {
 
     var program;
-    var gl_object = GL_OBJECTS [gl_view.__gl_id];
+    var gl_object = SPRITES [gl_view.__gl_id];
        
     if (mode === 1) {
 

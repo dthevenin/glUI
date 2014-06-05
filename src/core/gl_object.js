@@ -1,20 +1,20 @@
-var GL_OBJECTS = [];
+var SPRITES = [];
 
 var __unique_gl_id = 1;
 var GL_VIEWS = [];
 
-function createGLObject (gl_view) {
+function createSprite (gl_view) {
 
   var id = __unique_gl_id ++;
   gl_view.__gl_id = id ;
   GL_VIEWS [id] = gl_view;
 
-  new glObject (gl_view.__gl_id);
+  new Sprite (gl_view.__gl_id);
 }
 
-function deleteGLObject (gl_view) {
+function deleteSprite (gl_view) {
 
-  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  var gl_object = SPRITES [gl_view.__gl_id];
   
   if (gl_object.texture) {
     gl_ctx.deleteTexture (gl_object.texture);
@@ -23,7 +23,7 @@ function deleteGLObject (gl_view) {
 }
 
 function clean_image_texture (gl_view) {
-  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  var gl_object = SPRITES [gl_view.__gl_id];
   
   if (gl_object.image_texture) {
     gl_object.image_texture = null;
@@ -31,27 +31,27 @@ function clean_image_texture (gl_view) {
 }
 
 function set_image_texture (gl_view, texture) {
-  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  var gl_object = SPRITES [gl_view.__gl_id];
   
   gl_object.image_texture = texture;
 }
 
 
 function update_texture (gl_view, image) {
-  var gl_object = GL_OBJECTS [gl_view.__gl_id];
+  var gl_object = SPRITES [gl_view.__gl_id];
   
   gl_object.texture = __copy_image_into_webgl_texture (image, gl_object.texture);
 }
 
 
-function glObject (id)
+function Sprite (id)
 {
   this.matrix = mat4.create ();
   this.p_matrix = mat4.create ();
   this.m_matrix = mat4.create ();
   
   this.id = id;
-  GL_OBJECTS [this.id] = this;
+  SPRITES [this.id] = this;
   
   // contains position vertices
   this.vertices = new Float32Array (12);

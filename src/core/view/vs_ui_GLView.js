@@ -54,7 +54,7 @@ function GLView (config)
   this._translation = vec3.create ();
   this._transform_origin = vec2.create ();
 
-  createGLObject (this);
+  createSprite (this);
 }
 
 GLView.__should_render = true;
@@ -157,7 +157,7 @@ GLView.prototype = {
 
     this.clearTransformStack ();
   
-    deleteGLObject (this);
+    deleteSprite (this);
 
     GLEventSource.prototype.destructor.call (this);
   },
