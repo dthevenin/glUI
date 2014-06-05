@@ -52,88 +52,45 @@ var
 /********************************************************************
       Actions Management
 *********************************************************************/
+// 
+// 
+// /**
+//  *  Structure used for managing events
+//  *  @private
+//  */
+// function Action () {}
+// var Action__pool = [];
+// 
+// Action.prototype.configure = function (func, ctx) {
+//   this.func = func;
+//   this.ctx = ctx;
+// }
+// 
+// Action.retain = function () {
+//   var l = Action__pool.length;
+//   if (l) {
+//     return Action__pool.pop ();
+//   }
+//   return new Action ();
+// }
+// 
+// Action.release = function (action) {
+//   Action__pool.push (action);
+// }
 
 
-/**
- *  Structure used for managing events
- *  @private
- */
-function Action () {}
-var Action__pool = [];
+// 
+// /**
+//  * doAction, execute one action. This method is called with our setImmediate
+//  * implementation.
+//  *
+//  * @private
+//  */
+// function doOneAction (action) {
+//   action.func.call (action.ctx);
+// }
 
-Action.prototype.configure = function (func, ctx) {
-  this.func = func;
-  this.ctx = ctx;
-}
 
-Action.retain = function () {
-  var l = Action__pool.length;
-  if (l) {
-    return Action__pool.pop ();
-  }
-  return new Action ();
-}
-
-Action.release = function (action) {
-  Action__pool.push (action);
-}
-
-var is_actions_are_scheduled = false;
-
-function queueAction (func, ctx) {
-  var action = Action.retain ();
-  action.configure (func, ctx);
-  
-  _main_actions_queue.push (action);
-  
-  if (!is_actions_are_scheduled) {
-    is_actions_are_scheduled = true;
-    scheduleDoActions ();
-  }
-}
-
-/**
- * doAction, execute one action. This method is called with our setImmediate
- * implementation.
- *
- * @private
- */
-function doOneAction (action) {
-  action.func.call (action.ctx);
-}
-
-/**
- * @private
- */
-function doAllActions (now) {
-  var queue = _main_actions_queue;
-  
-  is_actions_are_scheduled = false;
-  
-  if (queue.length) {
-    if (!now) now = performance.now ();
-    
-    // switch queues
-    _main_actions_queue = _tmp_actions_queue;
-    _tmp_actions_queue = queue;
-    
-    try {
-      // execute actions
-      var i = 0, l = queue.length, action;
-      for (; i < l; i++) {
-        action = queue [i];
-        doOneAction (action, now)
-        Action.release (action);
-      }
-    }
-    catch (e) {
-      if (e.stack) console.error (e.stack);
-      else console.error (e);
-    }    
-    // clean the queue
-    queue.length = 0;
-  }
-}
 
 /********************************************************************
       setImmediate Polyfill (based on the Action management)
@@ -147,6 +104,55 @@ function doAllActions (now) {
  */
 var setImmediate, scheduleDoActions;
 if (!window.setImmediate) {
+
+
+  var is_actions_are_scheduled = false;
+
+  function queueAction (func, ctx) {
+  //   var action = Action.retain ();
+  //   action.configure (func, ctx);
+  
+    _main_actions_queue.push (func);
+  
+    if (!is_actions_are_scheduled) {
+      is_actions_are_scheduled = true;
+      scheduleDoActions ();
+    }
+  }
+
+  /**
+   * @private
+   */
+  function doAllActions (now) {
+    var queue = _main_actions_queue;
+  
+    is_actions_are_scheduled = false;
+  
+    if (queue.length) {
+      if (!now) now = performance.now ();
+    
+      // switch queues
+      _main_actions_queue = _tmp_actions_queue;
+      _tmp_actions_queue = queue;
+    
+      try {
+        // execute actions
+        var i = 0, l = queue.length, func;
+        for (; i < l; i++) {
+          func = queue [i];
+          func.call ();
+  //         doOneAction (action, now)
+  //         Action.release (action);
+        }
+      }
+      catch (e) {
+        if (e.stack) console.error (e.stack);
+        else console.error (e);
+      }    
+      // clean the queue
+      queue.length = 0;
+    }
+  }
 
   /**
    * doAction, execute one action. This method is called with our setImmediate
@@ -182,7 +188,7 @@ if (!window.setImmediate) {
 }
 else {
   setImmediate = window.setImmediate.bind (window);
-  scheduleDoActions = function () { setImmediate (doAllActions) };
+//  scheduleDoActions = function () { setImmediate (doAllActions) };
 }
 
 /********************************************************************

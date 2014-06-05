@@ -44,7 +44,7 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.delegate = {};
   chrono.delegate.taskDidEnd = function () {
     if (data_anim.steps === 0) {
-      queueAction (function () {
+      setImmediate (function () {
         var animations = ANIMATIONS [comp.__gl_id];
         animations.remove (chrono)
         GLView.__nb_animation --;
@@ -61,7 +61,7 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   if (data_anim.steps === 0) {
     // TODO this modification make we lose the first frame !!!
     // because the queueAction will schedule the animation on the next rendering.
-    queueAction (function () {
+    setImmediate (function () {
       var animations = ANIMATIONS [comp.__gl_id];
       if (!animations) {
         animations = [];
