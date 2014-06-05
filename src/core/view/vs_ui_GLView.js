@@ -863,7 +863,7 @@ util.defineClassProperties (GLView, {
      */
     set : function (v)
     {
-      this._scaling = v || 1;
+      this._scaling = v;
 
       this.__should_update_gl_matrix = true;
       GLView.__should_render = true;
