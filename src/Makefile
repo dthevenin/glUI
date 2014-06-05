@@ -93,7 +93,7 @@ vs_core.js:
 	$(CAT) core/math/vector.js >> $@
 	$(CAT) core/math/matrix.js >> $@
 	$(CAT) core/sprite.js >> $@
-	$(CAT) core/gl_program.js >> $@
+	$(CAT) core/program.js >> $@
 	$(CAT) core/gl_render.js >> $@
 	$(CAT) core/webGLRendering.js >> $@
 	$(CAT) core/vs_ui_GLConstraint.js >> $@
