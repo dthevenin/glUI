@@ -74,7 +74,7 @@ GLEventSource.prototype =
       while (l--)
       {
         bind = handler_list [l];
-        util.free (bind);
+        Handler.release (bind);
       }
     };
 
@@ -160,8 +160,11 @@ GLEventSource.prototype =
     if (!spec || !obj) { return; }
 
     /** @private */
-    var handler = new Handler (obj, func),
+    var handler = Handler.retain (),
       handler_list = this.__bindings__ [spec];
+      
+    handler.configure (obj, func);
+    
     if (!handler_list)
     {
       handler_list = [];
@@ -202,14 +205,14 @@ GLEventSource.prototype =
             if (handler.func_name === func || handler.func_ptr === func)
             {
               handler_list.remove (i);
-              util.free (handler);
+              Handler.release (handler);
             }
             else { i++; }
           }
           else
           {
             handler_list.remove (i);
-            util.free (handler);
+            Handler.release (handler);
           }
         }
         else { i++; }
