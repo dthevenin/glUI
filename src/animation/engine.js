@@ -88,6 +88,23 @@ function gl_update_animation (comp, now) {
   }
 }
 
+var verifyValue = function (traj_values)
+{
+  var l = traj_values.length, value;
+  
+  if (l < 2) return false;
+  
+  value = traj_values [0];
+  if (!value) return false;
+  if (value [0] !== 0) return false;
+
+  value = traj_values [l - 1];
+  if (!value) return false;
+  if (value [0] !== 1) return false;
+  
+  return true
+}
+
 var setupTrajectory = function (trajs, obj, property, traj_values)
 {
   switch (property) {
@@ -105,6 +122,10 @@ var setupTrajectory = function (trajs, obj, property, traj_values)
     value = [0, deepArrayClone (obj[property])];
     traj_values = traj_values.slice ();
     traj_values.unshift (value);
+  }
+  
+  if (!verifyValue (traj_values)) {
+    throw ("Error with the animation. Unvalid property declaration: " + property);
   }
 
   switch (property) {
