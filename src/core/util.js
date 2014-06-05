@@ -1,3 +1,9 @@
+var
+  util = vs.util,
+  core = vs.core,
+  ui = vs.ui,
+  VSObject = vs.core.Object;
+
 // Fallback for systems that don't support WebGL
 if(typeof Float32Array != 'undefined') {
 	glMatrixArrayType = Float32Array;
