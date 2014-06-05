@@ -504,7 +504,7 @@ function initRendering () {
 
     if (stats) stats.end ();
     
-    vs.requestAnimationFrame (render_ui);
+    if (mode !== 1) vs.requestAnimationFrame (render_ui);
   }
   
   vs.requestAnimationFrame (render_ui);
