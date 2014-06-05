@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html id="test" x-hag-ref="test">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Tests page</title>
+
+  <style>
+    @-webkit-keyframes around_3d {
+      0% { -webkit-transform: translate3d(0,0,0);}
+      25% { -webkit-transform: translate3d(600px,0,0);}
+      50% { -webkit-transform: translate3d(600px,400px,0);}
+      75% { -webkit-transform: translate3d(0,400px,0)}
+      100% { -webkit-transform: translate3d(0,0,0)}
+    }
+
+    @-webkit-keyframes around {
+      0% { top: 0; left: 0}
+      25% { top: 0; left: 600px}
+      50% { top: 400px; left: 600px}
+      75% { top: 400px; left: 0}
+      100% { top: 0; left: 0}
+    }
+    
+    body {
+      background-image: url(background.jpg);
+    }
+    
+    body > div {
+    
+    }
+    
+    .blob {
+      position: absolute;
+      width: 135px;
+      height: 126px;
+      -webkit-animation: around_3d 20s infinite linear;
+      background-image: url(circle.png);
+    }
+  </style>
+  </head>
+  <script>
+  
+  function onload () {
+  
+    '<div class="blob"></div>'
+    var parents = document.querySelectorAll ('div');
+    
+    function setDiv (parent) {
+      var delay = 0.125;
+      for (var i = 0; i < 100; i++) {
+        var div = document.createElement ('div');
+        div.className = "blob";
+        div.style["-webkit-animation-delay"] = "-" + delay + "s";
+        delay += 0.125;
+        parent.appendChild (div);
+      }
+    }
+
+    for (var i = 0; i < parents.length; i++) {
+      setDiv (parents.item (i));
+    }
+  }
+  
+  </script>
+  
+  <body onload="onload ()">
+    <div style="top:50px;left:50px;position:absolute;"></div>
+    <div style="top:130px;left:130px;position:absolute;"></div>
+    <div style="top:220px;left:220px;position:absolute;"></div>
+  </body>
+</html>
