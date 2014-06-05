@@ -89,7 +89,7 @@ vs_event.js:
 	
 vs_core.js:
 	$(CAT) core/util.js >> $@
-	$(CAT) core/MainLoop.js >> $@
+	$(CAT) core/mainloop.js >> $@
 	$(CAT) core/math/vector.js >> $@
 	$(CAT) core/math/matrix.js >> $@
 	$(CAT) core/sprite.js >> $@

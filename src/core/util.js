@@ -81,3 +81,21 @@ function generateCubicBezierFunction (x1, y1, x2, y2) {
   return (function(pos) {return CubicBezier (pos,x1,y1,x2,y2);});
 }
 
+(function(){
+  // prepare base perf object
+  if (typeof window.performance === 'undefined') {
+    window.performance = {};
+  }
+  
+  if (!window.performance.now) {
+    var nowOffset = Date.now ();
+ 
+    if (performance.timing && performance.timing.navigationStart) {
+      nowOffset = performance.timing.navigationStart
+    }
+
+    window.performance.now = function now () {
+      return Date.now() - nowOffset;
+    }
+  }
+})();
