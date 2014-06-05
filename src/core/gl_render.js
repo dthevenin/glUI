@@ -1,13 +1,13 @@
 function update_gl_vertices (gl_view) {
   var
-    gl_object = SPRITES [gl_view.__gl_id],
+    sprite = SPRITES [gl_view.__gl_id],
     obj_size = gl_view._size,
     obj_pos = gl_view._position,
     x = obj_pos[0],
     y = obj_pos[1],
     w = obj_size [0],
     h = obj_size [1],
-    m = gl_object.vertices;
+    m = sprite.vertices;
         
   // setup position vertices
   m[0] = x; m[1] = y; m[2] = 0;
@@ -15,7 +15,7 @@ function update_gl_vertices (gl_view) {
   m[6] = x + w; m[7] = y; m[8] = 0;
   m[9] = x + w; m[10] = y + h; m[11] = 0;
   
-  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, gl_object.vertices_buffer);
+  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
   gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
   
   gl_view.__should_update_gl_vertices = false;
@@ -30,8 +30,8 @@ var angle2rad = Math.PI / 180;
 function update_transform_gl_matrix (gl_view)
 {
   var
-    gl_object = SPRITES [gl_view.__gl_id],
-    matrix = gl_object.matrix,
+    sprite = SPRITES [gl_view.__gl_id],
+    matrix = sprite.matrix,
     pos = gl_view._position,
     tx = gl_view._transform_origin [0] + pos [0],
     ty = gl_view._transform_origin [1] + pos [1],
@@ -67,8 +67,8 @@ function update_transform_gl_matrix (gl_view)
 function update_envelop_vertices (gl_view)
 {
   var
-    gl_object = SPRITES [gl_view.__gl_id],
-    matrix = gl_object.matrix,
+    sprite = SPRITES [gl_view.__gl_id],
+    matrix = sprite.matrix,
     obj_size = gl_view._size,
     obj_pos = gl_view._position,
     x = obj_pos[0],
@@ -76,15 +76,15 @@ function update_envelop_vertices (gl_view)
     w = obj_size [0],
     h = obj_size [1];
 
-  vec3.set_p (x    , y    , 0, gl_object.vertex_1);
-  vec3.set_p (x    , y + h, 0, gl_object.vertex_2);
-  vec3.set_p (x + w, y    , 0, gl_object.vertex_3);
-  vec3.set_p (x + w, y + h, 0, gl_object.vertex_4);
+  vec3.set_p (x    , y    , 0, sprite.vertex_1);
+  vec3.set_p (x    , y + h, 0, sprite.vertex_2);
+  vec3.set_p (x + w, y    , 0, sprite.vertex_3);
+  vec3.set_p (x + w, y + h, 0, sprite.vertex_4);
   
-  mat4.multiplyVec3 (matrix, gl_object.vertex_1);
-  mat4.multiplyVec3 (matrix, gl_object.vertex_2);
-  mat4.multiplyVec3 (matrix, gl_object.vertex_3);
-  mat4.multiplyVec3 (matrix, gl_object.vertex_4);
+  mat4.multiplyVec3 (matrix, sprite.vertex_1);
+  mat4.multiplyVec3 (matrix, sprite.vertex_2);
+  mat4.multiplyVec3 (matrix, sprite.vertex_3);
+  mat4.multiplyVec3 (matrix, sprite.vertex_4);
 } 
 
 var rendering = true;
@@ -94,12 +94,12 @@ var gl_stack_for_renter = [1024];
 var gl_boundaries_stack = [256];
 var v_temp = vec3.create ();
 
-function isInFrustum (gl_object, level, p_size_vec, scroll_vec) {
+function isInFrustum (sprite, level, p_size_vec, scroll_vec) {
   // Update matrixes
   var
     boundaries = gl_boundaries_stack [level],
-    v1 = gl_object.vertex_1, v2 = gl_object.vertex_2,
-    v3 = gl_object.vertex_3, v4 = gl_object.vertex_4;
+    v1 = sprite.vertex_1, v2 = sprite.vertex_2,
+    v3 = sprite.vertex_3, v4 = sprite.vertex_4;
 
   if ((v1[0]>boundaries[2] && v2[0]>boundaries[2] &&
        v3[0]>boundaries[2] && v4[0]>boundaries[2]) ||
@@ -163,10 +163,10 @@ function calculateViewsInFrustum (now) {
     if (gl_view.__should_update_gl_matrix) {
       update_transform_gl_matrix (gl_view);
     }
-    var gl_object = SPRITES [gl_view.__gl_id];
-    var o_matrix = gl_object.matrix;
-    var m_matrix = gl_object.m_matrix;
-    var p_matrix = gl_object.p_matrix;
+    var sprite = SPRITES [gl_view.__gl_id];
+    var o_matrix = sprite.matrix;
+    var m_matrix = sprite.m_matrix;
+    var p_matrix = sprite.p_matrix;
     var p_size_vec = gl_view._size;
     var scroll_vec = gl_view.__gl_scroll;
           
@@ -191,7 +191,7 @@ function calculateViewsInFrustum (now) {
     gl_view.__invalid_matrixes = false;
     
     /*================= Culling allgorithm ================= */
-    if (!isInFrustum (gl_object, level, p_size_vec, scroll_vec)) return;
+    if (!isInFrustum (sprite, level, p_size_vec, scroll_vec)) return;
     
     var entry = gl_stack_for_renter [gl_views_index++];
     entry [0] = 1; // normal view to render
@@ -258,14 +258,14 @@ function initRendering () {
   var previous_program = null;
   var attribute = {}, texture1 = {}, texture2 = {};
   
-  function bindToUnitTEXTURE0_1 (unit, gl_object) {
+  function bindToUnitTEXTURE0_1 (unit, sprite) {
     gl_ctx.activeTexture (gl_ctx.TEXTURE0 + unit);
-    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, gl_object.texture);
+    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, sprite.texture);
   };
   
-  function bindToUnitTEXTURE0_2 (unit, gl_object) {
+  function bindToUnitTEXTURE0_2 (unit, sprite) {
     gl_ctx.activeTexture (gl_ctx.TEXTURE0 + unit);
-    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, gl_object.image_texture);
+    gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, sprite.image_texture);
   };
   
   function bindToUnitTEXTURE0_3 (unit, style) {
@@ -276,7 +276,7 @@ function initRendering () {
   function renderOneView (gl_view, alpha, mode) {
 
     var program;
-    var gl_object = SPRITES [gl_view.__gl_id];
+    var sprite = SPRITES [gl_view.__gl_id];
        
     if (mode === 1) {
 
@@ -312,7 +312,7 @@ function initRendering () {
           program.configureParameters (gl_view, style);
         }
       }
-      else if (gl_object.image_texture) {
+      else if (sprite.image_texture) {
         program = imageShaderProgram;
         if (previous_program !== imageShaderProgram) {
           program.useIt ();
@@ -328,9 +328,9 @@ function initRendering () {
         }
             
         texture1.bindToUnit = bindToUnitTEXTURE0_2;
-        program.textures.uMainTexture (texture1, gl_object);
+        program.textures.uMainTexture (texture1, sprite);
       }
-      else if (gl_object.texture && style.__gl_texture_bck_image) {
+      else if (sprite.texture && style.__gl_texture_bck_image) {
         program = twoTexturesShaderProgram;
         if (previous_program !== twoTexturesShaderProgram) {
           program.useIt ();
@@ -346,7 +346,7 @@ function initRendering () {
         }
 
         texture1.bindToUnit = bindToUnitTEXTURE0_1;
-        program.textures.uMainTexture (texture1, gl_object);
+        program.textures.uMainTexture (texture1, sprite);
       
         attribute.buffer = object_bck_image_uv_buffer;
         attribute.numComponents = 2;
@@ -358,7 +358,7 @@ function initRendering () {
 
         program.uniform.color (c_buffer);
       }
-      else if (gl_object.texture) {
+      else if (sprite.texture) {
         program = oneTextureShaderProgram;
         if (previous_program !== oneTextureShaderProgram) {
           program.useIt ();
@@ -376,7 +376,7 @@ function initRendering () {
         program.uniform.color (c_buffer);
 
         texture1.bindToUnit = bindToUnitTEXTURE0_1;
-        program.textures.uMainTexture (texture1, gl_object);
+        program.textures.uMainTexture (texture1, sprite);
       }
       else if (style.__gl_texture_bck_image) {
         program = oneTextureShaderProgram;
@@ -410,7 +410,7 @@ function initRendering () {
       }
     }
 
-    program.uniform.Mmatrix (gl_object.m_matrix);
+    program.uniform.Mmatrix (sprite.m_matrix);
     program.uniform.uAlpha (alpha);
 
     attribute.normalize = false;
@@ -422,7 +422,7 @@ function initRendering () {
       if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices ();
       else update_gl_vertices (gl_view);
     }
-    attribute.buffer = gl_object.vertices_buffer;
+    attribute.buffer = sprite.vertices_buffer;
     attribute.numComponents = 3;
     program.attrib.position (attribute);
     
