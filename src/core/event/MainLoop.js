@@ -58,30 +58,6 @@ Handler.prototype.destructor = function () {
 };
 
 /**
- *  Structure used for managing task
- *  @private
- */
-// function TaskHandler (func, args) {
-//   this.func_ptr = func;
-//   this.args = args;
-// }
-// 
-// /**
-//  * @private
-//  */
-// TaskHandler.prototype.run = function () {
-//   this.func_ptr.apply (undefined);
-// };
-// 
-// /**
-//  * @private
-//  */
-// TaskHandler.prototype.destructor = function () {
-//   delete (this.args);
-//   delete (this.func_ptr);
-// };
-
-/**
  * @private
  */
 var
@@ -241,64 +217,6 @@ function doOneSyncEvent () {
   doOneEvent (_sync_event, true);
   _sync_event = null;
 }
-
-/**
- * doAction, execute one action. This method is called with our setImmediate
- * implementation.
- *
- * @private
- */
-// function doAction () {
-// 
-//   if (!_actions_queue.length) return;
-//   
-//   var action = _actions_queue.shift ();
-// 
-//   if (action) try {
-//     _is_action_runing = true;
-//     action.run ();
-//   }
-//   catch (e) {
-//     if (e.stack) console.error (e.stack);
-//     else console.error (e);
-//   }
-// 
-//   vs.util.free (action);
-//   _is_action_runing = false;
-// 
-//   if (_actions_queue.length) { _delay_do_action (); }
-// }
-
-// var _delay_do_action = (window.postMessage)?installPostMessageImplementation():
-//   function () {setTimeout (doAction, 0)};
-// 
-// /**
-//  * Install our awn setImmediate implementation, if needs
-//  *
-//  * @private
-//  */
-// var setImmediate = window.setImmediate || function (func) {
-// 
-//   // push the action to execute into the queue
-//   _actions_queue.push (new TaskHandler (func));
-// 
-//   // doAction
-//   if (!_is_action_runing) _delay_do_action ();
-// };
-
-// *
-//  * This method is used to break-up long running operations and run a callback
-//  * function immediately after the browser has completed other operations such
-//  * as events and display updates.
-//  *
-//  * @example
-//  * vs.setImmediate (function () {...});
-//  *
-//  * @see vs.scheduleAction
-//  * @name vs.setImmediate 
-//  * @param {Function} func The action to run
-// 
-// vs.setImmediate = setImmediate.bind (window);
 
 /**
  * Mainloop core
