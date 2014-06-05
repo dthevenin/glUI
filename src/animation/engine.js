@@ -68,17 +68,18 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   chrono.start ();
   
   if (data_anim.steps === 0) {
-    var animations = ANIMATIONS [comp.__gl_id];
-    if (!animations) {
-      animations = [];
-      ANIMATIONS [comp.__gl_id] = animations;
-    }
-    else {
-      mixAnimations (animations, chrono);
-    }
+    // TODO this modification make we lose the first frame !!!
+    // because the queueAction will schedule the animation on the next rendering.
+    setImmediate (function () {
+      var animations = ANIMATIONS [comp.__gl_id];
+      if (!animations) {
+        animations = [];
+        ANIMATIONS [comp.__gl_id] = animations;
+      }
     
-    animations.push (chrono);
-    GLView.__nb_animation ++;
+      animations.push (chrono);
+      GLView.__nb_animation ++;
+    });
   }
 }
 
