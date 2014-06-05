@@ -18,6 +18,37 @@
 
 var render_ui;
 
+/**
+ * @private
+ */
+var
+  // Events queue. This array contains event structure for future propagation.
+  // This array is part of the algorithm that secure event propagation, in
+  // particular that avoids a event pass a previous one.
+  _async_events_queue = [],
+  
+  // Event reference on the current synchronous event.
+  _sync_event = null,
+  
+  // Actions queue. This array contains all actions (Action object)
+  // that have to be execute.
+  _main_actions_queue = [],
+  _tmp_actions_queue = [],
+  
+  // Boolean indicating if we are propagating a event or not.
+  // To secure event propagation, in particular to avoid a event pass a previous
+  // event, we manage a events queue and block new propagation if a event is
+  // in propagation.
+  _is_async_events_propagating = false,
+  _is_sync_events_propagating = false,
+  
+  // Boolean indicating if we are running an action or not.
+  // This boolean is used only in case we use our own implementation of 
+  // setImmediate.
+  _is_action_runing = false,
+  _is_waiting = false;
+
+
 /********************************************************************
       Actions Management
 *********************************************************************/
@@ -28,40 +59,36 @@ var render_ui;
  *  @private
  */
 function Action () {}
+var Action__pool = [];
 
 Action.prototype.configure = function (func, ctx) {
   this.func = func;
   this.ctx = ctx;
 }
 
-Action.__pool = [];
-
-Action.getAction = function () {
-  var l = Action.__pool.length;
+Action.retain = function () {
+  var l = Action__pool.length;
   if (l) {
-    return Action.__pool.pop ();
+    return Action__pool.pop ();
   }
   return new Action ();
 }
 
-Action.releaseAction = function (action) {
-  Action.__pool.push (action);
+Action.release = function (action) {
+  Action__pool.push (action);
 }
-
-var main_actions_queue = [];
-var tmp_actions_queue = [];
 
 var is_actions_are_scheduled = false;
 
 function queueAction (func, ctx) {
-  var action = Action.getAction ();
+  var action = Action.retain ();
   action.configure (func, ctx);
   
-  main_actions_queue.push (action);
+  _main_actions_queue.push (action);
   
   if (!is_actions_are_scheduled) {
     is_actions_are_scheduled = true;
-    delay_do_actions ();
+    scheduleDoActions ();
   }
 }
 
@@ -79,7 +106,7 @@ function doOneAction (action) {
  * @private
  */
 function doAllActions (now) {
-  var queue = main_actions_queue;
+  var queue = _main_actions_queue;
   
   is_actions_are_scheduled = false;
   
@@ -87,8 +114,8 @@ function doAllActions (now) {
     if (!now) now = performance.now ();
     
     // switch queues
-    main_actions_queue = tmp_actions_queue;
-    tmp_actions_queue = queue;
+    _main_actions_queue = _tmp_actions_queue;
+    _tmp_actions_queue = queue;
     
     try {
       // execute actions
@@ -96,7 +123,7 @@ function doAllActions (now) {
       for (; i < l; i++) {
         action = queue [i];
         doOneAction (action, now)
-        Action.releaseAction (action);
+        Action.release (action);
       }
     }
     catch (e) {
@@ -108,7 +135,6 @@ function doAllActions (now) {
   }
 }
 
-
 /********************************************************************
       setImmediate Polyfill (based on the Action management)
 *********************************************************************/
@@ -119,7 +145,7 @@ function doAllActions (now) {
  *
  * @private
  */
-var setImmediate, delay_do_actions;
+var setImmediate, scheduleDoActions;
 if (!window.setImmediate) {
 
   /**
@@ -147,35 +173,314 @@ if (!window.setImmediate) {
     };
   }
 
-  delay_do_actions = (window.postMessage)?
-    installPostMessageImplementation():
+  scheduleDoActions = (window.postMessage)?
+    installPostMessageImplementation ():
     function () { setTimeout (doAllActions, 0) };
-
 
   setImmediate = queueAction;
   window.setImmediate = setImmediate;
 }
 else {
   setImmediate = window.setImmediate.bind (window);
-  delay_do_actions = function () { setImmediate (doAllActions) };
+  scheduleDoActions = function () { setImmediate (doAllActions) };
 }
 
+/********************************************************************
+      Do one event
+*********************************************************************/
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * _DoOneEvent --
+ *
+ *  Process a single event of some sort.  If there's no work to
+ *  do, wait for an event to occur, then process it.
+ *
+ *
+ *----------------------------------------------------------------------
+ */
+
+/**
+ *  Structure used for managing events
+ *  @private
+ */
+function Handler () {}
+var Handler__pool = [];
+
+Handler.prototype.configure = function (obj, func) {
+  this.obj = obj;
+  if (util.isFunction (func)) {
+    this.func_ptr = func;
+  }
+  else if (util.isString (func)) {
+    this.func_name = func;
+  }
+}
+
+Handler.retain = function () {
+  var l = Handler__pool.length;
+  if (l) {
+    return Handler__pool.pop ();
+  }
+  return new Handler ();
+}
+
+Handler.release = function (handler) {
+  Handler__pool.push (handler);
+}
+
+/**
+ * doOneEvent will dispatch One event to all observers.
+ *
+ * @private
+ * @param {Object} burst a event burst structure
+ * @param {Boolean} isSynchron if its true the callbacks are executed
+ *             synchronously, otherwise they are executed within a setImmediate
+ */
+function doOneEvent (burst, isSynchron) {
+  var
+    handler_list = burst.handler_list,
+    n = handler_list.length,
+    i = n, l = n,
+    event = burst.event;
+
+  if (isSynchron) _is_sync_events_propagating = true;
+  else _is_async_events_propagating = true;
+  
+  // Test is all observers have been called
+  function end_propagation () {
+    l--;
+    if (l <= 0) {
+      if (isSynchron) _is_sync_events_propagating = false;
+			else _is_async_events_propagating = false;
+		}
+  }
+
+  /**
+   * doOneHandler will dispatch One event to an observer.
+   *
+   * @private
+   * @param {Handler} handler
+   */
+  function doOneHandler (handler) {
+    if (handler) try {
+      if (util.isFunction (handler.func_ptr)) {
+        // call function
+        handler.func_ptr.call (handler.obj, event);
+      }
+      else if (util.isString (handler.func_name) &&
+               util.isFunction (handler.obj[handler.func_name]))
+      {
+        // specific notify method
+        handler.obj[handler.func_name] (event);
+      }
+      else if (util.isFunction (handler.obj.notify)) {
+        // default notify method
+        handler.obj.notify (event);
+      }
+    }
+    catch (e) {
+      if (e.stack) console.error (e.stack);
+      else console.error (e);
+    }
+    end_propagation ();
+  };
+
+  if (!i) end_propagation (); // should not occur
+  
+  // For each observers, schedule the handler call (callback execution)
+  for (i = 0; i < n; i++) {
+    if (isSynchron) doOneHandler (handler_list [i])
+  
+    else (function (handler) {
+        setImmediate (function () { doOneHandler(handler) });
+      }) (handler_list [i])
+  }
+}
+
+/**
+ * doOneAsyncEvent will dispatch One event to all observers.
+ *
+ * @private
+ */
+function doOneAsyncEvent () {
+  if (_is_async_events_propagating || _is_sync_events_propagating) return;
+  
+  // dequeue the next event burst and do it
+  doOneEvent (_async_events_queue.shift ());
+}
+
+/**
+ * doOneSyncEvent will dispatch the synchronous event to all observers.
+ *
+ * @private
+ */
+function doOneSyncEvent () {
+  doOneEvent (_sync_event, true);
+  _sync_event = null;
+}
+
+/********************************************************************
+      Event dispatch
+*********************************************************************/
+
+/**
+ * Put an asynchronous event into the event queue and request the mainloop
+ *
+ * @private
+ */
+function queueProcAsyncEvent (event, handler_list) {
+  if (!event || !handler_list) return;
+
+  var burst = {
+    handler_list : handler_list,
+    event : event
+  }
+
+  // push the event to dispatch into the queue
+  _async_events_queue.push (burst);
+
+  // request for the mainloop
+  serviceLoop ();
+}
+
+/**
+ * Setup a synchronous event and request the mainloop
+ *
+ * @private
+ */
+function queueProcSyncEvent (event, handler_list) {
+  if (!event || !handler_list) return;
+
+  var burst = {
+    handler_list : handler_list,
+    event : event
+  }
+
+  // push the event to dispatch into the queue
+  _sync_event = burst;
+
+  // launch for the mainloop
+  serviceLoop ();
+}
 
 /********************************************************************
       Mainloop code
 *********************************************************************/
-
+  
+// var _waiting_for_service_loop = false;
+// function requestServiceLoop () {
+//   if (_waiting_for_service_loop) return;
+//   
+//   setImmediate (serviceLoop);
+//   _waiting_for_service_loop = true;
+// }
 
 /**
  * Mainloop core
  *
  * @private
  */
-function serviceLoopBis (now) {
-  
-  doAllActions (now);
-  
-  render_ui (now);
+function serviceLoop () {
 
-  vs.requestAnimationFrame (serviceLoopBis);
+  if (_sync_event) doOneSyncEvent ();
+
+  if ((_async_events_queue.length === 0 && _main_actions_queue.length === 0) ||
+      _is_waiting) return;
+
+  function loop () {
+    _is_waiting = false;
+    serviceLoop ();
+  }
+
+  if (_is_async_events_propagating || _is_sync_events_propagating) {
+    // do the loop
+    setImmediate (loop);
+    return;
+  }
+
+  // dispatch an event to observers
+  if (_main_actions_queue.length) scheduleDoActions ();
+  if (_async_events_queue.length) doOneAsyncEvent ();
 }
+
+/** 
+ * Schedule your action on next frame.
+ *
+ * @example
+ * vs.scheduleAction (function () {...}, vs.ON_NEXT_FRAME);
+ *
+ * @see vs.scheduleAction
+ *
+ * @name vs.ON_NEXT_FRAME 
+ * @type {String}
+ * @const
+ * @public
+ */ 
+var ON_NEXT_FRAME = '__on_next_frame__';
+
+/** 
+ * Schedule an action to be executed asynchronously.
+ * <br />
+ * There is three basic scheduling; the action can be executed:
+ * <ul>
+ *   <li>as soon as possible.
+ *   <li>on the next frame
+ *   <li>after a delay
+ * </ul>
+ *
+ * 1- As soon as possible<br />
+ * The action will be executed as soon as possible in a manner that is
+ * typically more efficient and consumes less power than the usual
+ * setTimeout(..., 0) pattern.<br />
+ * It based on setImmediate if it is available; otherwise it will use postMessage
+ * if it is possible and at least setTimeout(..., 0) pattern if previous APIs are
+ * not available.
+ *<br /><br />
+ *
+ * 2- On next frame<br />
+ * The action will be executed on next frame.<br />It is equivalent to use
+ * window.requestAnimationFrame.
+ *<br /><br />
+ *
+ * 2- After a delay<br />
+ * The action will be executed after a given delay in millisecond.<br />
+ * It is equivalent to use window.setTimeout(..., delay).
+ *
+ * @example
+ * // run asap
+ * vs.scheduleAction (function () {...});
+ * // run on next frame
+ * vs.scheduleAction (function () {...}, vs.ON_NEXT_FRAME);
+ * // run after 1s
+ * vs.scheduleAction (function () {...}, 1000);
+ *
+ * @name vs.scheduleAction 
+ * @type {String}
+ * @function
+ * @public
+ *
+ * @param {Function} func The action to run
+ * @param {(Number|String)} delay when run the action [optional]
+ */ 
+function scheduleAction (func, delay) {
+  if (!util.isFunction (func)) return;
+  if (delay && util.isNumber (delay)) {
+    setTimeout (func, delay);
+  }
+  else if (delay === ON_NEXT_FRAME) {
+    vs.requestAnimationFrame (func);
+  }
+  else setImmediate (func);
+}
+
+/********************************************************************
+                      Export
+*********************************************************************/
+/** @private */
+util.extend (vs, {
+  scheduleAction: scheduleAction,
+  ON_NEXT_FRAME: ON_NEXT_FRAME
+});
+
