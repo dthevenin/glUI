@@ -87,7 +87,6 @@ function update_envelop_vertices (gl_view)
   mat4.multiplyVec3 (matrix, sprite.vertex_4);
 } 
 
-var rendering = true;
 var next_rendering_id = 0;
 var gl_stack_length = 0;
 var gl_stack_for_renter = [1024];
@@ -223,6 +222,8 @@ function calculateViewsInFrustum (now) {
   
   gl_stack_length = gl_views_index;
 }
+
+var render_ui;
 
 function initRendering () {
 
@@ -461,13 +462,9 @@ function initRendering () {
   }
 
   render_ui = function (now, mode) {
-    if (!rendering) {
-//      next_rendering_id = vs.requestAnimationFrame (animate);
-      return
-    }
 
     if (mode !== 1 && (!GLView.__should_render && !GLView.__nb_animation)) {
-//      next_rendering_id = vs.requestAnimationFrame (animate);
+      vs.requestAnimationFrame (render_ui);
       return
     }
 
@@ -506,7 +503,11 @@ function initRendering () {
 //    if (mode !== 1) vs.scheduleAction(animate, 300);
 
     if (stats) stats.end ();
+    
+    vs.requestAnimationFrame (render_ui);
   }
+  
+  vs.requestAnimationFrame (render_ui);
   
 //  animate (performance.now ());
 //  vs.scheduleAction(animate, 100);

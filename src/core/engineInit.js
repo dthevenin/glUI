@@ -320,7 +320,5 @@ function initWebGLRendering () {
   // Configure view and projection matrix of programes
   updateProgramsMatrix ();
   
-  initRendering ()
-
-  vs.requestAnimationFrame (serviceLoopBis);
+  initRendering ();
 }
