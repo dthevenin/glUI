@@ -118,9 +118,9 @@ var ThingList = vs.core.createClass ({
     list_view.style.backgroundColor = GLColor.white;
     this.list_view = list_view;
 
-    for (var i = 0; i < DATA.length; i++)
+    for (var i = 0; i < DATA.length * 2; i++)
     {
-      var item = DATA[i];
+      var item = DATA[i % DATA.length];
       var itemView = new ListItem (item).init ();
       itemView.size = [size[0], 77];
       list_view.add (itemView);
@@ -140,7 +140,6 @@ var ThingList = vs.core.createClass ({
   }
 });
 
-
 var DATA = [
   {icon:'assets/place_small.png', name: 'Here', type: 'Place'},
   {icon:'assets/book_small.png', name: 'The Design Of Eve', type: 'Book'},
@@ -155,38 +154,4 @@ var DATA = [
 function loadApplication () {
   new ThingList ({id:"thinglist", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
   vs.ui.Application.start ();
-  
-//  vs.scheduleAction (test, 100);
-//  vs.scheduleAction (animate, 100);
-}
-
-function animate () {
-//  _pickUp (20, 20);
-  app.openSettings ();
-}
-
-function test () {
-  console.profile("webgl");
-  vs.scheduleAction (animate);
-  vs.scheduleAction (animate, 1000);
-  vs.scheduleAction (animate, 2000);
-  vs.scheduleAction (animate, 3000);
-  vs.scheduleAction (animate, 4000);
-  vs.scheduleAction (animate, 5000);
-//   vs.scheduleAction (animate, 6000);
-//   vs.scheduleAction (animate, 7000);
-//   vs.scheduleAction (animate, 8000);
-//   vs.scheduleAction (animate, 9000);
-//   vs.scheduleAction (animate, 10000);
-//   vs.scheduleAction (animate, 11000);
-//   vs.scheduleAction (animate, 12000);
-//   vs.scheduleAction (animate, 13000);
-//   vs.scheduleAction (animate, 14000);
-//   vs.scheduleAction (animate, 15000);
-//   vs.scheduleAction (animate, 16000);
-//   vs.scheduleAction (animate, 17000);
-//   vs.scheduleAction (animate, 18000);
-  vs.scheduleAction (function () {
-    console.profileEnd("webgl");
-  }, 6000);
 }

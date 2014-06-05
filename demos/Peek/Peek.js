@@ -35,7 +35,7 @@ day1LineIn.duration = duration;
 day1LineIn.timing = timing;
 
 var day1LineOut = new GLAnimation ({"rotation": [-90,0,0]});
-day1LineOut.keyFrame (0, {"translation": [0,0,0]});
+day1LineOut.keyFrame (0, {"rotation": [0,0,0]});
 day1LineOut.duration = duration;
 day1LineOut.timing = timing;
 
@@ -76,13 +76,13 @@ var Peek = vs.core.createClass ({
     dayStyle = new GLStyle ();
     dayStyle.fontSize = "12px";
     dayStyle.fontFamily = "arial";
-    dayStyle.color = GLColor.black;
+    dayStyle.color = GLColor.white;
     dayStyle.textAlign = "center";
 
     dateStyle = new GLStyle ();
     dateStyle.fontSize = "18px";
     dateStyle.fontFamily = "arial";
-    dateStyle.color = GLColor.black;
+    dateStyle.color = GLColor.white;
     dateStyle.textAlign = "center";  
 
     hourStyle = new GLStyle ();
