@@ -75,13 +75,6 @@ vs_webcomponent.js:
 	$(CAT) customElement/CustomElement.js >> $@
 
 vs_event.js:
-	$(CAT) core/event/MainLoop.js >> $@
-	$(CAT) core/event/vs_core_GLEventSource.js >> $@
-	$(CAT) core/event/GLPicking.js >> $@
-	$(CAT) core/event/GLPointerEvent.js >> $@
-	$(CAT) core/event/MouseEvent.js >> $@
-	$(CAT) core/event/TouchEvent.js >> $@
-	$(CAT) core/event/PointerEvent.js >> $@
 	$(CAT) core/event/recognizer/DragRecognizer.js >> $@
 	$(CAT) core/event/recognizer/PinchRecognizer.js >> $@
 	$(CAT) core/event/recognizer/RotationRecognizer.js >> $@
@@ -99,6 +92,12 @@ vs_core.js:
 	$(CAT) core/vs_ui_GLConstraint.js >> $@
 	$(CAT) core/vs_ui_GLColor.js >> $@
 	$(CAT) core/vs_ui_GLStyle.js >> $@
+	$(CAT) core/event/vs_core_GLEventSource.js >> $@
+	$(CAT) core/event/GLPicking.js >> $@
+	$(CAT) core/event/GLPointerEvent.js >> $@
+	$(CAT) core/event/MouseEvent.js >> $@
+	$(CAT) core/event/TouchEvent.js >> $@
+	$(CAT) core/event/PointerEvent.js >> $@
 	$(CAT) core/view/vs_ui_GLView.js >> $@
 	$(CAT) core/view/vs_ui_GLScrollView.js >> $@
 	$(CAT) core/view/vs_ui_GLApplication.js >> $@
@@ -120,8 +119,8 @@ vs_gl_animation.js:
 	$(CAT) animation/engine.js >> $@
 	
 vs_gl_engine.js: vs_core.js vs_event.js vs_gl_animation.js vs_gl_widget.js vs_webcomponent.js
-	$(CAT) vs_event.js >> $@
 	$(CAT) vs_core.js >> $@
+	$(CAT) vs_event.js >> $@
 	$(CAT) vs_gl_animation.js >> $@
 	$(CAT) vs_gl_widget.js >> $@
 	$(CAT) vs_webcomponent.js >> $@
