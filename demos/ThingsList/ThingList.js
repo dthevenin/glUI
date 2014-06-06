@@ -51,6 +51,22 @@ var ThingList = vs.core.createClass ({
       this.config_panel.hide ();
       this.show_list_anim.process (list_view);
       this.nav_bar.style.backgroundColor = new GLColor (41, 41, 41);
+
+      this.buttonOpen.animate ({
+        'rotation' : [0,0,0],
+        'scaling': 1,
+        'opacity': 1
+      }, {
+        'duration': 500
+      })
+      
+      this.buttonClose.animate ({
+        'rotation' : [0,0,-360],
+        'scaling': 0.3,
+        'opacity': 0
+      }, {
+        'duration': 500
+      })
     }
     else {
       this.config_panel.show ();
@@ -58,6 +74,22 @@ var ThingList = vs.core.createClass ({
         list_view.hide ();
       });
       this.nav_bar.style.backgroundColor = new GLColor (60, 60, 60);
+      
+      this.buttonOpen.animate ({
+        'rotation' : [0,0,360],
+        'scaling': 0.3,
+        'opacity': 0
+      }, {
+        'duration': 500
+      })
+
+      this.buttonClose.animate ({
+        'rotation' : [0,0,0],
+        'scaling': 1,
+        'opacity': 1
+      }, {
+        'duration': 500
+      })
     }    
     this.settings_open = !this.settings_open;
   },
@@ -86,7 +118,8 @@ var ThingList = vs.core.createClass ({
 
     var button = new vs.ui.GLButton ({
       size: [40, 40],
-      position: [3, 0]
+      position: [3, 0],
+      transformOrigin : [20, 20]
     }).init ();
     this.nav_bar.add (button);
     
@@ -95,6 +128,24 @@ var ThingList = vs.core.createClass ({
     button_default_style.backgroundImageUV = [-0.2,1.2, -0.2,-0.2, 1.2,1.2, 1.2,-0.2];
     
     button.bind ('select', this, this.openSettings);
+    this.buttonOpen = button;
+
+    button = new vs.ui.GLButton ({
+      size: [40, 40],
+      position: [3, 0],
+      transformOrigin : [20, 20],
+      rotation : [0,0,-360],
+      scaling: 0.3,
+      opacity: 0
+    }).init ();
+    this.nav_bar.add (button);
+    
+    button_default_style = button.style;
+    button_default_style.backgroundImage = "assets/x-icon.png";
+    button_default_style.backgroundImageUV = [-0.2,1.2, -0.2,-0.2, 1.2,1.2, 1.2,-0.2];
+    
+    button.bind ('select', this, this.openSettings);
+    this.buttonClose = button;
 
     var button = new vs.ui.GLImage ({
       size: [32, 32],
@@ -149,7 +200,6 @@ var DATA = [
   {icon:'assets/idea_small.png', name: 'Ideaaah', type: 'Idea'},
   {icon:'assets/movie_small.png', name: 'Make a movie', type: 'Movie'}
 ];
-
 
 function loadApplication () {
   new ThingList ({id:"thinglist", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
