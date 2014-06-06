@@ -27,16 +27,16 @@ var angle2rad = Math.PI / 180;
  * @protected
  * @function
  */
-function update_transform_gl_matrix (gl_view)
+function update_transform_gl_matrix (gl_view, sprite)
 {
   var
-    sprite = SPRITES [gl_view.__gl_id],
     matrix = sprite.matrix,
     pos = gl_view._position,
-    tx = gl_view._transform_origin [0] + pos [0],
-    ty = gl_view._transform_origin [1] + pos [1],
+    size = gl_view._size,
     rot = gl_view._rotation,
-    trans = gl_view._translation;
+    trans = gl_view._translation,
+    tx = gl_view._transform_origin [0] + pos [0],
+    ty = gl_view._transform_origin [1] + pos [1];
     
   // apply current transformation
   mat4.identity (matrix);
@@ -51,7 +51,7 @@ function update_transform_gl_matrix (gl_view)
 
   /*====================================================== */
   // Update vertices vectors for the culling algorithm
-  update_envelop_vertices (gl_view);
+  update_envelop_vertices (sprite, pos, size);
 
   gl_view.__invalid_matrixes = true;
   GLView.__should_render = true;
@@ -64,27 +64,20 @@ function update_transform_gl_matrix (gl_view)
  * @protected
  * @function
  */
-function update_envelop_vertices (gl_view)
+function update_envelop_vertices (sprite, obj_pos, obj_size)
 {
   var
-    sprite = SPRITES [gl_view.__gl_id],
     matrix = sprite.matrix,
-    obj_size = gl_view._size,
-    obj_pos = gl_view._position,
     x = obj_pos[0],
     y = obj_pos[1],
+    z = obj_pos[2],
     w = obj_size [0],
     h = obj_size [1];
 
-  vec3.set_p (x    , y    , 0, sprite.vertex_1);
-  vec3.set_p (x    , y + h, 0, sprite.vertex_2);
-  vec3.set_p (x + w, y    , 0, sprite.vertex_3);
-  vec3.set_p (x + w, y + h, 0, sprite.vertex_4);
-  
-  mat4.multiplyVec3 (matrix, sprite.vertex_1);
-  mat4.multiplyVec3 (matrix, sprite.vertex_2);
-  mat4.multiplyVec3 (matrix, sprite.vertex_3);
-  mat4.multiplyVec3 (matrix, sprite.vertex_4);
+  mat4.multiplyXYZToVec3 (matrix, x    , y    , z, sprite.vertex_1);
+  mat4.multiplyXYZToVec3 (matrix, x    , y + h, z, sprite.vertex_2);
+  mat4.multiplyXYZToVec3 (matrix, x + w, y    , z, sprite.vertex_3);
+  mat4.multiplyXYZToVec3 (matrix, x + w, y + h, z, sprite.vertex_4);
 } 
 
 var next_rendering_id = 0;
@@ -139,12 +132,14 @@ function calculateViewsInFrustum (now) {
   gl_views_index = 0;
 
   function _calculateViewsInFrustum (gl_view, p_transform, new_p_matrix, p_alpha, level) {
-    var key, i, l, child, children, style, alpha;
+    var key, i, l, child, children, style, alpha, sprite;
     
     // Views visibility
     if (!gl_view._visible && !gl_view.__is_hidding) {
       return;
     }
+    
+    sprite = SPRITES [gl_view.__gl_id];
     
     // animate view
     gl_update_animation (gl_view, now);
@@ -160,9 +155,8 @@ function calculateViewsInFrustum (now) {
     
     /*================= Update view matrixes ================= */
     if (gl_view.__should_update_gl_matrix) {
-      update_transform_gl_matrix (gl_view);
+      update_transform_gl_matrix (gl_view, sprite);
     }
-    var sprite = SPRITES [gl_view.__gl_id];
     var o_matrix = sprite.matrix;
     var m_matrix = sprite.m_matrix;
     var p_matrix = sprite.p_matrix;
@@ -493,7 +487,7 @@ function initRendering () {
         var entry = gl_stack_for_renter [i];
         if (entry[0] === 1) {
           // normal rendering
-          renderOneView (entry[1], entry[2], mode);
+//          renderOneView (entry[1], entry[2], mode);
         }
       }
 
