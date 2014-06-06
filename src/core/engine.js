@@ -487,7 +487,7 @@ function initRendering () {
         var entry = gl_stack_for_renter [i];
         if (entry[0] === 1) {
           // normal rendering
-//          renderOneView (entry[1], entry[2], mode);
+          renderOneView (entry[1], entry[2], mode);
         }
       }
 
