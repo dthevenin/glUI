@@ -27,7 +27,7 @@ function mixAnimations (animations, new_anim) {
   }
 }
 
-var procesAnimation = function (comp, animation, clb, ctx, now) {
+var procesAnimation = function (comp, animation, trajectories, clb, ctx, now) {
 
   var data_anim = {};
   for (var key in AnimationDefaultOption) {
@@ -38,8 +38,8 @@ var procesAnimation = function (comp, animation, clb, ctx, now) {
   var trajs = new TrajectoriesData ();
   var timing = data_anim.timing;
   
-  for (var property in animation._trajectories) {
-    setupTrajectory (trajs, comp, property, animation._trajectories [property]);
+  for (var property in trajectories) {
+    setupTrajectory (trajs, comp, property, trajectories [property]);
   }
   
   data_anim.steps = animation.steps | 0;

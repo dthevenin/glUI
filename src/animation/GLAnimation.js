@@ -190,7 +190,7 @@ GLAnimation.prototype = {
    */
   process : function (comp, clb, ctx, now)
   {
-    return procesAnimation (comp, this, clb, ctx, now);
+    return procesAnimation (comp, this, this._trajectories, clb, ctx, now);
   },
 };
 
