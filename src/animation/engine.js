@@ -128,7 +128,7 @@ var setupTrajectory = function (trajs, obj, property, traj_values)
   
   if (value [0] !== 0) {
     // add the miss the beginning value
-    value = [0, deepArrayClone (obj[property])];
+    value = [0, obj[property]];
     traj_values = traj_values.slice ();
     traj_values.unshift (value);
   }
