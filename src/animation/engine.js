@@ -65,7 +65,6 @@ var procesAnimation = function (comp, animation, trajectories, clb, ctx, now) {
       clb.apply (ctx);
     }
   }
-  chrono.start ();
   
   if (data_anim.steps === 0) {
     // TODO this modification make we lose the first frame !!!
@@ -81,6 +80,8 @@ var procesAnimation = function (comp, animation, trajectories, clb, ctx, now) {
       GLView.__nb_animation ++;
 //    });
   }
+
+  chrono.start ();
 }
 
 function gl_update_animation (comp, now) {
