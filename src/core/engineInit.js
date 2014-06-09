@@ -208,7 +208,7 @@ function initBuffers () {
   /*========================= UV =========================*/
   object_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, object_uv_buffer);
-  
+
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
     default_texture_projection,
