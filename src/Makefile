@@ -117,6 +117,7 @@ vs_gl_animation.js:
 	$(CAT) animation/GLAnimation.js >> $@
 	$(CAT) animation/DefaultAnimations.js >> $@
 	$(CAT) animation/engine.js >> $@
+	$(CAT) animation/chainingAPI.js >> $@
 	
 vs_gl_engine.js: vs_core.js vs_event.js vs_gl_animation.js vs_gl_widget.js vs_webcomponent.js
 	$(CAT) vs_core.js >> $@
