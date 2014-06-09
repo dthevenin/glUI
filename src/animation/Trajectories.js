@@ -52,21 +52,21 @@ Trajectory.prototype.compute = function () {
   return false;
 };
 
-function getValuesIndex (values, t, operation) {
-  var l = values.length, i, value_s, value_e, d;
+function getValuesIndex (values, nb_values, t, operation, out) {
+  var i, value_s, value_e, d;
   
   if (t <= 0) return values [0][1];
-  if (t >= 1) return values [l - 1][1];
+  if (t >= 1) return values [nb_values][1];
   
   value_s = values [0];
-  for (i = 1; i < l; i++) {
+  for (i = 1; i <= nb_values; i++) {
     value_e = values [i];
     if (t >= value_e [0]) {
       value_s = value_e;
     }
     else {
       d = (t - value_s[0]) / (value_e[0] - value_s[0]);
-      return operation (value_s[1], value_e[1], d);
+      return operation (value_s[1], value_e[1], d, out);
     }
   }
 }
@@ -76,16 +76,18 @@ var TrajectoryVect1D = function (values) {
   this._values = deepArrayClone (values);
 }
 util.extendClass (TrajectoryVect1D, Trajectory);
-  
+
+function TrajectoryVect1D_op (v1, v2, d) {
+  return v1 + (v2 - v1) * d;
+}
+
 TrajectoryVect1D.prototype.compute = function (tick) {
   var
     nb_values = this._values.length - 1, // int [0, n]
     ti = tick * nb_values, // float [0, n]
     index = ti | 0, // int [0, n]
     d = ti - index, // float [0, 1]
-    out = getValuesIndex (this._values, tick, function (v1, v2, d) {
-      return v1 + (v2 - v1) * d;
-    });
+    out = getValuesIndex (this._values, nb_values, tick, TrajectoryVect1D_op, null);
     
   return out;
 };
@@ -96,7 +98,14 @@ var TrajectoryVect2D = function (values) {
   this.out = new glMatrixArrayType (2);
 }
 util.extendClass (TrajectoryVect2D, Trajectory);
-  
+
+function TrajectoryVect2D_op (v1, v2, d, out) {
+  out[0] = v1[0] + (v2[0] - v1[0]) * d;
+  out[1] = v1[1] + (v2[1] - v1[1]) * d;
+
+  return out;
+}
+
 TrajectoryVect2D.prototype.compute = function (tick)
 {
   var
@@ -106,12 +115,7 @@ TrajectoryVect2D.prototype.compute = function (tick)
     index = ti | 0, // int [0, n]
     d = ti - index, // float [0, 1]
     out = this.out,
-    result = getValuesIndex (values, tick, function (v1, v2, d) {
-      out[0] = v1[0] + (v2[0] - v1[0]) * d;
-      out[1] = v1[1] + (v2[1] - v1[1]) * d;
-      
-      return out;
-    });
+    result = getValuesIndex (values, nb_values, tick, TrajectoryVect2D_op, out);
     
   if (result !== out) {
     out[0] = result[0];
@@ -127,6 +131,14 @@ var TrajectoryVect3D = function (values) {
   this.out = new glMatrixArrayType (3);
 }
 util.extendClass (TrajectoryVect3D, Trajectory);
+
+function TrajectoryVect3D_op (v1, v2, d, out) {
+  out[0] = v1[0] + (v2[0] - v1[0]) * d;
+  out[1] = v1[1] + (v2[1] - v1[1]) * d;
+  out[2] = v1[2] + (v2[2] - v1[2]) * d;
+
+  return out;
+}
   
 TrajectoryVect3D.prototype.compute = function (tick)
 {
@@ -137,13 +149,7 @@ TrajectoryVect3D.prototype.compute = function (tick)
     index = ti | 0, // int [0, n]
     d = ti - index, // float [0, 1]
     out = this.out,
-    result = getValuesIndex (values, tick, function (v1, v2, d) {
-      out[0] = v1[0] + (v2[0] - v1[0]) * d;
-      out[1] = v1[1] + (v2[1] - v1[1]) * d;
-      out[2] = v1[2] + (v2[2] - v1[2]) * d;
-
-      return out;
-    });
+    result = getValuesIndex (values, nb_values, tick, TrajectoryVect3D_op, out);
     
   if (result !== out) {
     out[0] = result[0];
