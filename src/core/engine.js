@@ -15,8 +15,8 @@ function update_gl_vertices (gl_view) {
   m[6] = x + w; m[7] = y; m[8] = 0;
   m[9] = x + w; m[10] = y + h; m[11] = 0;
   
-  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
-  gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
+  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, vertices_buffer);
+  gl_ctx.bufferSubData (gl_ctx.ARRAY_BUFFER, sprite.vertices_index * 12 * 4, m);
   
   gl_view.__should_update_gl_vertices = false;
 };
@@ -183,7 +183,7 @@ function calculateViewsInFrustum (now) {
     }
     gl_view.__invalid_matrixes = false;
     
-    /*================= Culling allgorithm ================= */
+    /*================= Culling algorithm ================= */
     if (!isInFrustum (sprite, level, p_size_vec, scroll_vec)) return;
     
     var entry = gl_stack_for_renter [gl_views_index++];
@@ -346,7 +346,7 @@ function initRendering () {
         attribute.buffer = object_bck_image_uv_buffer;
         attribute.numComponents = 2;
         program.attrib.bkImageUV (attribute);
-        gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, style._background_image_uv, gl_ctx.STATIC_DRAW);
+        gl_ctx.bufferSubData (gl_ctx.ARRAY_BUFFER, sprite.vertices_index * 8 * 4, style._background_image_uv);
 
         texture2.bindToUnit = bindToUnitTEXTURE0_3;
         program.textures.uBckTexture (texture2, style);
@@ -387,7 +387,7 @@ function initRendering () {
         attribute.buffer = object_bck_image_uv_buffer;
         attribute.numComponents = 2;
         program.attrib.bkImageUV (attribute);
-        gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, style._background_image_uv, gl_ctx.STATIC_DRAW);
+        gl_ctx.bufferSubData (gl_ctx.ARRAY_BUFFER, sprite.vertices_index * 8 * 4, style._background_image_uv);
 
         program.uniform.color (c_buffer);
 
@@ -417,7 +417,7 @@ function initRendering () {
       if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices ();
       else update_gl_vertices (gl_view);
     }
-    attribute.buffer = sprite.vertices_buffer;
+    attribute.buffer = vertices_buffer;
     attribute.numComponents = 3;
     program.attrib.position (attribute);
     
@@ -448,8 +448,13 @@ function initRendering () {
       
         default_faces_activated = true;
       }
-     
-      gl_ctx.drawElements (gl_ctx.TRIANGLE_STRIP, 4, gl_ctx.UNSIGNED_SHORT, 0);
+
+      gl_ctx.drawElements (
+        gl_ctx.TRIANGLE_STRIP,
+        4,
+        gl_ctx.UNSIGNED_SHORT,
+        sprite.vertices_index * 4 * 2
+      );
     }
     
     previous_program = program;

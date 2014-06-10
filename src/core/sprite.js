@@ -43,9 +43,30 @@ function update_texture (gl_view, image) {
   gl_object.texture = __copy_image_into_webgl_texture (image, gl_object.texture);
 }
 
+var vertices_index = 0;
+var vertices_buffer = null;
+var vertices = null;
 
 function Sprite (id)
 {
+  if (!vertices_buffer) {
+    vertices_buffer = gl_ctx.createBuffer ();
+    gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, vertices_buffer);
+    vertices = new Float32Array (12 * 1024);
+    gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, vertices, gl_ctx.DYNAMIC_DRAW);
+    
+    default_triangle_faces = new Uint16Array (4 * 1024);
+    for (var i = 0; i < 1024 * 4; i++) {
+      default_triangle_faces [i] = i;
+    }
+    
+    gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
+    gl_ctx.bufferData (
+      gl_ctx.ELEMENT_ARRAY_BUFFER,
+      default_triangle_faces,
+      gl_ctx.STATIC_DRAW
+    );
+  }
   this.matrix = mat4.create ();
   this.p_matrix = mat4.create ();
   this.m_matrix = mat4.create ();
@@ -54,8 +75,9 @@ function Sprite (id)
   SPRITES [this.id] = this;
   
   // contains position vertices
-  this.vertices = new Float32Array (12);
-  this.vertices_buffer = gl_ctx.createBuffer ();
+  this.vertices = vertices.subarray (vertices_index * 12, vertices_index * 12 + 12);
+  this.vertices_index = vertices_index;
+  vertices_index ++;
   
   this.vertex_1 = vec3.create ();
   this.vertex_2 = vec3.create ();

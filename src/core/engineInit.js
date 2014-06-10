@@ -87,10 +87,10 @@ void main(void) {\n\
 
   var image_vertex_shader="\n\
 attribute vec3 position;\n\
+attribute vec2 uv;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 uniform mat4 Mmatrix;\n\
-attribute vec2 uv;\n\
 varying vec2 vUV;\n\
 void main(void) { //pre-built function\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
@@ -203,8 +203,18 @@ function updateProgramsMatrix () {
 
 function initBuffers () {
 
-  default_texture_projection = new Float32Array ([0,0, 0,1, 1,0, 1,1]);
-
+  default_texture_projection = new Float32Array (1024 * 8);
+  for (var i = 0; i < 1024 * 8; ) {
+    default_texture_projection [i++] = 0;
+    default_texture_projection [i++] = 0;
+    default_texture_projection [i++] = 0;
+    default_texture_projection [i++] = 1;
+    default_texture_projection [i++] = 1;
+    default_texture_projection [i++] = 0;
+    default_texture_projection [i++] = 1;
+    default_texture_projection [i++] = 1;
+  }
+  
   /*========================= UV =========================*/
   object_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, object_uv_buffer);
@@ -212,7 +222,7 @@ function initBuffers () {
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
     default_texture_projection,
-    gl_ctx.STATIC_DRAW
+    gl_ctx.DYNAMIC_DRAW
   );
 
   object_bck_image_uv_buffer = gl_ctx.createBuffer ();
@@ -221,7 +231,7 @@ function initBuffers () {
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
     default_texture_projection,
-    gl_ctx.STATIC_DRAW
+    gl_ctx.DYNAMIC_DRAW
   );
     
   default_object_bck_image_uv_buffer = gl_ctx.createBuffer ();
@@ -229,19 +239,19 @@ function initBuffers () {
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
     default_texture_projection,
-    gl_ctx.STATIC_DRAW
+    gl_ctx.DYNAMIC_DRAW
   );
 
   /*========================= FACES ========================= */
   object_faces_buffer = gl_ctx.createBuffer ();
-  gl_ctx.bindBuffer(gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
+//  gl_ctx.bindBuffer(gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
 
-  default_triangle_faces = new Uint16Array ([0,1,2,3]);
-  gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
-  gl_ctx.bufferData (
-    gl_ctx.ELEMENT_ARRAY_BUFFER,
-    default_triangle_faces,
-    gl_ctx.STATIC_DRAW);
+//   default_triangle_faces = new Uint16Array ([0,1,2,3]);
+//   gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
+//   gl_ctx.bufferData (
+//     gl_ctx.ELEMENT_ARRAY_BUFFER,
+//     default_triangle_faces,
+//     gl_ctx.STATIC_DRAW);
 }
 
 var GL_CANVAS, stats;
