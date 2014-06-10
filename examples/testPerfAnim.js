@@ -21,7 +21,7 @@ var testPerfAnim = vs.core.createClass ({
 
     function setDiv (parent, dec) {
       var delay = 0;
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < 300; i++) {
 //      for (var i = 0; i < 3; i++) {
         var img = new vs.ui.GLImage ({
           position: [100 + dec, 100 + dec],
@@ -32,7 +32,7 @@ var testPerfAnim = vs.core.createClass ({
         parent.add (img);
         
         animation.begin = -delay;
-        delay += 125;
+        delay += 75;
         animation.process (img);
       }
     }
