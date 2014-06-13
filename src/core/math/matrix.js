@@ -842,15 +842,15 @@ mat4.rotateX = function(mat, angle) {
 	var a20 = mat[8], a21 = mat[9], a22 = mat[10], a23 = mat[11];
 	
 	// Perform axis-specific matrix multiplication
-	dest[4] = a10*c + a20*s;
-	dest[5] = a11*c + a21*s;
-	dest[6] = a12*c + a22*s;
-	dest[7] = a13*c + a23*s;
+	mat[4] = a10*c + a20*s;
+	mat[5] = a11*c + a21*s;
+	mat[6] = a12*c + a22*s;
+	mat[7] = a13*c + a23*s;
 	
-	dest[8] = a10*-s + a20*c;
-	dest[9] = a11*-s + a21*c;
-	dest[10] = a12*-s + a22*c;
-	dest[11] = a13*-s + a23*c;
+	mat[8] = a10*-s + a20*c;
+	mat[9] = a11*-s + a21*c;
+	mat[10] = a12*-s + a22*c;
+	mat[11] = a13*-s + a23*c;
 };
 
 /*
@@ -871,15 +871,15 @@ mat4.rotateY = function(mat, angle) {
 	var a20 = mat[8], a21 = mat[9], a22 = mat[10], a23 = mat[11];
 	
 	// Perform axis-specific matrix multiplication
-	dest[0] = a00*c + a20*-s;
-	dest[1] = a01*c + a21*-s;
-	dest[2] = a02*c + a22*-s;
-	dest[3] = a03*c + a23*-s;
+	mat[0] = a00*c + a20*-s;
+	mat[1] = a01*c + a21*-s;
+	mat[2] = a02*c + a22*-s;
+	mat[3] = a03*c + a23*-s;
 	
-	dest[8] = a00*s + a20*c;
-	dest[9] = a01*s + a21*c;
-	dest[10] = a02*s + a22*c;
-	dest[11] = a03*s + a23*c;
+	mat[8] = a00*s + a20*c;
+	mat[9] = a01*s + a21*c;
+	mat[10] = a02*s + a22*c;
+	mat[11] = a03*s + a23*c;
 };
 
 /*
@@ -899,15 +899,15 @@ mat4.rotateZ = function(mat, angle) {
 	var a10 = mat[4], a11 = mat[5], a12 = mat[6], a13 = mat[7];
 		
 	// Perform axis-specific matrix multiplication
-	dest[0] = a00*c + a10*s;
-	dest[1] = a01*c + a11*s;
-	dest[2] = a02*c + a12*s;
-	dest[3] = a03*c + a13*s;
+	mat[0] = a00*c + a10*s;
+	mat[1] = a01*c + a11*s;
+	mat[2] = a02*c + a12*s;
+	mat[3] = a03*c + a13*s;
 	
-	dest[4] = a00*-s + a10*c;
-	dest[5] = a01*-s + a11*c;
-	dest[6] = a02*-s + a12*c;
-	dest[7] = a03*-s + a13*c;
+	mat[4] = a00*-s + a10*c;
+	mat[5] = a01*-s + a11*c;
+	mat[6] = a02*-s + a12*c;
+	mat[7] = a03*-s + a13*c;
 };
 
 /*
