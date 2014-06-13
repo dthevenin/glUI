@@ -29,6 +29,7 @@ function GLStyle (config)
   this.constructor = GLStyle;
   
   this._background_image_uv = new Float32Array ([0,1, 0,0, 1,1, 1,0]);
+  this._shadow_offset = new Float32Array ([0,0]);
   this._color = GLColor.black;
 }
 
@@ -43,6 +44,9 @@ GLStyle.prototype = {
   _text_align: "left",
   _text_transform: null,
   _font_weight: "normal",
+  _shadow_color: null,
+  _shadow_offset: null,
+  _shadow_blur: 10,
   
   __gl_texture_bck_image: null,
   __gl_bck_image_uv_buffer: null,
@@ -394,6 +398,70 @@ vs.util.defineClassProperties (GLStyle, {
      */
     get : function () {
       return this._background_image;
+    }
+  },
+  
+  'shadowColor': {
+    /**
+     * Change view shadow.
+     * @name vs.ui.GLStyle#shadow
+     * @type {String}
+     */
+    set : function (v) {
+      if (!(v instanceof GLColor)) return; 
+      this._shadow_color = v;
+      GLView.__should_render = true;
+    },
+    
+    /**
+     * @ignore
+     * @type {String}
+     */
+    get : function () {
+      return this._shadow_color;
+    }
+  },
+  
+  'shadowOffset': {
+    /**
+     * Change view shadow.
+     * @name vs.ui.GLStyle#shadow
+     * @type {Array}
+     */
+    set : function (v) {
+      if (!util.isArray (v) || v.length !== 2) return;
+      this._shadow_offset[0] = v[0];
+      this._shadow_offset[1] = v[0];
+      GLView.__should_render = true;
+    },
+    
+    /**
+     * @ignore
+     * @type {String}
+     */
+    get : function () {
+      return this._shadow_offset;
+    }
+  },
+  
+  'shadowBlur': {
+    /**
+     * Change view shadow.
+     * @name vs.ui.GLStyle#shadow
+     * @type {String}
+     */
+    set : function (v) {
+      if (!util.isNumber (v)) return;
+      this._shadow_blur = v;
+      GLView.__should_render = true;
+    },
+    
+    /**
+     * @ignore
+     * @type {String}
+     */
+    get : function () {
+      return this._shadow_blur;
     }
   },
   

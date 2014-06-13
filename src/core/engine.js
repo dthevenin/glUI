@@ -21,6 +21,27 @@ function update_gl_vertices (gl_view) {
   gl_view.__should_update_gl_vertices = false;
 };
 
+function update_shadow_gl_vertices (gl_view, offset, blur) {
+//  blur = 0
+  var
+    obj_size = gl_view._size,
+    obj_pos = gl_view._position,
+    x = obj_pos[0] + offset [0] - blur,
+    y = obj_pos[1] + offset [1] - blur,
+    w = obj_size [0] + 2 * blur,
+    h = obj_size [1] + 2 * blur,
+    m = shadow_vertices;
+        
+  // setup position vertices
+  m[0] = x; m[1] = y; m[2] = 0;
+  m[3] = x; m[4] = y + h; m[5] = 0;
+  m[6] = x + w; m[7] = y; m[8] = 0;
+  m[9] = x + w; m[10] = y + h; m[11] = 0;
+  
+  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, shadow_buffer);
+  gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
+};
+
 var angle2rad = Math.PI / 180;
 
 /**
@@ -219,7 +240,12 @@ function calculateViewsInFrustum (now) {
 
 var render_ui;
 
+var shadow_buffer;
+var shadow_vertices = new Float32Array (12);
+
 function initRendering () {
+  
+  shadow_buffer = gl_ctx.createBuffer ();
 
   for (var i = 0; i < 1024; i ++) {
     gl_stack_for_renter [i] = new Array (3);
@@ -286,6 +312,45 @@ function initRendering () {
       program.uniform.color (color_id_array);
       alpha = 1;
     }
+    else if (mode === 2) {
+    
+      var style = gl_view.style;
+
+      program = shadowShaderProgram;
+      if (previous_program !== shadowShaderProgram) {
+        program.useIt ();
+      }
+      program.uniform.color (style._shadow_color.__gl_array);
+      if (style._shadow_blur) {
+        program.uniform.blur (1.75 * style._shadow_blur);
+      }
+      else {
+        program.uniform.blur (0.001);
+      }
+      update_shadow_gl_vertices (gl_view, style._shadow_offset, style._shadow_blur);
+      
+      var v1 = vec3.create ();
+      var v2 = vec3.create ();
+
+      mat4.multiplyXYZToVec3 (
+        sprite.m_matrix,
+        shadow_vertices[0], shadow_vertices[1], 0,
+        v1
+      );
+      
+      mat4.multiplyXYZToVec3 (
+        sprite.m_matrix,
+        shadow_vertices[9], shadow_vertices[10], 0,
+        v2
+      );
+
+      program.uniform.frame (
+        new Float32Array ([
+          v1[0], v2[0],
+          frame_size[1]-v1[1], frame_size[1]-v2[1]
+        ])
+      );
+    }
     else {
       var style = gl_view.style, c_buffer;
       if (!style) {
@@ -297,6 +362,10 @@ function initRendering () {
       }
       else {
         c_buffer = GLColor.default.__gl_array;
+      }
+      
+      if (style._shadow_color) {
+        renderOneView (gl_view, alpha, 2);
       }
     
       if (gl_view.__gl_user_program) {
@@ -413,11 +482,16 @@ function initRendering () {
     attribute.stride = 0;
     attribute.offset = 0;
 
-    if (gl_view.__should_update_gl_vertices) {
-      if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices ();
-      else update_gl_vertices (gl_view);
+    if (mode === 2) {
+      attribute.buffer = shadow_buffer;
     }
-    attribute.buffer = sprite.vertices_buffer;
+    else {
+      if (gl_view.__should_update_gl_vertices) {
+        if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices ();
+        else update_gl_vertices (gl_view);
+      }
+      attribute.buffer = sprite.vertices_buffer;
+    }
     attribute.numComponents = 3;
     program.attrib.position (attribute);
     

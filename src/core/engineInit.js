@@ -4,6 +4,7 @@ vs.error = console.error.bind (console);
 
 var
   basicShaderProgram,
+  shadowShaderProgram,
   imageShaderProgram,
   oneTextureShaderProgram,
   twoTexturesShaderProgram,
@@ -74,7 +75,8 @@ uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 uniform mat4 Mmatrix;\n\
 void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  vec4 new_pos = vec4(position, 1.);\n\
+  gl_Position = Pmatrix*Vmatrix*Mmatrix*new_pos;\n\
 }";
 
   var basic_shader_fragment="\n\
@@ -83,6 +85,35 @@ uniform vec4 color;\n\
 uniform float uAlpha;\n\
 void main(void) {\n\
   gl_FragColor = vec4(color.rgb, color.a * uAlpha);\n\
+}";
+
+  var shadow_vertex_shader="\n\
+attribute vec3 position;\n\
+uniform mat4 Pmatrix;\n\
+uniform mat4 Vmatrix;\n\
+uniform mat4 Mmatrix;\n\
+varying vec2 vUV;\n\
+void main(void) { //pre-built function\n\
+  vec4 temp_pos = Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  vUV = temp_pos.xy;\n\
+  gl_Position = Pmatrix*temp_pos;\n\
+}";
+
+  var shadow_shader_fragment="\n\
+precision lowp float;\n\
+uniform vec4 color;\n\
+uniform float uAlpha;\n\
+uniform float blur;\n\
+uniform vec4 frame;\n\
+void main(void) {\n\
+  float shine = \n\
+    smoothstep(frame[0], frame[0] + blur, gl_FragCoord.x) * \n\
+    smoothstep(frame[1], frame[1] - blur, gl_FragCoord.x) * \n\
+    smoothstep(frame[2], frame[2] - blur, gl_FragCoord.y) * \n\
+    smoothstep(frame[3], frame[3] + blur, gl_FragCoord.y); \n\
+\n\
+  gl_FragColor = vec4(color.rgb, shine * color.a * uAlpha);\n\
+//  gl_FragColor = vec4(color.rgb, color.a * uAlpha);\n\
 }";
 
   var image_vertex_shader="\n\
@@ -177,6 +208,7 @@ void main(void) {\n\
 }";
   
   basicShaderProgram = createProgram (basic_vertex_shader, basic_shader_fragment);
+  shadowShaderProgram = createProgram (shadow_vertex_shader, shadow_shader_fragment);
   imageShaderProgram = createProgram (image_vertex_shader, image_shader_fragment);
   oneTextureShaderProgram = createProgram (one_texture_vertex_shader, one_texture_shader_fragment);
   twoTexturesShaderProgram = createProgram (two_textures_vertex_shader, two_textures_shader_fragment);
@@ -199,6 +231,7 @@ function updateProgramsMatrix () {
   twoTexturesShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
   oneTextureShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
   basicShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
+  shadowShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
 }
 
 function initBuffers () {
