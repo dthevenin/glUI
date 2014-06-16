@@ -313,7 +313,7 @@ function initRendering () {
       alpha = 1;
     }
     else if (mode === 2) {
-    
+
       var style = gl_view.style;
 
       program = shadowShaderProgram;
@@ -328,26 +328,11 @@ function initRendering () {
         program.uniform.blur (0.001);
       }
       update_shadow_gl_vertices (gl_view, style._shadow_offset, style._shadow_blur);
-      
-      var v1 = vec3.create ();
-      var v2 = vec3.create ();
-
-      mat4.multiplyXYZToVec3 (
-        sprite.m_matrix,
-        shadow_vertices[0], shadow_vertices[1], 0,
-        v1
-      );
-      
-      mat4.multiplyXYZToVec3 (
-        sprite.m_matrix,
-        shadow_vertices[9], shadow_vertices[10], 0,
-        v2
-      );
 
       program.uniform.frame (
         new Float32Array ([
-          v1[0], v2[0],
-          frame_size[1]-v1[1], frame_size[1]-v2[1]
+          shadow_vertices[0], shadow_vertices[9],
+          shadow_vertices[1], shadow_vertices[10]
         ])
       );
     }
