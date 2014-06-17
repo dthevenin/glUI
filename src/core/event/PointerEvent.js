@@ -66,8 +66,12 @@ function getBindingIndex (target, type, listener)
  */
 function addPointerListener (node, type, listener, useCapture)
 {
-  if (!type) return;
+  if (!type || !node) return;
   
+//   if (node instanceof HTMLElement) {
+//     node.addEventListener (type, listener, useCapture);
+//     return;
+//   }
   if (!listener) {
     console.error ("addPointerListener no listener");
     return;
@@ -110,11 +114,28 @@ function addPointerListener (node, type, listener, useCapture)
     };
     node.addEventListener (type, binding.doc_handler, useCapture);
   }
+  else if (node instanceof HTMLElement) {
+    binding.node_handler = function (event) {
+      var e = buildEvent (type, event, node);
+      if (vs.util.isFunction (binding.handler)) {
+        binding.handler.call (node, e);
+      }
+      else if (vs.util.isFunction (binding.handler.handleEvent)) {
+        binding.handler.handleEvent.call (binding.handler, e);
+      }
+    };
+    node.addEventListener (type, binding.node_handler, useCapture);
+  }
 }
 
 function removePointerListener (node, type, listener, useCapture)
 {
-  if (!type) return;
+  if (!type || !node) return;
+  
+//   if (node instanceof HTMLElement) {
+//     node.removeEventListener (type, listener, useCapture);
+//     return;
+//   }
   
   if (!listener) {
     console.error ("removePointerListener no listener");
@@ -132,6 +153,9 @@ function removePointerListener (node, type, listener, useCapture)
 
   if (node instanceof GLView) {
     node.removeEventListener (type, binding.handler, useCapture);
+  }
+  else if (node instanceof HTMLElement) {
+    node.removeEventListener (type, binding.node_handler, useCapture);
   }
   else if (node instanceof Document) {
     node.removeEventListener (type, binding.doc_handler, useCapture);

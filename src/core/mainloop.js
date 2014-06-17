@@ -105,7 +105,6 @@ var
 var setImmediate, scheduleDoActions;
 if (!window.setImmediate) {
 
-
   var is_actions_are_scheduled = false;
 
   function queueAction (func, ctx) {
