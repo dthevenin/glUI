@@ -98,6 +98,34 @@ function makeMesh (resolution, pos_x, pos_y, width, height, c) {
   return c;
 }
 
+function makeNormal (resolution, pos_x, pos_y, width, height, c) {
+
+  var rx = width / resolution;
+  var ry = height / resolution;
+  
+  //(resolution + 1) * (resolution + 1) vertices; vertexe = 3 numbers
+  if (!c) {
+    c = new Float32Array ((resolution + 1) * (resolution + 1) * 3); 
+  }
+  
+  var i = 0, xs, ys, x, y;
+
+  for (xs = 0; xs < resolution + 1; xs++) {
+ 
+    c[i++] = 0.0;
+    c[i++] = 0.0;
+    c[i++] = 1.0;
+
+    for (ys = 1; ys < resolution + 1; ys++) {
+
+      c[i++] = 0.0;
+      c[i++] = 0.0;
+      c[i++] = 1.0;
+    }
+  }
+  return c;
+}
+
 function makeTextureProjection (resolution, c) {
   var r = 1 / resolution;
   
