@@ -1,8 +1,5 @@
-function update_gl_vertices (gl_view) {
+function update_gl_vertices (sprite, obj_pos, obj_size) {
   var
-    sprite = SPRITES [gl_view.__gl_id],
-    obj_size = gl_view._size,
-    obj_pos = gl_view._position,
     x = obj_pos[0],
     y = obj_pos[1],
     w = obj_size [0],
@@ -17,15 +14,11 @@ function update_gl_vertices (gl_view) {
   
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
   gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
-  
-  gl_view.__should_update_gl_vertices = false;
 };
 
-function update_shadow_gl_vertices (gl_view, offset, blur) {
+function update_shadow_gl_vertices (obj_pos, obj_size, offset, blur) {
 //  blur = 0
   var
-    obj_size = gl_view._size,
-    obj_pos = gl_view._position,
     x = obj_pos[0] + offset [0] - blur,
     y = obj_pos[1] + offset [1] - blur,
     w = obj_size [0] + 2 * blur,
@@ -327,7 +320,7 @@ function initRendering () {
       else {
         program.uniform.blur (0.001);
       }
-      update_shadow_gl_vertices (gl_view, style._shadow_offset, style._shadow_blur);
+      update_shadow_gl_vertices (gl_view._position, gl_view._size, style._shadow_offset, style._shadow_blur);
 
       program.uniform.frame (
         new Float32Array ([
@@ -353,12 +346,12 @@ function initRendering () {
         renderOneView (gl_view, alpha, 2);
       }
     
-      if (gl_view.__gl_user_program) {
-        program = gl_view.__gl_user_program;
+      if (sprite.user_program) {
+        program = sprite.user_program;
         program.useIt ();
         
         if (program.configureParameters) {
-          program.configureParameters (gl_view, style);
+          program.configureParameters (sprite, gl_view, style);
         }
       }
       else if (sprite.image_texture) {
@@ -472,28 +465,30 @@ function initRendering () {
     }
     else {
       if (gl_view.__should_update_gl_vertices) {
-        if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices ();
-        else update_gl_vertices (gl_view);
+        if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices (sprite);
+        else update_gl_vertices (sprite, gl_view._position, gl_view._size);
+        
+        gl_view.__should_update_gl_vertices = false;
       }
       attribute.buffer = sprite.vertices_buffer;
     }
     attribute.numComponents = 3;
     program.attrib.position (attribute);
     
-    if (gl_view.__gl_user_vertices) {
+    if (sprite.user_vertices) {
 
       gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
       gl_ctx.bufferData (
         gl_ctx.ELEMENT_ARRAY_BUFFER,
-        gl_view.__gl_user_triangle_faces,
+        sprite.user_triangle_faces,
         gl_ctx.STATIC_DRAW
       );
       
       default_faces_activated = false;
       
-      var nb_faces = gl_view.__gl_user_triangle_faces.length;
+      var nb_faces = sprite.user_triangle_faces.length;
       gl_ctx.drawElements (gl_ctx.TRIANGLES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
-
+//      gl_ctx.drawElements (gl_ctx.LINES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
     }
     else {
     
