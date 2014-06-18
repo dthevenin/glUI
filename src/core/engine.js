@@ -11,9 +11,6 @@ function update_gl_vertices (sprite, obj_pos, obj_size) {
   m[3] = x; m[4] = y + h; m[5] = 0;
   m[6] = x + w; m[7] = y; m[8] = 0;
   m[9] = x + w; m[10] = y + h; m[11] = 0;
-  
-  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
-  gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
 };
 
 function update_shadow_gl_vertices (obj_pos, obj_size, offset, blur) {
@@ -293,7 +290,35 @@ function initRendering () {
 
     var program;
     var sprite = SPRITES [gl_view.__gl_id];
+    var vertices_buffer;
        
+       
+    // determine which vertices buffer to use
+    // add update it if it's need.
+    if (mode === 2) {
+      vertices_buffer = shadow_buffer;
+    }
+    else {
+      if (gl_view.__should_update_gl_vertices) {
+        if (sprite.__update_gl_vertices) {
+          sprite.__update_gl_vertices (sprite, gl_view._position, gl_view._size);
+
+          gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
+          gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, sprite.user_vertices, gl_ctx.STATIC_DRAW);
+        }
+        else {
+          update_gl_vertices (sprite, gl_view._position, gl_view._size);
+
+          gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
+          gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, sprite.vertices, gl_ctx.STATIC_DRAW);
+        }
+        
+        gl_view.__should_update_gl_vertices = false;
+      }
+      vertices_buffer = sprite.vertices_buffer;
+    }
+
+    // Picking mode rendering
     if (mode === 1) {
 
       program = basicShaderProgram;
@@ -307,6 +332,8 @@ function initRendering () {
       program.uniform.color (color_id_array);
       alpha = 1;
     }
+
+    // Shadow mode rendering
     else if (mode === 2) {
 
       var style = gl_view.style;
@@ -331,6 +358,8 @@ function initRendering () {
         ])
       );
     }
+
+    // General mode rendering
     else {
       var style = gl_view.style, c_buffer;
       if (!style) {
@@ -461,19 +490,8 @@ function initRendering () {
     attribute.type = gl_ctx.FLOAT;
     attribute.stride = 0;
     attribute.offset = 0;
+    attribute.buffer = vertices_buffer;
 
-    if (mode === 2) {
-      attribute.buffer = shadow_buffer;
-    }
-    else {
-      if (gl_view.__should_update_gl_vertices) {
-        if (gl_view.__update_gl_vertices) gl_view.__update_gl_vertices (sprite);
-        else update_gl_vertices (sprite, gl_view._position, gl_view._size);
-        
-        gl_view.__should_update_gl_vertices = false;
-      }
-      attribute.buffer = sprite.vertices_buffer;
-    }
     attribute.numComponents = 3;
     program.attrib.position (attribute);
     
