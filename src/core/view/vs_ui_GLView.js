@@ -234,6 +234,14 @@ GLView.prototype = {
    */
   notify : function (event) {},
   
+  setUdpateVerticesFunction: function (update_gl_vertices) {
+    setUpdateVerticesSprite (this, update_gl_vertices);
+  },
+  
+  setShadersProgram: function (program) {
+    setShadersProgram (this, program);
+  },
+  
   /**
    *  Instantiate, init and add the specified child component to this component.
    *  <p>

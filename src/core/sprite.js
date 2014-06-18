@@ -9,7 +9,29 @@ function createSprite (gl_view) {
   gl_view.__gl_id = id ;
   GL_VIEWS [id] = gl_view;
 
-  new Sprite (gl_view.__gl_id);
+  var sprite = new Sprite (gl_view.__gl_id);
+  if (gl_view.__update_gl_vertices) {
+    setUpdateVerticesSprite (gl_view, gl_view.__update_gl_vertices);
+    gl_view.__update_gl_vertices = undefined;
+  }
+}
+
+function setUpdateVerticesSprite (gl_view, update_gl_vertices) {
+
+  if (!gl_view) return;
+  var sprite = SPRITES [gl_view.__gl_id];
+  if (!sprite) return;
+
+  sprite.__update_gl_vertices = update_gl_vertices;
+}
+
+function setShadersProgram (gl_view, program) {
+
+  if (!gl_view) return;
+  var sprite = SPRITES [gl_view.__gl_id];
+  if (!sprite) return;
+
+  sprite.user_program = program;
 }
 
 function deleteSprite (gl_view) {
