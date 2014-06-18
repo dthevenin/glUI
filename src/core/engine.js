@@ -236,6 +236,8 @@ var render_ui;
 var shadow_buffer;
 var shadow_vertices = new Float32Array (12);
 
+var rendering_mode = 0;
+
 function initRendering () {
   
   shadow_buffer = gl_ctx.createBuffer ();
@@ -487,8 +489,10 @@ function initRendering () {
       default_faces_activated = false;
       
       var nb_faces = sprite.user_triangle_faces.length;
-      gl_ctx.drawElements (gl_ctx.TRIANGLES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
-//      gl_ctx.drawElements (gl_ctx.LINES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
+      if (mode !== 1 && rendering_mode === 1)
+        gl_ctx.drawElements (gl_ctx.LINES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
+      else
+        gl_ctx.drawElements (gl_ctx.TRIANGLES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
     }
     else {
     
@@ -503,7 +507,10 @@ function initRendering () {
         default_faces_activated = true;
       }
      
-      gl_ctx.drawElements (gl_ctx.TRIANGLE_STRIP, 4, gl_ctx.UNSIGNED_SHORT, 0);
+      if (mode !== 1 && rendering_mode === 1)
+        gl_ctx.drawElements (gl_ctx.LINE_LOOP, 4, gl_ctx.UNSIGNED_SHORT, 0);
+      else
+        gl_ctx.drawElements (gl_ctx.TRIANGLE_STRIP, 4, gl_ctx.UNSIGNED_SHORT, 0);
     }
     
     previous_program = program;
