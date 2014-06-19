@@ -16,10 +16,10 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-function GLAnimation (animations)
+function GLAnimation (animations, options)
 {
   this.constructor = GLAnimation;
-  this.setAnimations (animations);
+  this.setAnimations (animations, options);
 };
 
 /**
@@ -77,12 +77,15 @@ GLAnimation.prototype = {
    * @param {Array.<Array>} animations The array of [property, value]
    *         to animate
    */
-  setAnimations : function (animations)
+  setAnimations : function (animations, options)
   {
     var i, property, value, traj, values;
 
     this.timing = GLAnimation.EASE;
     this._trajectories = {};
+    
+    var classes = options?options.classes:{};
+    if (!classes) classes = {};
     
     if (!animations) return;
 
@@ -100,6 +103,9 @@ GLAnimation.prototype = {
       values.push ([1, deepArrayClone (value)]);     
       
       this._trajectories [property] = values;
+      if (classes [property]) {
+        this._trajectories [property + "_class"] = classes [property];
+      }
     }
   },
 

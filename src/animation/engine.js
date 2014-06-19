@@ -39,7 +39,7 @@ var procesAnimation = function (comp, animation, trajectories, clb, ctx, now) {
   var timing = data_anim.timing;
   
   for (var property in trajectories) {
-    setupTrajectory (trajs, comp, property, trajectories [property]);
+    setupTrajectory (trajs, comp, property, trajectories [property], trajectories [property + "_class"]);
   }
   
   data_anim.steps = animation.steps | 0;
@@ -115,7 +115,7 @@ var verifyValue = function (traj_values)
   return true
 }
 
-var setupTrajectory = function (trajs, obj, property, traj_values)
+var setupTrajectory = function (trajs, obj, property, traj_values, traj_class)
 {
   switch (property) {
     case "opacity": 
@@ -137,24 +137,29 @@ var setupTrajectory = function (trajs, obj, property, traj_values)
   if (!verifyValue (traj_values)) {
     throw ("Error with the animation. Unvalid property declaration: " + property);
   }
+  
+  if (traj_class) {
+    traj = new traj_class (traj_values);
+  }
+  else {
+    switch (property) {
+      case "tick": 
+      case "opacity": 
+      case "fontSize": 
+      case "scaling":
+        traj = new TrajectoryVect1D (traj_values);
+        break;
 
-  switch (property) {
-    case "tick": 
-    case "opacity": 
-    case "fontSize": 
-    case "scaling":
-      traj = new TrajectoryVect1D (traj_values);
-      break;
+      case "translation": 
+      case "rotation": 
+        traj = new TrajectoryVect3D (traj_values);
+        break;
 
-    case "translation": 
-    case "rotation": 
-      traj = new TrajectoryVect3D (traj_values);
-      break;
-
-    default:
-      console.log ("NOT SUPPORTED PROPERTY: " + property);
-      return;
-  }      
+      default:
+        console.log ("NOT SUPPORTED PROPERTY: " + property);
+        return;
+    }
+  }
   
   trajs.add (obj, property, traj);
 }
