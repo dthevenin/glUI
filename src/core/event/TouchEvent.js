@@ -44,7 +44,7 @@ function setupTouchEvent () {
       touch = evt.touches[i];
       
       pointer = Pointer.getPointer (touch.identifier);
-      pointer.configure (touch, obj, obj, PointerTypes.TOUCH);
+      pointer.configure (touch, obj, obj);
       
       pointers.push (pointer);
     }

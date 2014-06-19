@@ -41,7 +41,7 @@ function setupMousePointerEvent () {
       pointers = mouse_event.targetPointerList,
       pointer = Pointer.getPointer (MOUSE_ID);
       
-    pointer.configure (mouse_event, obj, obj, PointerTypes.MOUSE);
+    pointer.configure (mouse_event, obj, obj);
     pointers.push (pointer);
     
     if (type === POINTER_END || type == POINTER_CANCEL) {
