@@ -47,6 +47,18 @@ define ('CurtainView', [], function () {
         }
       }
     },
+    
+    constructor: function (config) {
+      this._super (config);
+      
+      this.setVerticesAllocationFunctions (
+        mesh_resolution,
+        allocateMeshVertices,
+        allocateNormalVertices,
+        allocateTriangleFaces,
+        null
+      )
+    },
 
     initComponent : function () {
       this._super ();
@@ -70,9 +82,9 @@ define ('CurtainView', [], function () {
 
       if (!this._sprite) return;
 
-      var user_vertices_save = this._sprite.user_vertices_save;
-      var user_vertices = this._sprite.user_vertices;
-      var user_normals = this._sprite.user_vertices_normal;
+      var mesh_vertices_save = this._sprite.mesh_vertices_save;
+      var mesh_vertices = this._sprite.mesh_vertices;
+      var user_normals = this._sprite.normal_vertices;
 
       function updateNormals () {
 
@@ -82,17 +94,17 @@ define ('CurtainView', [], function () {
 
            for (ys = 0; ys < mesh_resolution ; ys++) {
 
-            x1 = user_vertices [j * 3];
-            x2 = user_vertices [(j + mesh_resolution + 1) * 3];
-            x3 = user_vertices [(j + 1) * 3];
+            x1 = mesh_vertices [j * 3];
+            x2 = mesh_vertices [(j + mesh_resolution + 1) * 3];
+            x3 = mesh_vertices [(j + 1) * 3];
 
-            y1 = user_vertices [j * 3 + 1];
-            y2 = user_vertices [(j + mesh_resolution + 1) * 3 + 1];
-            y3 = user_vertices [(j + 1) * 3 + 1];
+            y1 = mesh_vertices [j * 3 + 1];
+            y2 = mesh_vertices [(j + mesh_resolution + 1) * 3 + 1];
+            y3 = mesh_vertices [(j + 1) * 3 + 1];
 
-            z1 = user_vertices [j * 3 + 2];
-            z2 = user_vertices [(j + mesh_resolution + 1) * 3 + 2];
-            z3 = user_vertices [(j + 1) * 3 + 2];
+            z1 = mesh_vertices [j * 3 + 2];
+            z2 = mesh_vertices [(j + mesh_resolution + 1) * 3 + 2];
+            z3 = mesh_vertices [(j + 1) * 3 + 2];
 
             // x
             n1 = (y2-y1)*(z3-z1) - (z2-z1)*(y3-y1);
@@ -125,9 +137,9 @@ define ('CurtainView', [], function () {
         for (xs = 0; xs < mesh_resolution + 1; xs++) {
           for (ys = 0; ys < mesh_resolution + 1; ys++) {
 
-            x = (user_vertices_save [i] - pos[0]) / size[0];
-            y = (user_vertices_save [i+1] - pos[1]) / size[1];
-            z = user_vertices_save [i+2];
+            x = (mesh_vertices_save [i] - pos[0]) / size[0];
+            y = (mesh_vertices_save [i+1] - pos[1]) / size[1];
+            z = mesh_vertices_save [i+2];
 
             var dy = y - np_y;
             var bend = 0.25 * (1.0 - Math.exp (-dy * dy * 5.0));
@@ -135,9 +147,9 @@ define ('CurtainView', [], function () {
             z = 0.05 * Math.sin (-1.4 * Math.cos (x * x * Frills * 2.0 * Math.PI)) * (1.0 - np_x);
             x = x * np_x + x * bend * (1.0 - np_x);
 
-            user_vertices [i++] = x * size[0] + pos[0];
-            user_vertices [i++] = y * size[1] + pos[1];
-            user_vertices [i++] = z * size[0]
+            mesh_vertices [i++] = x * size[0] + pos[0];
+            mesh_vertices [i++] = y * size[1] + pos[1];
+            mesh_vertices [i++] = z * size[0]
           }
         }
       }
@@ -145,8 +157,8 @@ define ('CurtainView', [], function () {
       updateMeshes (Math.min (dx, size[0]), dy);
       updateNormals ();
 
-      gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this._sprite.vertices_buffer);
-      gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, this._sprite.user_vertices, gl_ctx.STATIC_DRAW);
+      gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this._sprite.mesh_vertices_buffer);
+      gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, this._sprite.mesh_vertices, gl_ctx.STATIC_DRAW);
 
       GLView.__should_render = true;
     }
@@ -160,11 +172,9 @@ define ('CurtainView', [], function () {
       h = obj_size [1];
 
     this._sprite = sprite;
-
-    sprite.user_vertices = makeMesh (mesh_resolution, x, y, w, h, sprite.user_vertices);
-    sprite.user_vertices_normal = makeNormal (mesh_resolution, x, y, w, h, sprite.user_vertices_normal);
-    sprite.user_vertices_save = new Float32Array (sprite.user_vertices);
-    sprite.user_triangle_faces = makeTriangles (mesh_resolution, sprite.user_triangle_faces);
+    
+    initMeshVeticesValues (mesh_resolution, x, y, w, h, sprite.mesh_vertices);
+    sprite.mesh_vertices_save = new Float32Array (sprite.mesh_vertices);
 
     this.__updateMeshAtPoint ();
   }
@@ -204,7 +214,7 @@ define ('CurtainView', [], function () {
       shaders_program.attrib.normal (normal);
       gl_ctx.bufferData (
         gl_ctx.ARRAY_BUFFER,
-        sprite.user_vertices_normal,
+        sprite.normal_vertices,
         gl_ctx.STATIC_DRAW
       );
     }

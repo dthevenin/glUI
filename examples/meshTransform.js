@@ -23,8 +23,8 @@ require (['CurtainDemo', 'CurtainImageDemo', 'FishEyeDemo'], function (CurtainDe
       this.style.backgroundColor = GLColor.white;
 
 //      var view = new CurtainDemo ({ position: [10, 10] }).init ();
-//      var view = new CurtainImageDemo ({ position: [0, 0] }).init ();
-       var view = new FishEyeDemo ({ position: [50, 50] }).init ();
+//      var view = new CurtainImageDemo ({ position: [50, 50] }).init ();
+       var view = new FishEyeDemo ({ position: [0, 0] }).init ();
 
       this.add (view);
     }

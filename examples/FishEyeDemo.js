@@ -16,7 +16,7 @@ define ('FishEyeDemo', ['FishEyeView'], function (FishEyeView) {
         {'radius': 0},
         {'classes': {'radius' : TrajectoryVect1D}}
       );
-      this.animation.duration = 400;
+      this.animation.duration = 200;
 
       this.src = "Picture.jpg";
       this.size = [500, 500];

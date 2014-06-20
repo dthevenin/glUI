@@ -1,7 +1,7 @@
 define ('FishEyeView', [], function () {
 
   var image_uv_buffer = null;
-  var FishEyeView_resolution = 30;
+  var mesh_resolution = 30;
   var shaders_program = null;
 
   var vertex_shader="\n\
@@ -63,7 +63,19 @@ define ('FishEyeView', [], function () {
         }
       }
     },
-
+    
+    constructor: function (config) {
+      this._super (config);
+      
+      this.setVerticesAllocationFunctions (
+        mesh_resolution,
+        allocateMeshVertices,
+        allocateNormalVertices,
+        allocateTriangleFaces,
+        makeTextureProjection
+      )
+    },
+    
     initComponent : function () {
       this._super ();
 
@@ -72,35 +84,11 @@ define ('FishEyeView', [], function () {
       this._slide = [0, 0];
       this._radius = 0;
 
-      var self = this;
-
       this.setShadersProgram (shaders_program);
 
-      this.setUdpateVerticesFunction (function (sprite, obj_pos, obj_size) {
-        var
-          x = obj_pos[0],
-          y = obj_pos[1],
-          w = obj_size [0],
-          h = obj_size [1];
-
-        self._sprite = sprite;
-
-        sprite.user_vertices = makeMesh (FishEyeView_resolution, x, y, w, h, sprite.user_vertices);
-        sprite.user_vertices_normal = makeNormal (FishEyeView_resolution, x, y, w, h, sprite.user_vertices_normal);
-        sprite.user_vertices_save = new Float32Array (sprite.user_vertices);
-        sprite.user_triangle_faces = makeTriangles (FishEyeView_resolution, sprite.user_triangle_faces);
-        sprite.user_texture_uv = makeTextureProjection (FishEyeView_resolution, sprite.user_texture_uv)
-
-        gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, image_uv_buffer);
-
-        gl_ctx.bufferData (
-          gl_ctx.ARRAY_BUFFER,
-          sprite.user_texture_uv,
-          gl_ctx.STATIC_DRAW
-        );
-
-        self.__updateCurtainMeshAtPoint ();
-      });
+      this.setUdpateVerticesFunction (
+        FishEyeView.updateVerticesFunction.bind (this)
+      );
     },
 
     __updateCurtainMeshAtPoint: function ()
@@ -115,29 +103,28 @@ define ('FishEyeView', [], function () {
 
       if (!this._sprite) return;
 
-      var user_vertices_save = this._sprite.user_vertices_save;
-      var user_vertices = this._sprite.user_vertices;
-      var user_normals = this._sprite.user_vertices_normal;
+      var mesh_vertices_save = this._sprite.mesh_vertices_save;
+      var mesh_vertices = this._sprite.mesh_vertices;
+      var normal_vertices = this._sprite.normal_vertices;
 
       function updateNormals () {
 
         var i = 0, xs, ys, j = 0, index, n1, n2, n3;
 
-        for (xs = 0; xs < FishEyeView_resolution ; xs++) {
+        for (xs = 0; xs < mesh_resolution ; xs++) {
+           for (ys = 0; ys < mesh_resolution ; ys++) {
 
-           for (ys = 0; ys < FishEyeView_resolution ; ys++) {
+            x1 = mesh_vertices [j * 3];
+            x2 = mesh_vertices [(j + mesh_resolution + 1) * 3];
+            x3 = mesh_vertices [(j + 1) * 3];
 
-            x1 = user_vertices [j * 3];
-            x2 = user_vertices [(j + FishEyeView_resolution + 1) * 3];
-            x3 = user_vertices [(j + 1) * 3];
+            y1 = mesh_vertices [j * 3 + 1];
+            y2 = mesh_vertices [(j + mesh_resolution + 1) * 3 + 1];
+            y3 = mesh_vertices [(j + 1) * 3 + 1];
 
-            y1 = user_vertices [j * 3 + 1];
-            y2 = user_vertices [(j + FishEyeView_resolution + 1) * 3 + 1];
-            y3 = user_vertices [(j + 1) * 3 + 1];
-
-            z1 = user_vertices [j * 3 + 2];
-            z2 = user_vertices [(j + FishEyeView_resolution + 1) * 3 + 2];
-            z3 = user_vertices [(j + 1) * 3 + 2];
+            z1 = mesh_vertices [j * 3 + 2];
+            z2 = mesh_vertices [(j + mesh_resolution + 1) * 3 + 2];
+            z3 = mesh_vertices [(j + 1) * 3 + 2];
 
             // x
             n1 = (y2-y1)*(z3-z1) - (z2-z1)*(y3-y1);
@@ -149,9 +136,9 @@ define ('FishEyeView', [], function () {
             // normal
             var norm = Math.sqrt (n1*n1 + n2*n2 + n3*n3);
 
-            user_normals [i++] = n1 / norm;
-            user_normals [i++] = n2 / norm;
-            user_normals [i++] = n3 / norm;
+            normal_vertices [i++] = n1 / norm;
+            normal_vertices [i++] = n2 / norm;
+            normal_vertices [i++] = n3 / norm;
 
             j++;
           }
@@ -173,12 +160,12 @@ define ('FishEyeView', [], function () {
 
         var yScale = size[1]/size[0];
 
-        for (xs = 0; xs < FishEyeView_resolution + 1; xs++) {
-          for (ys = 0; ys < FishEyeView_resolution + 1; ys++) {
+        for (xs = 0; xs < mesh_resolution + 1; xs++) {
+          for (ys = 0; ys < mesh_resolution + 1; ys++) {
 
-            x = (user_vertices_save [i] - pos[0]) / size[0];
-            y = (user_vertices_save [i+1] - pos[1]) / size[1];
-            z = user_vertices_save [i+2] / size[0];
+            x = (mesh_vertices_save [i] - pos[0]) / size[0];
+            y = (mesh_vertices_save [i+1] - pos[1]) / size[1];
+            z = mesh_vertices_save [i+2] / size[0];
 
             dx = x - np_x;
             dy = (y - np_y) * yScale;
@@ -186,9 +173,9 @@ define ('FishEyeView', [], function () {
             var r = Math.sqrt (dx*dx + dy*dy);
 
             if (r > rMax) {
-              user_vertices [i++] = x * size[0] + pos[0];
-              user_vertices [i++] = y * size[1] + pos[1];
-              user_vertices [i++] = z * size[0];
+              mesh_vertices [i++] = x * size[0] + pos[0];
+              mesh_vertices [i++] = y * size[1] + pos[1];
+              mesh_vertices [i++] = z * size[0];
               continue;
             }
 
@@ -199,9 +186,9 @@ define ('FishEyeView', [], function () {
             y += dy * scale / yScale;
             z = scale * 0.2;
 
-            user_vertices [i++] = x * size[0] + pos[0];
-            user_vertices [i++] = y * size[1] + pos[1];
-            user_vertices [i++] = z * size[0];
+            mesh_vertices [i++] = x * size[0] + pos[0];
+            mesh_vertices [i++] = y * size[1] + pos[1];
+            mesh_vertices [i++] = z * size[0];
           }
         }
       }
@@ -209,12 +196,45 @@ define ('FishEyeView', [], function () {
       updateMeshes (Math.min (dx, size[0]), dy);
       updateNormals ();
 
-      gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this._sprite.vertices_buffer);
-      gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, this._sprite.user_vertices, gl_ctx.STATIC_DRAW);
+      gl_ctx.bindBuffer (
+        gl_ctx.ARRAY_BUFFER, this._sprite.mesh_vertices_buffer
+      );
+      gl_ctx.bufferData (
+        gl_ctx.ARRAY_BUFFER,
+        this._sprite.mesh_vertices,
+        gl_ctx.STATIC_DRAW
+      );
 
       GLView.__should_render = true;
     }
   });
+  
+  FishEyeView.updateVerticesFunction = function (sprite, obj_pos, obj_size) {
+    var
+      x = obj_pos[0],
+      y = obj_pos[1],
+      w = obj_size [0],
+      h = obj_size [1];
+
+    this._sprite = sprite;
+
+    initMeshVeticesValues (
+      mesh_resolution, x, y, w, h, sprite.mesh_vertices
+    );
+
+    sprite.mesh_vertices_save =
+      new Float32Array (sprite.mesh_vertices);
+
+    this.__updateCurtainMeshAtPoint ();
+    
+    gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, image_uv_buffer);
+
+    gl_ctx.bufferData (
+      gl_ctx.ARRAY_BUFFER,
+      sprite.texture_uv,
+      gl_ctx.STATIC_DRAW
+    );
+  }
 
   glAddInitFunction (createCurtainProgram);
 
@@ -260,7 +280,7 @@ define ('FishEyeView', [], function () {
 
       gl_ctx.bufferData (
         gl_ctx.ARRAY_BUFFER,
-        sprite.user_vertices_normal,
+        sprite.normal_vertices,
         gl_ctx.STATIC_DRAW
       );
     };

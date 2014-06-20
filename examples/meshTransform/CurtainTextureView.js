@@ -1,7 +1,7 @@
 define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
 
   var image_uv_buffer = null;
-  var mesh_resolution = 20;
+  var mesh_resolution = 30;
 
   var vertex_shader="\n\
   attribute vec3 position;\n\
@@ -55,6 +55,18 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
         }
       }
     },
+    
+    constructor: function (config) {
+      this._super (config);
+      
+      this.setVerticesAllocationFunctions (
+        mesh_resolution,
+        allocateMeshVertices,
+        allocateNormalVertices,
+        allocateTriangleFaces,
+        makeTextureProjection
+      )
+    },
 
     initComponent : function () {
       this._super ();
@@ -65,18 +77,11 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
 
       var self = this;
 
-      this.setShadersProgram (CurtainTextureView_program);
+      this.setShadersProgram (shaders_program);
 
-      this.setUdpateVerticesFunction (CurtainTextureView.updateVerticesFunction.bind (this));
-
-      this.__recognizer = new vs.ui.DragRecognizer (this);
-      this.addPointerRecognizer (this.__recognizer);
-
-      this.animation = new GLAnimation (
-        {'slide': [0, 0]},
-        {'classes': {'slide' : TrajectoryVect2D}}
+      this.setUdpateVerticesFunction (
+        CurtainTextureView.updateVerticesFunction.bind (this)
       );
-      this.animation.duration = 200;
     }
   });
 
@@ -88,21 +93,21 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
       h = obj_size [1];
 
     this._sprite = sprite;
+    
+    initMeshVeticesValues (
+      mesh_resolution, x, y, w, h, sprite.mesh_vertices
+    );
 
-    sprite.user_vertices = makeMesh (mesh_resolution, x, y, w, h, sprite.user_vertices);
-    sprite.user_vertices_normal = makeNormal (mesh_resolution, x, y, w, h, sprite.user_vertices_normal);
-    sprite.user_vertices_save = new Float32Array (sprite.user_vertices);
-    sprite.user_triangle_faces = makeTriangles (mesh_resolution, sprite.user_triangle_faces);
+    sprite.mesh_vertices_save =
+        new Float32Array (sprite.mesh_vertices);
 
     this.__updateMeshAtPoint ();
-
-    sprite.user_texture_uv = makeTextureProjection (mesh_resolution, sprite.user_texture_uv)
 
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, image_uv_buffer);
 
     gl_ctx.bufferData (
       gl_ctx.ARRAY_BUFFER,
-      sprite.user_texture_uv,
+      sprite.texture_uv,
       gl_ctx.STATIC_DRAW
     );
   }
@@ -111,14 +116,14 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
 
   glAddInitFunction (createCurtainProgram);
 
-  var CurtainTextureView_program = null;
+  var shaders_program = null;
   function createCurtainProgram () {
 
     image_uv_buffer = gl_ctx.createBuffer ();
 
-    CurtainTextureView_program = createProgram (vertex_shader, shader_fragment);
-    CurtainTextureView_program.useIt ();
-    CurtainTextureView_program.setMatrixes (jsProjMatrix, jsViewMatrix);
+    shaders_program = createProgram (vertex_shader, shader_fragment);
+    shaders_program.useIt ();
+    shaders_program.setMatrixes (jsProjMatrix, jsViewMatrix);
 
     var normals_buffer = gl_ctx.createBuffer ();;
 
@@ -135,25 +140,25 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
       gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, sprite.image_texture);
     };
 
-    CurtainTextureView_program.configureParameters = function (sprite, gl_view, style) {
+    shaders_program.configureParameters = function (sprite, gl_view, style) {
 
-      CurtainTextureView_program.uniform.lightDirection (gl_view._light_direction);
-      CurtainTextureView_program.uniform.diffuseFactor (gl_view._diffuse_factor);
+      shaders_program.uniform.lightDirection (gl_view._light_direction);
+      shaders_program.uniform.diffuseFactor (gl_view._diffuse_factor);
 
       texture.bindToUnit = bindToUnitTEXTURE0_2;
-      CurtainTextureView_program.textures.uMainTexture (texture, sprite);
+      shaders_program.textures.uMainTexture (texture, sprite);
 
       attrib.buffer = image_uv_buffer;
       attrib.numComponents = 2;
-      CurtainTextureView_program.attrib.uv (attrib);
+      shaders_program.attrib.uv (attrib);
 
       attrib.buffer = normals_buffer;
       attrib.numComponents = 3;
-      CurtainTextureView_program.attrib.normal (attrib);
+      shaders_program.attrib.normal (attrib);
 
       gl_ctx.bufferData (
         gl_ctx.ARRAY_BUFFER,
-        sprite.user_vertices_normal,
+        sprite.normal_vertices,
         gl_ctx.STATIC_DRAW
       );
     }
