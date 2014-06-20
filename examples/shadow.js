@@ -14,6 +14,7 @@ var Test = vs.core.createClass ({
     }).init ();
     this.add (view);
     view.style.backgroundColor = GLColor.yellow;
+    view.style.shadowColor = GLColor.black;
     
     view = new vs.ui.GLView ({
       position: [200, 200],
@@ -21,15 +22,15 @@ var Test = vs.core.createClass ({
     }).init ();
     this.add (view);
     view.style.backgroundColor = GLColor.red;
+    view.opacity = 0.001
     
     view.style.shadowOffset = [0, 0];
     view.style.shadowBlur = 50;
-//    view.style.shadowColor = new GLColor (0, 0, 153);
-    view.style.shadowColor = GLColor.black;
-//    view.style.opacity = 0.1;
+    view.style.shadowColor = new GLColor (0, 0, 153, 0.8);
+    view.style.opacity = 1;
 
     window.view = view
-    view.translation = [50, 0, 0];
+    view.translation = [-50, -50, 0];
     view.rotation = [00, 0, 30];
   }
 });
