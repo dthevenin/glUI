@@ -15,7 +15,6 @@ var
   object_faces_buffer,
   frame_size = [100, 100],
   gl_device_pixel_ratio,
-  default_triangle_faces,
   default_texture_projection;
 
 
@@ -269,7 +268,6 @@ function initBuffers () {
   object_faces_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer(gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
 
-  default_triangle_faces = new Uint16Array ([0,1,2,3]);
   gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
   gl_ctx.bufferData (
     gl_ctx.ELEMENT_ARRAY_BUFFER,

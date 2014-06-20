@@ -85,7 +85,9 @@ vs_core.js:
 	$(CAT) core/mainloop.js >> $@
 	$(CAT) core/math/vector.js >> $@
 	$(CAT) core/math/matrix.js >> $@
+	$(CAT) core/meshUtil.js >> $@
 	$(CAT) core/sprite.js >> $@
+	$(CAT) core/spriteUtil.js >> $@
 	$(CAT) core/program.js >> $@
 	$(CAT) core/engineInit.js >> $@
 	$(CAT) core/engine.js >> $@

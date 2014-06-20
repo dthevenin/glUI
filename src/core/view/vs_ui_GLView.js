@@ -186,7 +186,7 @@ GLView.prototype = {
   initComponent : function ()
   {
     GLEventSource.prototype.initComponent.call (this);
-
+    
     this._style = new GLStyle ();
     this._constraint = null;
 
@@ -213,6 +213,8 @@ GLView.prototype = {
     
     this.__should_update_gl_vertices = true;
     this.__should_update_gl_matrix = true;
+    
+    initSprite (this);
   },
 
   /**
@@ -240,6 +242,18 @@ GLView.prototype = {
   
   setShadersProgram: function (program) {
     setShadersProgram (this, program);
+  },
+  
+  setVerticesAllocationFunctions: function (resolution, sprite_vertices_func, normal_vertices_func, triangle_faces_func,
+makeTextureProjection) {
+    setVerticesAllocationFunctions (
+      this,
+      resolution,
+      sprite_vertices_func,
+      normal_vertices_func,
+      triangle_faces_func,
+      makeTextureProjection
+    );
   },
   
   /**

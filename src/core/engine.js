@@ -4,7 +4,7 @@ function update_gl_vertices (sprite, obj_pos, obj_size) {
     y = obj_pos[1],
     w = obj_size [0],
     h = obj_size [1],
-    m = sprite.vertices;
+    m = sprite.mesh_vertices;
         
   // setup position vertices
   m[0] = x; m[1] = y; m[2] = 0;
@@ -303,19 +303,32 @@ function initRendering () {
         if (sprite.__update_gl_vertices) {
           sprite.__update_gl_vertices (sprite, gl_view._position, gl_view._size);
 
-          gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
-          gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, sprite.user_vertices, gl_ctx.STATIC_DRAW);
+          gl_ctx.bindBuffer (
+            gl_ctx.ARRAY_BUFFER,
+            sprite.mesh_vertices_buffer
+          );
+          gl_ctx.bufferData (
+            gl_ctx.ARRAY_BUFFER,
+            sprite.mesh_vertices,
+            gl_ctx.STATIC_DRAW
+          );
         }
         else {
           update_gl_vertices (sprite, gl_view._position, gl_view._size);
 
-          gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.vertices_buffer);
-          gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, sprite.vertices, gl_ctx.STATIC_DRAW);
+          gl_ctx.bindBuffer (
+            gl_ctx.ARRAY_BUFFER,
+            sprite.mesh_vertices_buffer);
+          gl_ctx.bufferData (
+            gl_ctx.ARRAY_BUFFER,
+            sprite.mesh_vertices,
+            gl_ctx.STATIC_DRAW
+          );
         }
         
         gl_view.__should_update_gl_vertices = false;
       }
-      vertices_buffer = sprite.vertices_buffer;
+      vertices_buffer = sprite.mesh_vertices_buffer;
     }
 
     // Picking mode rendering
@@ -495,28 +508,36 @@ function initRendering () {
     attribute.numComponents = 3;
     program.attrib.position (attribute);
     
-    if (sprite.user_vertices) {
+    if (!sprite.default_meshes) {
 
       gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
       gl_ctx.bufferData (
         gl_ctx.ELEMENT_ARRAY_BUFFER,
-        sprite.user_triangle_faces,
+        sprite.triangle_faces,
         gl_ctx.STATIC_DRAW
       );
       
       default_faces_activated = false;
       
-      var nb_faces = sprite.user_triangle_faces.length;
-      if (mode !== 1 && rendering_mode === 1)
-        gl_ctx.drawElements (gl_ctx.LINES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
-      else
-        gl_ctx.drawElements (gl_ctx.TRIANGLES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0);
+      var nb_faces = sprite.triangle_faces.length;
+      if (mode !== 1 && rendering_mode === 1) {
+        gl_ctx.drawElements (
+          gl_ctx.LINES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0
+        );
+      }
+      else {
+        gl_ctx.drawElements (
+          gl_ctx.TRIANGLES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0
+        );
+      }
     }
     else {
     
       if (!default_faces_activated) {
         // set default faces
-        gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
+        gl_ctx.bindBuffer (
+          gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer
+        );
         gl_ctx.bufferData (
           gl_ctx.ELEMENT_ARRAY_BUFFER,
           default_triangle_faces,
@@ -525,10 +546,14 @@ function initRendering () {
         default_faces_activated = true;
       }
      
-      if (mode !== 1 && rendering_mode === 1)
+      if (mode !== 1 && rendering_mode === 1) {
         gl_ctx.drawElements (gl_ctx.LINE_LOOP, 4, gl_ctx.UNSIGNED_SHORT, 0);
-      else
-        gl_ctx.drawElements (gl_ctx.TRIANGLE_STRIP, 4, gl_ctx.UNSIGNED_SHORT, 0);
+      }
+      else {
+        gl_ctx.drawElements (
+          gl_ctx.TRIANGLE_STRIP, 4, gl_ctx.UNSIGNED_SHORT, 0
+        );
+      }
     }
     
     previous_program = program;

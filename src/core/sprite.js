@@ -1,7 +1,9 @@
 var SPRITES = [];
+var SPRITE_ALLOCATIONS = [];
 
 var __unique_gl_id = 1;
 var GL_VIEWS = [];
+var default_triangle_faces = new Uint16Array ([0,1,2,3]);
 
 function createSprite (gl_view) {
 
@@ -16,24 +18,6 @@ function createSprite (gl_view) {
   }
 }
 
-function setUpdateVerticesSprite (gl_view, update_gl_vertices) {
-
-  if (!gl_view) return;
-  var sprite = SPRITES [gl_view.__gl_id];
-  if (!sprite) return;
-
-  sprite.__update_gl_vertices = update_gl_vertices;
-}
-
-function setShadersProgram (gl_view, program) {
-
-  if (!gl_view) return;
-  var sprite = SPRITES [gl_view.__gl_id];
-  if (!sprite) return;
-
-  sprite.user_program = program;
-}
-
 function deleteSprite (gl_view) {
 
   var gl_object = SPRITES [gl_view.__gl_id];
@@ -44,165 +28,117 @@ function deleteSprite (gl_view) {
   }
 }
 
-function clean_image_texture (gl_view) {
-  var gl_object = SPRITES [gl_view.__gl_id];
+function setVerticesAllocationFunctions (gl_view, resolution, sprite_vertices_func, normal_vertices_func, triangle_faces_func, texture_projection_func) {
   
-  if (gl_object.image_texture) {
-    gl_object.image_texture = null;
-  }
-}
+  if (!gl_view) return;
+  var sprite = new Sprite (gl_view.__gl_id);
+  if (!sprite) return;
 
-function set_image_texture (gl_view, texture) {
-  var gl_object = SPRITES [gl_view.__gl_id];
+  var allocations = {};
+  allocations.resolution = resolution;
+  allocations.sprite_vertices_func = sprite_vertices_func;
+  allocations.normal_vertices_func = normal_vertices_func;
+  allocations.triangle_faces_func = triangle_faces_func;
+  allocations.texture_projection_func = texture_projection_func;
   
-  gl_object.image_texture = texture;
-}
-
-
-function update_texture (gl_view, image) {
-  var gl_object = SPRITES [gl_view.__gl_id];
-  
-  gl_object.texture = __copy_image_into_webgl_texture (image, gl_object.texture);
-}
-
+  SPRITE_ALLOCATIONS [gl_view.__gl_id] = allocations;
+  sprite.default_meshes = false;
+}   
 
 function Sprite (id)
 {
   this.matrix = mat4.create ();
+  
+  // Parent matrix. Use to save parent transformation
+  // and accelerate the rendering
   this.p_matrix = mat4.create ();
+
+  // Sprite matrix transformation (translation, rotation, scale, skew)
   this.m_matrix = mat4.create ();
   
+  // Sprite id (number)
   this.id = id;
   SPRITES [this.id] = this;
   
-  // contains position vertices
-  this.vertices = new Float32Array (12);
-  this.vertices_buffer = gl_ctx.createBuffer ();
+  // Buffers allocation
+  this.mesh_vertices_buffer = gl_ctx.createBuffer ();
   
+  // Sprite vertices used for culling algorithm
   this.vertex_1 = vec3.create ();
   this.vertex_2 = vec3.create ();
   this.vertex_3 = vec3.create ();
   this.vertex_4 = vec3.create ();
+}
   
-  this.texture = null;
-  this.image_texture = null;
+function defaultSpriteVerticesAllocation (sprite) {
+  
+  // Default mesh allocation: 4 vertices * 3 float values
+  sprite.mesh_vertices = new Float32Array (12);
+  // will use the default_triangle_faces
+  sprite.triangle_faces = null;
+  // do not use normals
+  sprite.normal_vertices = null;
+  // do not use texture
+  sprite.texture_uv = null;
 }
 
-function makeMesh (resolution, pos_x, pos_y, width, height, c) {
-
-  var rx = width / resolution;
-  var ry = height / resolution;
+function initSprite (gl_view) {
+  if (!gl_view) return;
   
-  //(resolution + 1) * (resolution + 1) vertices; vertexe = 3 numbers
-  if (!c) {
-    c = new Float32Array ((resolution + 1) * (resolution + 1) * 3); 
+  var sprite = SPRITES [gl_view.__gl_id];
+  if (!sprite) return;
+  
+  if (sprite.default_meshes) {
+    defaultSpriteVerticesAllocation (sprite);
   }
-  
-  var i = 0, xs, ys, x, y;
-
-  for (xs = 0; xs < resolution + 1; xs++) {
-    x = pos_x + rx * xs;
-    y = pos_y;
-    
-    c[i++] = x;
-    c[i++] = y;
-    c[i++] = 0;
-
-    for (ys = 1; ys < resolution + 1; ys++) {
-
-      y = pos_y + ry * ys;
-      
-      c[i++] = x;
-      c[i++] = y;
-      c[i++] = 0;
+  else {
+    var allocations = SPRITE_ALLOCATIONS [gl_view.__gl_id];
+    if (!allocations) {
+      defaultSpriteVerticesAllocation (sprite);
+      return;
+    }
+    if (allocations.sprite_vertices_func) {
+      sprite.mesh_vertices = allocations.sprite_vertices_func (
+        allocations.resolution, sprite.mesh_vertices
+      );
+    }
+    if (allocations.normal_vertices_func) {
+      sprite.normal_vertices = allocations.normal_vertices_func (
+        allocations.resolution, sprite.normal_vertices
+      );
+    }
+    if (allocations.triangle_faces_func) {
+      sprite.triangle_faces = allocations.triangle_faces_func (
+        allocations.resolution, sprite.triangle_faces
+      );
+    }
+    if (allocations.texture_projection_func) {
+      sprite.texture_uv = allocations.texture_projection_func (
+        allocations.resolution, sprite.texture_uv
+      );
     }
   }
-  return c;
 }
 
-function makeNormal (resolution, pos_x, pos_y, width, height, c) {
+// This constant change when the use setup is own meshes
+// with the function setMeshFunctions
+Sprite.prototype.default_meshes = true;
 
-  var rx = width / resolution;
-  var ry = height / resolution;
-  
-  //(resolution + 1) * (resolution + 1) vertices; vertexe = 3 numbers
-  if (!c) {
-    c = new Float32Array ((resolution + 1) * (resolution + 1) * 3); 
-  }
-  
-  var i = 0, xs, ys, x, y;
+// Contains sprite vertices
+Sprite.prototype.mesh_vertices = null;
 
-  for (xs = 0; xs < resolution + 1; xs++) {
- 
-    c[i++] = 0.0;
-    c[i++] = 0.0;
-    c[i++] = 1.0;
+// Contains mesh's normal vertices
+Sprite.prototype.normal_vertices = null;
 
-    for (ys = 1; ys < resolution + 1; ys++) {
+// Contains trangles faces
+Sprite.prototype.triangle_faces = null;
 
-      c[i++] = 0.0;
-      c[i++] = 0.0;
-      c[i++] = 1.0;
-    }
-  }
-  return c;
-}
+// Contains texture projection parameters
+Sprite.prototype.texture_uv = null;
 
-function makeTextureProjection (resolution, c) {
-  var r = 1 / resolution;
-  
-  //(resolution + 1) * (resolution + 1) vertices; vertexe = 3 numbers
-  if (!c) {
-    c = new Float32Array ((resolution + 1) * (resolution + 1) * 2);
-  }
+// GL Buffer for mesh vertices
+Sprite.prototype.mesh_vertices_buffer = null;
 
-  var i = 0, xs, ys, x, y;
-
-  for (xs = 0; xs < resolution + 1; xs++) {
-    x = r * xs;
-    y = 0;
-    
-    c[i++] = x;
-    c[i++] = y;
- 
-    for (ys = 1; ys < resolution + 1; ys++) {
-
-      y = r * ys;
-
-      c[i++] = x;
-      c[i++] = y;
-    }
-  }
-  
-  return c;
-}
-
-function makeTriangles (resolution, c) {
-
-  //resolution * resolution rectangles; rectangle = 2 facets; facet = 3 vertices
-  if (!c) {
-    c = new Uint16Array (resolution * resolution * 6);
-  }
-  
-  var i = 0, xs, ys, j = 0;
-
-  for (xs = 0; xs < resolution; xs++) {
-    for (ys = 0; ys < resolution ; ys++) {
-
-      // first facet
-      c[i++] = j;
-      c[i++] = j + resolution + 1;
-      c[i++] = j + 1;
-
-      // second facet
-      c[i++] = j + 1;
-      c[i++] = j + resolution + 1;
-      c[i++] = j + resolution + 2;
-      
-      j++;
-    }
-    j++;
-  }
-  
-  return c;
-}
+// Textures references
+Sprite.prototype.texture = null;
+Sprite.prototype.image_texture = null;
