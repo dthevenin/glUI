@@ -562,7 +562,7 @@ function initRendering () {
   render_ui = function (now, mode) {
 
     if (mode !== 1 && (!GLView.__should_render && !GLView.__nb_animation)) {
-      vs.requestAnimationFrame (render_ui);
+      next_rendering_id = vs.requestAnimationFrame (render_ui);
       return
     }
 
@@ -602,11 +602,19 @@ function initRendering () {
 
     if (stats) stats.end ();
     
-    if (mode !== 1) vs.requestAnimationFrame (render_ui);
+    if (mode !== 1) {
+      next_rendering_id = vs.requestAnimationFrame (render_ui);
+    }
   }
   
-  vs.requestAnimationFrame (render_ui);
+  next_rendering_id = vs.requestAnimationFrame (render_ui);
   
 //  animate (performance.now ());
 //  vs.scheduleAction(animate, 100);
+}
+
+function handleContextLost (event) {
+  console.log ("webglcontextlost");
+  event.preventDefault ();
+  cancelAnimationFrame (next_rendering_id);
 }

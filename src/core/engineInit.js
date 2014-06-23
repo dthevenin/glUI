@@ -306,6 +306,19 @@ function initWebGLRendering () {
 
   var canvas = GL_CANVAS = createCanvas (frame_size [0], frame_size [1]);
   document.body.appendChild (canvas);
+
+
+  canvas.addEventListener ("webglcontextlost", handleContextLost, false);
+
+  canvas.addEventListener ("webglcontextrestored  ", function(event) {
+    console.log ("webglcontextrestored");
+    setupWebGLStateAndResources ();
+  }, false);
+  
+  setupWebGLStateAndResources ();
+}
+
+function setupWebGLStateAndResources () {
   
   /*================= Creates a webgl context ================= */
   var webgl_options = {
@@ -317,7 +330,7 @@ function initWebGLRendering () {
   var webgl_names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
   for (var i = 0; i < webgl_names.length; ++i) {
     try {
-      gl_ctx = canvas.getContext (webgl_names[i], webgl_options);
+      gl_ctx = GL_CANVAS.getContext (webgl_names[i], webgl_options);
     } catch (e) {}
     if (gl_ctx) {
       break;
@@ -328,7 +341,7 @@ function initWebGLRendering () {
     alert ("You are not webgl compatible :(") ;
     throw ("You are not webgl compatible :(") ;
     return;
-  }
+  }  
   
   /*========================= SHADERS ========================= */
   initPrograms ();
@@ -343,7 +356,7 @@ function initWebGLRendering () {
   gl_ctx.blendFunc (gl_ctx.SRC_ALPHA, gl_ctx.ONE_MINUS_SRC_ALPHA);
 
   gl_ctx.clearDepth (1.0);
-  gl_ctx.clearColor (0, 0, 0, 1);
+  gl_ctx.clearColor (1, 1, 1, 1);
   gl_ctx.colorMask (true, true, true, false);
   
   init_functions.forEach (function (func) { func (); });

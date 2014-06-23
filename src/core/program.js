@@ -10,7 +10,8 @@ var get_shader = function (type, source, typeString) {
   // Compile the shader
   gl_ctx.compileShader (shader);
   // Check the compile status
-  if (!gl_ctx.getShaderParameter(shader, gl_ctx.COMPILE_STATUS)) {
+  if (!gl_ctx.getShaderParameter(shader, gl_ctx.COMPILE_STATUS) &&
+      !gl_ctx.isContextLost ()) {
     var infoLog = this.gl_ctx.getShaderInfoLog (shader);
     vs.error ("Error compiling " + typeString + "shader:\n" + infoLog);
     gl_ctx.deleteShader (shader);
@@ -54,21 +55,22 @@ function createSetters (program) {
   }
 
   var numAttribs = gl_ctx.getProgramParameter (__prog, gl_ctx.ACTIVE_ATTRIBUTES);
-  for (var ii = 0; ii < numAttribs; ++ii) {
-    var info = gl_ctx.getActiveAttrib (__prog, ii);
-    if (!info) {
-      break;
+  if (numAttribs && !gl_ctx.isContextLost ()) {
+    for (var ii = 0; ii < numAttribs; ++ii) {
+      var info = gl_ctx.getActiveAttrib (__prog, ii);
+      if (!info) {
+        break;
+      }
+      var name = info.name;
+      var index = gl_ctx.getAttribLocation (__prog, name);
+      attribs [name] = createAttribSetter(info, index);
+      attribLocs [name] = index
     }
-    var name = info.name;
-    var index = gl_ctx.getAttribLocation (__prog, name);
-    attribs [name] = createAttribSetter(info, index);
-    attribLocs [name] = index
   }
 
   // Look up uniforms
   var numUniforms = gl_ctx.getProgramParameter (__prog, gl_ctx.ACTIVE_UNIFORMS);
-  var uniforms = {
-  };
+  var uniforms = {};
   var textureUnit = 0;
 
   function createUniformSetter (info) {
@@ -118,16 +120,18 @@ function createSetters (program) {
 
   var textures = {};
 
-  for (var ii = 0; ii < numUniforms; ++ii) {
-    var info = gl_ctx.getActiveUniform (__prog, ii);
-    if (!info) {
-      break;
-    }
-    name = info.name;
-    var setter = createUniformSetter(info);
-    uniforms [name] = setter;
-    if (info.type === gl_ctx.SAMPLER_2D || info.type === gl_ctx.SAMPLER_CUBE) {
-      textures [name] = setter;
+  if (numUniforms && !gl_ctx.isContextLost ()) {
+    for (var ii = 0; ii < numUniforms; ++ii) {
+      var info = gl_ctx.getActiveUniform (__prog, ii);
+      if (!info) {
+        break;
+      }
+      name = info.name;
+      var setter = createUniformSetter(info);
+      uniforms [name] = setter;
+      if (info.type === gl_ctx.SAMPLER_2D || info.type === gl_ctx.SAMPLER_CUBE) {
+        textures [name] = setter;
+      }
     }
   }
 

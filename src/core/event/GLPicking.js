@@ -56,6 +56,7 @@ function initPickBuffer()  {
 
 function pickUp (event) {
   if (!render_ui || !event) return;
+  if (gl_ctx.isContextLost ()) return;
   
   var x = event.clientX;
   var y = event.clientY;
@@ -83,7 +84,7 @@ function _pickUp (x, y) {
   gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, rttFramebuffer);
 
   // Clear GL Surface
-  gl_ctx.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl_ctx.clearColor (1, 1, 1, 1);
 
   render_ui (performance.now (), 1);
   
@@ -93,7 +94,7 @@ function _pickUp (x, y) {
   gl_ctx.readPixels(x, y,1,1,gl_ctx.RGBA,gl_ctx.UNSIGNED_BYTE, pickUp_pixelColor);
                   
   // Return GL Clear To User Colors
-  gl_ctx.clearColor (0, 0, 0, 1);
+  gl_ctx.clearColor (1, 1, 1, 1);
         
   gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, null);
   

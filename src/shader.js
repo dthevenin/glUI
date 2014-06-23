@@ -92,7 +92,8 @@ vs.shader.Shader.prototype.loadShader = function(type, shaderSrc) {
   // Compile the shader
   this.gl.compileShader(shader);
   // Check the compile status
-  if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
+  if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS) &&
+      !this.gl.isContextLost ()) {
     var infoLog = this.gl.getShaderInfoLog(shader);
     vs.error("Error compiling shader:\n" + infoLog);
     this.gl.deleteShader(shader);
