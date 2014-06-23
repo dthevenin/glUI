@@ -36,7 +36,7 @@ define ('CurtainDemo', ['CurtainView'], function (CurtainView) {
       this.animation.keyFrame (1, {'slide': [0, this._slide[1]]});
 
       this.animation.process (this);
-    },
+    }
   });
 
   return CurtainDemo;
