@@ -35,7 +35,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
       }).init ();
 
       this.curtain_recognizer = new vs.ui.DragRecognizer (this);
-      this.addPointerRecognizer (this.curtain_recognizer);
+      view.addPointerRecognizer (this.curtain_recognizer);
 
       this.curtainAnimation = new GLAnimation (
         {'slide': [0, 0]},
@@ -56,6 +56,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
         scaling: 0.2,
         transformOrigin : [size[0]/1.2, size[1]/2]
       }).init ();
+      
       this.add (list);
       list.style.backgroundColor = GLColor.white;
       var l = Data.length;
