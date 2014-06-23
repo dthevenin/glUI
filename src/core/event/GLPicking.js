@@ -56,7 +56,7 @@ function initPickBuffer()  {
 
 function pickUp (event) {
   if (!render_ui || !event) return;
-  if (gl_ctx.isContextLost ()) return;
+  if (!gl_ctx || gl_ctx.isContextLost ()) return;
   
   var x = event.clientX;
   var y = event.clientY;

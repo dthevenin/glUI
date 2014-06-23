@@ -142,3 +142,37 @@ Sprite.prototype.mesh_vertices_buffer = null;
 // Textures references
 Sprite.prototype.texture = null;
 Sprite.prototype.image_texture = null;
+
+Sprite.restoreGLContext = function () {
+  var sprite, i = 0, l = SPRITES.length;
+  
+  for (; i < l; i++) {
+    sprite = SPRITES [i];
+    if (sprite) {
+      delete (sprite.mesh_vertices_buffer);
+      sprite.mesh_vertices_buffer = gl_ctx.createBuffer ();
+      
+      if (sprite.texture) {
+        delete (sprite.texture);
+        sprite.texture = gl_ctx.createTexture ();
+      }
+      
+      if (sprite.image_texture) {
+        delete (sprite.image_texture);
+        sprite.image_texture = gl_ctx.createTexture ();
+      }
+    }
+  }
+  
+  var handlers = webglcontextrestored_listeners [sprite.id];
+  if (handlers) {
+    handlers.forEach (function (handler) {
+      try {
+        handler ();
+      } catch (exp) {
+        if (exp.stack) console.log (exp.stack);
+        else consoel.log (exp);
+      }
+    });
+  }
+}

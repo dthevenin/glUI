@@ -106,6 +106,9 @@ GLEventSource.prototype =
       this._pointer_end.push (handler);
       __gl_activate_pointer_end ();
     }
+    else if (type === 'webglcontextrestored') {
+      register_webglcontextrestored (this, handler);
+    }
 //    console.log ("addEventListener:" + type);  
   },
 

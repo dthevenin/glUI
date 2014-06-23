@@ -238,6 +238,9 @@ function initBuffers () {
   default_texture_projection = new Float32Array ([0,0, 0,1, 1,0, 1,1]);
 
   /*========================= UV =========================*/
+  if (object_uv_buffer) {
+    delete (object_uv_buffer);
+  }
   object_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, object_uv_buffer);
 
@@ -247,6 +250,9 @@ function initBuffers () {
     gl_ctx.STATIC_DRAW
   );
 
+  if (object_bck_image_uv_buffer) {
+    delete (object_bck_image_uv_buffer);
+  }
   object_bck_image_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, object_bck_image_uv_buffer);
 
@@ -256,6 +262,9 @@ function initBuffers () {
     gl_ctx.STATIC_DRAW
   );
     
+  if (default_object_bck_image_uv_buffer) {
+    delete (default_object_bck_image_uv_buffer);
+  }
   default_object_bck_image_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, default_object_bck_image_uv_buffer);
   gl_ctx.bufferData (
@@ -265,6 +274,9 @@ function initBuffers () {
   );
 
   /*========================= FACES ========================= */
+  if (object_faces_buffer) {
+    delete (object_faces_buffer);
+  }
   object_faces_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer(gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
 
@@ -310,9 +322,10 @@ function initWebGLRendering () {
 
   canvas.addEventListener ("webglcontextlost", handleContextLost, false);
 
-  canvas.addEventListener ("webglcontextrestored  ", function(event) {
+  canvas.addEventListener ("webglcontextrestored", function(event) {
     console.log ("webglcontextrestored");
     setupWebGLStateAndResources ();
+    Sprite.restoreGLContext ();
   }, false);
   
   setupWebGLStateAndResources ();

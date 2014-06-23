@@ -37,3 +37,20 @@ function update_texture (gl_view, image) {
   
   gl_object.texture = __copy_image_into_webgl_texture (image, gl_object.texture);
 }
+
+
+var webglcontextrestored_listeners = [];
+function register_webglcontextrestored (gl_view, handler) {
+  if (!gl_view || !handler) return;
+  
+  var sprite = SPRITES [gl_view.__gl_id];
+  if (!sprite) return;
+  
+  var handlers = webglcontextrestored_listeners [gl_view.__gl_id];
+  if (!handlers) {
+    handlers = [];
+    webglcontextrestored_listeners [gl_view.__gl_id] = handlers;
+  }
+  
+  handlers.push (handler);
+}

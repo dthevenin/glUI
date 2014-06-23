@@ -237,6 +237,9 @@ var rendering_mode = 0;
 
 function initRendering () {
   
+  if (shadow_buffer) {
+    delete (shadow_buffer); 
+  }
   shadow_buffer = gl_ctx.createBuffer ();
 
   for (var i = 0; i < 1024; i ++) {
@@ -617,4 +620,12 @@ function handleContextLost (event) {
   console.log ("webglcontextlost");
   event.preventDefault ();
   cancelAnimationFrame (next_rendering_id);
+  
+  delete (gl_ctx); gl_ctx = undefined;
+  
+  delete (basicShaderProgram); basicShaderProgram = undefined;
+  delete (shadowShaderProgram); shadowShaderProgram = undefined;
+  delete (imageShaderProgram); imageShaderProgram = undefined;
+  delete (oneTextureShaderProgram); oneTextureShaderProgram = undefined;
+  delete (twoTexturesShaderProgram); twoTexturesShaderProgram = undefined;
 }
