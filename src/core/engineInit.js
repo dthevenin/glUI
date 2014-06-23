@@ -371,7 +371,8 @@ function setupWebGLStateAndResources () {
 
   gl_ctx.clearDepth (1.0);
   gl_ctx.clearColor (1, 1, 1, 1);
-  gl_ctx.colorMask (true, true, true, false);
+  // DOES NOT WORK ON IOS
+  // gl_ctx.colorMask (true, true, true, false);
   
   init_functions.forEach (function (func) { func (); });
 
