@@ -326,6 +326,7 @@ function initWebGLRendering () {
     console.log ("webglcontextrestored");
     setupWebGLStateAndResources ();
     Sprite.restoreGLContext ();
+    GLStyle.restoreGLContext ();
   }, false);
   
   setupWebGLStateAndResources ();

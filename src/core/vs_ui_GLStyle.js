@@ -31,7 +31,10 @@ function GLStyle (config)
   this._background_image_uv = new Float32Array ([0,1, 0,0, 1,1, 1,0]);
   this._shadow_offset = new Float32Array ([0,0]);
   this._color = GLColor.black;
+  GLStyles.push (this);
 }
+
+var GLStyles = [];
 
 GLStyle.prototype = {
   _opacity : 1,
@@ -61,6 +64,8 @@ GLStyle.prototype = {
       gl_free_texture_image (this._background_image);
       this.__gl_texture_bck_image = null;
     }
+    
+    GLStyles.remove (this);
     
 //     if (this.__gl_bck_image_uv_buffer) {
 //       gl_ctx.deleteBuffer (this.__gl_bck_image_uv_buffer);
@@ -513,6 +518,20 @@ function initDefaultStyle () {
 }
 
 glAddInitFunction (initDefaultStyle);
+
+GLStyle.restoreGLContext = function () {
+  var style, i = 0, l = GLStyles.length;
+  
+  for (; i < l; i++) {
+    style = GLStyles [i];
+    if (style) {
+      if (style.__gl_texture_bck_image) {
+        delete (style.__gl_texture_bck_image);
+        style.__gl_texture_bck_image = gl_ctx.createTexture ();
+      }
+    }
+  }
+}
 
 /********************************************************************
                       Export
