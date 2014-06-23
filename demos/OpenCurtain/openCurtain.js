@@ -50,8 +50,8 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
     intList: function () {
       var size = demoSize;
       var list = new GLList ({
-        size : size,
-        position: demoPosition,
+        size : [size [0] - 20, size [1]],
+        position: [demoPosition [0] + 20, demoPosition[1]],
         scroll: true,
         scaling: 0.2,
         transformOrigin : [size[0]/1.2, size[1]/2]
@@ -86,7 +86,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
 
       var x = -drag_info.dx;
       var s = x / demoSize [0];
-      if (s > 0.95) s = 0.95;
+      if (s > 1) s = 1;
       if (s < 0.2) s = 0.2;
 
       this.curtainView.slide = [x, pointer.clientY - pos [1]];
@@ -110,7 +110,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
           0, { 'scaling' : this.list.scaling }
         );
         this.listAnimation.keyFrame (
-          1, { 'scaling' : 0.95 }
+          1, { 'scaling' : 1 }
         );
       }
       else {
