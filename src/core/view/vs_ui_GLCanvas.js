@@ -95,6 +95,11 @@ GLCanvas.prototype = {
       this._size [0] * gl_device_pixel_ratio,
       this._size [1] * gl_device_pixel_ratio
     );
+
+    var self = this;
+    this.addEventListener ('webglcontextrestored', function () {
+      update_texture (self, self.__canvas_node);
+    });
   },
   
   /**

@@ -314,6 +314,11 @@ GLText.prototype = {
     if (this._text != "") {
       this.__update_text (this._text, true);
     }
+    
+    var self = this;
+    this.addEventListener ('webglcontextrestored', function () {
+      update_texture (self, self.__text_canvas_node);
+    });
   },
 
   refresh: function () {

@@ -93,7 +93,6 @@ function gl_free_texture_image (src) {
   delete (__gl_textures_ref [src]);
 }
 
-
 /**
  * A vs.ui.GLImage.
  * @constructor
@@ -142,6 +141,10 @@ GLImage.prototype = {
     
     this._style.backgroundColor = GLColor.transparent;
     
+    var self = this;
+    this.addEventListener ('webglcontextrestored', function () {
+      self.src = self._src;
+    });    
     /* TODO */
   }
 };
