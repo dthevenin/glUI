@@ -16,9 +16,7 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-
-GLView.prototype.animate = function (ani_data, animation_options) {
+View.prototype.animate = function (ani_data, animation_options) {
   var trajectories = {};
   animation_options = animation_options || {};
 

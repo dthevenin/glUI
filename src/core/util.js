@@ -1,8 +1,12 @@
+vs.gl = {};
+
 var
   util = vs.util,
   core = vs.core,
   ui = vs.ui,
+  gl = vs.gl,
   VSObject = vs.core.Object;
+
 
 // Fallback for systems that don't support WebGL
 if(typeof Float32Array != 'undefined') {

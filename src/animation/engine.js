@@ -56,7 +56,7 @@ var procesAnimation = function (comp, animation, trajectories, clb, ctx, now) {
       setImmediate (function () {
         var animations = ANIMATIONS [comp.__gl_id];
         animations.remove (chrono)
-        GLView.__nb_animation --;
+        View.__nb_animation --;
       });
     }
     
@@ -77,7 +77,7 @@ var procesAnimation = function (comp, animation, trajectories, clb, ctx, now) {
       }
     
       animations.push (chrono);
-      GLView.__nb_animation ++;
+      View.__nb_animation ++;
 //    });
   }
 

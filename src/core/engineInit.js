@@ -4,10 +4,10 @@ vs.error = console.error.bind (console);
 
 var
   basicShaderProgram,
-  shadowShaderProgram,
-  imageShaderProgram,
-  oneTextureShaderProgram,
-  twoTexturesShaderProgram,
+//  shadowShaderProgram,
+//  imageShaderProgram,
+//  oneTextureShaderProgram,
+//  twoTexturesShaderProgram,
   gl_ctx,
   object_uv_buffer,
   object_bck_image_uv_buffer,
@@ -326,7 +326,7 @@ function initWebGLRendering () {
     console.log ("webglcontextrestored");
     setupWebGLStateAndResources ();
     Sprite.restoreGLContext ();
-    GLStyle.restoreGLContext ();
+    Style.restoreGLContext ();
   }, false);
   
   setupWebGLStateAndResources ();

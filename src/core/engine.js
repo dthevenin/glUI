@@ -65,7 +65,7 @@ function update_transform_gl_matrix (gl_view, sprite)
   update_envelop_vertices (sprite, pos, size);
 
   gl_view.__invalid_matrixes = true;
-  GLView.__should_render = true;
+  View.__should_render = true;
   
   gl_view.__should_update_gl_matrix = false;
 }
@@ -288,7 +288,7 @@ function initRendering () {
     gl_ctx.activeTexture (gl_ctx.TEXTURE0 + unit);
     gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, style.__gl_texture_bck_image);
   };
-  
+
   function renderOneView (gl_view, alpha, mode) {
 
     var program;
@@ -386,7 +386,7 @@ function initRendering () {
         c_buffer = style._background_color.__gl_array;
       }
       else {
-        c_buffer = GLColor.default.__gl_array;
+        c_buffer = Color.default.__gl_array;
       }
       
       if (style._shadow_color) {
@@ -564,7 +564,7 @@ function initRendering () {
 
   render_ui = function (now, mode) {
 
-    if (mode !== 1 && (!GLView.__should_render && !GLView.__nb_animation)) {
+    if (mode !== 1 && (!View.__should_render && !View.__nb_animation)) {
       next_rendering_id = vs.requestAnimationFrame (render_ui);
       return
     }
@@ -576,7 +576,7 @@ function initRendering () {
 //     }
 
     calculateViewsInFrustum (now);
-    GLView.__should_render = false;
+    View.__should_render = false;
     
 //    console.log (gl_stack_length);
       

@@ -251,11 +251,11 @@ function LIST_TEMPLATE_CONTENT (node, config) {
     str_template += ">" + item.innerHTML + "</vs-view>";
 
     // create the template object
-    var template = new vs.ui.GLTemplate (str_template);
+    var template = new vs.gl.Template (str_template);
     
     // generate the comp
     var config = buildConfiguration (item);
-    var comp = template.compileView ("vs.ui.GLAbstractListItem", config);
+    var comp = template.compileView ("vs.gl.AbstractListItem", config);
 //    _setCompProperties (comp, comp_properties);
 //    return comp;
 
@@ -341,15 +341,15 @@ function LIST_ATTACHED_CALLBACK () {
 function ALLOW_CHILD_CONTENT (node) {}
 
 var LIST_COMPONENT = [
-  ["vs.ui.GLText", "vs-text", TEXT_CONTENT],
-  ["vs.ui.GLButton", "vs-button", TEXT_CONTENT],
-  ["vs.ui.GLApplication", "vs-application", ALLOW_CHILD_CONTENT],
-  ["vs.ui.GLCanvas", "vs-canvas", NO_CONTENT],
-  ["vs.ui.GLImage", "vs-image", NO_CONTENT],
-  ["vs.ui.GLList", "vs-list", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
-  ["vs.ui.GLScrollView", "vs-scroll-view", ALLOW_CHILD_CONTENT],
-  ["vs.ui.GLView", "vs-view", ALLOW_CHILD_CONTENT],
-  ["vs.ui.GLView", "vs-template", ALLOW_CHILD_CONTENT]
+  ["vs.gl.Text", "vs-text", TEXT_CONTENT],
+  ["vs.gl.Button", "vs-button", TEXT_CONTENT],
+  ["vs.gl.Application", "vs-application", ALLOW_CHILD_CONTENT],
+  ["vs.gl.Canvas", "vs-canvas", NO_CONTENT],
+  ["vs.gl.Image", "vs-image", NO_CONTENT],
+  ["vs.gl.List", "vs-list", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
+  ["vs.gl.ScrollView", "vs-scroll-view", ALLOW_CHILD_CONTENT],
+  ["vs.gl.View", "vs-view", ALLOW_CHILD_CONTENT],
+  ["vs.gl.View", "vs-template", ALLOW_CHILD_CONTENT]
 ]
 
 function INT_DECODER (value) {
@@ -478,14 +478,14 @@ function buildConfiguration (node) {
     }
     else if (name == "style") {
 
-      var style = new GLStyle ();
+      var style = new Style ();
       style.parseStringStyle (attribute.value);
 
       config [name] = style;
     }
     else if (name == "constraint") {
 
-      var constraint = new GLConstraint ();
+      var constraint = new Constraint ();
       constraint.parseStringStyle (attribute.value);
 
       config [name] = constraint;
@@ -647,7 +647,7 @@ function declareComponent (className, comp_name, manage_content,
     
     if (parentComp) {
       if (this.nodeName == "VS-TEMPLATE") {
-        if (parentComp instanceof vs.ui.GLList) {
+        if (parentComp instanceof vs.gl.List) {
           window.list = parentComp;
           parentComp.__template_obj = this._comp_;
 //          parentComp._renderData ();
@@ -707,7 +707,7 @@ function declareComponent (className, comp_name, manage_content,
   
   decl = {prototype: comp_proto};
   
-  if (className == "vs.ui.GLApplication") {
+  if (className == "vs.gl.Application") {
     decl.extends = "body";
   }
   

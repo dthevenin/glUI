@@ -99,7 +99,7 @@ function addPointerListener (node, type, listener, useCapture)
   listener.__event_listeners.push (binding);
 
   binding.handler = func;
-  if (node instanceof GLView) {
+  if (node instanceof View) {
     node.addEventListener (type, binding.handler, useCapture);
   }
   else if (node instanceof Document) {
@@ -151,7 +151,7 @@ function removePointerListener (node, type, listener, useCapture)
   var binding = listener.__event_listeners [index];
   listener.__event_listeners.remove (index);
 
-  if (node instanceof GLView) {
+  if (node instanceof View) {
     node.removeEventListener (type, binding.handler, useCapture);
   }
   else if (node instanceof HTMLElement) {
