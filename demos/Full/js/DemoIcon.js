@@ -2,9 +2,9 @@
 
 function createStyle () {
   if (!DemoIcon.style) {
-    DemoIcon.style = new GLStyle ();
+    DemoIcon.style = new vs.gl.Style ();
     DemoIcon.style.fontFamily = "arial";
-    DemoIcon.style.color = GLColor.white;
+    DemoIcon.style.color = vs.gl.Color.white;
     DemoIcon.style.textAlign = "center";
   }
 }
@@ -12,7 +12,7 @@ function createStyle () {
 var DemoIcon = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
   
   /*****************************************************************
    *               private/protected members
@@ -66,7 +66,7 @@ var DemoIcon = vs.core.createClass ({
     
     this.add (this.imageView);
 
-    this.titleLabel = new vs.ui.GLText ({
+    this.titleLabel = new vs.gl.Text ({
       size : [config.size [0], 30],
       position: [0, config.size [1] - dy],
       style : DemoIcon.style
@@ -104,7 +104,7 @@ var DemoIcon = vs.core.createClass ({
     this._selected = true;
     
     this.__back_color = this.style.backgroundColor ;
-    this.style.backgroundColor = GLColor.lightGrey;
+    this.style.backgroundColor = vs.gl.Color.lightGrey;
   },
   
   /**

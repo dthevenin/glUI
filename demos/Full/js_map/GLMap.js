@@ -19,7 +19,7 @@
 var GLMap = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLCanvas,
+  parent: vs.gl.Canvas,
   tick : 0,
 
   initComponent : function () {
@@ -34,23 +34,22 @@ var GLMap = vs.core.createClass ({
     var self = this;
 
     // Show list animation
-    this.show_anim = new GLAnimation ({
-      'tick': 0,
-      'scaling': 1,
-      'rotation': [0, 0, 0]
-    });
-    this.show_anim.keyFrame (0, [1, 0.1, [30, 40, 0]]);
-    this.show_anim.keyFrame (0.3, [1, 1, [30, 40, 0]]);
+    this.show_anim = new vs.gl.Animation (
+      ['tick', 0],
+      ['scaling', 1],
+      ['rotation', [0, 0, 0]]);
+    this.show_anim.addKeyFrame (0, [1, 0.1, [30, 40, 0]]);
+    this.show_anim.addKeyFrame (0.3, [1, 1, [30, 40, 0]]);
     this.show_anim.duration = 1000;
 
     // Hide list animation
-    this.hide_anim = new GLAnimation ({
-      'tick': 1,
-      'scaling': 0.1,
-      'rotation': [30, 40, 0]
-    });
-    this.hide_anim.keyFrame (0, [0, 1, [0, 0, 0]]);
-    this.hide_anim.keyFrame (0.7, [1, 1, [30, 40, 0]]);
+    this.hide_anim = new vs.gl.Animation (
+      ['tick', 1],
+      ['scaling', 0.1],
+      ['rotation', [30, 40, 0]]
+    );
+    this.hide_anim.addKeyFrame (0, [0, 1, [0, 0, 0]]);
+    this.hide_anim.addKeyFrame (0.7, [1, 1, [30, 40, 0]]);
     this.hide_anim.duration = 1000;
     
     this._dx = 0;
@@ -122,8 +121,6 @@ var GLMap = vs.core.createClass ({
 
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this.__gl_vertices_buffer);
     gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, this.__gl_user_vertices, gl_ctx.STATIC_DRAW);
-    
-    gl_view.__should_update_gl_vertices = false;
   },
   
   setZoom : function (zoom) {
@@ -297,7 +294,7 @@ var GLMap = vs.core.createClass ({
   
   hide: function (clb) {
     this.hide_anim.process (this, function () {
-      vs.ui.GLCanvas.prototype.hide.call (this);
+      vs.gl.Canvas.prototype.hide.call (this);
       
       if (clb) clb ();
     }, this);

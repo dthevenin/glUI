@@ -19,24 +19,24 @@
 var titleStyle, typeStyle;
 function setStyle () {
   if (!titleStyle) {
-    titleStyle = new GLStyle ();
+    titleStyle = new vs.gl.Style ();
     titleStyle.fontSize = "22px";
     titleStyle.fontWeight = "bold";
     titleStyle.fontFamily = "Arial";
-    titleStyle.color = GLColor.black;
+    titleStyle.color = vs.gl.Color.black;
 
-    typeStyle = new GLStyle ();
+    typeStyle = new vs.gl.Style ();
     typeStyle.fontSize = "17px";
     typeStyle.fontWeight = "100";
     typeStyle.fontFamily = "Arial";
-    typeStyle.color = new GLColor (128, 128, 128);
+    typeStyle.color = new vs.gl.Color (128, 128, 128);
   }
 }
  
 var ListItem = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
   
   properties: {
     "name" : "titleLabel#text",
@@ -51,14 +51,14 @@ var ListItem = vs.core.createClass ({
 
     this.size = [80, 110]
     
-    this.img = new vs.ui.GLImage ({
+    this.img = new vs.gl.Image ({
       size : [30, 30],
       position: [5, 20],
     }).init ();
     
     this.add (this.img);
     
-    var img = new vs.ui.GLImage ({
+    var img = new vs.gl.Image ({
       size : [30, 33],
       src : "assets/arrow.png"
     }).init ();
@@ -67,28 +67,28 @@ var ListItem = vs.core.createClass ({
     
     this.add (img);
     
-    this.titleLabel = new vs.ui.GLText ({
+    this.titleLabel = new vs.gl.Text ({
       size : [300, 20],
       position: [40, 10],
       style : titleStyle
     }).init ();
     this.add (this.titleLabel);
     
-    this.typeLabel = new vs.ui.GLText ({
+    this.typeLabel = new vs.gl.Text ({
       size : [100, 20],
       position: [40, 35],
       style : typeStyle
     }).init ();
     this.add (this.typeLabel);
     
-    var bar = new vs.ui.GLView ({
+    var bar = new vs.gl.View ({
       size: [1, 1],
       position: [0, 70],
     }).init ();
     bar.constraint.left = 0;
     bar.constraint.right = 0;
 
-    bar.style.backgroundColor = new GLColor (200, 200, 200);
+    bar.style.backgroundColor = new vs.gl.Color (200, 200, 200);
     this.add (bar);
   }
 });

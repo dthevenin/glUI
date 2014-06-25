@@ -23,7 +23,7 @@ var info_design = "The Shape of Design is an odd little design book. Instead of 
 var CoverFlow = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
   
   settings_open: false,
 
@@ -31,12 +31,14 @@ var CoverFlow = vs.core.createClass ({
 
     window.app = this;     
     this.buildList ();
+    
+    this.style.backgroundColor = vs.gl.Color.white;
   },
   
   buildList: function () {
     var size = this.size;
   
-    var list = new GLList ({
+    var list = new vs.gl.List ({
       size : [300, size[1]],
       position: [(size[0] - 300)/2, 0],
       scroll: true
@@ -46,13 +48,13 @@ var CoverFlow = vs.core.createClass ({
     
     list.add = function (item) {
       item.__index = this.__children.length;
-      GLView.prototype.add.call (list, item);
+      View.prototype.add.call (list, item);
       
       item.addPointerRecognizer (__tap_recognizer);
     }
     
-    list.refresh = function () {
-      GLView.prototype.refresh.call (this);
+ = function    list.refresh = function () {
+      View.prototype.refresh.call (this);
 
       var children = this.__children;
       if (!children || children.length === 0) return;
@@ -83,9 +85,9 @@ var CoverFlow = vs.core.createClass ({
     };
     
     var duration = 200;
-    var timing = GLAnimation.LINEAR;
+    var timing = vs.gl.Animation.LINEAR;
   
-    var animationPanelShow = new GLAnimation ();
+    var animationPanelShow = new vs.gl.Animation ();
     animationPanelShow.keyFrame (0, {
       'rotation': [-40, 0, 0],
       'translation': [0, 0, 0]
@@ -93,18 +95,18 @@ var CoverFlow = vs.core.createClass ({
     animationPanelShow.duration = duration;
     animationPanelShow.timing = timing;
 
-    var animationPageOut = new GLAnimation ({
+    var animationPageOut = new vs.gl.Animation ({
       'rotation': [-40, 0, 0],
       'translation': [0, 0, 0]
     });
     animationPageOut.duration = duration;
     animationPageOut.timing = timing;
     
-    var movebackPanel = new GLAnimation ({'translation': [0,0,0]});
+    var movebackPanel = new vs.gl.Animation ({'translation': [0,0,0]});
     movebackPanel.duration = duration;
     movebackPanel.timing = timing;      
 
-    var hidePanelAnim = new GLAnimation ();
+    var hidePanelAnim = new vs.gl.Animation ();
     hidePanelAnim.duration = duration;
     hidePanelAnim.timing = timing;
     
@@ -202,7 +204,10 @@ var CoverFlow = vs.core.createClass ({
       list.add (item);
       item.link (model);
 
-      item.style.backgroundColor = new GLColor (240, 240, 240);
+      item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
+      item.style.shadowOffset = [0, 0];
+      item.style.shadowBlur = 150;
+      item.style.shadowColor = new vs.gl.Color (0, 0, 0, 0.5);;
     }
     
     window.list = list;

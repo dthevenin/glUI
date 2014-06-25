@@ -1,7 +1,7 @@
 var MapDemo = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
 
   initComponent : function () {
 
@@ -55,15 +55,15 @@ var MapDemo = vs.core.createClass ({
     
     vs.ext.fx.Animation.FadeOutUp.process (this.input);
   
-    GLAnimation.FadeOutDown.duration = 300;
-    GLAnimation.FadeOutDown.process (this.closeButton);
-    GLAnimation.FadeOutUp.duration = 300;
-    GLAnimation.FadeOutUp.process (this.NewYorkButton);
-    GLAnimation.FadeOutUp.process (this.ESECButton);
-    GLAnimation.FadeOutUp.process (this.ParisButton);
+    vs.gl.Animation.FadeOutDown.duration = 300;
+    vs.gl.Animation.FadeOutDown.process (this.closeButton);
+    vs.gl.Animation.FadeOutUp.duration = 300;
+    vs.gl.Animation.FadeOutUp.process (this.NewYorkButton);
+    vs.gl.Animation.FadeOutUp.process (this.ESECButton);
+    vs.gl.Animation.FadeOutUp.process (this.ParisButton);
 
     this.mapView.hide (function () {
-      vs.ui.GLView.prototype.hide.call (self);
+      vs.gl.View.prototype.hide.call (self);
     });
   },
   
@@ -73,13 +73,13 @@ var MapDemo = vs.core.createClass ({
     this.input.show ();
     vs.ext.fx.Animation.FadeInDown.process (this.input);
     this.mapView.show ();
-    GLAnimation.FadeInUp.process (this.closeButton);
-    GLAnimation.FadeInUp.duration = 300;    
+    vs.gl.Animation.FadeInUp.process (this.closeButton);
+    vs.gl.Animation.FadeInUp.duration = 300;    
 
-    GLAnimation.FadeInDown.duration = 300;
-    GLAnimation.FadeInDown.process (this.NewYorkButton);
-    GLAnimation.FadeInDown.process (this.ESECButton);
-    GLAnimation.FadeInDown.process (this.ParisButton);
+    vs.gl.Animation.FadeInDown.duration = 300;
+    vs.gl.Animation.FadeInDown.process (this.NewYorkButton);
+    vs.gl.Animation.FadeInDown.process (this.ESECButton);
+    vs.gl.Animation.FadeInDown.process (this.ParisButton);
   }
 });
 

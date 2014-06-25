@@ -1,6 +1,6 @@
 var Demo = vs.core.createClass ({
 
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
   demos_list : null,
   
   constructor: function (config) {
@@ -16,7 +16,7 @@ var Demo = vs.core.createClass ({
   /** The application is initialized */
   onload : function ()
   {
-    this.style.backgroundColor = GLColor.black;
+    this.style.backgroundColor = vs.gl.Color.black;
     var full_size = [window.innerWidth, window.innerHeight];
     var mode = 1; // tablet
     if (full_size[0] < 450) mode = 0;
@@ -36,7 +36,7 @@ var Demo = vs.core.createClass ({
         name: data.name,
         img: data.img
       }).init ();
-      demoIcon.style.backgroundColor = new GLColor ();
+      demoIcon.style.backgroundColor = new vs.gl.Color ();
       demoIcon.style.backgroundColor.setRGBAColor.apply (
         demoIcon.style.backgroundColor,
         data.rgb
@@ -55,7 +55,7 @@ var Demo = vs.core.createClass ({
       }
     }
     
-    var text = new vs.ui.GLText ({
+    var text = new vs.gl.Text ({
       size: [245, 20],
       position: [dx, y - 30],
       text: "Mini Application demos:"
@@ -65,15 +65,15 @@ var Demo = vs.core.createClass ({
     text.style.fontSize = "15px";
     text.style.fontFamily = "Arial";
     text.style.fontWeight = "bold";
-    text.style.color = GLColor.white;
+    text.style.color = vs.gl.Color.white;
     text.style.textAlign = "left";
     
-    var bar = new vs.ui.GLView ({
+    var bar = new vs.gl.View ({
       size: [size [0] - 2 * dx, 2],
       position: [dx, y - 10],
     }).init ();
     this.iconsView.add (bar);
-    bar.style.backgroundColor = GLColor.white;
+    bar.style.backgroundColor = vs.gl.Color.white;
     
     x = dx;
     y -= (sizeIcon + 10 + 30);
@@ -85,7 +85,7 @@ var Demo = vs.core.createClass ({
         name: data.name,
         img: data.img
       }).init ();
-      demoIcon.style.backgroundColor = new GLColor ();
+      demoIcon.style.backgroundColor = new vs.gl.Color ();
       demoIcon.style.backgroundColor.setRGBAColor.apply (
         demoIcon.style.backgroundColor,
         data.rgb
@@ -104,7 +104,7 @@ var Demo = vs.core.createClass ({
       }
     }
 
-    text = new vs.ui.GLText ({
+    text = new vs.gl.Text ({
       size: [245, 20],
       position: [dx, y - 30],
       text: "Samples:"
@@ -114,53 +114,53 @@ var Demo = vs.core.createClass ({
     text.style.fontSize = "15px";
     text.style.fontFamily = "Arial";
     text.style.fontWeight = "bold";
-    text.style.color = GLColor.white;
+    text.style.color = vs.gl.Color.white;
     text.style.textAlign = "left";
     
-    bar = new vs.ui.GLView ({
+    bar = new vs.gl.View ({
       size: [size [0] - 2 * dx, 2],
       position: [dx, y - 10],
     }).init ();
     this.iconsView.add (bar);
-    bar.style.backgroundColor = GLColor.white;
+    bar.style.backgroundColor = vs.gl.Color.white;
     
     
     //force hiding
     if (this.mapDemo) {
-      vs.ui.GLView.prototype.hide.call (this.mapDemo);
+      vs.gl.View.prototype.hide.call (this.mapDemo);
     }
     if (this.thingList) {
-      vs.ui.GLView.prototype.hide.call (this.thingList);
+      vs.gl.View.prototype.hide.call (this.thingList);
       if (mode === 0) {
         this.thingList.demoPanel.size = full_size;
       }
     }
     if (this.peek) {
-      vs.ui.GLView.prototype.hide.call (this.peek);
+      vs.gl.View.prototype.hide.call (this.peek);
       if (mode === 0) {
         this.peek.demoPanel.size = full_size;
       }
     }
     if (this.longList) {
-      vs.ui.GLView.prototype.hide.call (this.longList);
+      vs.gl.View.prototype.hide.call (this.longList);
       if (mode === 0) {
         this.longList.demoPanel.size = full_size;
       }
     }
     if (this.imagesDemo) {
-      vs.ui.GLView.prototype.hide.call (this.imagesDemo);
+      vs.gl.View.prototype.hide.call (this.imagesDemo);
     }
     if (this.animationsDemo) {
-      vs.ui.GLView.prototype.hide.call (this.animationsDemo);
+      vs.gl.View.prototype.hide.call (this.animationsDemo);
       if (mode === 0) {
         this.animationsDemo.size = full_size;
       }
     }
     if (this.textDemo) {
-      vs.ui.GLView.prototype.hide.call (this.textDemo);
+      vs.gl.View.prototype.hide.call (this.textDemo);
     }
     if (this.canvasDemo) {
-      vs.ui.GLView.prototype.hide.call (this.canvasDemo);
+      vs.gl.View.prototype.hide.call (this.canvasDemo);
     }
   },
 

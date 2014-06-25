@@ -19,14 +19,14 @@
 var ThingList = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
   
   settings_open: false,
 
   onload : function (event) {
     var size = this._size;
     
-    this.style.backgroundColor = GLColor.white;
+    this.style.backgroundColor = vs.gl.Color.white;
   
     this.config_panel = new ConfigPanel ({
       position: [0, 44],
@@ -47,14 +47,14 @@ var ThingList = vs.core.createClass ({
       this.show_list_anim.start ();
       this.config_panel.hide ();
       this.show_list_anim.process (list_view);
-      this.nav_bar.style.backgroundColor = new GLColor (41, 41, 41);
+      this.nav_bar.style.backgroundColor = new vs.gl.Color (41, 41, 41);
     }
     else {
       this.config_panel.show ();
       this.hide_list_anim.process (list_view, function () {
         list_view.hide ();
       });
-      this.nav_bar.style.backgroundColor = new GLColor (60, 60, 60);
+      this.nav_bar.style.backgroundColor = new vs.gl.Color (60, 60, 60);
     }    
     this.settings_open = !this.settings_open;
   },
@@ -63,27 +63,27 @@ var ThingList = vs.core.createClass ({
   
     var size = this._size;
   
-    this.nav_bar = new vs.ui.GLView ({
+    this.nav_bar = new vs.gl.View ({
       size: [size[0], 44],
       position: [0,0]
     }).init ();
-    this.nav_bar.style.backgroundColor = new GLColor (41, 41, 41);
+    this.nav_bar.style.backgroundColor = new vs.gl.Color (41, 41, 41);
 
     this.add (this.nav_bar);
     
-    this.titleLabel = new vs.ui.GLText ({
+    this.titleLabel = new vs.gl.Text ({
       size: [150, 25],
       position: [(size[0] / 2) - 75,10],
       text : "THINGLIST"
     }).init ();
     this.titleLabel.style.fontSize = "22px";
     this.titleLabel.style.fontFamily = "arial";
-    this.titleLabel.style.color = GLColor.white;
+    this.titleLabel.style.color = vs.gl.Color.white;
     this.titleLabel.style.textAlign = "center";
 
     this.nav_bar.add (this.titleLabel);
 
-    var button = new vs.ui.GLButton ({
+    var button = new vs.gl.Button ({
       size: [40, 40],
       position: [3, 0]
     }).init ();
@@ -95,7 +95,7 @@ var ThingList = vs.core.createClass ({
     
     button.bind ('select', this, this.openSettings);
 
-    var button = new vs.ui.GLImage ({
+    var button = new vs.gl.Image ({
       size: [32, 32],
       src: "assets/question.png"
     }).init ();
@@ -108,14 +108,14 @@ var ThingList = vs.core.createClass ({
   buildList : function () {
     var size = this._size;
     size [1] -= 44;
-    var list_view = new vs.ui.GLList ({
+    var list_view = new vs.gl.List ({
       position: [0, 44],
       size: size,
       scroll: true
     }).init ();
     
     this.add (list_view);
-    list_view.style.backgroundColor = GLColor.white;
+    list_view.style.backgroundColor = vs.gl.Color.white;
     this.list_view = list_view;
 
     for (var i = 0; i < DATA.length; i++)
@@ -129,12 +129,12 @@ var ThingList = vs.core.createClass ({
     list_view.refresh ();
     
     // Hide list animation
-    this.hide_list_anim = new GLAnimation (["translation", [0, size[1]]]);
-    this.hide_list_anim.keyFrame (0, [[0,0]]);
+    this.hide_list_anim = new vs.gl.Animation (["translation", [0, size[1]]]);
+    this.hide_list_anim.addKeyFrame (0, [[0,0]]);
     this.hide_list_anim.duration = 200;
     
-    this.show_list_anim = new GLAnimation (["translation", [0, 0]]);
-    this.show_list_anim.keyFrame (0, [[0, size[1]]]);
+    this.show_list_anim = new vs.gl.Animation (["translation", [0, 0]]);
+    this.show_list_anim.addKeyFrame (0, [[0, size[1]]]);
     this.show_list_anim.duration = 200;
   }
 });

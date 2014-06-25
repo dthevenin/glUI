@@ -19,16 +19,16 @@
 var ConfigPanel = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
 
   initComponent: function () {
     this._super ();
     
-    this.style.backgroundColor = new GLColor (22, 15, 58, 1);
+    this.style.backgroundColor = new vs.gl.Color (22, 15, 58, 1);
     var size = this.__config__.size;
     if (!size) size = [300, 400];
 
-    this.titleLabel = new vs.ui.GLText ({
+    this.titleLabel = new vs.gl.Text ({
       size : [200, 30],
       position: [(size[0] - 200)/2, 10],
       text : "FILTER BY:"
@@ -36,7 +36,7 @@ var ConfigPanel = vs.core.createClass ({
     
     this.titleLabel.style.fontSize = "22px";
     this.titleLabel.style.fontFamily = "arial";
-    this.titleLabel.style.color = new GLColor (196,189,233);
+    this.titleLabel.style.color = new vs.gl.Color (196,189,233);
     this.titleLabel.style.textAlign = "center";
 
     this.add (this.titleLabel);
@@ -84,7 +84,7 @@ var ConfigPanel = vs.core.createClass ({
     });
     var self = this;
     vs.scheduleAction (function () {
-//      vs.ui.GLView.prototype.hide.call (self);
+//      vs.gl.View.prototype.hide.call (self);
     }, 300);
 
   }
