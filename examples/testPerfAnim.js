@@ -1,29 +1,29 @@
 var testPerfAnim = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
 
   initComponent : function () {
     this._super ();
 
-    this.style.backgroundColor = GLColor.white;
+    this.style.backgroundColor = vs.gl.Color.white;
     this.style.backgroundImage = "background.jpg";
 
-    var animation = new GLAnimation ({'translation': [0,0,0]});
+    var animation = new vs.gl.Animation ({'translation': [0,0,0]});
     animation.keyFrame (0, {'translation': [0, 0, 0]});
     animation.keyFrame (0.25, {'translation': [600, 0, 0]});
     animation.keyFrame (0.50, {'translation': [600, 400, 0]});
     animation.keyFrame (0.75, {'translation': [0, 400, 0]});
     animation.duration = 20000;
-    animation.timing = GLAnimation.LINEAR;
+    animation.timing = vs.gl.Animation.LINEAR;
     animation.repeat = 200;
 
 
     function setDiv (parent, dec) {
       var delay = 0;
-      for (var i = 0; i < 300; i++) {
-//      for (var i = 0; i < 3; i++) {
-        var img = new vs.ui.GLImage ({
+//      for (var i = 0; i < 300; i++) {
+      for (var i = 0; i < 3; i++) {
+        var img = new vs.gl.Image ({
           position: [100 + dec, 100 + dec],
           size: [135, 126],
           src: "circle.png",

@@ -43,7 +43,7 @@ define ('FishEyeView', [], function () {
   var FishEyeView = vs.core.createClass ({
 
     /** parent class */
-    parent: vs.ui.GLImage,
+    parent: vs.gl.Image,
 
     properties : {
       'lightDirection': vs.core.Object.PROPERTY_IN_OUT,
@@ -205,7 +205,7 @@ define ('FishEyeView', [], function () {
         gl_ctx.STATIC_DRAW
       );
 
-      GLView.__should_render = true;
+      vs.gl.View.__should_render = true;
     }
   });
   
@@ -237,7 +237,6 @@ define ('FishEyeView', [], function () {
   }
 
   glAddInitFunction (createCurtainProgram);
-
 
   function createCurtainProgram () {
 

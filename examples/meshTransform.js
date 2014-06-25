@@ -15,16 +15,16 @@ require (['CurtainDemo', 'CurtainImageDemo', 'FishEyeDemo'], function (CurtainDe
   var Test = vs.core.createClass ({
 
     /** parent class */
-    parent: vs.ui.GLApplication,
+    parent: vs.gl.Application,
 
     initComponent : function () {
       this._super ();
 
-      this.style.backgroundColor = GLColor.white;
+      this.style.backgroundColor = vs.gl.Color.white;
 
-//      var view = new CurtainDemo ({ position: [10, 10] }).init ();
+      var view = new CurtainDemo ({ position: [10, 10] }).init ();
 //      var view = new CurtainImageDemo ({ position: [50, 50] }).init ();
-       var view = new FishEyeDemo ({ position: [0, 0] }).init ();
+//       var view = new FishEyeDemo ({ position: [0, 0] }).init ();
 
       this.add (view);
     }

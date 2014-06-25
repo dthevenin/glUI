@@ -23,7 +23,7 @@ var info_design = "The Shape of Design is an odd little design book. Instead of 
 var GamesList = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
   
   settings_open: false,
 
@@ -55,16 +55,16 @@ var GamesList = vs.core.createClass ({
 //    size = [size[0], size[1] - 100];
 //    size = [250, 400];
   
-    var list = new GLList ({
+    var list = new vs.gl.List ({
       size : size,
 //      position: [0, 100],
       scroll: true
     }).init ();
     this.add (list);
-    list.style.backgroundColor = GLColor.white;
+    list.style.backgroundColor = vs.gl.Color.white;
     var l = Data.length;
-    for (var i = 0; i < l * 10; i++) {
-//    for (var i = 0; i < l * 1; i++) {
+//    for (var i = 0; i < l * 10; i++) {
+    for (var i = 0; i < l * 1; i++) {
 //    for (var i = 0; i < 2; i++) {
       var d = Data [i % l];
       var model = new vs.core.Model ().init ();
@@ -74,7 +74,7 @@ var GamesList = vs.core.createClass ({
       list.add (item);
       item.link (model);
 
-      item.style.backgroundColor = new GLColor (240, 240, 240);
+      item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
     }
     
     window.list = list;

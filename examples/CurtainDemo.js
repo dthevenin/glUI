@@ -12,13 +12,13 @@ define ('CurtainDemo', ['CurtainView'], function (CurtainView) {
       this.__recognizer = new vs.ui.DragRecognizer (this);
       this.addPointerRecognizer (this.__recognizer);
 
-      this.animation = new GLAnimation (
+      this.animation = new vs.gl.Animation (
         {'slide': [0, 0]},
         {'classes': {'slide' : TrajectoryVect2D}}
       );
       this.animation.duration = 200;
 
-      this.style.backgroundColor = new GLColor (180, 0, 0);
+      this.style.backgroundColor = new vs.gl.Color (180, 0, 0);
       this.size = [300, 450];
     },
 

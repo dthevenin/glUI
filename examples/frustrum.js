@@ -2,7 +2,7 @@ var slider1, slider2;
 var Test = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
 
   initComponent : function () {
     this._super ();
@@ -21,13 +21,13 @@ var Test = vs.core.createClass ({
     }).init ();
     document.body.appendChild (slider2.view);
 
-    var glView2 = new vs.ui.GLView ({
+    var glView2 = new vs.gl.View ({
       position: [100, 100],
       size: [150, 100],
       transformOrigin : [75, 50],
 //      scaling: 0.5
     }).init ();
-    glView2.style.backgroundColor = GLColor.red;
+    glView2.style.backgroundColor = vs.gl.Color.red;
     
     this.add (glView2);
    

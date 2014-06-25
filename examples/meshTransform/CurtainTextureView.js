@@ -42,7 +42,7 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
   var CurtainTextureView = vs.core.createClass ({
 
     /** parent class */
-    parent: vs.ui.GLImage,
+    parent: vs.gl.Image,
 
     properties : {
       'lightDirection': vs.core.Object.PROPERTY_IN_OUT,

@@ -1,7 +1,7 @@
 var AnimationsDemo = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
 
   onload : function () {
     
@@ -13,13 +13,13 @@ var AnimationsDemo = vs.core.createClass ({
       
     this.glView.transformOrigin = [100, 50];
     
-    var buttonStyle = new GLStyle ();
-    buttonStyle.backgroundColor = new GLColor (200,200,200);
+    var buttonStyle = new vs.gl.Style ();
+    buttonStyle.backgroundColor = new vs.gl.Color (200,200,200);
     buttonStyle.textAlign = "center";
     buttonStyle.fontSize = 15;
    
-    var buttonSelectedStyle = new GLStyle ();
-    buttonSelectedStyle.backgroundColor = new GLColor (100,100,100);
+    var buttonSelectedStyle = new vs.gl.Style ();
+    buttonSelectedStyle.backgroundColor = new vs.gl.Color (100,100,100);
     buttonSelectedStyle.textAlign = "center";
     buttonSelectedStyle.fontSize = 15;
    
@@ -70,7 +70,7 @@ var AnimationsDemo = vs.core.createClass ({
     var index = event.src._index;
     var name = ANIMATION_LIST [index];
     
-    GLAnimation[name].process (this.glView);    
+    vs.gl.Animation[name].process (this.glView);    
   }
 });
 
@@ -81,18 +81,18 @@ var ANIMATION_LIST = [
 ]
 
 
-// var anim = new GLAnimation (['rotation', [0,0,20]], ['opacity', 1], ['translation', [100, 200]]);
+// var anim = new vs.gl.Animation (['rotation', [0,0,20]], ['opacity', 1], ['translation', [100, 200]]);
 // anim.keyFrame (0, [[0,0,0], 1, [0,0]]);
 // anim.keyFrame (0.5, [[0,0,10], 0.5, [50,100]]);
 
 
-var anim = new GLAnimation (['rotation', [0,0,20]]);
+var anim = new vs.gl.Animation (['rotation', [0,0,20]]);
 anim.keyFrame (0, [[0,0,0]]);
 anim.keyFrame (0.5, [[0,0,10]]);
 
-//   var anim = new GLAnimation (['opacity', 0.1]);
+//   var anim = new vs.gl.Animation (['opacity', 0.1]);
 //   anim.keyFrame (0, [1]);
-//    var anim = new GLAnimation (['translation', [100, 200]]);
+//    var anim = new vs.gl.Animation (['translation', [100, 200]]);
 anim.duration = 1000;
 //anim.repeat = 3;
 //anim.steps = 10;

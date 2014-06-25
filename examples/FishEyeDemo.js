@@ -12,7 +12,7 @@ define ('FishEyeDemo', ['FishEyeView'], function (FishEyeView) {
       this.__recognizer = new vs.ui.DragRecognizer (this);
       this.addPointerRecognizer (this.__recognizer);
 
-      this.animation = new GLAnimation (
+      this.animation = new vs.gl.Animation (
         {'radius': 0},
         {'classes': {'radius' : TrajectoryVect1D}}
       );

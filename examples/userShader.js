@@ -2,7 +2,7 @@ var glImage;
 var Test = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
 
   initComponent : function () {
     this._super ();
@@ -42,13 +42,13 @@ var Test = vs.core.createClass ({
 });
 
 function createImage1 () {
-  var glImage = new vs.ui.GLImage ({
+  var glImage = new vs.gl.Image ({
     position: [100, 100],
     size: [500, 250],
     src: "demo.png",
     transformOrigin : [250, 125]
   }).init ();
-  glImage.style.backgroundColor = GLColor.red;
+  glImage.style.backgroundColor = vs.gl.Color.red;
 
   var
     obj_size = glImage._size,
@@ -177,7 +177,7 @@ gl_FragColor.a *= uAlpha;\n\
 }
 
 function createImage2 () {
-  var glImage = new vs.ui.GLImage ({
+  var glImage = new vs.gl.Image ({
     position: [500, 200],
     size: [500, 250],
     src: "demo.png",

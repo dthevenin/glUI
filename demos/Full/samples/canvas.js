@@ -1,7 +1,7 @@
 var CanvasDemo = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLCanvas,
+  parent: vs.gl.Canvas,
 
   draw : function (x, y, width, height) {
     var

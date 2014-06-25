@@ -1,18 +1,18 @@
 var Text = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
 
   initComponent : function () {
     this._super ();
 
-    this.view1 = new vs.ui.GLText ({
+    this.view1 = new vs.gl.Text ({
       size: [100, 100],
       id: 'view1',
       position: [50, 50],
     }).init ();
     
-    this.view1.style.backgroundColor = GLColor.red;
+    this.view1.style.backgroundColor = vs.gl.Color.red;
 
     this.add (this.view1);
     this._tmp_translation = vec3.create ();

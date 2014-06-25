@@ -1,7 +1,7 @@
 　require.config({
   baseUrl: "",
   paths: {
-    'Data' : 'Data',
+    'Data' : 'data',
     'ListItem' : 'ListItem',
     'CurtainView' : 'meshTransform/CurtainView',
     'CurtainTextureView' : 'meshTransform/CurtainTextureView'
@@ -16,12 +16,13 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
   var CurtainDemo = vs.core.createClass ({
 
     /** parent class */
-    parent: vs.ui.GLApplication,
+    parent: vs.gl.Application,
+    startSlide: 0,
 
     initComponent : function () {
       this._super ();
 
-      this.style.backgroundColor = GLColor.white;
+      this.style.backgroundColor = vs.gl.Color.white;
 
       this.intList ();
       this.initCurtain ();
@@ -30,14 +31,14 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
     initCurtain : function () {
        var view = new CurtainTextureView ({
         src : "assets/velour.jpg",
-        position: demoPosition,
-        size : demoSize,
+        position: [demoPosition [0] - 10, demoPosition[1]],
+        size : [demoSize [0] + 10, demoSize [1]],
       }).init ();
 
       this.curtain_recognizer = new vs.ui.DragRecognizer (this);
       view.addPointerRecognizer (this.curtain_recognizer);
 
-      this.curtainAnimation = new GLAnimation (
+      this.curtainAnimation = new vs.gl.Animation (
         {'slide': [0, 0]},
         {'classes': {'slide' : TrajectoryVect2D}}
       );
@@ -49,18 +50,18 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
     
     intList: function () {
       var size = demoSize;
-      var list = new GLList ({
-        size : [size [0] - 20, size [1]],
-        position: [demoPosition [0] + 20, demoPosition[1]],
+      var list = new vs.gl.List ({
+        size : [size [0] - 10, size [1]],
+        position: [demoPosition [0] + 10, demoPosition[1]],
         scroll: true,
         scaling: 0.2,
         transformOrigin : [size[0]/1.2, size[1]/2]
       }).init ();
       
       this.add (list);
-      list.style.backgroundColor = GLColor.white;
+      list.style.backgroundColor = vs.gl.Color.white;
       var l = Data.length;
-      for (var i = 0; i < l; i++) {
+      for (var i = 0; i < l * 5; i++) {
         var d = Data [i % l];
         var model = new vs.core.Model ().init ();
         model.parseData (d)
@@ -69,22 +70,40 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
         list.add (item);
         item.link (model);
 
-        item.style.backgroundColor = new GLColor (240, 240, 240);
+        item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
       }
       
-      this.listAnimation = new GLAnimation (
+      this.listAnimation = new vs.gl.Animation (
         {'scaling' : 0.5}
       );
       this.listAnimation.duration = 200;
       
       this.list = list;
     },
+    
+    didDragStart : function (target, event) {
+      this.startSlide = this.curtainView._slide[0];
+      
+      var pointer = event.targetPointerList[0]
+      var pos = this._position;
 
+      var slide = [this.startSlide, pointer.clientY - pos [1]];
+
+      this.curtainAnimation.keyFrame (
+        0, { 'slide': this.curtainView._slide }
+      );
+      this.curtainAnimation.keyFrame (
+        1, { 'slide': slide }
+      );
+      
+      this.curtainAnimation.process (this.curtainView);
+    },
+    
     didDrag : function (drag_info, target, event) {
       var pointer = event.targetPointerList[0]
       var pos = this._position;
 
-      var x = -drag_info.dx;
+      var x = -drag_info.dx + this.startSlide;
       var s = x / demoSize [0];
       if (s > 1) s = 1;
       if (s < 0.2) s = 0.2;
@@ -95,7 +114,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
 
     didDragEnd : function () {
       
-      if (this.curtainView._slide [0] > demoSize [0] / 2) {
+      if (this.curtainView._slide [0] > demoSize [0] / 1.5) {
         // Open animation
         this.curtainAnimation.keyFrame (
           0, { 'slide': this.curtainView._slide }

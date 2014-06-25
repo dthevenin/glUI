@@ -4742,7 +4742,7 @@ function initRendering () {
         c_buffer = style._background_color.__gl_array;
       }
       else {
-        c_buffer = GLColor.default.__gl_array;
+        c_buffer = vs.gl.Color.default.__gl_array;
       }
     
       if (gl_view.__gl_user_program) {
@@ -5318,7 +5318,7 @@ function initWebGLRendering () {
 
 
 /**
- *  The vs.ui.GLConstraint class
+ *  The vs.gl.Constraint class
  *
 */
 function GLConstraint () {}
@@ -5517,7 +5517,7 @@ GLConstraint.prototype = {
                       Export
 *********************************************************************/
 /** @private */
-vs.ui.GLConstraint = GLConstraint;
+vs.gl.Constraint = GLConstraint;
 /*
   COPYRIGHT NOTICE
   Copyright (C) 2009-2012. David Thevenin, ViniSketch SARL (c), and 
@@ -5539,16 +5539,16 @@ vs.ui.GLConstraint = GLConstraint;
 
 
 /**
- *  The vs.ui.GLColor class
+ *  The vs.gl.Color class
  *
 */
-function GLColor (r, g, b, a) {
+function vs.gl.Color (r, g, b, a) {
   this.__gl_array = new Float32Array (4);
   
   this.setRGBAColor (r, g, b, a);
 }
 
-GLColor.prototype.setRGBAColor = function (r, g, b, a) {
+vs.gl.Color.prototype.setRGBAColor = function (r, g, b, a) {
   if (!vs.util.isNumber (r) || r < 0 || r > 255) r = 255;
   if (!vs.util.isNumber (g) || g < 0 || g > 255) g = 255;
   if (!vs.util.isNumber (b) || b < 0 || b > 255) b = 255;
@@ -5566,12 +5566,12 @@ GLColor.prototype.setRGBAColor = function (r, g, b, a) {
   this.setColorArray (r, g, b, a);
 }
 
-GLColor.prototype.setColorArray = function (m11, m12, m13, m14) {
+vs.gl.Color.prototype.setColorArray = function (m11, m12, m13, m14) {
   var m = this.__gl_array;  
   m[0] = m11; m[1] = m12; m[2] = m13; m[3] = m14;
 }
 
-GLColor.prototype.copy = function (color) {
+vs.gl.Color.prototype.copy = function (color) {
 
   var
     m = this.__gl_array,
@@ -5585,13 +5585,13 @@ GLColor.prototype.copy = function (color) {
   c_m.set (m);
 }
 
-GLColor.prototype.getRgbaString = function () {
+vs.gl.Color.prototype.getRgbaString = function () {
   return "rgba(" + (this.r * 255) + ","
     + (this.g * 255) + "," + (this.b * 255)
     + "," + this.a + ")";
 }
 
-GLColor.prototype.setRgbString = function (str) {
+vs.gl.Color.prototype.setRgbString = function (str) {
   var matchColors = /rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)/;
   var match = matchColors.exec (str);
   if (match !== null) {
@@ -5603,7 +5603,7 @@ GLColor.prototype.setRgbString = function (str) {
   }
 }
 
-GLColor.prototype.setRgbaString = function (str) {
+vs.gl.Color.prototype.setRgbaString = function (str) {
   var matchColors = /rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d?\.\d+)\)/;
   var match = matchColors.exec (str);
   if (match !== null) {
@@ -5616,16 +5616,16 @@ GLColor.prototype.setRgbaString = function (str) {
 }
 
 function initDefaultColors () {
-  GLColor.transparent = new GLColor (0, 0, 0, 0);
-  GLColor.black = new GLColor (0, 0, 0, 1.0);
-  GLColor.white = new GLColor (255, 255, 255, 1.0);
-  GLColor.red = new GLColor (255, 0, 0, 1);
-  GLColor.green = new GLColor (0, 255, 0, 1);
-  GLColor.blue = new GLColor (0, 0, 255, 1);
-  GLColor.yellow = new GLColor (255,255,0, 1);
-  GLColor.lightGrey = new GLColor (200, 200, 200, 1.0);
+  vs.gl.Color.transparent = new vs.gl.Color (0, 0, 0, 0);
+  vs.gl.Color.black = new vs.gl.Color (0, 0, 0, 1.0);
+  vs.gl.Color.white = new vs.gl.Color (255, 255, 255, 1.0);
+  vs.gl.Color.red = new vs.gl.Color (255, 0, 0, 1);
+  vs.gl.Color.green = new vs.gl.Color (0, 255, 0, 1);
+  vs.gl.Color.blue = new vs.gl.Color (0, 0, 255, 1);
+  vs.gl.Color.yellow = new vs.gl.Color (255,255,0, 1);
+  vs.gl.Color.lightGrey = new vs.gl.Color (200, 200, 200, 1.0);
 
-  GLColor.default = GLColor.transparent;
+  vs.gl.Color.default = vs.gl.Color.transparent;
 }
 
 glAddInitFunction (initDefaultColors);
@@ -5634,7 +5634,7 @@ glAddInitFunction (initDefaultColors);
                       Export
 *********************************************************************/
 /** @private */
-vs.ui.GLColor = GLColor;
+vs.gl.Color = vs.gl.Color;
 /*
   COPYRIGHT NOTICE
   Copyright (C) 2009-2012. David Thevenin, ViniSketch SARL (c), and 
@@ -5656,7 +5656,7 @@ vs.ui.GLColor = GLColor;
 
 
 /**
- *  The vs.ui.GLStyle class
+ *  The vs.gl.Style class
  *
 */
 function GLStyle (config)
@@ -5666,7 +5666,7 @@ function GLStyle (config)
   this.constructor = GLStyle;
   
   this._background_image_uv = new Float32Array ([0,1, 0,0, 1,1, 1,0]);
-  this._color = GLColor.black;
+  this._color = vs.gl.Color.black;
 }
 
 GLStyle.prototype = {
@@ -5719,13 +5719,13 @@ GLStyle.prototype = {
 
     if (this._background_color) {
       // TODO memory leak
-      style._background_color = new GLColor ();
+      style._background_color = new vs.gl.Color ();
       this._background_color.copy (style._background_color);
     }
     
     if (this._color) {
       // TODO memory leak
-      style._color = new GLColor ();
+      style._color = new vs.gl.Color ();
       this._color.copy (style._color);
     }
     
@@ -5785,19 +5785,19 @@ GLStyle.prototype = {
         case "color":
           var c;
         
-          if (GLColor [value]) {
-            c = GLColor [value];
+          if (vs.gl.Color [value]) {
+            c = vs.gl.Color [value];
           }
           else if (value.indexOf ("rgb(") === 0) {
-            c = new GLColor ();
+            c = new vs.gl.Color ();
             c.setRgbString (value);
           }
           else if (value.indexOf ("rgba(") === 0) {
-            c = new GLColor ();
+            c = new vs.gl.Color ();
             c.setRgbaString (value);
           }
           else {
-            c = new GLColor (value);
+            c = new vs.gl.Color (value);
           }
           self [p] = c;
           break;
@@ -5819,7 +5819,7 @@ vs.util.defineClassProperties (GLStyle, {
     /**
      * Change view opacity.
      * value is include in this range [0, 1]
-     * @name vs.ui.GLStyle#opacity
+     * @name vs.gl.Style#opacity
      * @type {number}
      */
     set : function (v) {
@@ -5841,19 +5841,19 @@ vs.util.defineClassProperties (GLStyle, {
   
   'backgroundColor': {
     /**
-     * @name vs.ui.GLView#backgroundColor
-     * @type {GLColor}
+     * @name vs.gl.View#backgroundColor
+     * @type {vs.gl.Color}
      */
     set : function (v)
     {
-      if (!(v instanceof GLColor)) return; 
+      if (!(v instanceof vs.gl.Color)) return; 
       this._background_color = v;
       GLView.__should_render = true;
     },
     
     /**
      * @ignore
-     * @type {GLColor}
+     * @type {vs.gl.Color}
      */
     get : function () {
       return this._background_color;
@@ -5862,19 +5862,19 @@ vs.util.defineClassProperties (GLStyle, {
   
   'color': {
     /**
-     * @name vs.ui.GLView#color
-     * @type {GLColor}
+     * @name vs.gl.View#color
+     * @type {vs.gl.Color}
      */
     set : function (v)
     {
-      if (!(v instanceof GLColor)) return; 
+      if (!(v instanceof vs.gl.Color)) return; 
       this._color = v;
       GLView.__should_render = true;
     },
     
     /**
      * @ignore
-     * @type {GLColor}
+     * @type {vs.gl.Color}
      */
     get : function () {
       return this._color;
@@ -5884,7 +5884,7 @@ vs.util.defineClassProperties (GLStyle, {
   'fontFamily': {
     /**
      * Change view fontFamily.
-     * @name vs.ui.GLStyle#fontFamily
+     * @name vs.gl.Style#fontFamily
      * @type {String}
      */
     set : function (v) {
@@ -5905,7 +5905,7 @@ vs.util.defineClassProperties (GLStyle, {
   'fontSize': {
     /**
      * Change view fontSize.
-     * @name vs.ui.GLStyle#fontSize
+     * @name vs.gl.Style#fontSize
      * @type {String}
      */
     set : function (v) {
@@ -5927,7 +5927,7 @@ vs.util.defineClassProperties (GLStyle, {
   'fontWeight': {
     /**
      * Change view fontWeight.
-     * @name vs.ui.GLStyle#fontWeight
+     * @name vs.gl.Style#fontWeight
      * @type {String}
      */
     set : function (v) {
@@ -5952,7 +5952,7 @@ vs.util.defineClassProperties (GLStyle, {
   'textAlign': {
     /**
      * Change view textAlign.
-     * @name vs.ui.GLStyle#textAlign
+     * @name vs.gl.Style#textAlign
      * @type {String}
      */
     set : function (v) {
@@ -5973,7 +5973,7 @@ vs.util.defineClassProperties (GLStyle, {
   'textTransform': {
     /**
      * Change view fontFamily.
-     * @name vs.ui.GLStyle#textTransform
+     * @name vs.gl.Style#textTransform
      * @type {String}
      */
     set : function (v) {
@@ -5994,7 +5994,7 @@ vs.util.defineClassProperties (GLStyle, {
   'backgroundImage': {
     /**
      * Set the image url
-     * @name vs.ui.GLStyle#src 
+     * @name vs.gl.Style#src 
      * @type {string}
      */
     set : function (v) {
@@ -6037,7 +6037,7 @@ vs.util.defineClassProperties (GLStyle, {
   'backgroundImageUV': {
     /**
      * Set the image url
-     * @name vs.ui.GLStyle#src 
+     * @name vs.gl.Style#src 
      * @type {string}
      */
     set : function (v) {
@@ -6077,8 +6077,8 @@ var _default_style;
 
 function initDefaultStyle () {
   _default_style = new GLStyle ();
-  _default_style.backgroundColor = GLColor.default;
-  _default_style.color = GLColor.black;
+  _default_style.backgroundColor = vs.gl.Color.default;
+  _default_style.color = vs.gl.Color.black;
 }
 
 glAddInitFunction (initDefaultStyle);
@@ -6087,15 +6087,15 @@ glAddInitFunction (initDefaultStyle);
                       Export
 *********************************************************************/
 /** @private */
-vs.ui.GLStyle = GLStyle;
+vs.gl.Style = GLStyle;
 /**
- *  The vs.ui.GLView class
+ *  The vs.gl.View class
  *
  *  @extends vs.core.EventSource
  *  @class
- *  vs.ui.GLView is a class that defines the basic drawing, event-handling, of
- *  an application. You typically don’t interact with the vs.ui.GLView API
- *  directly; rather, your custom view classes inherit from vs.ui.GLView and
+ *  vs.gl.View is a class that defines the basic drawing, event-handling, of
+ *  an application. You typically don’t interact with the vs.gl.View API
+ *  directly; rather, your custom view classes inherit from vs.gl.View and
  *  override many of its methods., Its also supports 2D
  *  transformations (translate, rotate, scale).
  *  <p>
@@ -6116,9 +6116,9 @@ vs.ui.GLStyle = GLStyle;
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.GLView.
+ *   Creates a new vs.gl.View.
  *
- * @name vs.ui.GLView
+ * @name vs.gl.View
  *
  * @param {Object} config the configuration structure [mandatory]
  */
@@ -6311,7 +6311,7 @@ GLView.prototype = {
    * associated with presenting the view.<br/>
    * If you override this method, you must call the parent method.
    *
-   * @name vs.ui.GLView#viewDidAdd
+   * @name vs.gl.View#viewDidAdd
    * @function
    */
   viewDidAdd : function () {
@@ -6334,12 +6334,12 @@ GLView.prototype = {
    *  var id =
    *    myObject.createAndAddComponent ('MyGUIComponent', config, 'children');
    *
-   * @name vs.ui.GLView#createAndAddComponent
+   * @name vs.gl.View#createAndAddComponent
    * @function
    *
    * @param {String} comp_name The GUI component name to instanciate
    * @param {Object} config Configuration structure need to build the component.
-   * @param {String} extension The hole into the vs.ui.GLView will be insert.
+   * @param {String} extension The hole into the vs.gl.View will be insert.
    * @return {vs.core.Object} the created component
    */
   createAndAddComponent : function (comp_name, config, extension)
@@ -6399,7 +6399,7 @@ GLView.prototype = {
   /**
    *  Return true if the set component is a child o the current component
    *
-   * @name vs.ui.GLView#isChild
+   * @name vs.gl.View#isChild
    * @function
    *
    * @param {vs.GLEventSource} child The component to be removed.
@@ -6419,9 +6419,9 @@ GLView.prototype = {
   /**
    *  Add the specified child component to this component.
    *  <p>
-   *  The component can be a graphic component (vs.ui.GLView) or
+   *  The component can be a graphic component (vs.gl.View) or
    *  a non graphic component (vs.GLEventSource).
-   *  In case of vs.ui.GLView its mandatory to set the extension.
+   *  In case of vs.gl.View its mandatory to set the extension.
    *  <p>
    *  The add is a lazy add! The child's view can be already in
    *  the HTML DOM. In that case, the add methode do not modify the DOM.
@@ -6430,11 +6430,11 @@ GLView.prototype = {
    *  var myButton = new Button (conf);
    *  myObject.add (myButton, 'children');
    *
-   * @name vs.ui.GLView#add
+   * @name vs.gl.View#add
    * @function
    *
    * @param {vs.GLEventSource} child The component to be added.
-   * @param {String} extension [optional] The hole into a vs.ui.GLView will be
+   * @param {String} extension [optional] The hole into a vs.gl.View will be
    *       insert.
    */
   add : function (child)
@@ -6461,7 +6461,7 @@ GLView.prototype = {
    *  @example
    *  myObject.remove (myButton);
    *
-   * @name vs.ui.GLView#remove
+   * @name vs.gl.View#remove
    * @function
    *
    * @param {vs.GLEventSource} child The component to be removed.
@@ -6486,7 +6486,7 @@ GLView.prototype = {
    *  @example
    *  myObject.removeAllChildren ();
    *
-   * @name vs.ui.GLView#removeAllChild
+   * @name vs.gl.View#removeAllChild
    * @function
    * @param {Boolean} should_free free children
    * @param {String} extension [optional] The hole from witch all views will be
@@ -6542,7 +6542,7 @@ GLView.prototype = {
    *  Call redraw function on you Application object for a entire redraw or just
    *  on a specific widget.
    *
-   * @name vs.ui.GLView#redraw
+   * @name vs.gl.View#redraw
    * @function
    *
    * @param {Function} clb Optional function to call after the redraw
@@ -6555,7 +6555,7 @@ GLView.prototype = {
   /**
    *  Displays the GUI Object
    *
-   * @name vs.ui.GLView#show
+   * @name vs.gl.View#show
    * @param {Function} clb a function to call a the end of show process
    * @function
    */
@@ -6649,7 +6649,7 @@ GLView.prototype = {
   /**
    *  Hides the GUI Object
    *
-   * @name vs.ui.GLView#hide
+   * @name vs.gl.View#hide
    * @param {Function} clb a function to call a the end of show process
    * @function
    */
@@ -6715,7 +6715,7 @@ GLView.prototype = {
   },
 
   /**
-   * @name vs.ui.GLView#notifyToParent
+   * @name vs.gl.View#notifyToParent
    * @function
    */
   notifyToParent : function (e)
@@ -6733,7 +6733,7 @@ GLView.prototype = {
 
   /**
    * Did enable delegate
-   * @name vs.ui.GLView#_didEnable
+   * @name vs.gl.View#_didEnable
    * @protected
    */
   _didEnable : function () {},
@@ -6773,7 +6773,7 @@ util.defineClassProperties (GLView, {
   'size': {
     /**
      * Getter|Setter for size. Gives access to the size of the GUI Object
-     * @name vs.ui.GLView#size
+     * @name vs.gl.View#size
      *
      * @type {Array.<number>}
      */
@@ -6802,7 +6802,7 @@ util.defineClassProperties (GLView, {
     /**
      * Getter|Setter for position. Gives access to the position of the GUI
      * Object
-     * @name vs.ui.GLView#position
+     * @name vs.gl.View#position
      *
      * @type Array
      */
@@ -6833,7 +6833,7 @@ util.defineClassProperties (GLView, {
     /**
      * Hide or show the object.
      * obj.visible = true <=> obj.show (), obj.visible = false <=> obj.hide (),
-     * @name vs.ui.GLView#visible
+     * @name vs.gl.View#visible
      * @type {boolean}
      */
     set : function (v)
@@ -6859,7 +6859,7 @@ util.defineClassProperties (GLView, {
 
     /**
      * Activate or deactivate a view.
-     * @name vs.ui.GLView#enable
+     * @name vs.gl.View#enable
      * @type {boolean}
      */
     set : function (v)
@@ -6893,7 +6893,7 @@ util.defineClassProperties (GLView, {
     /**
      * Translation vector [tx, ty]
      * <=> obj.translate (tx, ty)
-     * @name vs.ui.GLView#translation
+     * @name vs.gl.View#translation
      * @type {Array}
      */
     set : function (v)
@@ -6921,7 +6921,7 @@ util.defineClassProperties (GLView, {
 
     /**
      * Rotation angle in degre
-     * @name vs.ui.GLView#rotation
+     * @name vs.gl.View#rotation
      * @type {float}
      */
     set : function (v)
@@ -6948,7 +6948,7 @@ util.defineClassProperties (GLView, {
 
     /**
      * Scale the view
-     * @name vs.ui.GLView#scaling
+     * @name vs.gl.View#scaling
      * @type {float}
      */
     set : function (v)
@@ -6973,7 +6973,7 @@ util.defineClassProperties (GLView, {
 
     /**
      * Scale the view
-     * @name vs.ui.GLView#scaling
+     * @name vs.gl.View#scaling
      * @type {float}
      */
     set : function (v)
@@ -7001,7 +7001,7 @@ util.defineClassProperties (GLView, {
      * <p>
      * The property is set by default to [50, 50], which is the center of
      * the view.
-     * @name vs.ui.GLView#transformOrigin
+     * @name vs.gl.View#transformOrigin
      * @type Array.<number>
      */
     set : function (v)
@@ -7029,7 +7029,7 @@ util.defineClassProperties (GLView, {
 
     /**
      * Rotation angle in degre
-     * @name vs.ui.GLView#style
+     * @name vs.gl.View#style
      * @type {GLStyle}
      */
     set : function (v)
@@ -7053,7 +7053,7 @@ util.defineClassProperties (GLView, {
 
     /**
      * Rotation angle in degre
-     * @name vs.ui.GLView#constraint
+     * @name vs.gl.View#constraint
      * @type {GLStyle}
      */
     set : function (v)
@@ -7086,7 +7086,7 @@ util.defineClassProperties (GLView, {
                       Export
 *********************************************************************/
 /** @private */
-vs.ui.GLView = GLView;
+vs.gl.View = GLView;
 /**
   Copyright (C) 2009-2012. David Thevenin, ViniSketch SARL (c), and 
   contributors. All rights reserved
@@ -7106,12 +7106,12 @@ vs.ui.GLView = GLView;
 */
 
 /**
- *  The vs.ui.GLScrollView class
+ *  The vs.gl.ScrollView class
  *
- *  @extends vs.ui.GLView
+ *  @extends vs.gl.View
  *  @class
- *  vs.ui.GLScrollView defines the basic drawing, event-handling, of an application.
- *  The main different between vs.ui.GLScrollView and vs.ui.GLView classes is vs.ui.GLScrollView
+ *  vs.gl.ScrollView defines the basic drawing, event-handling, of an application.
+ *  The main different between vs.gl.ScrollView and vs.gl.View classes is vs.gl.ScrollView
  *  manages gesture events and scroll.
  *  <p>
  *  To allow pinch and scroll behavior, you need to set pinch and/or scroll
@@ -7120,22 +7120,22 @@ vs.ui.GLView = GLView;
  *  <p>
  * Delegates:
  *  <ul>
- *    <li/>viewWillStartZooming : function (vs.ui.GLScrollView the view)
- *    <li/>viewDidEndZooming : function (vs.ui.GLScrollView the view, number scale)
+ *    <li/>viewWillStartZooming : function (vs.gl.ScrollView the view)
+ *    <li/>viewDidEndZooming : function (vs.gl.ScrollView the view, number scale)
  *  </ul>
  *  <p>
  *  @example
- *  var myView = new vs.ui.GLScrollView (config);
+ *  var myView = new vs.gl.ScrollView (config);
  *  myView.minScale = 1;
  *  myView.maxScale = 2;
- *  myView.pinch = vs.ui.GLScrollView.SCALE; // activate pinch zoom
+ *  myView.pinch = vs.gl.ScrollView.SCALE; // activate pinch zoom
  *  myView.scroll = true; //
  *  
  *  @author David Thevenin
- * @name vs.ui.GLScrollView
+ * @name vs.gl.ScrollView
  *
  *  @constructor
- *   Creates a new vs.ui.GLScrollView.
+ *   Creates a new vs.gl.ScrollView.
  *
  * @param {Object} config the configuration structure [mandatory]
  */
@@ -7281,7 +7281,7 @@ util.defineClassProperties (GLScrollView, {
   /** 
    * Allow to scroll the view.
    * By default it not allowed
-   * @name vs.ui.GLScrollView#scroll 
+   * @name vs.gl.ScrollView#scroll 
    * @type {boolean|number}
    */ 
   set : function (v)
@@ -7911,8 +7911,8 @@ GLScrollView.__iscroll = __iscroll;
  *
  *  @author David Thevenin
  *
- *  @extends vs.ui.GLView
- * @name vs.ui.GLApplication
+ *  @extends vs.gl.View
+ * @name vs.gl.Application
  *  @constructor
  *  Main constructor
  *
@@ -7980,7 +7980,7 @@ GLApplication.prototype = {
   
   /**
    * Exit and terminate the application.
-   * @name vs.ui.GLApplication#exit 
+   * @name vs.gl.Application#exit 
    * @function
    */
   exit : function () {
@@ -7989,7 +7989,7 @@ GLApplication.prototype = {
   
   /**
    * @protected
-   * @name vs.ui.GLApplication#applicationStarted 
+   * @name vs.gl.Application#applicationStarted 
    * @function
    */
   applicationStarted : function () { },
@@ -8000,7 +8000,7 @@ GLApplication.prototype = {
    *
    * @private
    *
-   * @name vs.ui.GLApplication#setActiveStyleSheet 
+   * @name vs.gl.Application#setActiveStyleSheet 
    * @function
    * @param {string} title
    */
@@ -8011,7 +8011,7 @@ GLApplication.prototype = {
   /**
    * @protected
    *
-   * @name vs.ui.GLApplication#orientationWillChange 
+   * @name vs.gl.Application#orientationWillChange 
    * @function
    * @param {number} orientation = {0, 180, -90, 90}
    */
@@ -8023,7 +8023,7 @@ GLApplication.prototype = {
    *  If you have created your own dataflow (with new vs.core.Dataflow), you
    *  have to build it explicitly.
    *
-   * @name vs.ui.GLApplication#buildDataflow 
+   * @name vs.gl.Application#buildDataflow 
    * @function
    */
   buildDataflow: function () {
@@ -8044,7 +8044,7 @@ GLApplication.prototype = {
    *  myApp.bind ('scriptloaded', ...);
    *  myApp.loadScript ("resources/other.css");
    *
-   * @name vs.ui.GLApplication#loadScript 
+   * @name vs.gl.Application#loadScript 
    * @function
    * @param {string} path the script url [mandatory]
    */
@@ -8073,7 +8073,7 @@ GLApplication.prototype = {
    *  myApp.bind ('cssloaded', ...);
    *  myApp.loadCSS ("resources/other.css");
    *
-   * @name vs.ui.GLApplication#loadCSS 
+   * @name vs.gl.Application#loadCSS 
    * @function
    *
    * @param {string} path the css url [mandatory]
@@ -8100,7 +8100,7 @@ util.defineClassProperties (GLApplication, {
 //     /** 
 //      * Getter|Setter for size.<br/>
 //      * Gives access to the size of the GLApplication
-//      * @name vs.ui.GLApplication#size 
+//      * @name vs.gl.Application#size 
 //      *
 //      * @type {Array.<number>}
 //      */ 
@@ -8131,7 +8131,7 @@ util.defineClassProperties (GLApplication, {
      * normal behavior.<br/>
      * By default, the property is set to true.
      * 
-     * @name vs.ui.GLApplication#preventScroll 
+     * @name vs.gl.Application#preventScroll 
      *
      * @type {boolean}
      */ 
@@ -8287,7 +8287,7 @@ function __render_text_into_canvas_ctx (text, ctx, width, height, style) {
     lines = [],
     offsetY;
   
-  if (!color) color = GLColor.white;
+  if (!color) color = vs.gl.Color.white;
   
   var
     font = style.fontWeight + " " + 
@@ -8436,14 +8436,14 @@ var __text_management = {
 }
 
 /**
- * A ui.vs.GLText.
+ * A vs.gl.Text.
  *
  * @class
- * A ui.vs.GLText component displays a unselectable text.
+ * A vs.gl.Text component displays a unselectable text.
  *
  @constructor
- * @extends vs.ui.GLView
- * @name vs.ui.GLText
+ * @extends vs.gl.View
+ * @name vs.gl.Text
  */
 function GLText (config)
 {
@@ -8469,7 +8469,7 @@ GLText.prototype = {
   {
     GLView.prototype.initComponent.call (this);
     
-    this._style.backgroundColor = GLColor.transparent;
+    this._style.backgroundColor = vs.gl.Color.transparent;
 
     var size = this.__config__.size;
     if (!size) {
@@ -8515,7 +8515,7 @@ util.defineClassProperties (GLText, {
 
     /**
      * Set the text value
-     * @name vs.ui.GLText#name
+     * @name vs.gl.Text#name
      * @param {string} v
      */
     set : function (v)
@@ -8547,8 +8547,8 @@ util.defineClassProperties (GLText, {
 
   "size": {
    /** 
-     * Getter|Setter for size. Gives access to the size of the vs.ui.GLCanvas
-     * @name vs.ui.GLText#size 
+     * Getter|Setter for size. Gives access to the size of the vs.gl.Canvas
+     * @name vs.gl.Text#size 
      *
      * @type {Array.<number>}
      */ 
@@ -8683,11 +8683,11 @@ function gl_free_texture_image (src) {
 
 
 /**
- * A vs.ui.GLImage.
+ * A vs.gl.Image.
  * @constructor
- * @name vs.ui.GLImage
- * @extends vs.ui.GLView
- * An vs.ui.GLImage embeds an image in your application.
+ * @name vs.gl.Image
+ * @extends vs.gl.View
+ * An vs.gl.Image embeds an image in your application.
  */
 function GLImage (config)
 {
@@ -8728,7 +8728,7 @@ GLImage.prototype = {
   {
     GLView.prototype.initComponent.call (this);
     
-    this._style.backgroundColor = GLColor.transparent;
+    this._style.backgroundColor = vs.gl.Color.transparent;
     
     /* TODO */
   }
@@ -8744,7 +8744,7 @@ util.defineClassProperties (GLImage, {
   'src': {
     /**
      * Set the image url
-     * @name vs.ui.GLImage#src 
+     * @name vs.gl.Image#src 
      * @type {string}
      */
     set : function (v) {
@@ -8804,23 +8804,23 @@ ui.GLImage = GLImage;
 */
 
 /**
- *  The vs.ui.GLCanvas class
+ *  The vs.gl.Canvas class
  *
- *  @extends vs.ui.GLView
+ *  @extends vs.gl.View
  *  @class
- *  The vs.ui.GLCanvas class is a subclass of vs.ui.GLView that allows you to easily draw
+ *  The vs.gl.Canvas class is a subclass of vs.gl.View that allows you to easily draw
  *  arbitrary content within your HTML content.
  *  <p>
- *  When you instantiate the vs.ui.GLCanvas class you should reimpletement the draw method.
+ *  When you instantiate the vs.gl.Canvas class you should reimpletement the draw method.
  *
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.GLCanvas.
- * @name vs.ui.GLCanvas
+ *   Creates a new vs.gl.Canvas.
+ * @name vs.gl.Canvas
  *
  *  @example
- *  var myCanvas = new vs.ui.GLCanvas (config);
+ *  var myCanvas = new vs.gl.Canvas (config);
  *  myCanvas.init ();
  *
  *  myCanvas.draw = function (x, y, width, height)
@@ -8833,7 +8833,7 @@ ui.GLImage = GLImage;
  *    
  *  };
  *
- *  // other way to use vs.ui.GLCanvas
+ *  // other way to use vs.gl.Canvas
  *  myCanvas.moveTo(100,100).lineTo(200,200,100,200).closePath().stroke();
  *
  * @param {Object} config The configuration structure [mandatory]
@@ -8904,7 +8904,7 @@ GLCanvas.prototype = {
   
   /**
    *
-   * @name vs.ui.GLCanvas#getContext
+   * @name vs.gl.Canvas#getContext
    * @function
    * @return {CanvasRenderingContext2D} the canvas context
    */
@@ -8920,7 +8920,7 @@ GLCanvas.prototype = {
    * 5th argument specifies a radius for rounded corners. An optional
    * 6th argument specifies a clockwise rotation about (x,y).
    *
-   * @name vs.ui.GLCanvas#drawRect
+   * @name vs.gl.Canvas#drawRect
    * @function
    *
    * @param {number} x The x position
@@ -8981,13 +8981,13 @@ GLCanvas.prototype = {
    * radius.
    *
    * @example
-   *  var myCanvas = new vs.ui.GLCanvas (config);
+   *  var myCanvas = new vs.gl.Canvas (config);
    *  myCanvas.init ();
    *
    *  // draw a triangle
    *  myCanvas.c_polygon (100, 100, 50, 150, 300, 300);
    *
-   * @name vs.ui.GLCanvas#c_polygon
+   * @name vs.gl.Canvas#c_polygon
    * @function
    * @param {...number} list of number
    */
@@ -9042,7 +9042,7 @@ GLCanvas.prototype = {
   /**
    * This method draws elliptical arcs as well as circular arcs.
    *
-   * @name vs.ui.GLCanvas#c_ellipse
+   * @name vs.gl.Canvas#c_ellipse
    * @function
    * @example
    *  var myCanvas = new GLCanvas (config);
@@ -9092,10 +9092,10 @@ GLCanvas.prototype = {
   },
   
   /**
-   * vs.ui.GLCanvas draw method.
-   * Should be reimplement when you instanciate a vs.ui.GLCanvas object.
+   * vs.gl.Canvas draw method.
+   * Should be reimplement when you instanciate a vs.gl.Canvas object.
    *
-   * @name vs.ui.GLCanvas#draw
+   * @name vs.gl.Canvas#draw
    * @function
    *
    * @param {number} x The top position of the canvas; Default = 0
@@ -9228,46 +9228,46 @@ ui.GLCanvas = GLCanvas;
  * and ending at the given end angle, going in the given direction (defaulting * 
  * to clockwise), is added to the path, connected to the previous point by a 
  * straight line.
- * @name vs.ui.GLCanvas#c_arc
+ * @name vs.gl.Canvas#c_arc
  * @function
  */
 
 /**
  * Adds an arc with the given control points and radius to the current subpath, 
  * connected to the previous point by a straight line.
- * @name vs.ui.GLCanvas#c_arcTo
+ * @name vs.gl.Canvas#c_arcTo
  * @function
  */
 
 /**
  * Resets the current path.
- * @name vs.ui.GLCanvas#c_beginPath
+ * @name vs.gl.Canvas#c_beginPath
  * @function
  */
 
 /**
  * Adds the given point to the current subpath, connected to the previous one by 
  * a cubic Bézier curve with the given control points.
- * @name vs.ui.GLCanvas#c_bezierCurveTo
+ * @name vs.gl.Canvas#c_bezierCurveTo
  * @function
  */
 
 /**
  * Clears all pixels on the canvas in the given rectangle to transparent black.
- * @name vs.ui.GLCanvas#c_clearRect
+ * @name vs.gl.Canvas#c_clearRect
  * @function
  */
 
 /**
  * Further constrains the clipping region to the given path.
- * @name vs.ui.GLCanvas#c_clip
+ * @name vs.gl.Canvas#c_clip
  * @function
  */
 
 /**
  * Marks the current subpath as closed, and starts a new subpath with a point 
  * the same as the start and end of the newly closed subpath.
- * @name vs.ui.GLCanvas#c_closePath
+ * @name vs.gl.Canvas#c_closePath
  * @function
  */
 
@@ -9275,7 +9275,7 @@ ui.GLCanvas = GLCanvas;
  * Returns an ImageData object with the given dimensions in CSS pixels (which 
  * might map to a different number of actual device pixels exposed by the object 
  * itself). All the pixels in the returned object are transparent black.
- * @name vs.ui.GLCanvas#c_createImageData
+ * @name vs.gl.Canvas#c_createImageData
  * @function
  */
 
@@ -9284,7 +9284,7 @@ ui.GLCanvas = GLCanvas;
  * along the line given by the coordinates represented by the arguments.
  * If any of the arguments are not finite numbers, throws a NotSupportedError 
  * exception.
- * @name vs.ui.GLCanvas#c_createLinearGradient
+ * @name vs.gl.Canvas#c_createLinearGradient
  * @function
  */
 
@@ -9294,176 +9294,176 @@ ui.GLCanvas = GLCanvas;
  * If any of the arguments are not finite numbers, throws a NotSupportedError 
  * exception. If either of the radii are negative, throws an IndexSizeError 
  * exception.
- * @name vs.ui.GLCanvas#c_createRadialGradient
+ * @name vs.gl.Canvas#c_createRadialGradient
  * @function
  */
 
 /**
  * Returns a CanvasPattern object that uses the given image and repeats in the 
  * direction(s) given by the repetition argument.
- * @name vs.ui.GLCanvas#c_createPattern
+ * @name vs.gl.Canvas#c_createPattern
  * @function
  */
 
 /**
- * @name vs.ui.GLCanvas#c_drawFocusRing
+ * @name vs.gl.Canvas#c_drawFocusRing
  * @function
  */
 
 /**
  * Draws the given image onto the canvas.
- * @name vs.ui.GLCanvas#c_drawImage
+ * @name vs.gl.Canvas#c_drawImage
  * @function
  */
 
 /**
- * @name vs.ui.GLCanvas#c_fill
+ * @name vs.gl.Canvas#c_fill
  * @function
  */
 
 /**
  * Paints the given rectangle onto the canvas, using the current fill style.
- * @name vs.ui.GLCanvas#c_fillRect
+ * @name vs.gl.Canvas#c_fillRect
  * @function
  */
 
 /**
  * Fills the given text at the given position. If a maximum width is provided, 
  * the text will be scaled to fit that width if necessary.
- * @name vs.ui.GLCanvas#c_fillText
+ * @name vs.gl.Canvas#c_fillText
  * @function
  */
 
 /**
  * Returns an ImageData object containing the image data for the given rectangle 
  * of the canvas.
- * @name vs.ui.GLCanvas#c_getImageData
+ * @name vs.gl.Canvas#c_getImageData
  * @function
  */
 
 /**
  * Returns true if the given point is in the current path.
- * @name vs.ui.GLCanvas#c_isPointInPath
+ * @name vs.gl.Canvas#c_isPointInPath
  * @function
  */
 
 /**
  * Adds the given point to the current subpath, connected to the previous one by 
  * a straight line.
- * @name vs.ui.GLCanvas#c_lineTo
+ * @name vs.gl.Canvas#c_lineTo
  * @function
  */
 
 /**
  * Returns a TextMetrics object with the metrics of the given text in the 
  * current font.
- * @name vs.ui.GLCanvas#c_measureText
+ * @name vs.gl.Canvas#c_measureText
  * @function
  */
 
 /**
  * Creates a new subpath with the given point.
- * @name vs.ui.GLCanvas#c_moveTo
+ * @name vs.gl.Canvas#c_moveTo
  * @function
  */
 
 /**
  * Paints the data from the given ImageData object onto the canvas. If a dirty 
  * rectangle is provided, only the pixels from that rectangle are painted.
- * @name vs.ui.GLCanvas#c_putImageData
+ * @name vs.gl.Canvas#c_putImageData
  * @function
  */
 
 /**
  * Adds the given point to the current subpath, connected to the previous one by 
  * a quadratic Bézier curve with the given control point.
- * @name vs.ui.GLCanvas#c_quadraticCurveTo
+ * @name vs.gl.Canvas#c_quadraticCurveTo
  * @function
  */
 
 /**
  * Adds a new closed subpath to the path, representing the given rectangle.
- * @name vs.ui.GLCanvas#c_rect
+ * @name vs.gl.Canvas#c_rect
  * @function
  */
 
 /**
  * Pops the top state on the stack, restoring the context to that state.
- * @name vs.ui.GLCanvas#c_restore
+ * @name vs.gl.Canvas#c_restore
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply a rotation transformation with the 
  * given characteristics. The angle is in radians.
- * @name vs.ui.GLCanvas#c_rotate
+ * @name vs.gl.Canvas#c_rotate
  * @function
  */
 
 /**
  * Pushes the current state onto the stack.
- * @name vs.ui.GLCanvas#c_save
+ * @name vs.gl.Canvas#c_save
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply a scaling transformation with the 
  * given characteristics.
- * @name vs.ui.GLCanvas#c_scale
+ * @name vs.gl.Canvas#c_scale
  * @function
  */
 
 /**
  * Changes the transformation matrix to the matrix given by the arguments as 
  * described below.
- * @name vs.ui.GLCanvas#c_setTransform
+ * @name vs.gl.Canvas#c_setTransform
  * @function
  */
 
 /**
  * Strokes the subpaths with the current stroke style.
- * @name vs.ui.GLCanvas#c_stroke
+ * @name vs.gl.Canvas#c_stroke
  * @function
  */
 
 /**
  * Paints the box that outlines the given rectangle onto the canvas, using the 
  * current stroke style.
- * @name vs.ui.GLCanvas#c_strokeRect
+ * @name vs.gl.Canvas#c_strokeRect
  * @function
  */
 
 /**
  * Strokes the given text at the given position. If a maximum width is provided, 
  * the text will be scaled to fit that width if necessary.
- * @name vs.ui.GLCanvas#c_strokeText
+ * @name vs.gl.Canvas#c_strokeText
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply the matrix given by the arguments 
  * as described below.
- * @name vs.ui.GLCanvas#c_transform
+ * @name vs.gl.Canvas#c_transform
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply a translation transformation with 
  * the given characteristics.
- * @name vs.ui.GLCanvas#c_translate
+ * @name vs.gl.Canvas#c_translate
  * @function
  */
 
 /**
  * Returns the canvas element.
- * @name vs.ui.GLCanvas#c_canvas
+ * @name vs.gl.Canvas#c_canvas
  */
 
 /**
  * Can be set, to change the fill style.
  * <br />
  * Returns the current style used for filling shapes.
- * @name vs.ui.GLCanvas#c_fillStyle
+ * @name vs.gl.Canvas#c_fillStyle
  */
 
 /**
@@ -9471,7 +9471,7 @@ ui.GLCanvas = GLCanvas;
  * property; values that cannot be parsed as CSS font values are ignored.
  * <br />
  * Returns the current font settings
- * @name vs.ui.GLCanvas#c_font
+ * @name vs.gl.Canvas#c_font
  */
 
 /**
@@ -9479,28 +9479,28 @@ ui.GLCanvas = GLCanvas;
  * are ignored.
  * <br />
  * Returns the current alpha value applied to rendering operations.
- * @name vs.ui.GLCanvas#c_globalAlpha
+ * @name vs.gl.Canvas#c_globalAlpha
  */
 
 /**
  * Can be set, to change the composition operation. Unknown values are ignored.
  * <br />
  * Returns the current composition operation, from the list below.
- * @name vs.ui.GLCanvas#c_globalCompositeOperation
+ * @name vs.gl.Canvas#c_globalCompositeOperation
  */
 
 /**
  * Can be set, to change the line cap style.
  * <br />
  * Returns the current line cap style.
- * @name vs.ui.GLCanvas#c_lineCap
+ * @name vs.gl.Canvas#c_lineCap
  */
 
 /**
  * Can be set, to change the line join style.
  * <br />
  * Returns the current line join style.
- * @name vs.ui.GLCanvas#c_lineJoin
+ * @name vs.gl.Canvas#c_lineJoin
  */
 
 /**
@@ -9508,14 +9508,14 @@ ui.GLCanvas = GLCanvas;
  * values greater than zero are ignored.
  * <br />
  * Returns the current miter limit ratio.
- * @name vs.ui.GLCanvas#c_miterLimit
+ * @name vs.gl.Canvas#c_miterLimit
  */
 
 /**
  * Can be set, to change the line width. Values that are not finite values 
  * greater than zero are ignored.
  * Returns the current line width.
- * @name vs.ui.GLCanvas#c_lineWidth
+ * @name vs.gl.Canvas#c_lineWidth
  */
 
 /**
@@ -9523,7 +9523,7 @@ ui.GLCanvas = GLCanvas;
  * are ignored.
  * <br />
  * Returns the current shadow offset.
- * @name vs.ui.GLCanvas#c_shadowOffsetX
+ * @name vs.gl.Canvas#c_shadowOffsetX
  */
 
 /**
@@ -9531,7 +9531,7 @@ ui.GLCanvas = GLCanvas;
  * are ignored.
  * <br />
  * Returns the current shadow offset.
- * @name vs.ui.GLCanvas#c_shadowOffsetY
+ * @name vs.gl.Canvas#c_shadowOffsetY
  */
 
 /**
@@ -9539,7 +9539,7 @@ ui.GLCanvas = GLCanvas;
  * greater than or equal to zero are ignored.
  * <br />
  * Returns the current level of blur applied to shadows.
- * @name vs.ui.GLCanvas#c_shadowBlur
+ * @name vs.gl.Canvas#c_shadowBlur
  */
 
 /**
@@ -9547,21 +9547,21 @@ ui.GLCanvas = GLCanvas;
  * colors are ignored.
  * <br />
  * Returns the current shadow color.
- * @name vs.ui.GLCanvas#c_shadowColor
+ * @name vs.gl.Canvas#c_shadowColor
  */
 
 /**
  * Can be set, to change the stroke style.
  * <br />
  * Returns the current style used for stroking shapes.
- * @name vs.ui.GLCanvas#c_strokeStyle
+ * @name vs.gl.Canvas#c_strokeStyle
  */
 
 /**
  * Can be set, to change the alignment. The possible values are start, end, 
  * left, right, and center. Other values are ignored. The default is start.
  * Returns the current text alignment settings.
- * @name vs.ui.GLCanvas#c_textAlign
+ * @name vs.gl.Canvas#c_textAlign
  */
 
 /**
@@ -9570,7 +9570,7 @@ ui.GLCanvas = GLCanvas;
  * alphabetic.
  * <br />
  * Returns the current baseline alignment settings.
- * @name vs.ui.GLCanvas#c_textBaseline
+ * @name vs.gl.Canvas#c_textBaseline
  */
  var Chronometer = function (params) {
   this._state = vs.core.Task.STOPPED;
@@ -10023,16 +10023,16 @@ GLAnimation.prototype = {
    * The duration for each transformation. For setting only one duration,
    * use a string (ex anim.duration = 3000)
    * @type Array.<string>
-   * @name vs.fx.GLAnimation#duration
+   * @name vs.gl.Animation#duration
    */
   duration: GLAnimation.DEFAULT_DURATION,
 
   /**
    * Specifies how the intermediate values used during a transition are
    * calculated. <p />Use the constants to specify preset points of the curve:
-   * ({@link vs.fx.GLAnimation.EASE},
-   * {@link vs.fx.GLAnimation.LINEAR}, {@link vs.fx.GLAnimation.EASE_IN},
-   * {@link vs.fx.GLAnimation.EASE_OUT}, {@link vs.fx.GLAnimation.EASE_IN_OUT})
+   * ({@link vs.gl.Animation.EASE},
+   * {@link vs.gl.Animation.LINEAR}, {@link vs.gl.Animation.EASE_IN},
+   * {@link vs.gl.Animation.EASE_OUT}, {@link vs.gl.Animation.EASE_IN_OUT})
    * or the cubic-bezier function to specify your own points.
    * <p />
    * Specifies a cubic Bézier curve : cubic-bezier(P1x,P1y,P2x,P2y) <br />
@@ -10041,7 +10041,7 @@ GLAnimation.prototype = {
    * - Second point in the Bézier curve : P2x, P2y <br />
    *
    * @type Function
-   * @name vs.fx.GLAnimation#timing
+   * @name vs.gl.Animation#timing
    */
   timing: null,
 
@@ -10053,10 +10053,10 @@ GLAnimation.prototype = {
    *
    * @example
    * // define a animation with two transformations
-   * animation = new vs.fx.GLAnimation ()
+   * animation = new vs.gl.Animation ()
    * animation.setAnimations ({‘width’: 100, 'opacity': 0});
    *
-   * @name vs.fx.GLAnimation#setAnimations
+   * @name vs.gl.Animation#setAnimations
    * @function
    * @param {Array.<Array>} animations The array of [property, value]
    *         to animate
@@ -10073,7 +10073,7 @@ GLAnimation.prototype = {
       value = animations [property];
       if (!util.isString (property))
       {
-        console.warn ('vs.fx.GLAnimation, invalid constructor argument option: [' +
+        console.warn ('vs.gl.Animation, invalid constructor argument option: [' +
           property + ', ' + value + ']');
         continue;
       }
@@ -10097,13 +10097,13 @@ GLAnimation.prototype = {
    *  var translate = new vs.fx.TranslateAnimation (130, 150);
    *
    *  @example
-   *  var translate = new vs.fx.GLAnimation ({'translation' : [100,10,0], 'opacity' : 0});
+   *  var translate = new vs.gl.Animation ({'translation' : [100,10,0], 'opacity' : 0});
    *
    *  translate.keyFrame (0.2, {translation [50,50,0], 'opacity' : 0.5});
    *  translate.keyFrame (0.4, {translation [80,10,0]});
    *  translate.keyFrame (0.6, {'opacity' : 1});
    *
-   * @name vs.fx.GLAnimation#addKeyFrame
+   * @name vs.gl.Animation#addKeyFrame
    * @function
    * @param {number} pos The percentage value of animation
    * @param {Object | Array} values the object containing values for
@@ -10155,7 +10155,7 @@ GLAnimation.prototype = {
    *    myAnimation.process (a_gui_object, this.endAnimation, this);
    *  }
    *
-   * @name vs.fx.GLAnimation#process
+   * @name vs.gl.Animation#process
    * @function
    * @param {vs.fx.View} comp The component the view will be animated
    * @param {Function} clb an optional callback to call at the end of animation
@@ -10183,7 +10183,7 @@ GLAnimation.prototype = {
 /**
  * The ease timing function
  * Equivalent to cubic-bezier(0.25, 0.1, 0.25, 1.0)
- * @name vs.fx.GLAnimation.EASE
+ * @name vs.gl.Animation.EASE
  * @const
  */
 GLAnimation.EASE = generateCubicBezierFunction (0.25, 0.1, 0.25, 1.0);
@@ -10191,7 +10191,7 @@ GLAnimation.EASE = generateCubicBezierFunction (0.25, 0.1, 0.25, 1.0);
 /**
  * The linear timing function
  * Equivalent to cubic-bezier(0.0, 0.0, 1.0, 1.0)
- * @name vs.fx.GLAnimation.LINEAR
+ * @name vs.gl.Animation.LINEAR
  * @const
  */
 GLAnimation.LINEAR = function (pos) { return pos; };
@@ -10199,7 +10199,7 @@ GLAnimation.LINEAR = function (pos) { return pos; };
 /**
  * The ease in timing function
  * Equivalent to cubic-bezier(0.42, 0, 1.0, 1.0)
- * @name vs.fx.GLAnimation.EASE_IN
+ * @name vs.gl.Animation.EASE_IN
  * @const
  */
 GLAnimation.EASE_IN = generateCubicBezierFunction (0.42, 0.0, 1.0, 1.0);
@@ -10207,7 +10207,7 @@ GLAnimation.EASE_IN = generateCubicBezierFunction (0.42, 0.0, 1.0, 1.0);
 /**
  * The ease out timing function
  * Equivalent to cubic-bezier(0, 0, 0.58, 1.0)
- * @name vs.fx.GLAnimation.EASE_OUT
+ * @name vs.gl.Animation.EASE_OUT
  * @const
  */
 GLAnimation.EASE_OUT = generateCubicBezierFunction (0.0, 0.0, 0.58, 1.0);
@@ -10215,7 +10215,7 @@ GLAnimation.EASE_OUT = generateCubicBezierFunction (0.0, 0.0, 0.58, 1.0);
 /**
  * The ease in out timing function
  * Equivalent to cubic-bezier(0.42, 0, 0.58, 1.0)
- * @name vs.fx.GLAnimation.EASE_IN_OUT
+ * @name vs.gl.Animation.EASE_IN_OUT
  * @const
  */
 GLAnimation.EASE_IN_OUT = generateCubicBezierFunction (0.42, 0.0, 0.58, 1.0);
@@ -10223,7 +10223,7 @@ GLAnimation.EASE_IN_OUT = generateCubicBezierFunction (0.42, 0.0, 0.58, 1.0);
 /**
  * The ease in out timing function
  * Equivalent to cubic-bezier(0.42, 0, 0.58, 1.0)
- * @name vs.fx.GLAnimation.EASE_IN_OUT
+ * @name vs.gl.Animation.EASE_IN_OUT
  * @const
  */
 GLAnimation.EASE_OUT_IN = generateCubicBezierFunction (0.0, 0.42, 1.0, 0.58);
@@ -10249,23 +10249,23 @@ var AnimationDefaultOption = {
                       Export
 *********************************************************************/
 /** @private */
-vs.fx.GLAnimation = GLAnimation;
+vs.gl.Animation = GLAnimation;
 /*************************************************************
                 Predefined animation
 *************************************************************/
 
 /**
  *  Fade in an object.
- * @name vs.fx.GLAnimation.FadeIn
- *  @type vs.fx.GLAnimation
+ * @name vs.gl.Animation.FadeIn
+ *  @type vs.gl.Animation
  */
 var FadeIn = new GLAnimation ({'opacity': 1});
 FadeIn.keyFrame (0, {'opacity': 0});
 
 /**
  *  Fade out an object.
- * @name vs.fx.GLAnimation.FadeOut
- *  @type vs.fx.GLAnimation
+ * @name vs.gl.Animation.FadeOut
+ *  @type vs.gl.Animation
  */
 var FadeOut = new GLAnimation ({'opacity': 0});
 FadeOut.keyFrame (0, {'opacity': 1});
@@ -10294,7 +10294,7 @@ Shake.duration = 1000;
 
 /**
  *  Swing
- * @name vs.ext.GLAnimation.Swing
+ * @name vs.gl.Animation.Swing
  *  @type vs.GLAnimation
  */
 var Swing = new GLAnimation ({'rotation': 0});
@@ -10308,7 +10308,7 @@ Swing.origin = [50, 0];
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.Pulse
+ * @name vs.gl.Animation.Pulse
  *  @type vs.GLAnimation
  */
 var Pulse = new GLAnimation ({'scaling': 1});
@@ -10319,7 +10319,7 @@ Pulse.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FlipInX
+ * @name vs.gl.Animation.FlipInX
  *  @type vs.GLAnimation
  */
 var FlipInX = new GLAnimation ({'rotation': [0, 0, 0], 'opacity': 1});
@@ -10331,7 +10331,7 @@ FlipInX.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FlipOutX
+ * @name vs.gl.Animation.FlipOutX
  *  @type vs.GLAnimation
  */
 var FlipOutX = new GLAnimation ({'rotation': [90, 0, 0], 'opacity': 0});
@@ -10340,7 +10340,7 @@ FlipOutX.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FlipInY
+ * @name vs.gl.Animation.FlipInY
  *  @type vs.GLAnimation
  */
 var FlipInY = new GLAnimation ({'rotation': [0, 0, 0], 'opacity': 1});
@@ -10351,7 +10351,7 @@ FlipInY.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FlipOutY
+ * @name vs.gl.Animation.FlipOutY
  *  @type vs.GLAnimation
  */
 var FlipOutY = new GLAnimation ({'rotation': [0, 90, 0], 'opacity': 0});
@@ -10360,7 +10360,7 @@ FlipOutY.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FadeInUp
+ * @name vs.gl.Animation.FadeInUp
  *  @type vs.GLAnimation
  */
 var FadeInUp = new GLAnimation ({'translation': [0,0], 'opacity': 1});
@@ -10378,7 +10378,7 @@ FadeOutUp.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FadeInDown
+ * @name vs.gl.Animation.FadeInDown
  *  @type vs.GLAnimation
  */
 var FadeInDown = new GLAnimation ({'translation': [0,0], 'opacity': 1});
@@ -10387,7 +10387,7 @@ FadeInDown.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FadeOutDown
+ * @name vs.gl.Animation.FadeOutDown
  *  @type vs.GLAnimation
  */
 var FadeOutDown = new GLAnimation ({'translation': [0, 20], 'opacity': 0});
@@ -10396,7 +10396,7 @@ FadeOutDown.duration = 300;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FadeInLeft
+ * @name vs.gl.Animation.FadeInLeft
  *  @type vs.GLAnimation
  */
 var FadeInLeft = new GLAnimation ({'translation': [0,0], 'opacity': 1});
@@ -10405,7 +10405,7 @@ FadeInLeft.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FadeOutLeft
+ * @name vs.gl.Animation.FadeOutLeft
  *  @type vs.GLAnimation
  */
 var FadeOutLeft = new GLAnimation ({'translation': [20, 0], 'opacity': 0});
@@ -10414,7 +10414,7 @@ FadeOutLeft.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FadeInLeft
+ * @name vs.gl.Animation.FadeInLeft
  *  @type vs.GLAnimation
  */
 var FadeInRight = new GLAnimation ({'translation': [0,0], 'opacity': 1});
@@ -10423,7 +10423,7 @@ FadeInRight.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.ext.GLAnimation.FadeOutLeft
+ * @name vs.gl.Animation.FadeOutLeft
  *  @type vs.GLAnimation
  */
 var FadeOutRight = new GLAnimation ({'translation': [-20, 0], 'opacity': 0});
@@ -10604,11 +10604,11 @@ var setupTrajectory = function (trajs, obj, property, traj_values)
 
 
 /**
- *  The vs.ui.GLButton class
+ *  The vs.gl.Button class
  *
- *  @extends vs.ui.GLView
+ *  @extends vs.gl.View
  *  @class
- *  The GLButton class is a subclass of vs.ui.GLView that intercepts pointer-down
+ *  The GLButton class is a subclass of vs.gl.View that intercepts pointer-down
  *  events and sends an 'select' event to a target object when it’s clicked
  *  or pressed.
  *
@@ -10632,16 +10632,16 @@ var setupTrajectory = function (trajs, obj, property, traj_values)
  *  var config.id = 'mybutton';
  *  var config.text = 'Hello';
  *
- *  var myButton = vs.ui.GLButton (config);
+ *  var myButton = vs.gl.Button (config);
  *  myButton.init ();
  *
  * <p>
  *
  *  @author David Thevenin
- * @name vs.ui.GLButton
+ * @name vs.gl.Button
  *
  *  @constructor
- *   Creates a new vs.ui.GLButton.
+ *   Creates a new vs.gl.Button.
  *
  * @param {Object} config the configuration structure [mandatory]
 */
@@ -10776,7 +10776,7 @@ util.defineClassProperties (GLButton, {
     /** 
      * Getter|Setter for text. Allow to get or change the text draw
      * by the button
-     * @name vs.ui.GLButton#text 
+     * @name vs.gl.Button#text 
      * @type String
      */ 
     set : function (v) {
@@ -10804,8 +10804,8 @@ util.defineClassProperties (GLButton, {
 
   "size": {
    /** 
-     * Getter|Setter for size. Gives access to the size of the vs.ui.GLCanvas
-     * @name vs.ui.GLCanvas#size 
+     * Getter|Setter for size. Gives access to the size of the vs.gl.Canvas
+     * @name vs.gl.Canvas#size 
      *
      * @type {Array.<number>}
      */ 
@@ -10862,15 +10862,15 @@ ui.GLButton = GLButton;
 
 
 /**
- *  The vs.ui.GLAbstractList class
+ *  The vs.gl.AbstractList class
  *
- *  @extends vs.ui.GLScrollView
+ *  @extends vs.gl.ScrollView
  *  @class
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.GLAbstractList.
- * @name vs.ui.GLAbstractList
+ *   Creates a new vs.gl.AbstractList.
+ * @name vs.gl.AbstractList
  *
  * @param {Object} config the configuration structure [mandatory]
  */
@@ -11130,7 +11130,7 @@ GLAbstractList.prototype = {
    * <p>
    * If to time is defined, the default time is set to 200ms.
    *
-   * @name vs.ui.GLAbstractList#scrollToElementAt 
+   * @name vs.gl.AbstractList#scrollToElementAt 
    * @function
    * @param {Number} index the element index
    * @param {Number} time [Optional] the scroll duration
@@ -11195,7 +11195,7 @@ util.defineClassProperties (GLAbstractList, {
   'model': {
     /** 
      * Getter|Setter for data. Allow to get or change the vertical list
-     * @name vs.ui.GLAbstractList#model 
+     * @name vs.gl.AbstractList#model 
      *
      * @type vs.core.Array
      */ 
@@ -11235,10 +11235,10 @@ util.defineClassProperties (GLAbstractList, {
   'data': {
     /** 
      * Getter|Setter for data. Allow to get or change the vertical list
-     * @name vs.ui.GLAbstractList#data 
+     * @name vs.gl.AbstractList#data 
      *
      * @deprecated
-     * @see vs.ui.GLAbstractList#model 
+     * @see vs.gl.AbstractList#model 
      * @type Array
      */ 
     set : function (v)
@@ -11296,7 +11296,7 @@ ui.GLAbstractList = GLAbstractList;
 
 /**
  *  @class
- *  vs.ui.GLTemplate is GUI template system you can use to create the view
+ *  vs.gl.Template is GUI template system you can use to create the view
  *  of component for instance. <br/>
  *  A template is a HTML text fragment containing template tags. There is two
  *  ways to use template :
@@ -11345,7 +11345,7 @@ ui.GLAbstractList = GLAbstractList;
  *  @constructor
  *  Main constructor
  *
- * @name vs.ui.GLTemplate
+ * @name vs.gl.Template
  *
  * @param {string} config the configuration structure [mandatory]
  */
@@ -11353,7 +11353,7 @@ function GLTemplate (str) {
   this._str = str;
 }
 
-/** @name vs.ui.GLTemplate# */
+/** @name vs.gl.Template# */
 GLTemplate.prototype = {
   /**
    * @protected
@@ -11371,7 +11371,7 @@ GLTemplate.prototype = {
   /**
    * HTML String of the template <p>
    *
-   * @name vs.ui.GLTemplate#toString
+   * @name vs.gl.Template#toString
    * @function
    *
    * @return {String} HTML String of the template
@@ -11382,7 +11382,7 @@ GLTemplate.prototype = {
 
   /**
    *
-   * @name vs.ui.GLTemplate#compileView
+   * @name vs.gl.Template#compileView
    * @function
    *
    * @param {String} className The view class Name. By default vs.ui.View.
@@ -11410,7 +11410,7 @@ GLTemplate.prototype = {
 
   /**
    *
-   * @name vs.ui.GLTemplate#compileView
+   * @name vs.gl.Template#compileView
    * @function
    * @private
    *
@@ -11443,7 +11443,7 @@ GLTemplate.prototype = {
    * @example
    *  myTemplate.apply (['John', 25]);
    *
-   * @name vs.ui.GLTemplate#apply
+   * @name vs.gl.Template#apply
    * @function
    *
    * @param {Object} values The template values.
@@ -11954,7 +11954,7 @@ GLTemplate.parseHTML = function (html) {
     }
   }
   catch (e) {
-    console.error ("vs.ui.GLTemplate.parseHTML failed:");
+    console.error ("vs.gl.Template.parseHTML failed:");
     if (e.stack) console.log (e.stack);
     console.error (e);
     return undefined;
@@ -11965,7 +11965,7 @@ GLTemplate.parseHTML = function (html) {
                       Export
 *********************************************************************/
 /** @private */
-vs.ui.GLTemplate = GLTemplate;
+vs.gl.Template = GLTemplate;
 /**
   Copyright (C) 2009-2012. David Thevenin, ViniSketch SARL (c), and 
   contributors. All rights reserved
@@ -11991,11 +11991,11 @@ vs.ui.GLTemplate = GLTemplate;
 *********************************************************************/
 
 /**
- *  The vs.ui.GLList class
+ *  The vs.gl.List class
  *
  *  @extends vs.ui.AbstractList
  *  @class
- *  The vs.ui.GLList class draw a list of ListItem and allows the user to 
+ *  The vs.gl.List class draw a list of ListItem and allows the user to 
  *  select one object from it.
  *  <p>
  *  Events:
@@ -12005,7 +12005,7 @@ vs.ui.GLTemplate = GLTemplate;
  *  </ul>
  *  <p>
  *  To reduce performance issues, you can deactivate events handling
- *  for the list, using vs.ui.GLList#itemsSelectable property.
+ *  for the list, using vs.gl.List#itemsSelectable property.
  *
  * Data can be filtered. The filter he array contains the member to filters
  * and filter:
@@ -12013,14 +12013,14 @@ vs.ui.GLTemplate = GLTemplate;
  *   list.filters = [{
  *      property:'title',
  *      value:'o',
- *      matching:vs.ui.GLList.FILTER_CONTAINS,
+ *      matching:vs.gl.List.FILTER_CONTAINS,
  *      strict:true
  *   }];
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.GLList.
- * @name vs.ui.GLList
+ *   Creates a new vs.gl.List.
+ * @name vs.gl.List
  *
  * @param {Object} config the configuration structure [mandatory]
  */
@@ -12033,19 +12033,19 @@ function GLList (config)
 
 /**
  * @const 
- * @name vs.ui.GLList.BLOCK_LIST
+ * @name vs.gl.List.BLOCK_LIST
  */
 GLList.BLOCK_LIST = 'BlockList';
 
 /**
  * @const 
- * @name vs.ui.GLList.TAB_LIST
+ * @name vs.gl.List.TAB_LIST
  */
 GLList.TAB_LIST = 'TabList';
 
 /**
  * @const 
- * @name vs.ui.GLList.DEFAULT_LIST
+ * @name vs.gl.List.DEFAULT_LIST
  */
 GLList.DEFAULT_LIST = 'DefaultList';
 
@@ -12088,9 +12088,9 @@ GLList.prototype = {
   *********************************************************************/
 
   /**
-   * Return the list of items in the vs.ui.GLList
+   * Return the list of items in the vs.gl.List
    *
-   * @name vs.ui.GLList#getItems 
+   * @name vs.gl.List#getItems 
    * @function
    * @return {Array} the items
    */
@@ -12174,7 +12174,7 @@ util.defineClassProperties (GLList, {
      * management
      * which uses processing time.
      * By default its set to true
-     * @name vs.ui.GLList#itemsSelectable 
+     * @name vs.gl.List#itemsSelectable 
      * @type {boolean}
      */ 
     set : function (v)
@@ -12206,7 +12206,7 @@ util.defineClassProperties (GLList, {
   'selectedIndex': {
     /** 
      * Getter for selectedIndex.
-     * @name vs.ui.GLList#selectedIndex 
+     * @name vs.gl.List#selectedIndex 
      * @type {number}
      */ 
     get : function ()
@@ -12219,7 +12219,7 @@ util.defineClassProperties (GLList, {
   'selectedItem': {
     /** 
      * Getter for selectedItem.
-     * @name vs.ui.GLList#selectedItem 
+     * @name vs.gl.List#selectedItem 
      * @type {Object}
      */ 
     get : function ()
@@ -13424,11 +13424,11 @@ function LIST_TEMPLATE_CONTENT (node, config) {
     str_template += ">" + item.innerHTML + "</vs-view>";
 
     // create the template object
-    var template = new vs.ui.GLTemplate (str_template);
+    var template = new vs.gl.Template (str_template);
     
     // generate the comp
     var config = buildConfiguration (item);
-    var comp = template.compileView ("vs.ui.GLAbstractListItem", config);
+    var comp = template.compileView ("vs.gl.AbstractListItem", config);
 //    _setCompProperties (comp, comp_properties);
 //    return comp;
 
@@ -13514,15 +13514,15 @@ function LIST_ATTACHED_CALLBACK () {
 function ALLOW_CHILD_CONTENT (node) {}
 
 var LIST_COMPONENT = [
-  ["vs.ui.GLText", "vs-text", TEXT_CONTENT],
-  ["vs.ui.GLButton", "vs-button", TEXT_CONTENT],
-  ["vs.ui.GLApplication", "vs-application", ALLOW_CHILD_CONTENT],
-  ["vs.ui.GLCanvas", "vs-canvas", NO_CONTENT],
-  ["vs.ui.GLImage", "vs-image", NO_CONTENT],
-  ["vs.ui.GLList", "vs-list", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
-  ["vs.ui.GLScrollView", "vs-scroll-view", ALLOW_CHILD_CONTENT],
-  ["vs.ui.GLView", "vs-view", ALLOW_CHILD_CONTENT],
-  ["vs.ui.GLView", "vs-template", ALLOW_CHILD_CONTENT]
+  ["vs.gl.Text", "vs-text", TEXT_CONTENT],
+  ["vs.gl.Button", "vs-button", TEXT_CONTENT],
+  ["vs.gl.Application", "vs-application", ALLOW_CHILD_CONTENT],
+  ["vs.gl.Canvas", "vs-canvas", NO_CONTENT],
+  ["vs.gl.Image", "vs-image", NO_CONTENT],
+  ["vs.gl.List", "vs-list", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
+  ["vs.gl.ScrollView", "vs-scroll-view", ALLOW_CHILD_CONTENT],
+  ["vs.gl.View", "vs-view", ALLOW_CHILD_CONTENT],
+  ["vs.gl.View", "vs-template", ALLOW_CHILD_CONTENT]
 ]
 
 function INT_DECODER (value) {
@@ -13820,7 +13820,7 @@ function declareComponent (className, comp_name, manage_content,
     
     if (parentComp) {
       if (this.nodeName == "VS-TEMPLATE") {
-        if (parentComp instanceof vs.ui.GLList) {
+        if (parentComp instanceof vs.gl.List) {
           window.list = parentComp;
           parentComp.__template_obj = this._comp_;
 //          parentComp._renderData ();
@@ -13880,7 +13880,7 @@ function declareComponent (className, comp_name, manage_content,
   
   decl = {prototype: comp_proto};
   
-  if (className == "vs.ui.GLApplication") {
+  if (className == "vs.gl.Application") {
     decl.extends = "body";
   }
   

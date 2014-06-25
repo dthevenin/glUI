@@ -1,7 +1,7 @@
 var GLMap = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLImage,
+  parent: vs.gl.Image,
   _pourcentage : 0,
 
   initComponent : function () {

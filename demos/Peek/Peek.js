@@ -18,33 +18,33 @@
  
 var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var duration = 300;
-var timing = GLAnimation.EASE_OUT;
+var timing = vs.gl.Animation.EASE_OUT;
 
-var weekLineOut = new GLAnimation ({"translation": [0,0,0]});
+var weekLineOut = new vs.gl.Animation ({"translation": [0,0,0]});
 weekLineOut.keyFrame (0, {"translation": [0,0,0]});
 weekLineOut.duration = duration;
 weekLineOut.timing = timing;
 
-var weekLineIn = new GLAnimation ({"translation": [0,0,0]});
+var weekLineIn = new vs.gl.Animation ({"translation": [0,0,0]});
 weekLineIn.duration = duration;
 weekLineIn.timing = timing;
 
-var day1LineIn = new GLAnimation ({"rotation": [0,0,0]});
+var day1LineIn = new vs.gl.Animation ({"rotation": [0,0,0]});
 day1LineIn.keyFrame (0, {"rotation": [-90,0,0]});
 day1LineIn.duration = duration;
 day1LineIn.timing = timing;
 
-var day1LineOut = new GLAnimation ({"rotation": [-90,0,0]});
+var day1LineOut = new vs.gl.Animation ({"rotation": [-90,0,0]});
 day1LineOut.keyFrame (0, {"rotation": [0,0,0]});
 day1LineOut.duration = duration;
 day1LineOut.timing = timing;
 
-var day2LineIn = new GLAnimation ({"rotation": [0,0,0], "translation": [0,0,0]});
+var day2LineIn = new vs.gl.Animation ({"rotation": [0,0,0], "translation": [0,0,0]});
 day2LineIn.keyFrame (0, {"rotation": [90,0,0], "translation": [0,0,0]});
 day2LineIn.duration = duration;
 day2LineIn.timing = timing;
 
-var day2LineOut = new GLAnimation ({"rotation": [90,0,0], "translation": [0,0,0]});
+var day2LineOut = new vs.gl.Animation ({"rotation": [90,0,0], "translation": [0,0,0]});
 day2LineOut.keyFrame (0, {"rotation": [0,0,0], "translation": [0,0,0]});
 day2LineOut.duration = duration;
 day2LineOut.timing = timing;
@@ -54,7 +54,7 @@ var dayStyle, dateStyle, hourStyle, textStyle;
 var Peek = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
   
   settings_open: false,
 
@@ -70,52 +70,56 @@ var Peek = vs.core.createClass ({
     this.buildNavBar ();
     this.buildDay ();
     this.buildCalendar();
+    
+    this.style.backgroundColor = new vs.gl.Color (26, 33, 51);
   },
   
   initStyles : function () {
-    dayStyle = new GLStyle ();
+    dayStyle = new vs.gl.Style ();
     dayStyle.fontSize = "12px";
     dayStyle.fontFamily = "arial";
-    dayStyle.color = GLColor.white;
+    dayStyle.color = vs.gl.Color.white;
     dayStyle.textAlign = "center";
+    dayStyle.backgroundColor = new vs.gl.Color (186, 204, 69);
 
-    dateStyle = new GLStyle ();
+    dateStyle = new vs.gl.Style ();
     dateStyle.fontSize = "18px";
     dateStyle.fontFamily = "arial";
-    dateStyle.color = GLColor.white;
-    dateStyle.textAlign = "center";  
+    dateStyle.color = vs.gl.Color.white;
+    dateStyle.textAlign = "center"; 
+    dateStyle.backgroundColor = new vs.gl.Color (186, 204, 69);
 
-    hourStyle = new GLStyle ();
+    hourStyle = new vs.gl.Style ();
     hourStyle.fontSize = "18px";
     hourStyle.fontFamily = "arial";
-    hourStyle.color = GLColor.white;
-    hourStyle.backgroundColor = new GLColor (252, 181, 48);
+    hourStyle.color = vs.gl.Color.white;
+    hourStyle.backgroundColor = new vs.gl.Color (252, 181, 48);
     hourStyle.textAlign = "center";
 
-    textStyle = new GLStyle ();
+    textStyle = new vs.gl.Style ();
     textStyle.fontSize = "18px";
     textStyle.fontFamily = "arial";
-    textStyle.color = new GLColor (105, 137, 145);
+    textStyle.color = new vs.gl.Color (105, 137, 145);
     textStyle.textAlign = "left";
   },
 
   buildNavBar : function () {
   
-    this.nav_bar = new vs.ui.GLView ({
+    this.nav_bar = new vs.gl.View ({
       size: [window.innerWidth, 64],
       position: [0,0]
     }).init ();
-    this.nav_bar.style.backgroundColor = new GLColor (26, 33, 51);
+    this.nav_bar.style.backgroundColor = new vs.gl.Color (26, 33, 51);
 
     this.add (this.nav_bar);
     
-    var button = new vs.ui.GLImage ({
+    var button = new vs.gl.Image ({
       size: [51, 64],
       src: "assets/leaf.png"
     }).init ();
     this.nav_bar.add (button);
 
-    this.monthView = new vs.ui.GLText ({
+    this.monthView = new vs.gl.Text ({
       size: [150, 20],
       text : "XXX"
     }).init ();
@@ -124,11 +128,11 @@ var Peek = vs.core.createClass ({
     
     this.monthView.style.fontSize = "18px";
     this.monthView.style.fontFamily = "arial";
-    this.monthView.style.color = GLColor.white;
+    this.monthView.style.color = vs.gl.Color.white;
     this.monthView.style.textAlign = "center";
     this.nav_bar.add (this.monthView);
 
-    this.yearView = new vs.ui.GLText ({
+    this.yearView = new vs.gl.Text ({
       size: [50, 20],
       text : "2014"
     }).init ();
@@ -137,7 +141,7 @@ var Peek = vs.core.createClass ({
     
     this.yearView.style.fontSize = "15px";
     this.yearView.style.fontFamily = "arial";
-    this.yearView.style.color = new GLColor (186, 204, 69);
+    this.yearView.style.color = new vs.gl.Color (186, 204, 69);
     this.yearView.style.textAlign = "right";
     this.nav_bar.add (this.yearView);
   },
@@ -270,7 +274,7 @@ var Peek = vs.core.createClass ({
 var WeekView = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
   
   settings_open: false,
   
@@ -280,8 +284,8 @@ var WeekView = vs.core.createClass ({
   
   constructor : function (config) {
     config = config || {};
-    config.style = new GLStyle ();
-    config.style.backgroundColor = new GLColor (186, 204, 69);
+    config.style = new vs.gl.Style ();
+    config.style.backgroundColor = new vs.gl.Color (186, 204, 69);
     config.size = [window.innerWidth, 104];
     
     this._super (config);
@@ -293,7 +297,7 @@ var WeekView = vs.core.createClass ({
     var size = this._size, width = size[0] / 7, x = 0;
     
     for (var i = 0; i < 7; i++) {
-      var text = new vs.ui.GLText ({
+      var text = new vs.gl.Text ({
         size: [width, 20],
         position: [x, 40],
         style: dayStyle,
@@ -301,7 +305,7 @@ var WeekView = vs.core.createClass ({
       }).init ();
       this.add (text);
       
-      var text = new vs.ui.GLText ({
+      var text = new vs.gl.Text ({
         size: [width, 20],
         position: [x, 62],
         style: dateStyle,
@@ -320,7 +324,7 @@ var WeekView = vs.core.createClass ({
 var DayView = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
   
   properties: {
     "hour": "hourView#text",
@@ -329,20 +333,20 @@ var DayView = vs.core.createClass ({
   
   constructor : function (config) {
     config = config || {};
-    config.style = new GLStyle ();
-    config.style.backgroundColor = GLColor.white;
+    config.style = new vs.gl.Style ();
+    config.style.backgroundColor = vs.gl.Color.white;
     config.size = [window.innerWidth, 104];
     
     this._super (config);
     
-    this.hourView = new vs.ui.GLText ({
+    this.hourView = new vs.gl.Text ({
       size: [60, 30],
       position: [20, 40],
       style: hourStyle
     }).init ();
     this.add (this.hourView);
   
-    this.textView = new vs.ui.GLText ({
+    this.textView = new vs.gl.Text ({
       size: [400, 30],
       position: [90, 40],
       style: textStyle

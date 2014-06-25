@@ -1,30 +1,30 @@
 var Test = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
 
   initComponent : function () {
     this._super ();
 
-    this.glView1 = new vs.ui.GLView ({
+    var view1 = new vs.gl.View ({
       position: [50, 50],
       size: [400, 400]
     }).init ();
-    this.add (this.glView1);
-    this.glView1.style.backgroundColor = GLColor.red;
+    this.add (view1);
+    view1.style.backgroundColor = vs.gl.Color.red;
 
-    this.glView2 = new vs.ui.GLView ({
+    var view2 = new vs.gl.View ({
       position: [50, 20],
       size: [200, 100]
     }).init ();
-    this.glView1.add (this.glView2);
-    this.glView2.style.backgroundColor = GLColor.yellow;
+    view1.add (view2);
+    view2.style.backgroundColor = vs.gl.Color.yellow;
 
-    var constraint = this.glView2.constraint;
-    constraint.top = 30;
+    var constraint = view2.constraint;
+    constraint.bottom = 30;
     constraint.right = 10;
     constraint.middleY = 0;
-    this.glView2.redraw ();
+    view2.redraw ();
   }
 });
 

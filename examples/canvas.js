@@ -1,7 +1,7 @@
 var Test = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
 
   initComponent : function () {
     this._super ();
@@ -19,7 +19,7 @@ var Test = vs.core.createClass ({
     }).init ();
     document.body.appendChild (slider2.view);
 
-    this.canvas = new vs.ui.GLCanvas ({
+    this.canvas = new vs.gl.Canvas ({
       position: [100, 100],
       size: [256, 256],
       transformOrigin : [140, 75]

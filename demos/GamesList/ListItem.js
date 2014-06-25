@@ -20,7 +20,7 @@
 var ListItem = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
   
   properties: {
     "imageUrl": "imageView#src",
@@ -46,46 +46,46 @@ var ListItem = vs.core.createClass ({
       size = [300, 70]
     }
     
-    this.imageView = new vs.ui.GLImage ({
+    this.imageView = new vs.gl.Image ({
       position: [5, 5],
       size: [60, 60]
     }).init ();
     this.add (this.imageView);
-    this.imageView.style.backgroundColor = GLColor.transparent;
+    this.imageView.style.backgroundColor = vs.gl.Color.transparent;
 
 
-    this.titleView = new vs.ui.GLText ({
+    this.titleView = new vs.gl.Text ({
       size: [size [0] - 80, 20],
       position: [70, 5]
     }).init ();
     
     this.titleView.style.fontSize = "18px";
     this.titleView.style.fontFamily = "arial";
-    this.titleView.style.color = GLColor.black;
+    this.titleView.style.color = vs.gl.Color.black;
     this.titleView.style.textAlign = "left";
 
     this.add (this.titleView);
 
-    this.infoView = new vs.ui.GLText ({
+    this.infoView = new vs.gl.Text ({
       size: [size [0] - 80, 20],
       position: [70, 25]
     }).init ();
     
     this.infoView.style.fontSize = "12px";
     this.infoView.style.fontFamily = "arial";
-    this.infoView.style.color = GLColor.black;
+    this.infoView.style.color = vs.gl.Color.black;
     this.infoView.style.textAlign = "left";
 
     this.add (this.infoView);
 
-    this.ratingView = new vs.ui.GLText ({
+    this.ratingView = new vs.gl.Text ({
       size: [100, 15],
       position: [size [0] - 120, size[1] - 15]
     }).init ();
     
     this.ratingView.style.fontSize = "10px";
     this.ratingView.style.fontFamily = "FontAwesome";
-    this.ratingView.style.color = new GLColor (100, 100, 100);
+    this.ratingView.style.color = new vs.gl.Color (100, 100, 100);
     this.ratingView.style.textAlign = "right";
 
     this.add (this.ratingView);

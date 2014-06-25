@@ -1,7 +1,7 @@
 var Test = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLApplication,
+  parent: vs.gl.Application,
 
   initComponent : function () {
     this._super ();
@@ -12,21 +12,21 @@ var Test = vs.core.createClass ({
     }).init ();
     this.add (slider);
 
-    this.glView1 = new vs.ui.GLView ({
+    this.glView1 = new vs.gl.View ({
       position: [50, 70],
       size: [150, 100],
       transformOrigin : [75, 50]
     }).init ();
     this.add (this.glView1);
-    this.glView1.style.backgroundColor = GLColor.blue;
+    this.glView1.style.backgroundColor = vs.gl.Color.blue;
 
-    this.glView2 = new vs.ui.GLView ({
+    this.glView2 = new vs.gl.View ({
       position: [150, 270],
       size: [200, 100],
       transformOrigin : [100, 50]
     }).init ();
     this.add (this.glView2);
-    this.glView2.style.backgroundColor = GLColor.red;
+    this.glView2.style.backgroundColor = vs.gl.Color.red;
 
 //    this.glView2.opacity = 0.4;
     this.glView2.style.opacity = 0.4;
@@ -37,6 +37,17 @@ var Test = vs.core.createClass ({
       });
 
     slider.connect ("value").to (this.glView2, "rotation");
+
+//     for (var i = 0; i < 100; i++) {
+//     index = 10 * i;
+//     view = new vs.gl.View ({
+//       position: [150 + index, 270 + index],
+//       size: [200, 100],
+//       transformOrigin : [100, 50]
+//     }).init ();
+//     this.add (view);
+//     view.style.backgroundColor = vs.gl.Color.red;
+//     }
   }
 });
 

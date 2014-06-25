@@ -19,38 +19,38 @@
 var iconStyle;
 function getStyle () {
   if (!iconStyle) {
-    iconStyle = new GLStyle ();
+    iconStyle = new vs.gl.Style ();
     iconStyle.fontSize = "18px";
     iconStyle.fontFamily = "arial";
-    iconStyle.color = new GLColor (196,189,233);
+    iconStyle.color = new vs.gl.Color (196,189,233);
     iconStyle.textAlign = "center";
-    iconStyle.backgroundColor = GLColor.transparent;
+    iconStyle.backgroundColor = vs.gl.Color.transparent;
   }
   return iconStyle;
 }
 
-var showTitle = new GLAnimation ({"scaling": 1});
+var showTitle = new vs.gl.Animation ({"scaling": 1});
 showTitle.keyFrame (0, {"scaling": 0.3});
 showTitle.duration = 300;
 showTitle.begin = 100;
 
-var hideTitle = new GLAnimation ({"scaling": 0});
+var hideTitle = new vs.gl.Animation ({"scaling": 0});
 hideTitle.keyFrame (0, {"scaling": 1});
 hideTitle.duration = 400;
 
-var showIcon = new GLAnimation ({"scaling": 1});
+var showIcon = new vs.gl.Animation ({"scaling": 1});
 showIcon.keyFrame (0, {"scaling": 0.3});
 showIcon.duration = 300;
 showIcon.begin = 100;
 
-var hideIcon = new GLAnimation ({"scaling": 0});
+var hideIcon = new vs.gl.Animation ({"scaling": 0});
 hideIcon.keyFrame (0, {"scaling": 1});
 hideIcon.duration = 400;
 
 var ConfigIcon = vs.core.createClass ({
 
   /** parent class */
-  parent: vs.ui.GLView,
+  parent: vs.gl.View,
   
   properties: {
     "name" : "titleLabel#text",
@@ -64,7 +64,7 @@ var ConfigIcon = vs.core.createClass ({
 
     this.size = [80, 110]
     
-    this.img = new vs.ui.GLImage ({
+    this.img = new vs.gl.Image ({
       size : [80, 80],
       transformOrigin: [40, 40],
       position: [0, 0],
@@ -73,7 +73,7 @@ var ConfigIcon = vs.core.createClass ({
     this.img.init ();
     this.add (this.img);
     
-    this.titleLabel = new vs.ui.GLText ({
+    this.titleLabel = new vs.gl.Text ({
       size : [80, 20],
       position: [0, 85],
       transformOrigin: [40, 40],
@@ -94,7 +94,7 @@ var ConfigIcon = vs.core.createClass ({
     
     hideIcon.process (this.titleLabel);
     hideIcon.process (this.img, function () {
-      vs.ui.GLView.prototype.hide.call (self);
+      vs.gl.View.prototype.hide.call (self);
       if (clb) clb ();
     });
   }
