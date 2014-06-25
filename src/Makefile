@@ -91,32 +91,35 @@ vs_core.js:
 	$(CAT) core/program.js >> $@
 	$(CAT) core/engineInit.js >> $@
 	$(CAT) core/engine.js >> $@
-	$(CAT) core/vs_ui_GLConstraint.js >> $@
-	$(CAT) core/vs_ui_GLColor.js >> $@
-	$(CAT) core/vs_ui_GLStyle.js >> $@
+	$(CAT) core/texture_util.js >> $@
+	$(CAT) core/Constraint.js >> $@
+	$(CAT) core/Color.js >> $@
+	$(CAT) core/Style.js >> $@
 	$(CAT) core/event/vs_core_GLEventSource.js >> $@
 	$(CAT) core/event/GLPicking.js >> $@
 	$(CAT) core/event/GLPointerEvent.js >> $@
 	$(CAT) core/event/MouseEvent.js >> $@
 	$(CAT) core/event/TouchEvent.js >> $@
 	$(CAT) core/event/PointerEvent.js >> $@
-	$(CAT) core/view/vs_ui_GLView.js >> $@
-	$(CAT) core/view/vs_ui_GLScrollView.js >> $@
-	$(CAT) core/view/vs_ui_GLApplication.js >> $@
-	$(CAT) core/view/vs_ui_GLText.js >> $@
-	$(CAT) core/view/vs_ui_GLImage.js >> $@
-	$(CAT) core/view/vs_ui_GLCanvas.js >> $@
+	$(CAT) core/view/iScroll.js >> $@
+	$(CAT) core/view/Group.js >> $@
+	$(CAT) core/view/Transform.js >> $@
+	$(CAT) core/view/View.js >> $@
+	$(CAT) core/view/Application.js >> $@
+	$(CAT) core/view/Text.js >> $@
+	$(CAT) core/view/Image.js >> $@
+	$(CAT) core/view/Canvas.js >> $@
 	
 vs_gl_widget.js:
-	$(CAT) widget/vs_ui_GLButton.js >> $@
-	$(CAT) widget/vs_ui_GLAbstractList.js >> $@
+	$(CAT) widget/Button.js >> $@
+	$(CAT) widget/AbstractList.js >> $@
 	$(CAT) widget/vs_ui_GLTemplate.js >> $@
-	$(CAT) widget/vs_ui_GLList.js >> $@
+	$(CAT) widget/List.js >> $@
 	
 vs_gl_animation.js:
 	$(CAT) animation/Chronometer.js >> $@
 	$(CAT) animation/Trajectories.js >> $@
-	$(CAT) animation/GLAnimation.js >> $@
+	$(CAT) animation/Animation.js >> $@
 	$(CAT) animation/DefaultAnimations.js >> $@
 	$(CAT) animation/engine.js >> $@
 	$(CAT) animation/chainingAPI.js >> $@
