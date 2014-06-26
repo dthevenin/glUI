@@ -1,7 +1,7 @@
 
 function View (config)
 {
-  this.parent = GLEventSource;
+  this.parent = EventSource;
   this.parent (config);
   this.constructor = View;
   
@@ -87,7 +87,7 @@ View.prototype = {
     this._scroll = false;
     
     Group.prototype.destructor.call (this);
-    GLEventSource.prototype.destructor.call (this);
+    EventSource.prototype.destructor.call (this);
   },
 
   /**
@@ -109,7 +109,7 @@ View.prototype = {
    */
   initComponent : function ()
   {
-    GLEventSource.prototype.initComponent.call (this);
+    EventSource.prototype.initComponent.call (this);
     
     this._style = new Style ();
     this._constraint = null;
@@ -376,7 +376,7 @@ makeTextureProjection) {
 util.extend (View.prototype, Group.prototype);
 util.extend (View.prototype, Transform.prototype);
 util.extend (View.prototype, vs.ui.RecognizerManager);
-util.extendClass (View, GLEventSource);
+util.extendClass (View, EventSource);
 
 /********************************************************************
                   Define class properties

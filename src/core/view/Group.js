@@ -64,7 +64,7 @@ Group.prototype.viewDidAdd = function () {};
  * @name vs.ui.Group#isChild
  * @function
  *
- * @param {vs.GLEventSource} child The component to be removed.
+ * @param {vs.gl.View} child The component to be removed.
  * @return {boolean}
  */
 Group.prototype.isChild = function (child)
@@ -82,7 +82,7 @@ Group.prototype.isChild = function (child)
  *  Add the specified child component to this component.
  *  <p>
  *  The component can be a graphic component (vs.ui.Group) or
- *  a non graphic component (vs.GLEventSource).
+ *  a non graphic component (vs.gl.View).
  *  In case of vs.ui.Group its mandatory to set the extension.
  *  <p>
  *  The add is a lazy add! The child's view can be already in
@@ -125,7 +125,7 @@ Group.prototype.add = function (child)
  * @name vs.ui.Group#remove
  * @function
  *
- * @param {vs.GLEventSource} child The component to be removed.
+ * @param {vs.gl.View} child The component to be removed.
  */
 Group.prototype.remove = function (child)
 {

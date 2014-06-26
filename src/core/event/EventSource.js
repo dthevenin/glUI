@@ -32,11 +32,11 @@
  *
  * @param {Object} config the configuration structure [mandatory]
  */
-function GLEventSource (config)
+function EventSource (config)
 {
   this.parent = VSObject;
   this.parent (config);
-  this.constructor = core.GLEventSource;
+  this.constructor = EventSource;
 
   this.__bindings__ = {};
   
@@ -45,8 +45,8 @@ function GLEventSource (config)
   this._pointer_end = [];
 }
 
-/** @name vs.core.GLEventSource# */
-GLEventSource.prototype =
+/** @name vs.gl.EventSource */
+EventSource.prototype =
 {
   /**
    * @protected
@@ -129,7 +129,7 @@ GLEventSource.prototype =
   },
 
   /**
-   * @name vs.core.GLEventSource#_clone
+   * @name vs.gl.EventSource#_clone
    * @function
    * @private
    *
@@ -228,10 +228,10 @@ GLEventSource.prototype =
   /**
    *  Propagate an event
    *  <p>
-   *  All Object listening this GLEventSource will receive this new handled
+   *  All Object listening this EventSource will receive this new handled
    *  event.
    *
-   * @name vs.core.GLEventSource#propagate
+   * @name vs.gl.EventSource#propagate
    * @function
    *
    * @param {String} spec the event specification [mandatory]
@@ -262,7 +262,7 @@ GLEventSource.prototype =
    * if this object receive an event it repropagates it if nobody has
    * overcharged the notify method.
    *
-   * @name vs.core.GLEventSource#notify
+   * @name vs.gl.EventSource#notify
    * @function
    *
    * @protected
@@ -272,11 +272,11 @@ GLEventSource.prototype =
     this.propagate (event.type, event.data);
   }
 };
-util.extendClass (GLEventSource, VSObject);
+util.extendClass (EventSource, VSObject);
 
 /********************************************************************
                       Export
 *********************************************************************/
 /** @private */
-core.GLEventSource = GLEventSource;
+vs.gl.EventSource = EventSource;
 

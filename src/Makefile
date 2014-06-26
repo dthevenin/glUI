@@ -95,7 +95,7 @@ vs_core.js:
 	$(CAT) core/Constraint.js >> $@
 	$(CAT) core/Color.js >> $@
 	$(CAT) core/Style.js >> $@
-	$(CAT) core/event/vs_core_GLEventSource.js >> $@
+	$(CAT) core/event/EventSource.js >> $@
 	$(CAT) core/event/GLPicking.js >> $@
 	$(CAT) core/event/GLPointerEvent.js >> $@
 	$(CAT) core/event/MouseEvent.js >> $@
@@ -113,7 +113,6 @@ vs_core.js:
 vs_gl_widget.js:
 	$(CAT) widget/Button.js >> $@
 	$(CAT) widget/AbstractList.js >> $@
-	$(CAT) widget/vs_ui_GLTemplate.js >> $@
 	$(CAT) widget/List.js >> $@
 	
 vs_gl_animation.js:
