@@ -96,11 +96,10 @@ vs_core.js:
 	$(CAT) core/Color.js >> $@
 	$(CAT) core/Style.js >> $@
 	$(CAT) core/event/EventSource.js >> $@
-	$(CAT) core/event/GLPicking.js >> $@
-	$(CAT) core/event/GLPointerEvent.js >> $@
+	$(CAT) core/event/Picking.js >> $@
+	$(CAT) core/event/PointerEvent.js >> $@
 	$(CAT) core/event/MouseEvent.js >> $@
 	$(CAT) core/event/TouchEvent.js >> $@
-	$(CAT) core/event/PointerEvent.js >> $@
 	$(CAT) core/view/iScroll.js >> $@
 	$(CAT) core/view/Group.js >> $@
 	$(CAT) core/view/Transform.js >> $@
