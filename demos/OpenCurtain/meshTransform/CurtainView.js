@@ -68,10 +68,7 @@ define ('CurtainView', [], function () {
       this._slide = [0, 300];
 
       this.setShadersProgram (shaders_program);
-      this.addEventListener ('webglcontextrestored', function () {
-        self.setShadersProgram (shaders_program);
-      });
-      
+
       this.setUdpateVerticesFunction (CurtainView.updateVerticesFunction.bind (this));
     },
 

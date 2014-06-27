@@ -67,11 +67,21 @@ var Peek = vs.core.createClass ({
     this._week_view = [];
    
     this.initStyles ();
+
+    this.mainView = new vs.gl.View ({
+      scroll: true
+    }).init ();
+    this.mainView.constraint.top = 64;
+    this.mainView.constraint.bottom = 0;
+    this.mainView.constraint.left = 0;
+    this.mainView.constraint.right = 0;
+    
+    this.add (this.mainView);
+
     this.buildNavBar ();
+    
     this.buildDay ();
     this.buildCalendar();
-    
-    this.style.backgroundColor = new vs.gl.Color (26, 33, 51);
   },
   
   initStyles : function () {
@@ -80,14 +90,12 @@ var Peek = vs.core.createClass ({
     dayStyle.fontFamily = "arial";
     dayStyle.color = vs.gl.Color.white;
     dayStyle.textAlign = "center";
-    dayStyle.backgroundColor = new vs.gl.Color (186, 204, 69);
 
     dateStyle = new vs.gl.Style ();
     dateStyle.fontSize = "18px";
     dateStyle.fontFamily = "arial";
     dateStyle.color = vs.gl.Color.white;
-    dateStyle.textAlign = "center"; 
-    dateStyle.backgroundColor = new vs.gl.Color (186, 204, 69);
+    dateStyle.textAlign = "center";  
 
     hourStyle = new vs.gl.Style ();
     hourStyle.fontSize = "18px";
@@ -157,12 +165,12 @@ var Peek = vs.core.createClass ({
     // the calendar start to monday
     date.setTime (date.getTime () - (date.getDay () - 1) * 86400000);
     
-    var y = 64, index = 0;    
+    var y = 0, index = 0;    
     while (date.getMonth () <= month) {
       var line = new WeekView ({index: index++}).init ();
       line.position = [0, y];
       line.setDate (date);
-      this.add (line);
+      this.mainView.add (line);
       line.addPointerRecognizer (this.__tap_recognizer);
       
       this._week_view.push (line);
@@ -172,7 +180,7 @@ var Peek = vs.core.createClass ({
   
   buildDay: function () {
     this.day1 = new DayView ({
-      position : [0, 64],
+      position : [0, 0],
       transformOrigin: [0,0],
       rotation: [-90, 0, 0],
       hour: "12:00",
@@ -181,7 +189,7 @@ var Peek = vs.core.createClass ({
     this.day1.hide ();
     
     this.day2 = new DayView ({
-      position : [0, 64],
+      position : [0, 0],
       transformOrigin: [0,104],
       rotation: [90, 0, 0],
       hour: "20:00",
@@ -189,8 +197,8 @@ var Peek = vs.core.createClass ({
     }).init ();
     this.day2.hide ();
 
-    this.add (this.day2);
-    this.add (this.day1);
+    this.mainView.add (this.day2);
+    this.mainView.add (this.day1);
   },
   
   openWeek : function (index) {
@@ -208,6 +216,7 @@ var Peek = vs.core.createClass ({
     this.day1.show ();
     day1LineIn.process (this.day1, function () {
       self._is_animating = false;
+      self.mainView.refresh ();
     });
     
     this.day2.show ();
@@ -232,6 +241,7 @@ var Peek = vs.core.createClass ({
     
     function endClose () {
       self._is_animating = false;
+      self.mainView.refresh ();
       if (clb) clb ();
     }
 

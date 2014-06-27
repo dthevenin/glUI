@@ -48,13 +48,13 @@ var CoverFlow = vs.core.createClass ({
     
     list.add = function (item) {
       item.__index = this.__children.length;
-      View.prototype.add.call (list, item);
+      vs.gl.View.prototype.add.call (list, item);
       
       item.addPointerRecognizer (__tap_recognizer);
     }
     
- = function    list.refresh = function () {
-      View.prototype.refresh.call (this);
+    list.refresh = function () {
+      vs.gl.View.prototype.refresh.call (this);
 
       var children = this.__children;
       if (!children || children.length === 0) return;

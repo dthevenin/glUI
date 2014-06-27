@@ -10,7 +10,7 @@
 
 require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureView, ListItem, Data) {
   
-  var demoSize = [400, 550];
+  var demoSize = [window.innerWidth, window.innerHeight];
   var demoPosition = [0, 0];
 
   var CurtainDemo = vs.core.createClass ({

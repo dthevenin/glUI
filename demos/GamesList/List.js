@@ -63,8 +63,8 @@ var GamesList = vs.core.createClass ({
     this.add (list);
     list.style.backgroundColor = vs.gl.Color.white;
     var l = Data.length;
-//    for (var i = 0; i < l * 10; i++) {
-    for (var i = 0; i < l * 1; i++) {
+    for (var i = 0; i < l * 10; i++) {
+//    for (var i = 0; i < l * 1; i++) {
 //    for (var i = 0; i < 2; i++) {
       var d = Data [i % l];
       var model = new vs.core.Model ().init ();

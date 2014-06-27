@@ -78,10 +78,6 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
       var self = this;
 
       this.setShadersProgram (shaders_program);
-      
-      this.addEventListener ('webglcontextrestored', function () {
-        self.setShadersProgram (shaders_program);
-      });
 
       this.setUdpateVerticesFunction (
         CurtainTextureView.updateVerticesFunction.bind (this)
