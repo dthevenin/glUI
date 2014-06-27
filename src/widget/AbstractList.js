@@ -159,22 +159,18 @@ AbstractList.prototype = {
    */
   refresh : function ()
   {
-    View.prototype.refresh.call (this);
-
     var children = this.__children;
-    if (!children || children.length === 0) return;
+    if (children && children.length) {
+      var i = 0, l = children.length, view, y = 0, size;
+      for (; i < l; i++) {
+        view = children [i];
+        view.position = [0, y];
+        size = view._size;
+        y += size [1];
+      }
+    }
     
-    var i = 0, l = children.length, view, y = 0, size;
-    for (; i < l; i++) {
-      view = children [i];
-      view.position = [0, y];
-      size = view._size;
-      y += size [1];
-    }
-
-    if (this.__scroll__) {
-      this.__scroll__.refresh ();
-    }
+    View.prototype.refresh.call (this);
   },
 
   /**
@@ -310,121 +306,6 @@ AbstractList.prototype = {
 };
 util.extendClass (AbstractList, View);
 
-/********************************************************************
-                  Define class properties
-********************************************************************/
-
-util.defineClassProperties (AbstractList, {
-
-  'scroll': {
-    /** 
-     * Allow to scroll the list items.
-     * By default it not allowed
-     * @name vs.ui.CheckBox#scroll 
-     * @type {boolean}
-     */ 
-    set : function (v)
-    {
-      if (v)
-      {
-        this._scroll = vs.ui.ScrollView.VERTICAL_SCROLL;
-        this._setup_scroll ();
-      }
-      else
-      {
-        this._scroll = false;
-        this._remove_scroll ();
-      }
-    },
-  
-    /** 
-     * @ignore
-     * @type {boolean}
-     */ 
-    get : function ()
-    {
-      return this._scroll?true:false;
-    }
-  },
-  
-  'model': {
-    /** 
-     * Getter|Setter for data. Allow to get or change the vertical list
-     * @name vs.gl.AbstractList#model 
-     *
-     * @type vs.core.Array
-     */ 
-    set : function (v)
-    {
-      if (!v) return;
-      
-      if (util.isArray (v))
-      {
-        this._model.removeAll ();
-        this._model.add.apply (this._model, v);
-      }
-      else if (v.toJSON && v.propertyChange)
-      {
-        if (this._model_allocated)
-        {
-          this._model.unbindChange (null, this, this._modelChanged);
-          util.free (this._model);
-        }
-        this._model_allocated = false;
-        this._model = v;
-        this._model.bindChange (null, this, this._modelChanged);
-      }
-      
-      this.inPropertyDidChange ();
-    },
-  
-    /**
-     * @ignore
-     */
-    get : function ()
-    {
-      return this._model;
-    }
-  },
-  
-  'data': {
-    /** 
-     * Getter|Setter for data. Allow to get or change the vertical list
-     * @name vs.gl.AbstractList#data 
-     *
-     * @deprecated
-     * @see vs.gl.AbstractList#model 
-     * @type Array
-     */ 
-    set : function (v)
-    {
-      if (!util.isArray (v)) return;
-      
-      if (!this._model_allocated)
-      {
-        this._model = new vs.core.Array ();
-        this._model.init ();
-        this._model_allocated = true;
-        this._model.bindChange (null, this, this._modelChanged);
-      }
-      else
-      {
-        this._model.removeAll ();
-      }
-      this._model.add.apply (this._model, v);
-
-      this.inPropertyDidChange ();
-    },
-  
-    /**
-     * @ignore
-     */
-    get : function ()
-    {
-      return this._model._data.slice ();
-    }
-  }
-});
 
 /********************************************************************
                       Export
