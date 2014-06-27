@@ -20,6 +20,9 @@ function View (config)
 
   createSprite (this);
 }
+util.extend (View.prototype, Group.prototype);
+util.extend (View.prototype, Transform.prototype);
+util.extend (View.prototype, vs.ui.RecognizerManager);
 
 View.__should_render = true;
 View.__nb_animation = 0;
@@ -38,344 +41,339 @@ View._positionStyle = undefined;
  */
 var _template_nodes = null;
 
-View.prototype = {
 
-  /*****************************************************************
-   *                Private members
-   ****************************************************************/
-  /**
-   * @protected
-   * @type {boolean}
-   */
-  _visible: true,
+/*****************************************************************
+ *                Private members
+ ****************************************************************/
+/**
+ * @protected
+ * @type {boolean}
+ */
+View.prototype._visible = true;
 
-  /**
-   *
-   * @protected
-   * @type {boolean}
-   */
-  _enable: true,
+/**
+ *
+ * @protected
+ * @type {boolean}
+ */
+View.prototype._enable = true;
 
-  /**
-   * @protected
-   * @type {Array}
-   */
-  _position : null,
+/**
+ * @protected
+ * @type {Array}
+ */
+View.prototype._position = null;
 
-  /**
-   * @protected
-   * @type {Array}
-   */
-  _size : null,
-    
-  _constraint: null,
-  _style: null,
+/**
+ * @protected
+ * @type {Array}
+ */
+View.prototype._size = null;
+View.prototype._constraint = null;
+View.prototype._style = null;
 
-  /*****************************************************************
-   *
-   ****************************************************************/
+/*****************************************************************
+ *
+ ****************************************************************/
 
-  /**
-   * @protected
-   * @function
-   */
-  destructor : function ()
-  {
-    deleteSprite (this);
+/**
+ * @protected
+ * @function
+ */
+View.prototype.destructor = function ()
+{
+  deleteSprite (this);
 
-    this._remove_scroll ();
-    this._scroll = false;
-    
-    Group.prototype.destructor.call (this);
-    EventSource.prototype.destructor.call (this);
-  },
+  this._remove_scroll ();
+  this._scroll = false;
 
-  /**
-   * @protected
-   * @function
-   */
-  refresh : function ()
-  {
-    Group.prototype.refresh.call (this);
-    this._updateSizeAndPos ();
-    if (this.__scroll__) {
-      this.__scroll__.refresh ();
-    }
-  },
+  Group.prototype.destructor.call (this);
+  EventSource.prototype.destructor.call (this);
+};
 
-  /**
-   * @protected
-   * @function
-   */
-  initComponent : function ()
-  {
-    EventSource.prototype.initComponent.call (this);
-    
-    this._style = new Style ();
-    this._constraint = null;
+/**
+ * @protected
+ * @function
+ */
+View.prototype.refresh = function ()
+{
+  Group.prototype.refresh.call (this);
+  this._updateSizeAndPos ();
+  if (this.__scroll__) {
+    this.__scroll__.refresh ();
+  }
+};
 
-    if (!this.__config__) this.__config__ = {};
-    this.__config__.id = this.id;
-    
-    initSprite (this);
-  },
+/**
+ * @protected
+ * @function
+ */
+View.prototype.initComponent = function ()
+{
+  EventSource.prototype.initComponent.call (this);
 
-  /**
-   * Notifies that the component's view was added to the DOM.<br/>
-   * You can override this method to perform additional tasks
-   * associated with presenting the view.<br/>
-   * If you override this method, you must call the parent method.
-   *
-   * @name vs.ui.View#viewDidAdd
-   * @function
-   */
-  viewDidAdd : function () {
-    Group.prototype.viewDidAdd.call (this);
-    this._updateSizeAndPos ();
-  },
+  this._style = new Style ();
+  this._constraint = null;
 
-  /**
-   * @protected
-   * @function
-   */
-  notify : function (event) {},
-  
-  setUdpateVerticesFunction: function (update_gl_vertices) {
-    setUpdateVerticesSprite (this, update_gl_vertices);
-  },
-  
-  setShadersProgram: function (program) {
-    setShadersProgram (this, program);
-  },
-  
-  setVerticesAllocationFunctions: function (resolution, sprite_vertices_func, normal_vertices_func, triangle_faces_func,
+  if (!this.__config__) this.__config__ = {};
+  this.__config__.id = this.id;
+
+  initSprite (this);
+};
+
+/**
+ * Notifies that the component's view was added to the DOM.<br/>
+ * You can override this method to perform additional tasks
+ * associated with presenting the view.<br/>
+ * If you override this method, you must call the parent method.
+ *
+ * @name vs.ui.View#viewDidAdd
+ * @function
+ */
+View.prototype.viewDidAdd = function () {
+  Group.prototype.viewDidAdd.call (this);
+  this._updateSizeAndPos ();
+};
+
+/**
+ * @protected
+ * @function
+ */
+View.prototype.notify = function (event) {},
+
+View.prototype.setUdpateVerticesFunction= function (update_gl_vertices) {
+  setUpdateVerticesSprite (this, update_gl_vertices);
+},
+
+View.prototype.setShadersProgram= function (program) {
+  setShadersProgram (this, program);
+},
+
+View.prototype.setVerticesAllocationFunctions= function (resolution, sprite_vertices_func, normal_vertices_func, triangle_faces_func,
 makeTextureProjection) {
-    setVerticesAllocationFunctions (
-      this,
-      resolution,
-      sprite_vertices_func,
-      normal_vertices_func,
-      triangle_faces_func,
-      makeTextureProjection
-    );
-  },
-  
+  setVerticesAllocationFunctions (
+    this,
+    resolution,
+    sprite_vertices_func,
+    normal_vertices_func,
+    triangle_faces_func,
+    makeTextureProjection
+  );
+};
+
 
 /********************************************************************
-                  GUI Utilities
+                GUI Utilities
 ********************************************************************/
-  redraw : function (clb)
-  {
-    this._updateSizeAndPos ();
-  },
-  
-  /**
-   * @protected
-   * @function
-   * This function cost a lot!
-   */
-  _updateSizeAndPos : function ()
-  {
-    if (this._constraint) {
-      this._constraint.__update_view (this);
-    }
+View.prototype.redraw = function (clb)
+{
+  this._updateSizeAndPos ();
+};
 
-    this.__should_update_gl_vertices = true;
-    this.__should_update_gl_matrix = true;
-  },
-  
+/**
+ * @protected
+ * @function
+ * This function cost a lot!
+ */
+View.prototype._updateSizeAndPos = function ()
+{
+  if (this._constraint) {
+    this._constraint.__update_view (this);
+  }
+
+  this.__should_update_gl_vertices = true;
+  this.__should_update_gl_matrix = true;
+};
+
 /********************************************************************
 
 ********************************************************************/
 
 
-  /**
-   *  Displays the GUI Object
-   *
-   * @name vs.ui.View#show
-   * @param {Function} clb a function to call a the end of show process
-   * @function
-   */
-  show : function (clb)
-  {
-    if (this._visible) { return; }
-    if (!util.isFunction (clb)) clb = undefined;
+/**
+ *  Displays the GUI Object
+ *
+ * @name vs.ui.View#show
+ * @param {Function} clb a function to call a the end of show process
+ * @function
+ */
+View.prototype.show = function (clb)
+{
+  if (this._visible) { return; }
+  if (!util.isFunction (clb)) clb = undefined;
 
-    this.__is_hidding = false;
-    this.__is_showing = true;
+  this.__is_hidding = false;
+  this.__is_showing = true;
 
-    this._show_object (clb);
-  },
+  this._show_object (clb);
+};
 
-  /**
-   *  Show the GUI Object
-   *
-   * @private
-   * @param {Function} clb a function to call a the end of show process
-   * @function
-   */
-  _show_object : function (clb)
-  {
-    vs.scheduleAction (function () {
-      View.__should_render = true;
-    });
-    
-    this.__visibility_anim = undefined;
+/**
+ *  Show the GUI Object
+ *
+ * @private
+ * @param {Function} clb a function to call a the end of show process
+ * @function
+ */
+View.prototype._show_object = function (clb)
+{
+  vs.scheduleAction (function () {
+    View.__should_render = true;
+  });
 
-    if (!this.__is_showing) { return; }
-    this.__is_showing = false;
+  this.__visibility_anim = undefined;
 
-    this._visible = true;
-    var self = this;
+  if (!this.__is_showing) { return; }
+  this.__is_showing = false;
 
-    this.propertyChange ();
+  this._visible = true;
+  var self = this;
+
+  this.propertyChange ();
+  if (clb) {
     if (clb) {
-      if (clb) {
-        vs.scheduleAction (function () {clb.call (self);});
-      }
-    }
-  },
-
-  /**
-   *  Hides the GUI Object
-   *
-   * @name vs.ui.View#hide
-   * @param {Function} clb a function to call a the end of show process
-   * @function
-   */
-  hide : function (clb)
-  {
-    if (!this._visible && !this.__is_showing) { return; }
-    if (!util.isFunction (clb)) clb = undefined; 
-
-    this._visible = false;
-    
-    this.__is_showing = false;
-    this.__is_hidding = true;
-
-    this._hide_object (clb);
-  },
-
-  /**
-   *  Hides the GUI Object
-   *
-   * @private
-   * @function
-   * @param {Function} clb a function to call a the end of show process
-   */
-  _hide_object: function (clb) {
-    vs.scheduleAction (function () {
-      View.__should_render = true;
-    });
-    
-    if (this._visible) { return; }
-    this.__visibility_anim = undefined;
-
-    if (!this.__is_hidding) { return; }
-    
-    this.__is_hidding = false;
-    if (clb) {
-      if (clb) {
-        vs.scheduleAction (function () {clb.call (self);});
-      }
-    }
-    this.propertyChange ();
-  },
-
-/********************************************************************
-
-********************************************************************/
-
-  /**
-   * @protected
-   * @function
-   */
-  _propagateToParent : function (e)
-  {
-    if (this.__parent) {
-      
-      if (this.__parent.handleEvent) {
-        to_propatate = this.__parent.handleEvent (e);
-      }
-      
-      if (to_propatate) {
-        this.__parent._propagateToParent (e);
-      }
-    }
-  },
-
-  /**
-   * @name vs.ui.View#notifyToParent
-   * @function
-   */
-  notifyToParent : function (e)
-  {
-    if (!this.__parent) { return; }
-    if (this.__parent.handleEvent)
-    {
-      this.__parent.handleEvent (e);
-    }
-    else if (this.__parent.notify)
-    {
-      this.__parent.notify (e);
-    }
-  },
-
-  /**
-   * Did enable delegate
-   * @name vs.ui.View#_didEnable
-   * @protected
-   */
-  _didEnable : function () {},
-  
-/********************************************************************
-                    scrolling management
-*********************************************************************/
-
-  
-  _setup_scroll : function () {
-    
-    this.__gl_scroll = vec3.create ();
-    
-    this._remove_scroll ();
-    
-    var config = {};
-    config.scrollY = false;
-    config.scrollX = false;
-    
-    if (this._scroll === vs.ui.ScrollView.VERTICAL_SCROLL) {
-      config.scrollY = true;
-    }
-    else if (this._scroll === vs.ui.ScrollView.HORIZONTAL_SCROLL) {
-      config.scrollX = true;
-    }
-    else if (this._scroll === vs.ui.ScrollView.SCROLL) {
-      config.scrollX = true;
-      config.scrollY = true;
-    }
-  
-    this.__scroll__ = new gl.__iscroll (this, config);
-    this.refresh ();
-  },
-  
-  __gl_update_scroll : function (now) {
-    if (this.__scroll__) {
-      this.__scroll__.__gl_update_scroll (now);
-    }
-  },
-  
-  _remove_scroll : function () {
-    if (this.__scroll__)
-    {
-      this.__scroll__.destroy ();
-      delete (this.__scroll__);
-      this.__scroll__ = undefined;
+      vs.scheduleAction (function () {clb.call (self);});
     }
   }
 };
-util.extend (View.prototype, Group.prototype);
-util.extend (View.prototype, Transform.prototype);
-util.extend (View.prototype, vs.ui.RecognizerManager);
+
+/**
+ *  Hides the GUI Object
+ *
+ * @name vs.ui.View#hide
+ * @param {Function} clb a function to call a the end of show process
+ * @function
+ */
+View.prototype.hide = function (clb)
+{
+  if (!this._visible && !this.__is_showing) { return; }
+  if (!util.isFunction (clb)) clb = undefined; 
+
+  this._visible = false;
+
+  this.__is_showing = false;
+  this.__is_hidding = true;
+
+  this._hide_object (clb);
+},
+
+/**
+ *  Hides the GUI Object
+ *
+ * @private
+ * @function
+ * @param {Function} clb a function to call a the end of show process
+ */
+View.prototype._hide_object= function (clb) {
+  vs.scheduleAction (function () {
+    View.__should_render = true;
+  });
+
+  if (this._visible) { return; }
+  this.__visibility_anim = undefined;
+
+  if (!this.__is_hidding) { return; }
+
+  this.__is_hidding = false;
+  if (clb) {
+    if (clb) {
+      vs.scheduleAction (function () {clb.call (self);});
+    }
+  }
+  this.propertyChange ();
+};
+
+/********************************************************************
+
+********************************************************************/
+
+/**
+ * @protected
+ * @function
+ */
+View.prototype._propagateToParent = function (e)
+{
+  if (this.__parent) {
+
+    if (this.__parent.handleEvent) {
+      to_propatate = this.__parent.handleEvent (e);
+    }
+
+    if (to_propatate) {
+      this.__parent._propagateToParent (e);
+    }
+  }
+};
+
+/**
+ * @name vs.ui.View#notifyToParent
+ * @function
+ */
+View.prototype.notifyToParent = function (e)
+{
+  if (!this.__parent) { return; }
+  if (this.__parent.handleEvent)
+  {
+    this.__parent.handleEvent (e);
+  }
+  else if (this.__parent.notify)
+  {
+    this.__parent.notify (e);
+  }
+},
+
+/**
+ * Did enable delegate
+ * @name vs.ui.View#_didEnable
+ * @protected
+ */
+View.prototype._didEnable = function () {};
+
+/********************************************************************
+                  scrolling management
+*********************************************************************/
+
+
+View.prototype._setup_scroll = function () {
+
+  this.__gl_scroll = vec3.create ();
+
+  this._remove_scroll ();
+
+  var config = {};
+  config.scrollY = false;
+  config.scrollX = false;
+
+  if (this._scroll === vs.ui.ScrollView.VERTICAL_SCROLL) {
+    config.scrollY = true;
+  }
+  else if (this._scroll === vs.ui.ScrollView.HORIZONTAL_SCROLL) {
+    config.scrollX = true;
+  }
+  else if (this._scroll === vs.ui.ScrollView.SCROLL) {
+    config.scrollX = true;
+    config.scrollY = true;
+  }
+
+  this.__scroll__ = new gl.__iscroll (this, config);
+  this.refresh ();
+},
+
+View.prototype.__gl_update_scroll = function (now) {
+  if (this.__scroll__) {
+    this.__scroll__.__gl_update_scroll (now);
+  }
+},
+
+View.prototype._remove_scroll = function () {
+  if (this.__scroll__)
+  {
+    this.__scroll__.destroy ();
+    delete (this.__scroll__);
+    this.__scroll__ = undefined;
+  }
+}
+
 util.extendClass (View, EventSource);
 
 /********************************************************************
@@ -600,6 +598,8 @@ Object.defineProperty (View.prototype, 'scroll', {
       this._remove_scroll ();
     }
     else if (v === true || v === 1 || v === 2 || v === 3) {
+      if (v === true) { v = 1; }
+      
       this._scroll = v;
       this._setup_scroll ();
     }
@@ -613,7 +613,6 @@ Object.defineProperty (View.prototype, 'scroll', {
     return this._scroll;
   }
 });
-
 
 /********************************************************************
                       Export
