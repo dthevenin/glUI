@@ -58,6 +58,8 @@
  */
 function List (config)
 {
+  if (config.scroll === undefined) config.scroll = 1;
+  
   this.parent = AbstractList;
   this.parent (config);
   this.constructor = List;
