@@ -156,11 +156,64 @@ function declare_extern_component () {
   document.registerElement ("vs-import", {prototype: comp_proto});
 }
 
+function TEMPLATE_CREATED_CALLBACK () {
 
+/*
+  var
+    config = buildConfiguration (this),
+    _comp_;
+
+  ALLOW_CHILD_CONTENT (this, config);
+  
+  _comp_ = new vs.gl.View (config);
+
+  this._comp_ = _comp_;
+
+  var properties_str = this.getAttribute ("properties");
+  if (properties_str) {
+    var comp_properties = parsePropertiesDeclaration (properties_str);
+    _setCompProperties (_comp_, comp_properties);
+  }
+*/
+
+//  _comp_.init ();
+
+  
+  var template_name = this.getAttribute ("name");
+//  buildBinding (this, _comp_);
+//  newTemplate (template_name, _comp_);
+  newTemplate (template_name, this);
+  
+  this.parentNode.removeChild (this);
+};
+
+function TEMPLATE_ATTACHED_CALLBACK () {
+
+  if (!this._comp_) return;
+
+  var parentComp, name;
+
+  parentComp = getParentComp (this);
+  name = this.getAttribute ("name")
+
+/*
+  if (parentComp) {
+    parentComp.add (this._comp_);
+    if (name) {
+      parentComp [name] = this._comp_;
+      this.classList.add (name);
+    }
+  }
+*/
+
+//   console.log (this.nodeName);
+};
 
 var property_reg = /(\w+):(\w+[.\w+]*)#(\w+)/;
 
 function parsePropertiesDeclaration (properties_str) {
+
+  if (!properties_str) return;
 
   var
     comp_properties = {},
@@ -182,6 +235,8 @@ function parsePropertiesDeclaration (properties_str) {
 
 function _setCompProperties (comp, properties)
 {
+  if (!comp || !properties) return;
+  
   var desc, prop_name, value;
   
   if (!comp.__properties__) comp.__properties__ = [];
@@ -290,7 +345,7 @@ function LIST_ATTACHED_CALLBACK () {
   
   if (!this._comp_) return;
   
-   console.log ("LIST attachedCallback");
+  console.log ("LIST attachedCallback");
    
   var href = this.__ext_template, self = this;
   if (href) {
@@ -321,7 +376,7 @@ function LIST_ATTACHED_CALLBACK () {
   if (parentComp) {
     parentComp.add (this._comp_);
     if (name) {
-      if (parentComp.isProperty (name)) {
+      if (parentComp.isProperty && parentComp.isProperty (name)) {
         console.error (
           "Impossible to define a child, type \"%s\", with the same name " +
           "\"%s\" of a property. Change the component name on your template.",
@@ -341,97 +396,15 @@ function LIST_ATTACHED_CALLBACK () {
 function ALLOW_CHILD_CONTENT (node) {}
 
 var LIST_COMPONENT = [
-  ["vs.gl.Text", "vs-text", TEXT_CONTENT],
-  ["vs.gl.Button", "vs-button", TEXT_CONTENT],
-  ["vs.gl.Application", "vs-application", ALLOW_CHILD_CONTENT],
-  ["vs.gl.Canvas", "vs-canvas", NO_CONTENT],
-  ["vs.gl.Image", "vs-image", NO_CONTENT],
-  ["vs.gl.List", "vs-list", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
-  ["vs.gl.ScrollView", "vs-scroll-view", ALLOW_CHILD_CONTENT],
-  ["vs.gl.View", "vs-view", ALLOW_CHILD_CONTENT],
-  ["vs.gl.View", "vs-template", ALLOW_CHILD_CONTENT]
+  ["vs.gl.Text", "VS-LABEL", TEXT_CONTENT],
+  ["vs.gl.Button", "VS-BUTTON", TEXT_CONTENT],
+  ["vs.gl.Application", "VS-APPLICATION", ALLOW_CHILD_CONTENT],
+  ["vs.gl.Canvas", "VS-CANVAS", NO_CONTENT],
+  ["vs.gl.Image", "VS-IMAGE", NO_CONTENT],
+  ["vs.gl.List", "VS-LIST", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
+  ["vs.gl.View", "VS-VIEW", ALLOW_CHILD_CONTENT],
+  ["vs.gl.View", "VS-TEMPLATE", null, TEMPLATE_CREATED_CALLBACK, TEMPLATE_ATTACHED_CALLBACK]
 ]
-
-function INT_DECODER (value) {
-  return parseInt (value, 10)
-}
-
-function BOOL_DECODER (value) {
-  return Boolean (value)
-}
-
-function REF_DECODER (value) {
-  var result;
-  try {
-    result = eval (value);
-  }
-  catch (exp) {
-    if (exp.stack) console.error (exp.stack);
-    console.error (exp);
-  }
-  return result;
-}
-
-function JSON_DECODER (value) {
-  var result;
-  try {
-    result = JSON.parse (value);
-  }
-  catch (exp) {
-    if (exp.stack) console.error (exp.stack);
-    console.error (exp);
-  }
-  return result;
-}
-
-function ARRAY_DECODER (value) {
-  var result;
-  try {
-    result = JSON.parse (value);
-  }
-  catch (exp) {
-    if (exp.stack) console.error (exp.stack);
-    console.error (exp);
-  }
-  if (vs.util.isArray (result)) return result;
-  
-  return;
-}
-
-function OBJECT_DECODER (value) {
-  var result;
-  try {
-    result = JSON.parse (value);
-  }
-  catch (exp) {
-    if (exp.stack) console.error (exp.stack);
-    console.error (exp);
-  }
-  
-  return result;
-}
-
-function STRING_DECODER (value) {
-  return "" + value;
-}
-
-function DYNAMIC_DECODER (value, comp, prop_name) {
-  if (!comp || !prop_name) return STRING_DECODER (value);
-  
-  var old_value = comp [prop_name];
-  if (vs.util.isNumber (old_value)) return INT_DECODER (value);
-  if (vs.util.isArray (old_value)) return ARRAY_DECODER (value);
-  if (vs.util.isString (old_value)) return STRING_DECODER (value);
-  if (vs.util.isUndefined (old_value)) return STRING_DECODER (value);
-  if (vs.util.isObject (old_value)) return OBJECT_DECODER (value);
-  
-  return STRING_DECODER (value);
-}
-
-var ATTRIBUTE_DECODERS = {
-  "magnet": INT_DECODER,
-  "range": ARRAY_DECODER
-}
 
 var ONLOAD_METHODS = [];
 
@@ -448,59 +421,6 @@ function resolveClass (name) {
   }
 
   return base;
-}
-
-function buildConfiguration (node) {
-
-  var
-    config = {},
-    name,
-    attributes = node.attributes,
-    l = attributes.length,
-    attribute;
-  
-  while (l--) {
-    attribute = attributes.item (l);
-    name = vs.util.camelize (attribute.name);
-    if (name == "id") {
-      config.id = attribute.value;
-      continue;
-    }
-    else if (name == "class") continue;
-    else if (UNMUTABLE_ATTRIBUTES.indexOf (attribute.name) !== -1) continue;
-    else if (name.indexOf ("on") === 0) continue; // Event
-    else if (name.indexOf ("json:") === 0) {
-      config [name.replace ("json:", "")] = JSON_DECODER (attribute.value);
-    }
-    else if (name == "size" || name == "position" ||
-             name == "rotation" || name == "translation") {
-      config [name] = JSON_DECODER (attribute.value);
-    }
-    else if (name == "style") {
-
-      var style = new Style ();
-      style.parseStringStyle (attribute.value);
-
-      config [name] = style;
-    }
-    else if (name == "constraint") {
-
-      var constraint = new Constraint ();
-      constraint.parseStringStyle (attribute.value);
-
-      config [name] = constraint;
-    }
-    else if (name.indexOf ("ref:") === 0) {
-      config [name.replace ("ref:", "")] = REF_DECODER (attribute.value);
-    }
-    else {
-      var decoder = ATTRIBUTE_DECODERS [name]
-      if (decoder) config [name] = decoder (attribute.value);
-      else config [name] = DYNAMIC_DECODER (attribute.value);
-    }
-  }
-  
-  return config;
 }
 
 function buildBinding (node, comp) {
@@ -552,7 +472,7 @@ function getParentComp (node) {
   else return getParentComp (parentNode);
 }
 
-function declareComponent (className, comp_name, manage_content,
+function declareComponent (className, comp_name, _manage_content,
   createdCallback, attachedCallback, detachedCallback) {
 
   var
@@ -560,7 +480,8 @@ function declareComponent (className, comp_name, manage_content,
     node,
     comp_proto,
     decl,
-    html_comp;
+    html_comp,
+    manage_content = _manage_content;
   
   if (!_class) return;
 
@@ -581,6 +502,8 @@ function declareComponent (className, comp_name, manage_content,
       manage_content (this, config);
     }
     else NO_CONTENT (this);
+
+    config.__template_name = this.getAttribute ("template");
     
     var over_class_name = this.getAttribute ("class"), over_class;
     
@@ -631,6 +554,7 @@ function declareComponent (className, comp_name, manage_content,
     }
     
     buildBinding (this, _comp_);
+    
   };
   
   if (vs.util.isFunction (attachedCallback)) {
@@ -656,7 +580,7 @@ function declareComponent (className, comp_name, manage_content,
       else {
         parentComp.add (this._comp_);
         if (name) {
-          if (parentComp.isProperty (name)) {
+          if (parentComp.isProperty && parentComp.isProperty (name)) {
             console.error (
               "Impossible to define a child, type \"%s\", with the same name " +
               "\"%s\" of a property. Change the component name on your template.",
@@ -692,12 +616,12 @@ function declareComponent (className, comp_name, manage_content,
 
     else if (name.indexOf ("json:") === 0) {
       name = name.replace ("json:", "");
-      if (comp.isProperty (name)) {
+      if (comp.isProperty && comp.isProperty (name)) {
         comp [name] = JSON_DECODER (newValue);
       }
     }
 
-    else if (comp.isProperty (name)) {
+    else if (comp.isProperty && comp.isProperty (name)) {
       var decoder = ATTRIBUTE_DECODERS [name]
       if (decoder) comp [name] = decoder (newValue);
       else comp [name] = DYNAMIC_DECODER (newValue, comp, name);
@@ -729,7 +653,6 @@ window.addEventListener ('DOMContentLoaded', function() {
 window.addEventListener ('WebComponentsReady', function() {
 
 //  list._renderData ();
-//  endInit ();
   
   ONLOAD_METHODS.forEach (function (item) { item.call (); });
   
@@ -739,33 +662,3 @@ window.addEventListener ('WebComponentsReady', function() {
     document.body.style.opacity = 1;
   });
 });
-
-
-function endInit () {
-//   var apps = vs.Application_applications, key;
-// 
-//   function _initComponent (component) {
-//     var i, l, child, children;
-//         
-//     children = component.__children;
-//     l = children.length;
-//     for (i = 0; i < l; i++) {
-//       child = children [i];
-//       _initComponent (child, p_matrix, new_p_matrix, new_view_p);
-//     }
-//     
-//     component.init ();
-// 
-//     for (i = 0; i < l; i++) {
-//       child = children [i];
-//       if (child.viewDidAdd) {
-//         child.viewDidAdd ();
-//       }
-//     }
-//   }
-// 
-//   for (key in apps) {
-//     var app = apps[key];
-//     _initComponent (app);
-//   }
-}

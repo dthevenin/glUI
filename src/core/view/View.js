@@ -117,6 +117,10 @@ View.prototype.initComponent = function ()
 
   if (!this.__config__) this.__config__ = {};
   this.__config__.id = this.id;
+  
+  if (this.__config__.__template_name) {
+    applyTemplate (this.__config__.__template_name, this);
+  }
 
   initSprite (this);
 };
@@ -160,7 +164,6 @@ makeTextureProjection) {
     makeTextureProjection
   );
 };
-
 
 /********************************************************************
                 GUI Utilities
