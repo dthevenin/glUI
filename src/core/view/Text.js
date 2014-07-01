@@ -255,7 +255,9 @@ var __text_management = {
     );
     
     if (autoresize && text_height > this._size [1]) {
-      this.size = [this._size [0], text_height];
+      this._size [1] = text_height;
+    
+      this._updateSizeAndPos ();
     }
     else {
       this.__update_texture ();
@@ -412,7 +414,7 @@ util.defineClassProperties (Text, {
      */
     get : function ()
     {
-      return this._size.slice ();
+      return this._size;
     }
   }
 });

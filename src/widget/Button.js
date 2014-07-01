@@ -252,7 +252,7 @@ util.defineClassProperties (Button, {
      */
     get : function ()
     {
-      return this._size.slice ();
+      return this._size;
     }
   }
 });
