@@ -60,8 +60,10 @@ release :: clean vs_gl_engine.js
 	-$(MV) vs_gl_engine.js vs_gl_engine_tmp.js
 	-$(COMPILE) --js=vs_gl_engine_tmp.js --js_output_file=vs_gl_engine.js
 	-$(RM_F) vs_gl_engine_tmp.js
+	-$(CP) vs_gl_engine.js ../demos/lib
 
 debug :: clean vs_gl_engine.js
+	-$(CP) vs_gl_engine.js ../demos/lib
 
 clean ::
 	-$(RM_RF) vs_gl_engine.js
@@ -95,6 +97,7 @@ vs_core.js:
 	$(CAT) core/Constraint.js >> $@
 	$(CAT) core/Color.js >> $@
 	$(CAT) core/Style.js >> $@
+	$(CAT) core/event/Event.js >> $@
 	$(CAT) core/event/EventSource.js >> $@
 	$(CAT) core/event/Picking.js >> $@
 	$(CAT) core/event/PointerEvent.js >> $@
@@ -102,8 +105,10 @@ vs_core.js:
 	$(CAT) core/event/TouchEvent.js >> $@
 	$(CAT) core/view/iScroll.js >> $@
 	$(CAT) core/view/Group.js >> $@
+	$(CAT) core/view/Configuration.js >> $@
 	$(CAT) core/view/Transform.js >> $@
 	$(CAT) core/view/View.js >> $@
+	$(CAT) core/view/Template.js >> $@
 	$(CAT) core/view/Application.js >> $@
 	$(CAT) core/view/Text.js >> $@
 	$(CAT) core/view/Image.js >> $@
