@@ -166,12 +166,12 @@ List.prototype = {
     if (item.didSelect) item.didSelect ();
     
     this.outPropertyChange ();
-                
-    this.propagate ('itemselect',
-    {
+    var event = new vs.core.Event (this, 'itemselect', {
       index: this._selected_index,
       item: this._selected_item
     });
+                
+    this.dispatchEvent (event);
   }
 };
 util.extendClass (List, AbstractList);

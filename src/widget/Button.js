@@ -136,7 +136,8 @@ Button.prototype = {
   },
   
   didTap : function () {
-    this.propagate ('select');
+    var event = new vs.gl.Event ('select');
+    this.dispatchEvent (event);
   },
   
   /**

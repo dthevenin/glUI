@@ -207,35 +207,6 @@ else {
  */
 
 /**
- *  Structure used for managing events
- *  @private
- */
-function Handler () {}
-var Handler__pool = [];
-
-Handler.prototype.configure = function (obj, func) {
-  this.obj = obj;
-  if (util.isFunction (func)) {
-    this.func_ptr = func;
-  }
-  else if (util.isString (func)) {
-    this.func_name = func;
-  }
-}
-
-Handler.retain = function () {
-  var l = Handler__pool.length;
-  if (l) {
-    return Handler__pool.pop ();
-  }
-  return new Handler ();
-}
-
-Handler.release = function (handler) {
-  Handler__pool.push (handler);
-}
-
-/**
  * doOneEvent will dispatch One event to all observers.
  *
  * @private
@@ -270,19 +241,13 @@ function doOneEvent (burst, isSynchron) {
    */
   function doOneHandler (handler) {
     if (handler) try {
-      if (util.isFunction (handler.func_ptr)) {
+      if (util.isFunction (handler)) {
         // call function
-        handler.func_ptr.call (handler.obj, event);
+        handler (event);
       }
-      else if (util.isString (handler.func_name) &&
-               util.isFunction (handler.obj[handler.func_name]))
-      {
-        // specific notify method
-        handler.obj[handler.func_name] (event);
-      }
-      else if (util.isFunction (handler.obj.notify)) {
+      else if (util.isFunction (handler.handleEvent)) {
         // default notify method
-        handler.obj.notify (event);
+        handler.handleEvent.call (handler, event);
       }
     }
     catch (e) {

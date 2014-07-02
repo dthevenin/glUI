@@ -93,7 +93,8 @@ Application.prototype = {
       var target_id =
         window.deviceConfiguration.setOrientation (orientation);
       if (target_id) {
-        self.propagate ('deviceChanged', target_id, null, true);
+        var event = new vs.gl.Event ('deviceChanged', target_id);
+        self.dispatchEvent (event);
       }
     });
     
@@ -175,7 +176,8 @@ Application.prototype = {
       var i, l, data, ab_event;
       if (!path) { return; }
       
-      self.propagate ('scriptloaded', path);
+      var event = new vs.gl.Event ('scriptloaded', path);
+      self.dispatchEvent (event);
     };
     
     util.importFile (path, document, endScriptLoad, "js");
@@ -205,7 +207,8 @@ Application.prototype = {
       var i, l, data, ab_event;
       if (!path) { return; }
       
-      self.propagate ('cssloaded', path);
+      var event = new vs.gl.Event ('cssloaded', path);
+      self.dispatchEvent (event);
     };
 
     util.importFile (path, document, endCssLoad, "css");
