@@ -19,7 +19,7 @@
 
 /**
  *  @class
- *  vs.core.EventSource is an  class that forms the basis of event and command
+ *  vs.gl.EventSource is an  class that forms the basis of event and command
  *  processing. All class that handles events must inherit form EventSource.
  *
  *  @extends vs.core.Object
@@ -28,7 +28,7 @@
  *  @constructor
  *  Main constructor
  *
- * @name vs.core.EventSource
+ * @name vs.gl.EventSource
  *
  * @param {Object} config the configuration structure [mandatory]
  */
