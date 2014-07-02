@@ -1,6 +1,6 @@
 /**
-  Copyright (C) 2009-2012. David Thevenin, ViniSketch SARL (c), and 
-  contributors. All rights reserved
+  Copyright (C) 2009-2014. David Thevenin, ViniSketch (c), IGEL Co. Ltd,
+  and contributors. All rights reserved
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as published
@@ -133,22 +133,11 @@ Event.prototype.srcTarget = null;
 Event.prototype.type = "";
 
 /**
- * The optional data associate to the event.
+ * The optional data associated to the event.
  * @type {Object|null}
  * @name vs.gl.Event#data
  */
 Event.prototype.data = null;
-
-/**
- * @protected
- * @function
- */
-Event.prototype.destructor = function () {
-  delete (this.src);
-  delete (this.srcTarget);
-  delete (this.type);
-  delete (this.data);
-};
 
 /**
  * @function

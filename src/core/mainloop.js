@@ -246,7 +246,7 @@ function doOneEvent (burst, isSynchron) {
         handler (event);
       }
       else if (util.isFunction (handler.handleEvent)) {
-        // default notify method
+        // default handleEvent method
         handler.handleEvent.call (handler, event);
       }
     }

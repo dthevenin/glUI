@@ -141,12 +141,6 @@ View.prototype.viewDidAdd = function () {
   this._updateSizeAndPos ();
 };
 
-/**
- * @protected
- * @function
- */
-View.prototype.notify = function (event) {},
-
 View.prototype.setUdpateVerticesFunction= function (update_gl_vertices) {
   setUpdateVerticesSprite (this, update_gl_vertices);
 },
@@ -291,41 +285,6 @@ View.prototype._hide_object= function (clb) {
 /********************************************************************
 
 ********************************************************************/
-
-/**
- * @protected
- * @function
- */
-View.prototype._propagateToParent = function (e)
-{
-  if (this.__parent) {
-
-    if (this.__parent.handleEvent) {
-      to_propatate = this.__parent.handleEvent (e);
-    }
-
-    if (to_propatate) {
-      this.__parent._propagateToParent (e);
-    }
-  }
-};
-
-/**
- * @name vs.ui.View#notifyToParent
- * @function
- */
-View.prototype.notifyToParent = function (e)
-{
-  if (!this.__parent) { return; }
-  if (this.__parent.handleEvent)
-  {
-    this.__parent.handleEvent (e);
-  }
-  else if (this.__parent.notify)
-  {
-    this.__parent.notify (e);
-  }
-},
 
 /**
  * Did enable delegate
