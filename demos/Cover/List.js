@@ -27,12 +27,8 @@ var CoverFlow = vs.core.createClass ({
   
   settings_open: false,
 
-  applicationStarted : function (event) {
-
-    window.app = this;     
+  applicationStarted : function () {
     this.buildList ();
-    
-    this.style.backgroundColor = vs.gl.Color.white;
   },
   
   buildList: function () {

@@ -40,8 +40,9 @@ var ThingList = vs.core.createClass ({
     this.config_panel.hide ();
      
     this.buildList ();
-
     this.buildNavBar ();
+    
+    this.refresh ();
   },
   
   openSettings: function () {
@@ -127,12 +128,12 @@ var ThingList = vs.core.createClass ({
     button_default_style.backgroundImage = "assets/setting.png";
     button_default_style.backgroundImageUV = [-0.2,1.2, -0.2,-0.2, 1.2,1.2, 1.2,-0.2];
     
-    button.bind ('select', this, this.openSettings);
+    button.addEventListener ('select', this.openSettings.bind (this));
     this.buttonOpen = button;
 
     button = new vs.gl.Button ({
       size: [40, 40],
-      position: [3, 0],
+      position: [3, 3],
       transformOrigin : [20, 20],
       rotation : [0,0,-360],
       scaling: 0.3,
@@ -144,7 +145,7 @@ var ThingList = vs.core.createClass ({
     button_default_style.backgroundImage = "assets/x-icon.png";
     button_default_style.backgroundImageUV = [-0.2,1.2, -0.2,-0.2, 1.2,1.2, 1.2,-0.2];
     
-    button.bind ('select', this, this.openSettings);
+    button.addEventListener ('select', this.openSettings.bind (this));
     this.buttonClose = button;
 
     var button = new vs.gl.Image ({
