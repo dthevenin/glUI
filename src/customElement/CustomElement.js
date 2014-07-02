@@ -25,6 +25,19 @@ function TEXT_CONTENT (node, config) {
   if (text) config.text = text;
 }
 
+function CONFIGURATION_CONTENT (node, config) {
+}
+
+function CONFIGURATION_CREATED_CALLBACK () {
+  this.parentNode.removeChild (this);
+};
+
+function CONFIGURATION_ATTACHED_CALLBACK () {
+  var text = this.textContent;
+
+  Configuration.parse (text);
+};
+
 function RADIO_CHECK_BUTTON_CONTENT (node, config) {
   var
     model = [],
@@ -403,7 +416,8 @@ var LIST_COMPONENT = [
   ["vs.gl.Image", "VS-IMAGE", NO_CONTENT],
   ["vs.gl.List", "VS-LIST", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
   ["vs.gl.View", "VS-VIEW", ALLOW_CHILD_CONTENT],
-  ["vs.gl.View", "VS-TEMPLATE", null, TEMPLATE_CREATED_CALLBACK, TEMPLATE_ATTACHED_CALLBACK]
+  ["vs.gl.View", "VS-TEMPLATE", null, TEMPLATE_CREATED_CALLBACK, TEMPLATE_ATTACHED_CALLBACK],
+  ["vs.gl.Configuration", "VS-CONFIGURATION", CONFIGURATION_CONTENT, CONFIGURATION_CREATED_CALLBACK, CONFIGURATION_ATTACHED_CALLBACK]
 ]
 
 var ONLOAD_METHODS = [];
@@ -503,7 +517,7 @@ function declareComponent (className, comp_name, _manage_content,
     }
     else NO_CONTENT (this);
 
-    config.__template_name = this.getAttribute ("template");
+    config.templateName = this.getAttribute ("template");
     
     var over_class_name = this.getAttribute ("class"), over_class;
     
@@ -658,7 +672,24 @@ window.addEventListener ('WebComponentsReady', function() {
   
   // show body now that everything is ready
   vs.ui.Application.start ();
+  
   vs.scheduleAction (function () {
     document.body.style.opacity = 1;
   });
 });
+
+/**
+ * @potected
+ */
+vs.ui.Application.start = function ()
+{
+  var key, obj;
+  for (key in vs.Application_applications)
+  {
+    obj = vs.Application_applications [key];
+    Configuration.applyToApplication (obj);
+    obj.propertyChange ();
+    obj.applicationStarted ();
+  }
+  vs._default_df_.build ();
+};

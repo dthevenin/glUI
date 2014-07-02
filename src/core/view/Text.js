@@ -256,8 +256,11 @@ var __text_management = {
     
     if (autoresize && text_height > this._size [1]) {
       this._size [1] = text_height;
-    
+     
       this._updateSizeAndPos ();
+
+      this.__update_text_view (this._size);
+      this.__update_text (this._text, false);      
     }
     else {
       this.__update_texture ();

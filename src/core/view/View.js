@@ -118,8 +118,10 @@ View.prototype.initComponent = function ()
   if (!this.__config__) this.__config__ = {};
   this.__config__.id = this.id;
   
-  if (this.__config__.__template_name) {
-    applyTemplate (this.__config__.__template_name, this);
+  var templateName = this.templateName || this.__config__.templateName;
+  
+  if (templateName) {
+    applyTemplate (templateName, this);
   }
 
   initSprite (this);

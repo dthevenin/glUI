@@ -165,3 +165,4 @@ Group.prototype.removeAllChildren = function ()
   });
 }
 
+

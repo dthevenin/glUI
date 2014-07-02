@@ -190,8 +190,9 @@ function applyTemplate (template_name, view) {
   }
   
   view.configure (template.config);
+  
+  Configuration.applyToTemplate (template_name, view);
 }
-
 
 function getTemplate (name) {
   var template_node = Templates [name];

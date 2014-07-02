@@ -24,6 +24,55 @@
 */
 function Constraint () {}
 
+
+function parseFromStringStyle (str, obj) {
+  
+  function clean(css) {
+    return css
+    .replace(/\/\*[\W\w]*?\*\//g, "") // remove comments
+    .replace(/^\s+|\s+$/g, "") // remove trailing spaces
+    .replace(/\s*([:;{}])\s*/g, "$1") // remove trailing separator spaces
+    .replace(/\};+/g, "}") // remove unnecessary separators
+    .replace(/([^:;{}])}/g, "$1;}") // add trailing separators
+  }
+
+  function refine(css, isBlock) {
+    return /^@/.test(css) ? (css = css.split(" ")) && {
+      "identifier": css.shift().substr(1).toLowerCase(),
+      "parameters": css.join(" ")
+    } : (isBlock ? /:$/ : /:/).test(css) ? (css = css.split(":")) && {
+      "property": css.shift(),
+      "value": css.join(":")
+    } : css;
+  }
+
+  function parse(css, regExp, object) {
+    for (var m; (m = regExp.exec(css)) != null;) {
+      if (m[2] == "{") object.block.push(object = {
+        "selector": refine(m[1], true),
+        "block": [],
+        "parent": object
+      });
+      else if (m[2] == "}") object = object.parent;
+      else if (m[2] == ";") object.block.push(refine(m[1]));
+    }
+  }
+
+  var parseStyle = function (css) {
+    return parse(clean(css), /([^{};]*)([;{}])/g, css = { block: [] }), css;
+  };
+    
+  var style = parseStyle (str).block;
+
+  style.forEach (function (block) {
+    var p = util.camelize (block.property);
+    var value = parseInt (block.value, 10);
+    if (value === NaN) value = null;
+    
+    obj [p] = value;
+  });
+}
+
 Constraint.prototype = {
   top : null,
   bottom: null,
@@ -48,51 +97,17 @@ Constraint.prototype = {
     constraint.middleY = this.middleY;
   },
   
-  parseStringStyle: function (str) {
-    function clean(css) {
-      return css
-      .replace(/\/\*[\W\w]*?\*\//g, "") // remove comments
-      .replace(/^\s+|\s+$/g, "") // remove trailing spaces
-      .replace(/\s*([:;{}])\s*/g, "$1") // remove trailing separator spaces
-      .replace(/\};+/g, "}") // remove unnecessary separators
-      .replace(/([^:;{}])}/g, "$1;}") // add trailing separators
+  parseStringStyle: function (str) {    
+    parseFromStringStyle (str, this);
+  },
+  
+  parseObjectStyle: function (obj) {
+    
+    if (!obj) return;
+    
+    for (var property in obj) {
+      this [property] = obj [property];
     }
-
-    function refine(css, isBlock) {
-      return /^@/.test(css) ? (css = css.split(" ")) && {
-        "identifier": css.shift().substr(1).toLowerCase(),
-        "parameters": css.join(" ")
-      } : (isBlock ? /:$/ : /:/).test(css) ? (css = css.split(":")) && {
-        "property": css.shift(),
-        "value": css.join(":")
-      } : css;
-    }
-
-    function parse(css, regExp, object) {
-      for (var m; (m = regExp.exec(css)) != null;) {
-        if (m[2] == "{") object.block.push(object = {
-          "selector": refine(m[1], true),
-          "block": [],
-          "parent": object
-        });
-        else if (m[2] == "}") object = object.parent;
-        else if (m[2] == ";") object.block.push(refine(m[1]));
-      }
-    }
-
-    var parseStyle = function (css) {
-      return parse(clean(css), /([^{};]*)([;{}])/g, css = { block: [] }), css;
-    };
-      
-    var style = parseStyle (str).block, self = this;
-
-    style.forEach (function (block) {
-      var p = util.camelize (block.property);
-      var value = parseInt (block.value, 10);
-      if (value === NaN) value = null;
-      
-      self [p] = value;
-    });
   },
   
   __update_view : function (view) {
@@ -212,6 +227,15 @@ Constraint.prototype = {
     view._size [0] = w; view._size [1] = h;
   }
 }
+
+Constraint.createObjectFromStringStyle = function (str) {
+  var obj = {};
+  
+  parseFromStringStyle (str, obj);
+  
+  return obj;
+};
+
 
 
 /********************************************************************
