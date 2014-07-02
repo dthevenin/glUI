@@ -671,25 +671,10 @@ window.addEventListener ('WebComponentsReady', function() {
   ONLOAD_METHODS.forEach (function (item) { item.call (); });
   
   // show body now that everything is ready
-  vs.ui.Application.start ();
+  vs.gl.Application.start ();
   
   vs.scheduleAction (function () {
     document.body.style.opacity = 1;
   });
 });
 
-/**
- * @potected
- */
-vs.ui.Application.start = function ()
-{
-  var key, obj;
-  for (key in vs.Application_applications)
-  {
-    obj = vs.Application_applications [key];
-    Configuration.applyToApplication (obj);
-    obj.propertyChange ();
-    obj.applicationStarted ();
-  }
-  vs._default_df_.build ();
-};

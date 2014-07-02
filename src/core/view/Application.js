@@ -49,6 +49,8 @@ var Application = function (config) {
   this.constructor = Application;
 };
 
+//var Application_applications = {};
+
 var ORIENTATION_CHANGE_EVT =
   'onorientationchange' in window ? 'orientationchange' : 'resize';
 
@@ -221,34 +223,7 @@ util.extendClass (Application, View);
 ********************************************************************/
 
 util.defineClassProperties (Application, {
-//   'size': {
-//     /** 
-//      * Getter|Setter for size.<br/>
-//      * Gives access to the size of the vs.gl.Application
-//      * @name vs.gl.Application#size 
-//      *
-//      * @type {Array.<number>}
-//      */ 
-//     set : function (v) {
-//       if (!v) { return; }
-//       if (!util.isArray (v) || v.length !== 2) { return; }
-//       if (!util.isNumber (v[0]) || !util.isNumber(v[1])) { return; }
-//       this._size [0] = v [0];
-//       this._size [1] = v [1];
-//       
-//       this._updateSizeAndPos ();
-//       
-// //      window.resizeTo (this._size [0], this._size [1]);
-//     },
-//     
-//     /**
-//      * @ignore
-//      * @type {Array.<number>}
-//      */
-//     get : function () {
-//       return this._size.slice ();
-//     }
-//   },
+
   'preventScroll': {
     /** 
      * Getter|Setter for page scrolling cancel.<br/>
@@ -285,6 +260,22 @@ util.defineClassProperties (Application, {
     }
   }
 });
+
+/**
+ * @potected
+ */
+Application.start = function ()
+{
+  var key, obj;
+  for (key in vs.Application_applications) {
+    obj = vs.Application_applications [key];
+    Configuration.applyToApplication (obj);
+    obj.propertyChange ();
+    obj.applicationStarted ();
+    obj.refresh ();
+  }
+  vs._default_df_.build ();
+};
 
 /********************************************************************
                       Export
