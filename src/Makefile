@@ -62,9 +62,15 @@ release :: clean vs_gl_engine.js
 	-$(RM_F) vs_gl_engine_tmp.js
 	-$(CP) vs_gl_engine.js ../demos/lib
 
-debug :: clean vs_gl_engine.js
-	-$(CP) vs_gl_engine.js ../demos/lib
-
+debug :: clean vs_core.js vs_event.js vs_gl_animation.js vs_gl_widget.js vs_webcomponent.js
+#	compile-modules convert --type amd --to ../lib/core.js vs_core.js 
+#	$(RM) vs_core.js
+	$(MV) vs_core.js ../lib/core.js
+	$(MV) vs_event.js ../lib/event.js
+	$(MV) vs_gl_animation.js ../lib/animation.js
+	$(MV) vs_gl_widget.js ../lib/widget.js
+	$(MV) vs_webcomponent.js ../lib/webcomponent.js
+	
 clean ::
 	-$(RM_RF) vs_gl_engine.js
 
@@ -83,7 +89,9 @@ vs_event.js:
 	$(CAT) core/event/recognizer/TapRecognizer.js >> $@
 	
 vs_core.js:
+	$(CAT) core/export_header.js >> $@
 	$(CAT) core/util.js >> $@
+	$(CAT) core/Object.js >> $@
 	$(CAT) core/mainloop.js >> $@
 	$(CAT) core/math/vector.js >> $@
 	$(CAT) core/math/matrix.js >> $@
@@ -113,6 +121,8 @@ vs_core.js:
 	$(CAT) core/view/Text.js >> $@
 	$(CAT) core/view/Image.js >> $@
 	$(CAT) core/view/Canvas.js >> $@
+	$(CAT) class/Class.js >> $@
+	$(CAT) core/export_footer.js >> $@
 	
 vs_gl_widget.js:
 	$(CAT) widget/Button.js >> $@
@@ -127,14 +137,5 @@ vs_gl_animation.js:
 	$(CAT) animation/engine.js >> $@
 	$(CAT) animation/chainingAPI.js >> $@
 	
-vs_gl_engine.js: vs_core.js vs_event.js vs_gl_animation.js vs_gl_widget.js vs_webcomponent.js
-	$(CAT) vs_core.js >> $@
-	$(CAT) vs_event.js >> $@
-	$(CAT) vs_gl_animation.js >> $@
-	$(CAT) vs_gl_widget.js >> $@
-	$(CAT) vs_webcomponent.js >> $@
-	-$(RM_RF) vs_core.js
-	-$(RM_RF) vs_event.js
-	-$(RM_RF) vs_gl_animation.js
-	-$(RM_RF) vs_gl_widget.js
-	-$(RM_RF) vs_webcomponent.js
+vs_gl_engine.js: 
+
