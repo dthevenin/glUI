@@ -238,7 +238,7 @@ var rendering_mode = 0;
 function initRendering () {
   
   if (shadow_buffer) {
-    delete (shadow_buffer); 
+    gl_ctx.deleteBuffer (shadow_buffer); 
   }
   shadow_buffer = gl_ctx.createBuffer ();
 
@@ -621,11 +621,21 @@ function handleContextLost (event) {
   event.preventDefault ();
   cancelAnimationFrame (next_rendering_id);
   
-  delete (gl_ctx); gl_ctx = undefined;
+  //delete (gl_ctx);
+  gl_ctx = undefined;
   
-  delete (basicShaderProgram); basicShaderProgram = undefined;
-  delete (shadowShaderProgram); shadowShaderProgram = undefined;
-  delete (imageShaderProgram); imageShaderProgram = undefined;
-  delete (oneTextureShaderProgram); oneTextureShaderProgram = undefined;
-  delete (twoTexturesShaderProgram); twoTexturesShaderProgram = undefined;
+  //delete (basicShaderProgram);
+  basicShaderProgram = undefined;
+  
+  //delete (shadowShaderProgram);
+  shadowShaderProgram = undefined;
+  
+  //delete (imageShaderProgram);
+  imageShaderProgram = undefined;
+  
+  //delete (oneTextureShaderProgram);
+  oneTextureShaderProgram = undefined;
+  
+  //delete (twoTexturesShaderProgram);
+  twoTexturesShaderProgram = undefined;
 }

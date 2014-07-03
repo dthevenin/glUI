@@ -73,12 +73,12 @@ function createClass (config)
   if (config && config.parent)
   {
     parent = config.parent;
-    delete (config.parent);
+    config.parent = undefined;
   }
   if (config && config.properties)
   {
     properties = config.properties;
-    delete (config.properties);
+    config.properties = undefined;
   }
   
   __spec.parent = parent;

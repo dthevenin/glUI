@@ -239,7 +239,7 @@ function initBuffers () {
 
   /*========================= UV =========================*/
   if (object_uv_buffer) {
-    delete (object_uv_buffer);
+    gl_ctx.deleteBuffer (object_uv_buffer);
   }
   object_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, object_uv_buffer);
@@ -251,7 +251,7 @@ function initBuffers () {
   );
 
   if (object_bck_image_uv_buffer) {
-    delete (object_bck_image_uv_buffer);
+    gl_ctx.deleteBuffer (object_bck_image_uv_buffer);
   }
   object_bck_image_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, object_bck_image_uv_buffer);
@@ -263,7 +263,7 @@ function initBuffers () {
   );
     
   if (default_object_bck_image_uv_buffer) {
-    delete (default_object_bck_image_uv_buffer);
+    gl_ctx.deleteBuffer (default_object_bck_image_uv_buffer);
   }
   default_object_bck_image_uv_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, default_object_bck_image_uv_buffer);
@@ -275,7 +275,7 @@ function initBuffers () {
 
   /*========================= FACES ========================= */
   if (object_faces_buffer) {
-    delete (object_faces_buffer);
+    gl_ctx.deleteBuffer (object_faces_buffer);
   }
   object_faces_buffer = gl_ctx.createBuffer ();
   gl_ctx.bindBuffer(gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
