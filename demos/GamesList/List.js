@@ -17,7 +17,7 @@
  */
 
 
-var GamesList = vs.core.createClass ({
+var GamesList = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.Application,

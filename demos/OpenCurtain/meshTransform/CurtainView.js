@@ -31,7 +31,7 @@ define ('CurtainView', [], function () {
     gl_FragColor = shadingVarying * vec4(color.rgb, color.a * uAlpha);\n\
   }";
 
-  var CurtainView = vs.core.createClass ({
+  var CurtainView = vs.gl.createClass ({
 
     /** parent class */
     parent: vs.gl.View,

@@ -1,4 +1,4 @@
-var Text = vs.core.createClass ({
+var Text = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.Application,

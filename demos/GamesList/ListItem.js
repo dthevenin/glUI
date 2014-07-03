@@ -17,7 +17,7 @@
  */
  
 
-var ListItem = vs.core.createClass ({
+var ListItem = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.View,

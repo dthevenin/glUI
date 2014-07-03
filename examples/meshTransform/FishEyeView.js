@@ -40,7 +40,7 @@ define ('FishEyeView', [], function () {
     gl_FragColor = shadingVarying * gl_FragColor;\n\
   }";
 
-  var FishEyeView = vs.core.createClass ({
+  var FishEyeView = vs.gl.createClass ({
 
     /** parent class */
     parent: vs.gl.Image,

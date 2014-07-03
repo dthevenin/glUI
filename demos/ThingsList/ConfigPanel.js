@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
-var ConfigPanel = vs.core.createClass ({
+var ConfigPanel = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.View,

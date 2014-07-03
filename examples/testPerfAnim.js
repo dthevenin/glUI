@@ -1,4 +1,4 @@
-var testPerfAnim = vs.core.createClass ({
+var testPerfAnim = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.Application,

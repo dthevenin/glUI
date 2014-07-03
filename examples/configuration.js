@@ -17,7 +17,7 @@
  */
 
 
-var TemplateTest = vs.core.createClass ({
+var TemplateTest = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.Application,
@@ -26,7 +26,7 @@ var TemplateTest = vs.core.createClass ({
   }
 });
 
-var Item = vs.core.createClass ({
+var Item = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.View,

@@ -13,7 +13,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
   var demoSize = [window.innerWidth, window.innerHeight];
   var demoPosition = [0, 0];
 
-  var CurtainDemo = vs.core.createClass ({
+  var CurtainDemo = vs.gl.createClass ({
 
     /** parent class */
     parent: vs.gl.Application,

@@ -1,7 +1,7 @@
 define ('CurtainDemo', ['CurtainView'], function (CurtainView) {
 
 
-  var CurtainDemo = vs.core.createClass ({
+  var CurtainDemo = vs.gl.createClass ({
 
     /** parent class */
     parent: CurtainView,

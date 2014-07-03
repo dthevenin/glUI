@@ -20,7 +20,7 @@ var info_pasquale = "Pasquale is a masculine Italian given name and a surname fo
 var info_bar = "Part of the new wave of more eclectic and sophisticated gay hangouts that have steadily been gaining in prevalence and popularity in the Castro, the dapper and convivial Blackbird Bar (2124 Market St., 415-503-0630) is along the hip Church Street corridor (right at the intersection with Market Street). ";
 var info_design = "The Shape of Design is an odd little design book. Instead of talking about typography, grids, or logos, it focuses on storytelling, co-dependency, and craft. It tries to supplement the abundance of technical talk and how-to elsewhere by elevating why great work is done. "
 
-var ThingList = vs.core.createClass ({
+var ThingList = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.Application,

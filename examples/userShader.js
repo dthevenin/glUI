@@ -1,5 +1,5 @@
 var glImage;
-var Test = vs.core.createClass ({
+var Test = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.Application,

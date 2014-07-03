@@ -1,7 +1,7 @@
 define ('FishEyeDemo', ['FishEyeView'], function (FishEyeView) {
 
 
-  var FishEyeDemo = vs.core.createClass ({
+  var FishEyeDemo = vs.gl.createClass ({
 
     /** parent class */
     parent: FishEyeView,

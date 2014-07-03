@@ -47,7 +47,7 @@ var hideIcon = new vs.gl.Animation ({"scaling": 0});
 hideIcon.keyFrame (0, {"scaling": 1});
 hideIcon.duration = 400;
 
-var ConfigIcon = vs.core.createClass ({
+var ConfigIcon = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.View,

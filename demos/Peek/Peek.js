@@ -51,7 +51,7 @@ day2LineOut.timing = timing;
 
 var dayStyle, dateStyle, hourStyle, textStyle;
 
-var Peek = vs.core.createClass ({
+var Peek = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.Application,
@@ -281,7 +281,7 @@ var Peek = vs.core.createClass ({
 });
 
 
-var WeekView = vs.core.createClass ({
+var WeekView = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.View,
@@ -331,7 +331,7 @@ var WeekView = vs.core.createClass ({
   
 });
 
-var DayView = vs.core.createClass ({
+var DayView = vs.gl.createClass ({
 
   /** parent class */
   parent: vs.gl.View,

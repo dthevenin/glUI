@@ -12,7 +12,7 @@
 
 require (['CurtainDemo', 'CurtainImageDemo', 'FishEyeDemo'], function (CurtainDemo, CurtainImageDemo, FishEyeDemo) {
 
-  var Test = vs.core.createClass ({
+  var Test = vs.gl.createClass ({
 
     /** parent class */
     parent: vs.gl.Application,
