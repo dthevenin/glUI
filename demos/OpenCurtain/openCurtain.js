@@ -68,7 +68,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
 
         var item = new ListItem ({size : [size[0], 70]}).init ();
         list.add (item);
-        item.link (model);
+        item.configure (model);
 
         item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
       }

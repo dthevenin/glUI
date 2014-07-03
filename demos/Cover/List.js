@@ -198,7 +198,7 @@ var CoverFlow = vs.gl.createClass ({
         rotation: [-40, 0, 0]
       }).init ();
       list.add (item);
-      item.link (model);
+      item.configure (model);
 
       item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
       item.style.shadowOffset = [0, 0];

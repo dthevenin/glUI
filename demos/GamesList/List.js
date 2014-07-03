@@ -42,7 +42,7 @@ var GamesList = vs.gl.createClass ({
         position: [0, 70 * i]
       }).init ();
       this.gamesList.add (item);
-      item.link (model);
+      item.configure (model);
 
       item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
     }
