@@ -166,7 +166,7 @@ List.prototype = {
     if (item.didSelect) item.didSelect ();
     
     this.outPropertyChange ();
-    var event = new vs.core.Event (this, 'itemselect', {
+    var event = new vs.gl.Event ('itemselect', {
       index: this._selected_index,
       item: this._selected_item
     });
