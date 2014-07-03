@@ -228,7 +228,6 @@ View.prototype._show_object = function (clb)
   this._visible = true;
   var self = this;
 
-  this.propertyChange ();
   if (clb) {
     if (clb) {
       vs.scheduleAction (function () {clb.call (self);});
@@ -279,7 +278,6 @@ View.prototype._hide_object= function (clb) {
       vs.scheduleAction (function () {clb.call (self);});
     }
   }
-  this.propertyChange ();
 };
 
 /********************************************************************

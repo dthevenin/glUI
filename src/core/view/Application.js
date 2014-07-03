@@ -270,7 +270,6 @@ Application.start = function ()
   for (key in vs.Application_applications) {
     obj = vs.Application_applications [key];
     Configuration.applyToApplication (obj);
-    obj.propertyChange ();
     obj.applicationStarted ();
     obj.refresh ();
   }

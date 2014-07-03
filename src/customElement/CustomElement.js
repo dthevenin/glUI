@@ -271,7 +271,6 @@ function _setCompProperties (comp, properties)
         if (base) {
           base [_prop_name] = v;
         }
-        this.propertyChange (_prop_name);
       };
     }(value[0], value[1]));
 
