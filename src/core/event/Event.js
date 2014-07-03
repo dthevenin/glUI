@@ -16,69 +16,8 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- * @name vs.gl.FORCE_EVENT_PROPAGATION_DELAY
- */
-gl.FORCE_EVENT_PROPAGATION_DELAY = false;
-
 var EVENT_SUPPORT_GESTURE = false;
 var hasMSPointer = window.navigator.msPointerEnabled;
-
-/** 
- * Start pointer event (mousedown, touchstart, )
- * @name vs.gl.POINTER_START
- * @type {String}
- * @const
- */ 
-gl.POINTER_START = vs.POINTER_START;
-
-/** 
- * Move pointer event (mousemove, touchmove, )
- * @name vs.gl.POINTER_MOVE 
- * @type {String}
- * @const
- */ 
-gl.POINTER_MOVE = vs.POINTER_MOVE;
-
-/** 
- * End pointer event (mouseup, touchend, )
- * @name vs.gl.POINTER_END 
- * @type {String}
- * @const
- */ 
-gl.POINTER_END = vs.POINTER_END;
-
-/** 
- * Cancel pointer event (mouseup, touchcancel, )
- * @name vs.gl.POINTER_CANCEL 
- * @type {String}
- * @const
- */ 
-gl.POINTER_CANCEL = vs.POINTER_CANCEL;
-
-/** 
- * Start gesture event
- * @name vs.gl.GESTURE_START
- * @type {String}
- * @const
- */ 
-gl.GESTURE_START = vs.GESTURE_START;
-
-/** 
- * Change gesture event
- * @name vs.gl.GESTURE_MOVE 
- * @type {String}
- * @const
- */ 
-gl.GESTURE_CHANGE = vs.GESTURE_CHANGE;
-
-/** 
- * End gesture event
- * @name vs.gl.GESTURE_END 
- * @type {String}
- * @const
- */ 
-gl.GESTURE_END = vs.GESTURE_END;
 
 /**
  *  @class
@@ -158,12 +97,3 @@ Event.retain = function () {
 Event.release = function (event) {
   Event__pool.push (event);
 }
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-gl.Event = Event;
-
-/** touch event messages */
-gl.EVENT_SUPPORT_GESTURE = EVENT_SUPPORT_GESTURE;

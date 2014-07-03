@@ -224,9 +224,3 @@ function _setProperties (klass, properties)
   }
   util.defineClassProperties (klass, descriptions);
 }
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-gl.createClass = createClass;

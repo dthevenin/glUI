@@ -444,13 +444,3 @@ function scheduleAction (func, delay) {
   }
   else setImmediate (func);
 }
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-util.extend (vs, {
-  scheduleAction: scheduleAction,
-  ON_NEXT_FRAME: ON_NEXT_FRAME
-});
-

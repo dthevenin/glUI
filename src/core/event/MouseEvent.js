@@ -58,5 +58,3 @@ function setupMousePointerEvent () {
 
   buildEvent = buildMouseList;
 }
-
-

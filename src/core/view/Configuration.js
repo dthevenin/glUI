@@ -177,9 +177,3 @@ Configuration.applyToApplication = function (base) {
     }) 
   }
 }
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.gl.Configuration = Configuration;

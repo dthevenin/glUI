@@ -109,9 +109,3 @@ function initDefaultColors () {
 }
 
 glAddInitFunction (initDefaultColors);
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.gl.Color = Color;

@@ -235,11 +235,3 @@ Constraint.createObjectFromStringStyle = function (str) {
   
   return obj;
 };
-
-
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-gl.Constraint = Constraint;

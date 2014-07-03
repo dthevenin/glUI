@@ -216,10 +216,3 @@ EventSource.prototype =
   handleEvent : function (event) {}
 };
 util.extendClass (EventSource, GLObject);
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.gl.EventSource = EventSource;
-
