@@ -222,7 +222,7 @@ function TEMPLATE_ATTACHED_CALLBACK () {
 //   console.log (this.nodeName);
 };
 
-var property_reg = /(\w+):(\w+[.\w+]*)#(\w+)/;
+var ce_property_reg = /(\w+):(\w+[.\w+]*)#(\w+)/;
 
 function parsePropertiesDeclaration (properties_str) {
 
@@ -234,7 +234,7 @@ function parsePropertiesDeclaration (properties_str) {
     prop_decl;
   
   for (var i = 0; i < properties.length; i++) {
-    prop_decl = property_reg.exec (properties [i]);
+    prop_decl = ce_property_reg.exec (properties [i]);
     if (!prop_decl || prop_decl.length != 4) {
       console.error ("Problem with properties declaration \"%s\"",
         properties [i]);
