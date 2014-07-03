@@ -13,6 +13,26 @@ if(typeof Float32Array != 'undefined') {
 	glMatrixArrayType = Array;
 }
 
+/**
+ *  Returns `true` if `object` is an String; `false` otherwise.
+ *
+ *  @example
+ *
+ *  vs.util.isString ("qwe");
+ *  //-> true
+ *
+ *  vs.util.isString (123);
+ *  //-> false
+ *
+ *  @memberOf vs.util
+ *
+ * @param {Object} object The object to test.
+ **/
+function isString (object)
+{
+  return _toString.call (object) === STRING_CLASS;
+};
+
 function deepArrayClone (data) {
   var result, len, i;
   
