@@ -158,14 +158,14 @@ function createProgram (vertex_txt, fragment_txt) {
 
   var shader_vertex = get_shader (gl_ctx.VERTEX_SHADER, vertex_txt, "VERTEX");
   if (!shader_vertex) {
-    vs.log ("couldn't load shader")
+    console.error ("couldn't load shader")
   }
   gl_ctx.attachShader (program.__prog, shader_vertex);
   gl_ctx.deleteShader (shader_vertex);
 
   var shader_fragment = get_shader (gl_ctx.FRAGMENT_SHADER, fragment_txt, "FRAGMENT");
   if (!shader_fragment) {
-    vs.log("couldn't load shader")
+    console.error ("couldn't load shader")
   }
   gl_ctx.attachShader (program.__prog, shader_fragment);
   gl_ctx.deleteShader (shader_fragment);
@@ -177,7 +177,7 @@ function createProgram (vertex_txt, fragment_txt) {
   var linked = gl_ctx.getProgramParameter (program.__prog, gl_ctx.LINK_STATUS);
   if (!linked && !gl_ctx.isContextLost ()) {
     var infoLog = gl_ctx.getProgramInfoLog (program.__prog);
-    vs.error ("Error linking program:\n" + infoLog);
+    console.error ("Error linking program:\n" + infoLog);
     gl_ctx.deleteProgram (program.__prog);
     program.__prog = null;
     return;

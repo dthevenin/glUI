@@ -64,7 +64,7 @@ Group.prototype.viewDidAdd = function () {};
  * @name vs.ui.Group#isChild
  * @function
  *
- * @param {vs.gl.View} child The component to be removed.
+ * @param {View} child The component to be removed.
  * @return {boolean}
  */
 Group.prototype.isChild = function (child)
@@ -82,7 +82,7 @@ Group.prototype.isChild = function (child)
  *  Add the specified child component to this component.
  *  <p>
  *  The component can be a graphic component (vs.ui.Group) or
- *  a non graphic component (vs.gl.View).
+ *  a non graphic component (View).
  *  In case of vs.ui.Group its mandatory to set the extension.
  *  <p>
  *  The add is a lazy add! The child's view can be already in
@@ -111,7 +111,7 @@ Group.prototype.add = function (child)
     child.viewDidAdd ();
   }
 
-  vs.scheduleAction (function () {
+  scheduleAction (function () {
     View.__should_render = true;
   });
 };
@@ -125,7 +125,7 @@ Group.prototype.add = function (child)
  * @name vs.ui.Group#remove
  * @function
  *
- * @param {vs.gl.View} child The component to be removed.
+ * @param {View} child The component to be removed.
  */
 Group.prototype.remove = function (child)
 {
@@ -136,7 +136,7 @@ Group.prototype.remove = function (child)
   this.__children.remove (child);
   child.__parent = null;
 
-  vs.scheduleAction (function () {
+  scheduleAction (function () {
     View.__should_render = true;
   });
 };
@@ -160,7 +160,7 @@ Group.prototype.removeAllChildren = function ()
     child.__parent = null;
   }
 
-  vs.scheduleAction (function () {
+  scheduleAction (function () {
     View.__should_render = true;
   });
 }

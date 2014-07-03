@@ -21,7 +21,7 @@ var hasMSPointer = window.navigator.msPointerEnabled;
 
 /**
  *  @class
- *  An vs.gl.Event object, or simply an event, contains information about an 
+ *  An Event object, or simply an event, contains information about an 
  *  input action such as a button click or a key down. The Event object contains
  *  pertinent information about each event, such as where the cursor was located
  *  or which character was typed.<br>
@@ -36,7 +36,7 @@ var hasMSPointer = window.navigator.msPointerEnabled;
  *  @constructor
  *  Main constructor
  *
- *  @memberOf vs.gl
+ *  @memberOf core
  *
  * @param {string} type the event type [mandatory]
  * @param {Object} data complemetary event data [optional]
@@ -49,8 +49,8 @@ var Event__pool = [];
 
 /**
  * The component which produce the event
- * @type {vs.gl.EventSource|HTMLElement}
- * @name vs.gl.Event#src
+ * @type {EventSource|HTMLElement}
+ * @name Event#src
  */
 Event.prototype.src = null;
 
@@ -58,8 +58,8 @@ Event.prototype.src = null;
  * [Deprecated] The component which produce the event. <br>
  * In case of DOM event, the Event is mapped to the DOM event. Then
  * the developer has access to srcTarget (and many other data).
- * @type {vs.gl.EventSource|HTMLElement}
- * @name vs.gl.Event#srcTarget
+ * @type {EventSource|HTMLElement}
+ * @name Event#srcTarget
  * @deprecated
  */
 Event.prototype.srcTarget = null;
@@ -67,14 +67,14 @@ Event.prototype.srcTarget = null;
 /**
  * The event spec. For instance 'click' for a mouse click event.
  * @type {String}
- * @name vs.gl.Event#type
+ * @name Event#type
  */
 Event.prototype.type = "";
 
 /**
  * The optional data associated to the event.
  * @type {Object|null}
- * @name vs.gl.Event#data
+ * @name Event#data
  */
 Event.prototype.data = null;
 

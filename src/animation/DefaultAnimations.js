@@ -4,21 +4,21 @@
 
 /**
  *  Fade in an object.
- * @name vs.gl.Animation.FadeIn
- *  @type vs.gl.Animation
+ * @name Animation.FadeIn
+ *  @type Animation
  */
-var FadeIn = new vs.gl.Animation ({'opacity': 1});
+var FadeIn = new Animation ({'opacity': 1});
 FadeIn.keyFrame (0, {'opacity': 0});
 
 /**
  *  Fade out an object.
- * @name vs.gl.Animation.FadeOut
- *  @type vs.gl.Animation
+ * @name Animation.FadeOut
+ *  @type Animation
  */
-var FadeOut = new vs.gl.Animation ({'opacity': 0});
+var FadeOut = new Animation ({'opacity': 0});
 FadeOut.keyFrame (0, {'opacity': 1});
 
-var Bounce = new vs.gl.Animation ({'translation': [0,0]});
+var Bounce = new Animation ({'translation': [0,0]});
 Bounce.keyFrame (0, {'translation': [0,0]});
 Bounce.keyFrame (0.2, {'translation': [0,0]});
 Bounce.keyFrame (0.4, {'translation': [0,-30]});
@@ -27,7 +27,7 @@ Bounce.keyFrame (0.6, {'translation': [0,-15]});
 Bounce.keyFrame (0.8, {'translation': [0,0]});
 Bounce.duration = 1000;
 
-var Shake = new vs.gl.Animation ({'translation': [0,0]});
+var Shake = new Animation ({'translation': [0,0]});
 Shake.keyFrame (0, {'translation': [0,0]});
 Shake.keyFrame (0.10, {'translation': [-10,0]});
 Shake.keyFrame (0.20, {'translation': [10,0]});
@@ -42,10 +42,10 @@ Shake.duration = 1000;
 
 /**
  *  Swing
- * @name vs.gl.Animation.Swing
- *  @type vs.gl.Animation
+ * @name Animation.Swing
+ *  @type Animation
  */
-var Swing = new vs.gl.Animation ({'rotation': 0});
+var Swing = new Animation ({'rotation': 0});
 Swing.keyFrame (0, {'rotation': 0});
 Swing.keyFrame (0.20, {'rotation':15});
 Swing.keyFrame (0.40, {'rotation':-10});
@@ -56,10 +56,10 @@ Swing.origin = [50, 0];
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.Pulse
- *  @type vs.gl.Animation
+ * @name Animation.Pulse
+ *  @type Animation
  */
-var Pulse = new vs.gl.Animation ({'scaling': 1});
+var Pulse = new Animation ({'scaling': 1});
 Pulse.keyFrame (0, {'scaling':1});
 Pulse.keyFrame (0.50, {'scaling':1.1});
 Pulse.keyFrame (0.80, {'scaling':0.97});
@@ -67,10 +67,10 @@ Pulse.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FlipInX
- *  @type vs.gl.Animation
+ * @name Animation.FlipInX
+ *  @type Animation
  */
-var FlipInX = new vs.gl.Animation ({'rotation': [0, 0, 0], 'opacity': 1});
+var FlipInX = new Animation ({'rotation': [0, 0, 0], 'opacity': 1});
 FlipInX.keyFrame (0, {'rotation': [90, 0, 0], 'opacity': 0});
 FlipInX.keyFrame (0.4, {'rotation': [-10, 0, 0], 'opacity': 1});
 FlipInX.keyFrame (0.7, {'rotation': [10, 0, 0], 'opacity': 1});
@@ -79,19 +79,19 @@ FlipInX.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FlipOutX
- *  @type vs.gl.Animation
+ * @name Animation.FlipOutX
+ *  @type Animation
  */
-var FlipOutX = new vs.gl.Animation ({'rotation': [90, 0, 0], 'opacity': 0});
+var FlipOutX = new Animation ({'rotation': [90, 0, 0], 'opacity': 0});
 FlipOutX.keyFrame (0, {'rotation': [0,0,0], 'opacity': 1});
 FlipOutX.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FlipInY
- *  @type vs.gl.Animation
+ * @name Animation.FlipInY
+ *  @type Animation
  */
-var FlipInY = new vs.gl.Animation ({'rotation': [0, 0, 0], 'opacity': 1});
+var FlipInY = new Animation ({'rotation': [0, 0, 0], 'opacity': 1});
 FlipInY.keyFrame (0, {'rotation': [0, 90, 0], 'opacity': 0});
 FlipInY.keyFrame (0.4, {'rotation': [0, -10, 0], 'opacity': 1});
 FlipInY.keyFrame (0.7, {'rotation': [0, 10, 0], 'opacity': 1});
@@ -99,82 +99,82 @@ FlipInY.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FlipOutY
- *  @type vs.gl.Animation
+ * @name Animation.FlipOutY
+ *  @type Animation
  */
-var FlipOutY = new vs.gl.Animation ({'rotation': [0, 90, 0], 'opacity': 0});
+var FlipOutY = new Animation ({'rotation': [0, 90, 0], 'opacity': 0});
 FlipOutY.keyFrame (0, {'rotation': [0,0,0],'opacity': 1});
 FlipOutY.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FadeInUp
- *  @type vs.gl.Animation
+ * @name Animation.FadeInUp
+ *  @type Animation
  */
-var FadeInUp = new vs.gl.Animation ({'translation': [0,0], 'opacity': 1});
+var FadeInUp = new Animation ({'translation': [0,0], 'opacity': 1});
 FadeInUp.keyFrame (0, {'translation': [0, 20], 'opacity': 0});
 FadeInUp.duration = 500;
 
 /**
  *  Slide a object to right.
  * @name vs.ext.fx.Animation.FadeOutUp
- *  @type vs.gl.Animation
+ *  @type Animation
  */
-var FadeOutUp = new vs.gl.Animation ({'translation': [0, -20], 'opacity': 0});
+var FadeOutUp = new Animation ({'translation': [0, -20], 'opacity': 0});
 FadeOutUp.keyFrame (0, {'translation': [0,0], 'opacity': 1});
 FadeOutUp.duration = 500;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FadeInDown
- *  @type vs.gl.Animation
+ * @name Animation.FadeInDown
+ *  @type Animation
  */
-var FadeInDown = new vs.gl.Animation ({'translation': [0,0], 'opacity': 1});
+var FadeInDown = new Animation ({'translation': [0,0], 'opacity': 1});
 FadeInDown.keyFrame (0, {'translation': [0, -20], 'opacity': 0});
 FadeInDown.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FadeOutDown
- *  @type vs.gl.Animation
+ * @name Animation.FadeOutDown
+ *  @type Animation
  */
-var FadeOutDown = new vs.gl.Animation ({'translation': [0, 20], 'opacity': 0});
+var FadeOutDown = new Animation ({'translation': [0, 20], 'opacity': 0});
 FadeOutDown.keyFrame (0, {'translation': [0,0], 'opacity': 1});
 FadeOutDown.duration = 300;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FadeInLeft
- *  @type vs.gl.Animation
+ * @name Animation.FadeInLeft
+ *  @type Animation
  */
-var FadeInLeft = new vs.gl.Animation ({'translation': [0,0], 'opacity': 1});
+var FadeInLeft = new Animation ({'translation': [0,0], 'opacity': 1});
 FadeInLeft.keyFrame (0, {'translation': [-20, 0], 'opacity': 0});
 FadeInLeft.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FadeOutLeft
- *  @type vs.gl.Animation
+ * @name Animation.FadeOutLeft
+ *  @type Animation
  */
-var FadeOutLeft = new vs.gl.Animation ({'translation': [20, 0], 'opacity': 0});
+var FadeOutLeft = new Animation ({'translation': [20, 0], 'opacity': 0});
 FadeOutLeft.keyFrame (0, {'translation': [0,0], 'opacity': 1});
 FadeOutLeft.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FadeInLeft
- *  @type vs.gl.Animation
+ * @name Animation.FadeInLeft
+ *  @type Animation
  */
-var FadeInRight = new vs.gl.Animation ({'translation': [0,0], 'opacity': 1});
+var FadeInRight = new Animation ({'translation': [0,0], 'opacity': 1});
 FadeInRight.keyFrame (0, {'translation': [20, 0], 'opacity': 0});
 FadeInRight.duration = 1000;
 
 /**
  *  Slide a object to right.
- * @name vs.gl.Animation.FadeOutLeft
- *  @type vs.gl.Animation
+ * @name Animation.FadeOutLeft
+ *  @type Animation
  */
-var FadeOutRight = new vs.gl.Animation ({'translation': [-20, 0], 'opacity': 0});
+var FadeOutRight = new Animation ({'translation': [-20, 0], 'opacity': 0});
 FadeOutRight.keyFrame (0, {'translation': [0,0], 'opacity': 1});
 FadeOutRight.duration = 1000;
 
@@ -182,7 +182,7 @@ FadeOutRight.duration = 1000;
                       Export
 *********************************************************************/
 /** private */
-util.extend (vs.gl.Animation, {
+util.extend (Animation, {
   FadeIn:     FadeIn,
   FadeOut:    FadeOut,
   Bounce:     Bounce,

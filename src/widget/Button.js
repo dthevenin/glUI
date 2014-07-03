@@ -186,7 +186,7 @@ Button.prototype = {
   }
 };
 util.extend (Button.prototype, __text_management);
-util.extendClass (Button, View);
+extendClass (Button, View);
 
 /********************************************************************
                   Define class properties
@@ -234,7 +234,7 @@ util.defineClassProperties (Button, {
     {
       if (!v) { return; } 
       if (!util.isArray (v) || v.length !== 2) { return; }
-      if (!util.isNumber (v[0]) || !util.isNumber(v[1])) { return; }
+      if (!util.isNumber (v[0]) || !isNumber(v[1])) { return; }
 
       this._size [0] = v [0];
       this._size [1] = v [1];

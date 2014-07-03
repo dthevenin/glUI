@@ -158,7 +158,7 @@ Chronometer.prototype = {
     this.__time_decl = 0;
     this.__end_time = this.__timings__ [this.__repeat_dur - 1];
     
-    if (vs.util.isFunction (this.__param)) this.__clb = this.__param;
+    if (util.isFunction (this.__param)) this.__clb = this.__param;
 
     this._state = vs.core.Task.STARTED;
     this._tick = 0;
@@ -212,7 +212,7 @@ Chronometer.prototype = {
 //       return;
 //     }
 // 
-//     if (vs.util.isFunction (this.__param)) this.__clb = this.__param;
+//     if (util.isFunction (this.__param)) this.__clb = this.__param;
 // 
 //     this._state = vs.core.Task.STARTED;
 //     this._tick = 0;

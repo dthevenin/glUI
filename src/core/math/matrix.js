@@ -43,7 +43,7 @@ var mat3 = {};
  * New mat3
  */
 mat3.create = function(mat) {
-	var dest = new glMatrixArrayType(9);
+	var dest = new util.glMatrixArrayType (9);
 	
 	if(mat) {
 		dest[0] = mat[0];
@@ -215,7 +215,7 @@ var mat4 = {};
  * New mat4
  */
 mat4.create = function(mat) {
-	var dest = new glMatrixArrayType(16);
+	var dest = new util.glMatrixArrayType (16);
 	
 	if(mat) {
 		dest[0] = mat[0];

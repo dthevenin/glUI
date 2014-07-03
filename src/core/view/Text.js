@@ -240,7 +240,7 @@ var __text_management = {
         !this.__text_canvas_node.height) {
      
       var self = this;
-      vs.requestAnimationFrame (function () {
+      requestAnimationFrame (function () {
         self.__update_text (text);
       });
       return;
@@ -273,14 +273,14 @@ var __text_management = {
 }
 
 /**
- * A vs.gl.Text.
+ * A Text.
  *
  * @class
- * A vs.gl.Text component displays a unselectable text.
+ * A Text component displays a unselectable text.
  *
  @constructor
  * @extends vs.ui.View
- * @name vs.gl.Text
+ * @name Text
  */
 function Text (config)
 {
@@ -352,12 +352,12 @@ util.extendClass (Text, View);
                   Define class properties
 ********************************************************************/
 
-util.defineClassProperties (Text, {
+util.addClassProperties (Text, {
   "text": {
 
     /**
      * Set the text value
-     * @name vs.gl.Text#name
+     * @name Text#name
      * @param {string} v
      */
     set : function (v)
@@ -389,8 +389,8 @@ util.defineClassProperties (Text, {
 
   "size": {
    /** 
-     * Getter|Setter for size. Gives access to the size of the vs.gl.Canvas
-     * @name vs.gl.Text#size 
+     * Getter|Setter for size. Gives access to the size of the Canvas
+     * @name Text#size 
      *
      * @type {Array.<number>}
      */ 
@@ -398,7 +398,7 @@ util.defineClassProperties (Text, {
     {
       if (!v) { return; } 
       if (!util.isArray (v) || v.length !== 2) { return; }
-      if (!util.isNumber (v[0]) || !util.isNumber(v[1])) { return; }
+      if (!util.isNumber (v[0]) || !util.isNumber (v[1])) { return; }
 
       this._size [0] = v [0];
       this._size [1] = v [1];

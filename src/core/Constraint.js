@@ -19,7 +19,7 @@
 
 
 /**
- *  The vs.gl.Constraint class
+ *  The Constraint class
  *
 */
 function Constraint () {}

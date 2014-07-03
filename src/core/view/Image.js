@@ -1,9 +1,9 @@
 /**
- * A vs.gl.Image.
+ * A Image.
  * @constructor
- * @name vs.gl.Image
+ * @name Image
  * @extends vs.ui.View
- * An vs.gl.Image embeds an image in your application.
+ * An Image embeds an image in your application.
  */
 function gl_Image (config)
 {
@@ -57,10 +57,10 @@ util.extendClass (gl_Image, View);
                   Define class properties
 ********************************************************************/
   
-addClassProperty (gl_Image, 'src', {
+util.addClassProperty (gl_Image, 'src', {
   /**
    * Set the image url
-   * @name vs.gl.Image#src 
+   * @name Image#src 
    * @type {string}
    */
   set : function (v) {

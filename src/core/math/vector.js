@@ -43,7 +43,7 @@ var vec2 = {};
  * New vec2
  */
 vec2.create = function(vec) {
-	var dest = new glMatrixArrayType(2);
+	var dest = new util.glMatrixArrayType (2);
 	
 	if(vec) {
 		dest[0] = vec[0];
@@ -90,7 +90,7 @@ var vec3 = {};
  * New vec3
  */
 vec3.create = function(vec) {
-	var dest = new glMatrixArrayType(3);
+	var dest = new util.glMatrixArrayType (3);
 	
 	if(vec) {
 		dest[0] = vec[0];

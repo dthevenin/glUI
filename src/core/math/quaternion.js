@@ -43,7 +43,7 @@ quat4 = {};
  * New quat4
  */
 quat4.create = function(quat) {
-	var dest = new glMatrixArrayType(4);
+	var dest = new util.glMatrixArrayType (4);
 	
 	if(quat) {
 		dest[0] = quat[0];

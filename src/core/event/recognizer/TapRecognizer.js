@@ -233,7 +233,7 @@ TapRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-vs.util.extendClass (TapRecognizer, vs.ui.PointerRecognizer);
+util.extendClass (TapRecognizer, vs.ui.PointerRecognizer);
 
 /********************************************************************
                       Export

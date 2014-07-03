@@ -61,7 +61,7 @@ Transform.prototype._transform_origin = null;
                   Define class properties
 ********************************************************************/
 
-addClassProperty (Transform, 'translation', {
+util.addClassProperty (Transform, 'translation', {
   /**
    * Translation vector [tx, ty]
    * <=> obj.translate (tx, ty)
@@ -89,7 +89,7 @@ addClassProperty (Transform, 'translation', {
   }
 });
 
-addClassProperty (Transform, 'rotation', {
+util.addClassProperty (Transform, 'rotation', {
   /**
    * Rotation angle in degre
    * @name vs.ui.Transform#rotation
@@ -115,7 +115,7 @@ addClassProperty (Transform, 'rotation', {
   }
 });
 
-addClassProperty (Transform, 'scaling', {
+util.addClassProperty (Transform, 'scaling', {
   /**
    * Scale the view
    * @name vs.ui.Transform#scaling
@@ -137,7 +137,7 @@ addClassProperty (Transform, 'scaling', {
   }
 });
 
-addClassProperty (Transform, 'transformOrigin', {
+util.addClassProperty (Transform, 'transformOrigin', {
   /**
    * This property allows you to specify the origin of the 2D transformations.
    * Values are pourcentage of the view size.

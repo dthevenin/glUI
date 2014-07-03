@@ -157,7 +157,7 @@ PinchRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-vs.util.extendClass (PinchRecognizer, vs.ui.PointerRecognizer);
+util.extendClass (PinchRecognizer, vs.ui.PointerRecognizer);
 
 /********************************************************************
                       Export

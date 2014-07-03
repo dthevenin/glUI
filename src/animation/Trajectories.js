@@ -73,7 +73,7 @@ function getValuesIndex (values, nb_values, t, operation, out) {
 
 var TrajectoryVect1D = function (values) {
   Trajectory.call (this);  
-  this._values = deepArrayClone (values);
+  this._values = util.deepArrayClone (values);
 }
 util.extendClass (TrajectoryVect1D, Trajectory);
 
@@ -94,8 +94,8 @@ TrajectoryVect1D.prototype.compute = function (tick) {
 
 var TrajectoryVect2D = function (values) {
   Trajectory.call (this);  
-  this._values = deepArrayClone (values);
-  this.out = new glMatrixArrayType (2);
+  this._values = util.deepArrayClone (values);
+  this.out = new util.glMatrixArrayType (2);
 }
 util.extendClass (TrajectoryVect2D, Trajectory);
 
@@ -127,8 +127,8 @@ TrajectoryVect2D.prototype.compute = function (tick)
 
 var TrajectoryVect3D = function (values) {
   Trajectory.call (this);  
-  this._values = deepArrayClone (values);
-  this.out = new glMatrixArrayType (3);
+  this._values = util.deepArrayClone (values);
+  this.out = new util.glMatrixArrayType (3);
 }
 util.extendClass (TrajectoryVect3D, Trajectory);
 

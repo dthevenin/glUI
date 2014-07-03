@@ -19,16 +19,16 @@
 
 /**
  *  @class
- *  vs.gl.EventSource is an  class that forms the basis of event and command
+ *  EventSource is an  class that forms the basis of event and command
  *  processing. All class that handles events must inherit form EventSource.
  *
- *  @extends vs.gl.Object
+ *  @extends Object
  *  @author David Thevenin
  *
  *  @constructor
  *  Main constructor
  *
- * @name vs.gl.EventSource
+ * @name EventSource
  *
  * @param {Object} config the configuration structure [mandatory]
  */
@@ -45,7 +45,7 @@ function EventSource (config)
   this._pointer_end = [];
 }
 
-/** @name vs.gl.EventSource */
+/** @name EventSource */
 EventSource.prototype =
 {
   /**
@@ -93,7 +93,7 @@ EventSource.prototype =
    *  listener on the EventSource it's called on. The event target may be any
    *  GL object that supports events
    *
-   * @name vs.gl.EventSource#addEventListener
+   * @name EventSource#addEventListener
    * @function
    *
    * @param {string} type the event specification [mandatory]
@@ -104,15 +104,15 @@ EventSource.prototype =
   addEventListener: function (type, handler, useCapture) {
     if (!type || !handler) { return; }
 
-    if (type === vs.POINTER_START) {
+    if (type === POINTER_START) {
       this._pointer_start.push (handler);
       __gl_activate_pointer_start ();
     }
-    else if (type === vs.POINTER_MOVE) {
+    else if (type === POINTER_MOVE) {
       this._pointer_move.push (handler);
       __gl_activate_pointer_move ();
     }
-    else if (type === vs.POINTER_END) {
+    else if (type === POINTER_END) {
       this._pointer_end.push (handler);
       __gl_activate_pointer_end ();
     }
@@ -135,7 +135,7 @@ EventSource.prototype =
    *  Removes the event listener previously registered with
    *  EventSource.addEventListener.
    *
-   * @name vs.gl.EventSource#removeEventListener
+   * @name EventSource#removeEventListener
    * @function
    *
    * @param {string} type the event specification [mandatory]
@@ -146,15 +146,15 @@ EventSource.prototype =
   removeEventListener: function (type, handler, useCapture) {
     if (!type || !handler) { return; }
 
-    if (type === vs.POINTER_START) {
+    if (type === POINTER_START) {
       this._pointer_start.remove (handler);
       __gl_deactivate_pointer_start ()
     }
-    else if (type === vs.POINTER_MOVE) {
+    else if (type === POINTER_MOVE) {
       this._pointer_move.remove (handler);
       __gl_deactivate_pointer_move ()
     }
-    else if (type === vs.POINTER_END) {
+    else if (type === POINTER_END) {
       this._pointer_end.remove (handler);
       __gl_deactivate_pointer_end ()
     }
@@ -208,7 +208,7 @@ EventSource.prototype =
   /**
    * if this object receive an event
    *
-   * @name vs.gl.EventSource#handleEvent
+   * @name EventSource#handleEvent
    * @function
    *
    * @protected

@@ -27,14 +27,14 @@ vs.shader.Shader = function(gl, vertex, fragment) {
 
   var vs = this.loadShader(this.gl.VERTEX_SHADER, vertex);
   if (!vs) {
-    vs.log("couldn't load shader")
+    console.error ("couldn't load shader")
   }
   this.gl.attachShader(this.program, vs);
   this.gl.deleteShader(vs);
 
   var fs = this.loadShader(this.gl.FRAGMENT_SHADER, fragment);
   if (!fs) {
-    vs.log("couldn't load shader")
+    console.error ("couldn't load shader")
   }
   this.gl.attachShader(this.program, fs);
   this.gl.deleteShader(fs);
@@ -46,7 +46,7 @@ vs.shader.Shader = function(gl, vertex, fragment) {
   var linked = this.gl.getProgramParameter(this.program, this.gl.LINK_STATUS);
   if (!linked && !this.gl.isContextLost()) {
     var infoLog = this.gl.getProgramInfoLog(this.program);
-    vs.error("Error linking program:\n" + infoLog);
+    console.error ("Error linking program:\n" + infoLog);
     this.gl.deleteProgram(this.program);
     this.program = null;
     return;

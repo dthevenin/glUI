@@ -348,10 +348,10 @@ function addPointerListener (node, type, listener, useCapture)
   else if (node instanceof Document) {
     binding.doc_handler = function (event) {
       var e = buildEvent (type, event, node);
-      if (vs.util.isFunction (binding.handler)) {
+      if (util.isFunction (binding.handler)) {
         binding.handler.call (node, e);
       }
-      else if (vs.util.isFunction (binding.handler.handleEvent)) {
+      else if (util.isFunction (binding.handler.handleEvent)) {
         binding.handler.handleEvent.call (binding.handler, e);
       }
     };
@@ -360,10 +360,10 @@ function addPointerListener (node, type, listener, useCapture)
   else if (node instanceof HTMLElement) {
     binding.node_handler = function (event) {
       var e = buildEvent (type, event, node);
-      if (vs.util.isFunction (binding.handler)) {
+      if (util.isFunction (binding.handler)) {
         binding.handler.call (node, e);
       }
-      else if (vs.util.isFunction (binding.handler.handleEvent)) {
+      else if (util.isFunction (binding.handler.handleEvent)) {
         binding.handler.handleEvent.call (binding.handler, e);
       }
     };
@@ -409,10 +409,10 @@ function _dispatch_event (obj, list, e) {
   e.currentTarget = obj;
   
   list.forEach (function (handler) {
-    if (vs.util.isFunction (handler)) {
+    if (util.isFunction (handler)) {
       handler.call (obj, e);
     }
-    else if (vs.util.isFunction (handler.handleEvent)) {
+    else if (util.isFunction (handler.handleEvent)) {
       handler.handleEvent.call (handler, e);
     }
   });

@@ -288,7 +288,7 @@ AbstractList.prototype = {
 		this.__scroll__.scrollTo (0, pos.top, 200);
   }
 };
-util.extendClass (AbstractList, View);
+extendClass (AbstractList, View);
 
 
 /********************************************************************

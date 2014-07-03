@@ -6,7 +6,7 @@ function gl_get_texture_from_image_url (src, clb) {
   var handler = __gl_textures_ref [src];
   if (handler) {
     handler.ref_count ++;
-    if (vs.util.isFunction (clb)) {
+    if (util.isFunction (clb)) {
       if (handler.texture) {
         try {
           clb (handler.texture);
@@ -27,7 +27,7 @@ function gl_get_texture_from_image_url (src, clb) {
   handler.texture = null;
   handler.ref_count = 1;
   handler.clbs = [];
-  if (vs.util.isFunction (clb)) {
+  if (util.isFunction (clb)) {
     handler.clbs.push (clb);
   }
   __gl_textures_ref [src] = handler;

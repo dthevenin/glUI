@@ -161,7 +161,7 @@ if (!window.setImmediate) {
    */
   function installPostMessageImplementation () {
 
-    var MESSAGE_PREFIX = "vs.scheduler" + Math.random ();
+    var MESSAGE_PREFIX = "_scheduler" + Math.random ();
 
     function onGlobalMessage (event) {
       if (event.data === MESSAGE_PREFIX) {
@@ -379,11 +379,11 @@ function serviceLoop () {
  * Schedule your action on next frame.
  *
  * @example
- * vs.scheduleAction (function () {...}, vs.ON_NEXT_FRAME);
+ * core.scheduleAction (function () {...}, core.ON_NEXT_FRAME);
  *
- * @see vs.scheduleAction
+ * @see core.scheduleAction
  *
- * @name vs.ON_NEXT_FRAME 
+ * @name core.ON_NEXT_FRAME 
  * @type {String}
  * @const
  * @public
@@ -420,13 +420,13 @@ var ON_NEXT_FRAME = '__on_next_frame__';
  *
  * @example
  * // run asap
- * vs.scheduleAction (function () {...});
+ * core.scheduleAction (function () {...});
  * // run on next frame
- * vs.scheduleAction (function () {...}, vs.ON_NEXT_FRAME);
+ * core.scheduleAction (function () {...}, core.ON_NEXT_FRAME);
  * // run after 1s
- * vs.scheduleAction (function () {...}, 1000);
+ * core.scheduleAction (function () {...}, 1000);
  *
- * @name vs.scheduleAction 
+ * @name core.scheduleAction 
  * @type {String}
  * @function
  * @public
@@ -440,7 +440,7 @@ function scheduleAction (func, delay) {
     setTimeout (func, delay);
   }
   else if (delay === ON_NEXT_FRAME) {
-    vs.requestAnimationFrame (func);
+    requestAnimationFrame (func);
   }
   else setImmediate (func);
 }

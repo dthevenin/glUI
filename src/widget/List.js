@@ -174,13 +174,13 @@ List.prototype = {
     this.dispatchEvent (event);
   }
 };
-util.extendClass (List, AbstractList);
+extendClass (List, AbstractList);
 
 /********************************************************************
                   Define class properties
 ********************************************************************/
 
-util.defineClassProperties (List, {
+addClassProperties (List, {
   'itemsSelectable': {
     /** 
      * Allow deactivate the list item selection.

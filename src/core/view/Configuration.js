@@ -63,7 +63,7 @@ Configuration.parse = function (text) {
     configuration.property = property;
     configuration.value = JSON.parse (value);
     
-    if (property === "constraint" && vs.util.isString (configuration.value)) {
+    if (property === "constraint" && util.isString (configuration.value)) {
       configuration.value =
         Constraint.createObjectFromStringStyle (configuration.value);
     }
@@ -104,7 +104,7 @@ Configuration.applyToTemplate = function (template_name, base) {
     
     if (base && i === l) {
       if (configuration.property === "constraint") {
-        if (vs.util.isString (configuration.value)) {
+        if (util.isString (configuration.value)) {
           base.constraint.parseStringStyle (configuration.value)
         }
         else {
@@ -112,7 +112,7 @@ Configuration.applyToTemplate = function (template_name, base) {
         }
       }
       else if (configuration.property === "style") {
-        if (vs.util.isString (configuration.value)) {
+        if (util.isString (configuration.value)) {
           base.style.parseStringStyle (configuration.value)
         }
         else {
@@ -146,7 +146,7 @@ Configuration.applyToApplication = function (base) {
     
     if (base && i === l) {
       if (configuration.property === "constraint") {
-        if (vs.util.isString (configuration.value)) {
+        if (util.isString (configuration.value)) {
           base.constraint.parseStringStyle (configuration.value)
         }
         else {
@@ -154,7 +154,7 @@ Configuration.applyToApplication = function (base) {
         }
       }
       else if (configuration.property === "style") {
-        if (vs.util.isString (configuration.value)) {
+        if (util.isString (configuration.value)) {
           base.style.parseStringStyle (configuration.value)
         }
         else {

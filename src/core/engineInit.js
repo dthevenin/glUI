@@ -1,13 +1,10 @@
 
-vs.log = console.log.bind (console);
-vs.error = console.error.bind (console);
-
 var
   basicShaderProgram,
-//  shadowShaderProgram,
-//  imageShaderProgram,
-//  oneTextureShaderProgram,
-//  twoTexturesShaderProgram,
+  shadowShaderProgram,
+  imageShaderProgram,
+  oneTextureShaderProgram,
+  twoTexturesShaderProgram,
   gl_ctx,
   object_uv_buffer,
   object_bck_image_uv_buffer,
@@ -15,7 +12,9 @@ var
   object_faces_buffer,
   frame_size = [100, 100],
   gl_device_pixel_ratio,
-  default_texture_projection;
+  default_texture_projection,
+  jsProjMatrix,
+  jsViewMatrix;
 
 
 function createCanvas (width, height) {
@@ -27,8 +26,9 @@ function createCanvas (width, height) {
   canvas.height = height* gl_device_pixel_ratio;
 
   if (
-    deviceConfiguration.browser !== vs.core.DeviceConfiguration.BROWSER_FIREFOX
-    && gl_device_pixel_ratio !== 1) {
+//   deviceConfiguration.browser !==
+//       vs.core.DeviceConfiguration.BROWSER_FIREFOX &&
+    gl_device_pixel_ratio !== 1) {
   
     var modes = ["crisp-edges", "-moz-crisp-edges", "-webkit-optimize-contrast"];
   
@@ -297,22 +297,13 @@ function glAddInitFunction (func) {
 function initWebGLRendering () {
 
   if (gl_ctx) return;
-  
-  if (window.ACTIVATE_STATS) {
-    vs.util.importFile ("../../src/Stats.js", null, function () {
-      stats = Stats ();
-      document.body.appendChild (stats.domElement);
-      stats.setMode (1);
     
-    }, "js");
-  }
-  
   frame_size = [window.innerWidth, window.innerHeight];
   gl_device_pixel_ratio = window.devicePixelRatio || 1;
   
-  if (deviceConfiguration.browser === vs.core.DeviceConfiguration.BROWSER_FIREFOX) {
-    gl_device_pixel_ratio = 1;
-  }
+//  if (deviceConfiguration.browser === vs.core.DeviceConfiguration.BROWSER_FIREFOX) {
+//    gl_device_pixel_ratio = 1;
+//  }
   
   console.log (gl_device_pixel_ratio);
 

@@ -62,14 +62,15 @@ release :: clean vs_gl_engine.js
 	-$(RM_F) vs_gl_engine_tmp.js
 	-$(CP) vs_gl_engine.js ../demos/lib
 
-debug :: clean vs_core.js vs_event.js vs_gl_animation.js vs_gl_widget.js vs_webcomponent.js
+debug :: clean vs_util.js vs_core.js vs_event.js vs_gl_widget.js vs_webcomponent.js vs_class.js
 #	compile-modules convert --type amd --to ../lib/core.js vs_core.js 
 #	$(RM) vs_core.js
+	$(MV) vs_util.js ../lib/util.js
 	$(MV) vs_core.js ../lib/core.js
 	$(MV) vs_event.js ../lib/event.js
-	$(MV) vs_gl_animation.js ../lib/animation.js
 	$(MV) vs_gl_widget.js ../lib/widget.js
 	$(MV) vs_webcomponent.js ../lib/webcomponent.js
+	$(MV) vs_class.js ../lib/class.js
 	
 clean ::
 	-$(RM_RF) vs_gl_engine.js
@@ -88,9 +89,18 @@ vs_event.js:
 	$(CAT) core/event/recognizer/RotationRecognizer.js >> $@
 	$(CAT) core/event/recognizer/TapRecognizer.js >> $@
 	
-vs_core.js:
+vs_class.js:
+	$(CAT) class/export_header.js >> $@
+	$(CAT) class/Class.js >> $@
+	$(CAT) class/export_footer.js >> $@
+	
+vs_util.js:
+	$(CAT) util/export_header.js >> $@
+	$(CAT) util/util.js >> $@
+	$(CAT) util/export_footer.js >> $@
+	
+vs_core.js: vs_gl_animation.js
 	$(CAT) core/export_header.js >> $@
-	$(CAT) core/util.js >> $@
 	$(CAT) core/Object.js >> $@
 	$(CAT) core/mainloop.js >> $@
 	$(CAT) core/math/vector.js >> $@
@@ -121,7 +131,8 @@ vs_core.js:
 	$(CAT) core/view/Text.js >> $@
 	$(CAT) core/view/Image.js >> $@
 	$(CAT) core/view/Canvas.js >> $@
-	$(CAT) class/Class.js >> $@
+	$(CAT) vs_gl_animation.js >> $@
+	-$(RM_RF) vs_gl_animation.js
 	$(CAT) core/export_footer.js >> $@
 	
 vs_gl_widget.js:

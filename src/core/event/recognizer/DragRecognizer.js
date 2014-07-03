@@ -190,7 +190,7 @@ DragRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-vs.util.extendClass (DragRecognizer, vs.ui.PointerRecognizer);
+util.extendClass (DragRecognizer, vs.ui.PointerRecognizer);
 
 /********************************************************************
                       Export

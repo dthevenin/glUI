@@ -42,7 +42,7 @@ function ARRAY_DECODER (value) {
     if (exp.stack) console.error (exp.stack);
     console.error (exp);
   }
-  if (vs.util.isArray (result)) return result;
+  if (util.isArray (result)) return result;
   
   return;
 }
@@ -68,11 +68,11 @@ function DYNAMIC_DECODER (value, comp, prop_name) {
   if (!comp || !prop_name) return STRING_DECODER (value);
   
   var old_value = comp [prop_name];
-  if (vs.util.isNumber (old_value)) return INT_DECODER (value);
-  if (vs.util.isArray (old_value)) return ARRAY_DECODER (value);
-  if (vs.util.isString (old_value)) return STRING_DECODER (value);
-  if (vs.util.isUndefined (old_value)) return STRING_DECODER (value);
-  if (vs.util.isObject (old_value)) return OBJECT_DECODER (value);
+  if (util.isNumber (old_value)) return INT_DECODER (value);
+  if (util.isArray (old_value)) return ARRAY_DECODER (value);
+  if (util.isString (old_value)) return STRING_DECODER (value);
+  if (isUndefined (old_value)) return STRING_DECODER (value);
+  if (isObject (old_value)) return OBJECT_DECODER (value);
   
   return STRING_DECODER (value);
 }

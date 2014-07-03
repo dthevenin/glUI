@@ -12,6 +12,7 @@ return {
 //  GESTURE_END,
   scheduleAction: scheduleAction,
   ON_NEXT_FRAME: ON_NEXT_FRAME,
+  Object: GLObject,
   Style: Style,
   Color: Color,
   Event: Event,
@@ -22,7 +23,8 @@ return {
   Text: Text,
   View: View,
   Application: Application,
-  createClass: createClass
+  
+  Animation: Animation
 };
 
 //gl.createCustomEvent = createCustomEvent;

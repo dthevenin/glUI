@@ -39,16 +39,16 @@ Animation.prototype = {
    * The duration for each transformation. For setting only one duration,
    * use a string (ex anim.duration = 3000)
    * @type Array.<string>
-   * @name vs.gl.Animation#duration
+   * @name Animation#duration
    */
   duration: Animation.DEFAULT_DURATION,
 
   /**
    * Specifies how the intermediate values used during a transition are
    * calculated. <p />Use the constants to specify preset points of the curve:
-   * ({@link vs.gl.Animation.EASE},
-   * {@link vs.gl.Animation.LINEAR}, {@link vs.gl.Animation.EASE_IN},
-   * {@link vs.gl.Animation.EASE_OUT}, {@link vs.gl.Animation.EASE_IN_OUT})
+   * ({@link Animation.EASE},
+   * {@link Animation.LINEAR}, {@link Animation.EASE_IN},
+   * {@link Animation.EASE_OUT}, {@link Animation.EASE_IN_OUT})
    * or the cubic-bezier function to specify your own points.
    * <p />
    * Specifies a cubic Bézier curve : cubic-bezier(P1x,P1y,P2x,P2y) <br />
@@ -57,7 +57,7 @@ Animation.prototype = {
    * - Second point in the Bézier curve : P2x, P2y <br />
    *
    * @type Function
-   * @name vs.gl.Animation#timing
+   * @name Animation#timing
    */
   timing: null,
 
@@ -69,10 +69,10 @@ Animation.prototype = {
    *
    * @example
    * // define a animation with two transformations
-   * animation = new vs.gl.Animation ()
+   * animation = new Animation ()
    * animation.setAnimations ({‘width’: 100, 'opacity': 0});
    *
-   * @name vs.gl.Animation#setAnimations
+   * @name Animation#setAnimations
    * @function
    * @param {Array.<Array>} animations The array of [property, value]
    *         to animate
@@ -94,13 +94,13 @@ Animation.prototype = {
       value = animations [property];
       if (!util.isString (property))
       {
-        console.warn ('vs.gl.Animation, invalid constructor argument option: [' +
+        console.warn ('Animation, invalid constructor argument option: [' +
           property + ', ' + value + ']');
         continue;
       }
       
       values = [];
-      values.push ([1, deepArrayClone (value)]);     
+      values.push ([1, util.deepArrayClone (value)]);     
       
       this._trajectories [property] = values;
       if (classes [property]) {
@@ -121,13 +121,13 @@ Animation.prototype = {
    *  var translate = new vs.fx.TranslateAnimation (130, 150);
    *
    *  @example
-   *  var translate = new vs.gl.Animation ({'translation' : [100,10,0], 'opacity' : 0});
+   *  var translate = new Animation ({'translation' : [100,10,0], 'opacity' : 0});
    *
    *  translate.keyFrame (0.2, {translation [50,50,0], 'opacity' : 0.5});
    *  translate.keyFrame (0.4, {translation [80,10,0]});
    *  translate.keyFrame (0.6, {'opacity' : 1});
    *
-   * @name vs.gl.Animation#addKeyFrame
+   * @name Animation#addKeyFrame
    * @function
    * @param {number} pos The percentage value of animation
    * @param {Object | Array} values the object containing values for
@@ -146,12 +146,12 @@ Animation.prototype = {
       for (; i < l; i++) {
         value = values[i];
         if (value[0] === pos) {
-          value[1] = deepArrayClone (new_value);
+          value[1] = util.deepArrayClone (new_value);
           return;
         }
       }
       
-      values.push ([pos, deepArrayClone (new_value)]);
+      values.push ([pos, util.deepArrayClone (new_value)]);
       values.sort (function(a, b) {return a[0] - b[0];});
     }
     
@@ -182,7 +182,7 @@ Animation.prototype = {
    *    myAnimation.process (a_gui_object, this.endAnimation, this);
    *  }
    *
-   * @name vs.gl.Animation#process
+   * @name Animation#process
    * @function
    * @param {vs.fx.View} comp The component the view will be animated
    * @param {Function} clb an optional callback to call at the end of animation
@@ -200,25 +200,22 @@ Animation.prototype = {
   },
 };
 
-
 /*************************************************************
                 Timing Function
 *************************************************************/
 
-
-
 /**
  * The ease timing function
  * Equivalent to cubic-bezier(0.25, 0.1, 0.25, 1.0)
- * @name vs.gl.Animation.EASE
+ * @name Animation.EASE
  * @const
  */
-Animation.EASE = generateCubicBezierFunction (0.25, 0.1, 0.25, 1.0);
+Animation.EASE = util.generateCubicBezierFunction (0.25, 0.1, 0.25, 1.0);
 
 /**
  * The linear timing function
  * Equivalent to cubic-bezier(0.0, 0.0, 1.0, 1.0)
- * @name vs.gl.Animation.LINEAR
+ * @name Animation.LINEAR
  * @const
  */
 Animation.LINEAR = function (pos) { return pos; };
@@ -226,34 +223,34 @@ Animation.LINEAR = function (pos) { return pos; };
 /**
  * The ease in timing function
  * Equivalent to cubic-bezier(0.42, 0, 1.0, 1.0)
- * @name vs.gl.Animation.EASE_IN
+ * @name Animation.EASE_IN
  * @const
  */
-Animation.EASE_IN = generateCubicBezierFunction (0.42, 0.0, 1.0, 1.0);
+Animation.EASE_IN = util.generateCubicBezierFunction (0.42, 0.0, 1.0, 1.0);
 
 /**
  * The ease out timing function
  * Equivalent to cubic-bezier(0, 0, 0.58, 1.0)
- * @name vs.gl.Animation.EASE_OUT
+ * @name Animation.EASE_OUT
  * @const
  */
-Animation.EASE_OUT = generateCubicBezierFunction (0.0, 0.0, 0.58, 1.0);
+Animation.EASE_OUT = util.generateCubicBezierFunction (0.0, 0.0, 0.58, 1.0);
 
 /**
  * The ease in out timing function
  * Equivalent to cubic-bezier(0.42, 0, 0.58, 1.0)
- * @name vs.gl.Animation.EASE_IN_OUT
+ * @name Animation.EASE_IN_OUT
  * @const
  */
-Animation.EASE_IN_OUT = generateCubicBezierFunction (0.42, 0.0, 0.58, 1.0);
+Animation.EASE_IN_OUT = util.generateCubicBezierFunction (0.42, 0.0, 0.58, 1.0);
 
 /**
  * The ease in out timing function
  * Equivalent to cubic-bezier(0.42, 0, 0.58, 1.0)
- * @name vs.gl.Animation.EASE_IN_OUT
+ * @name Animation.EASE_IN_OUT
  * @const
  */
-Animation.EASE_OUT_IN = generateCubicBezierFunction (0.0, 0.42, 1.0, 0.58);
+Animation.EASE_OUT_IN = util.generateCubicBezierFunction (0.0, 0.42, 1.0, 0.58);
 
 Animation.DEFAULT_DURATION = 300;
 Animation.DEFAULT_TIMING = Animation.EASE;
@@ -271,9 +268,3 @@ var AnimationDefaultOption = {
   repeat: 1
 }
 
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.gl.Animation = Animation;

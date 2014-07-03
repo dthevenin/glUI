@@ -19,12 +19,12 @@
 
 
 /**
- *  The vs.gl.Style class
+ *  The Style class
  *
 */
 function Style (config)
 {
-  this.parent = vs.core.Object;
+  this.parent = GLObject;
   this.parent (config);
   this.constructor = Style;
   
@@ -185,13 +185,13 @@ Style.prototype = {
   }
 }
 
-vs.util.defineClassProperties (Style, {
+util.addClassProperties (Style, {
 
   'opacity': {
     /**
      * Change view opacity.
      * value is include in this range [0, 1]
-     * @name vs.gl.Style#opacity
+     * @name Style#opacity
      * @type {number}
      */
     set : function (v) {
@@ -213,8 +213,8 @@ vs.util.defineClassProperties (Style, {
   
   'backgroundColor': {
     /**
-     * @name vs.ui.View#backgroundColor
-     * @type {vs.gl.Color}
+     * @name Style#backgroundColor
+     * @type {Color}
      */
     set : function (v)
     {
@@ -225,7 +225,7 @@ vs.util.defineClassProperties (Style, {
     
     /**
      * @ignore
-     * @type {vs.gl.Color}
+     * @type {Color}
      */
     get : function () {
       return this._background_color;
@@ -234,8 +234,8 @@ vs.util.defineClassProperties (Style, {
   
   'color': {
     /**
-     * @name vs.ui.View#color
-     * @type {vs.gl.Color}
+     * @name Style#color
+     * @type {Color}
      */
     set : function (v)
     {
@@ -246,7 +246,7 @@ vs.util.defineClassProperties (Style, {
     
     /**
      * @ignore
-     * @type {vs.gl.Color}
+     * @type {Color}
      */
     get : function () {
       return this._color;
@@ -256,7 +256,7 @@ vs.util.defineClassProperties (Style, {
   'fontFamily': {
     /**
      * Change view fontFamily.
-     * @name vs.gl.Style#fontFamily
+     * @name Style#fontFamily
      * @type {String}
      */
     set : function (v) {
@@ -277,7 +277,7 @@ vs.util.defineClassProperties (Style, {
   'fontSize': {
     /**
      * Change view fontSize.
-     * @name vs.gl.Style#fontSize
+     * @name Style#fontSize
      * @type {String}
      */
     set : function (v) {
@@ -299,7 +299,7 @@ vs.util.defineClassProperties (Style, {
   'fontWeight': {
     /**
      * Change view fontWeight.
-     * @name vs.gl.Style#fontWeight
+     * @name Style#fontWeight
      * @type {String}
      */
     set : function (v) {
@@ -324,7 +324,7 @@ vs.util.defineClassProperties (Style, {
   'textAlign': {
     /**
      * Change view textAlign.
-     * @name vs.gl.Style#textAlign
+     * @name Style#textAlign
      * @type {String}
      */
     set : function (v) {
@@ -345,7 +345,7 @@ vs.util.defineClassProperties (Style, {
   'textTransform': {
     /**
      * Change view fontFamily.
-     * @name vs.gl.Style#textTransform
+     * @name Style#textTransform
      * @type {String}
      */
     set : function (v) {
@@ -366,7 +366,7 @@ vs.util.defineClassProperties (Style, {
   'backgroundImage': {
     /**
      * Set the image url
-     * @name vs.gl.Style#src 
+     * @name Style#src 
      * @type {string}
      */
     set : function (v) {
@@ -409,8 +409,8 @@ vs.util.defineClassProperties (Style, {
   'shadowColor': {
     /**
      * Change view shadow.
-     * @name vs.gl.Style#shadow
-     * @type {vs.gl.Color}
+     * @name Style#shadow
+     * @type {Color}
      */
     set : function (v) {
       if (!(v instanceof Color)) return; 
@@ -430,7 +430,7 @@ vs.util.defineClassProperties (Style, {
   'shadowOffset': {
     /**
      * Change view shadow.
-     * @name vs.gl.Style#shadow
+     * @name Style#shadow
      * @type {Array}
      */
     set : function (v) {
@@ -452,7 +452,7 @@ vs.util.defineClassProperties (Style, {
   'shadowBlur': {
     /**
      * Change view shadow.
-     * @name vs.gl.Style#shadow
+     * @name Style#shadow
      * @type {String}
      */
     set : function (v) {
@@ -473,16 +473,16 @@ vs.util.defineClassProperties (Style, {
   'backgroundImageUV': {
     /**
      * Set the image url
-     * @name vs.gl.Style#src 
+     * @name Style#src 
      * @type {string}
      */
     set : function (v) {
       if (!v) { return; }
       if (!util.isArray (v) || v.length != 8) { return; }
-      if (!util.isNumber (v[0]) || !util.isNumber(v[1]) ||
-          !util.isNumber (v[2]) || !util.isNumber(v[3]) ||
-          !util.isNumber (v[4]) || !util.isNumber(v[5]) ||
-          !util.isNumber (v[6]) || !util.isNumber(v[7])) { return; }
+      if (!util.isNumber (v[0]) || !util.isNumber (v[1]) ||
+          !util.isNumber (v[2]) || !util.isNumber (v[3]) ||
+          !util.isNumber (v[4]) || !util.isNumber (v[5]) ||
+          !util.isNumber (v[6]) || !util.isNumber (v[7])) { return; }
       
       this._background_image_uv = new Float32Array (v);
       

@@ -20,7 +20,7 @@
  * Returns a local unique Id <p>
  * The algorithm is based on an index initialized when the page is loaded.
  *
- * @memberOf vs.core
+ * @memberOf core
  *
  * @return {String}
  */
@@ -34,8 +34,8 @@ function createId () {
 *********************************************************************/
 /**
  *  @class Object
- *  vs.gl.Object is the root class of most class hierarchies. Through
- *  vs.gl.Object, objects inherit a basic interface for configuration
+ *  Object is the root class of most class hierarchies. Through
+ *  Object, objects inherit a basic interface for configuration
  *  and clone mechanism. It provides an unique identifier for objects.
  *
  *  @author David Thevenin
@@ -43,20 +43,20 @@ function createId () {
  *  @constructor
  *  Main constructor
  *
- * @name vs.gl.Object
+ * @name Object
  *
  * @param {Object} config the configuration structure
 */
 function GLObject (config)
 {
-  this.constructor = gl.Object;
+  this.constructor = GLObject;
   if (util.isString (config)) { this._id = config; }
   else if (config && config.id) { this._id = config.id; }
   else this._id = createId ();
 
   if (config)
   {
-    this.__config__ = config;//util.clone (config);
+    this.__config__ = config;
   }
 }
 
@@ -77,11 +77,11 @@ GLObject.prototype =
   /**
    *  Object default init. <p>
    *
-   * @name vs.gl.Object#init
+   * @name Object#init
    * @function
    *
    *  @example
-   *  myObject = new vs.gl.Object (vs.core.createId ());
+   *  myObject = new Object (core.createId ());
    *  myObject.init ();
    *  @return {Object} this
    */
@@ -130,7 +130,7 @@ GLObject.prototype =
    *  <br/><br/>
    *  Ex:
    *  @example
-   *  var myObject = new vs.gl.Object ({id: 'myobject'});
+   *  var myObject = new Object ({id: 'myobject'});
    *  myObject.init ();
    *
    *  myObject.configure ({prop1: "1", prop2: 'hello', ..});
@@ -139,7 +139,7 @@ GLObject.prototype =
    *  myObject.prop2 = "hello";
    *  ...
    *
-   * @name vs.gl.Object#configure
+   * @name Object#configure
    * @function
    *
    * @param {Object} config the associated array used for configuring the
@@ -170,7 +170,7 @@ GLObject.prototype =
    *  dataflow propagation) you have to return 'false' or nothing.
    *  Otherwise return 'true' to and the propagation will terminate.
    *
-   * @name vs.gl.Object#propertiesDidChange
+   * @name Object#propertiesDidChange
    * @function
    * @return {boolean} true if you wants stop de propagation, false otherwise
    */
@@ -183,30 +183,17 @@ GLObject.prototype =
   destructor : function () {
     // remove the current object
     GLObject._obs [this._id] = undefined;
-  },
-
- /*************************************************************
-                  Properties introscpection
-  *************************************************************/
-
-  /**
-   * @private
-   */
-  _super : function ()
-  {
-    var superFunc = this._super.caller._super_func_;
-    if (superFunc) superFunc.apply (this, arguments);
-  },
+  }
 };
 
 /********************************************************************
                   Define class properties
 ********************************************************************/
 
-addClassProperty (GLObject, "id", {
+util.addClassProperty (GLObject, "id", {
   /**
-   * Getter for vs.gl.Object id
-   * @name vs.gl.Object#id
+   * Getter for Object id
+   * @name Object#id
    *
    * @type {String}
    */

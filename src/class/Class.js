@@ -25,7 +25,7 @@ var _constructor_ = Object.prototype.constructor;
 /**
  * @example
  *  var Class1 = vs.core.createClass ({
- *    properties: {name: vs.core.Object.PROPERTY_IN_OUT},{});
+ *    properties: {name: core.Object.PROPERTY_IN_OUT},{});
  *
  *  var t = new Class1 ({name: 'Hello'});
  *  t.init ();
@@ -51,7 +51,8 @@ var _constructor_ = Object.prototype.constructor;
 function createClass (config)
 {
   var klass = null, __spec = {}, 
-    parent = vs.gl.Object, properties = {};
+    parent = core.Object, properties = {},
+    key;
 
   // Create the class
   klass = function ()
@@ -120,21 +121,21 @@ function createClass (config)
  * @const
  * @type {number}
  */
-vs.gl.Object.PROPERTY_IN = 1;
+core.Object.PROPERTY_IN = 1;
 
 /** 
  * @name vs.gl.Object.PROPERTY_OUT
  * @const
  * @type {number}
  */
-vs.gl.Object.PROPERTY_OUT = 2;
+core.Object.PROPERTY_OUT = 2;
 
 /** 
  * @name vs.gl.Object.PROPERTY_IN_OUT
  * @const
  * @type {number}
  */
-vs.gl.Object.PROPERTY_IN_OUT = 3;
+core.Object.PROPERTY_IN_OUT = 3;
 
 /** 
  * Regular expression used for parsing property export path.
@@ -158,8 +159,8 @@ function _setProperties (klass, properties)
     if (util.isNumber (value))
     {
       export_value = value; desc = {};
-      _prop_name = '_' + util.underscore (prop_name);
-      if (export_value & vs.gl.Object.PROPERTY_IN)
+      _prop_name = '_' + underscore (prop_name);
+      if (export_value & core.Object.PROPERTY_IN)
       {
         desc.set = (function (prop_name, _prop_name)
         {
@@ -169,7 +170,7 @@ function _setProperties (klass, properties)
           };
         }(prop_name, _prop_name));
       }
-      if (export_value & vs.gl.Object.PROPERTY_OUT)
+      if (export_value & core.Object.PROPERTY_OUT)
       {
         desc.get = (function (_prop_name)
         {
@@ -222,5 +223,14 @@ function _setProperties (klass, properties)
     }
     descriptions [prop_name] = desc;
   }
-  util.defineClassProperties (klass, descriptions);
+  util.addClassProperties (klass, descriptions);
 }
+
+
+/**
+ * @private
+ */
+core.Object.prototype._super = function () {
+  var superFunc = this._super.caller._super_func_;
+  if (superFunc) superFunc.apply (this, arguments);
+};

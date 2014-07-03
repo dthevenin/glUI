@@ -19,7 +19,7 @@
 
 
 /**
- *  The vs.gl.Color class
+ *  The Color class
  *
 */
 function Color (r, g, b, a) {
@@ -29,10 +29,10 @@ function Color (r, g, b, a) {
 }
 
 Color.prototype.setRGBAColor = function (r, g, b, a) {
-  if (!vs.util.isNumber (r) || r < 0 || r > 255) r = 255;
-  if (!vs.util.isNumber (g) || g < 0 || g > 255) g = 255;
-  if (!vs.util.isNumber (b) || b < 0 || b > 255) b = 255;
-  if (!vs.util.isNumber (a) || a < 0 || a > 1) a = 1;
+  if (!util.isNumber (r) || r < 0 || r > 255) r = 255;
+  if (!util.isNumber (g) || g < 0 || g > 255) g = 255;
+  if (!util.isNumber (b) || b < 0 || b > 255) b = 255;
+  if (!util.isNumber (a) || a < 0 || a > 1) a = 1;
 
   r = r / 255;
   g = g / 255;

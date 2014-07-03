@@ -19,23 +19,23 @@
 */
 
 /**
- *  The vs.gl.Canvas class
+ *  The Canvas class
  *
  *  @extends vs.ui.View
  *  @class
- *  The vs.gl.Canvas class is a subclass of vs.ui.View that allows you to easily draw
+ *  The Canvas class is a subclass of vs.ui.View that allows you to easily draw
  *  arbitrary content within your HTML content.
  *  <p>
- *  When you instantiate the vs.gl.Canvas class you should reimpletement the draw method.
+ *  When you instantiate the Canvas class you should reimpletement the draw method.
  *
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.gl.Canvas.
- * @name vs.gl.Canvas
+ *   Creates a new Canvas.
+ * @name Canvas
  *
  *  @example
- *  var myCanvas = new vs.gl.Canvas (config);
+ *  var myCanvas = new Canvas (config);
  *  myCanvas.init ();
  *
  *  myCanvas.draw = function (x, y, width, height)
@@ -48,7 +48,7 @@
  *    
  *  };
  *
- *  // other way to use vs.gl.Canvas
+ *  // other way to use Canvas
  *  myCanvas.moveTo(100,100).lineTo(200,200,100,200).closePath().stroke();
  *
  * @param {Object} config The configuration structure [mandatory]
@@ -124,7 +124,7 @@ Canvas.prototype = {
   
   /**
    *
-   * @name vs.gl.Canvas#getContext
+   * @name Canvas#getContext
    * @function
    * @return {CanvasRenderingContext2D} the canvas context
    */
@@ -140,7 +140,7 @@ Canvas.prototype = {
    * 5th argument specifies a radius for rounded corners. An optional
    * 6th argument specifies a clockwise rotation about (x,y).
    *
-   * @name vs.gl.Canvas#drawRect
+   * @name Canvas#drawRect
    * @function
    *
    * @param {number} x The x position
@@ -201,13 +201,13 @@ Canvas.prototype = {
    * radius.
    *
    * @example
-   *  var myCanvas = new vs.gl.Canvas (config);
+   *  var myCanvas = new Canvas (config);
    *  myCanvas.init ();
    *
    *  // draw a triangle
    *  myCanvas.c_polygon (100, 100, 50, 150, 300, 300);
    *
-   * @name vs.gl.Canvas#c_polygon
+   * @name Canvas#c_polygon
    * @function
    * @param {...number} list of number
    */
@@ -262,7 +262,7 @@ Canvas.prototype = {
   /**
    * This method draws elliptical arcs as well as circular arcs.
    *
-   * @name vs.gl.Canvas#c_ellipse
+   * @name Canvas#c_ellipse
    * @function
    * @example
    *  var myCanvas = new Canvas (config);
@@ -312,10 +312,10 @@ Canvas.prototype = {
   },
   
   /**
-   * vs.gl.Canvas draw method.
-   * Should be reimplement when you instanciate a vs.gl.Canvas object.
+   * Canvas draw method.
+   * Should be reimplement when you instanciate a Canvas object.
    *
-   * @name vs.gl.Canvas#draw
+   * @name Canvas#draw
    * @function
    *
    * @param {number} x The top position of the canvas; Default = 0
@@ -442,46 +442,46 @@ Canvas.setup ();
  * and ending at the given end angle, going in the given direction (defaulting * 
  * to clockwise), is added to the path, connected to the previous point by a 
  * straight line.
- * @name vs.gl.Canvas#c_arc
+ * @name Canvas#c_arc
  * @function
  */
 
 /**
  * Adds an arc with the given control points and radius to the current subpath, 
  * connected to the previous point by a straight line.
- * @name vs.gl.Canvas#c_arcTo
+ * @name Canvas#c_arcTo
  * @function
  */
 
 /**
  * Resets the current path.
- * @name vs.gl.Canvas#c_beginPath
+ * @name Canvas#c_beginPath
  * @function
  */
 
 /**
  * Adds the given point to the current subpath, connected to the previous one by 
  * a cubic Bézier curve with the given control points.
- * @name vs.gl.Canvas#c_bezierCurveTo
+ * @name Canvas#c_bezierCurveTo
  * @function
  */
 
 /**
  * Clears all pixels on the canvas in the given rectangle to transparent black.
- * @name vs.gl.Canvas#c_clearRect
+ * @name Canvas#c_clearRect
  * @function
  */
 
 /**
  * Further constrains the clipping region to the given path.
- * @name vs.gl.Canvas#c_clip
+ * @name Canvas#c_clip
  * @function
  */
 
 /**
  * Marks the current subpath as closed, and starts a new subpath with a point 
  * the same as the start and end of the newly closed subpath.
- * @name vs.gl.Canvas#c_closePath
+ * @name Canvas#c_closePath
  * @function
  */
 
@@ -489,7 +489,7 @@ Canvas.setup ();
  * Returns an ImageData object with the given dimensions in CSS pixels (which 
  * might map to a different number of actual device pixels exposed by the object 
  * itself). All the pixels in the returned object are transparent black.
- * @name vs.gl.Canvas#c_createImageData
+ * @name Canvas#c_createImageData
  * @function
  */
 
@@ -498,7 +498,7 @@ Canvas.setup ();
  * along the line given by the coordinates represented by the arguments.
  * If any of the arguments are not finite numbers, throws a NotSupportedError 
  * exception.
- * @name vs.gl.Canvas#c_createLinearGradient
+ * @name Canvas#c_createLinearGradient
  * @function
  */
 
@@ -508,176 +508,176 @@ Canvas.setup ();
  * If any of the arguments are not finite numbers, throws a NotSupportedError 
  * exception. If either of the radii are negative, throws an IndexSizeError 
  * exception.
- * @name vs.gl.Canvas#c_createRadialGradient
+ * @name Canvas#c_createRadialGradient
  * @function
  */
 
 /**
  * Returns a CanvasPattern object that uses the given image and repeats in the 
  * direction(s) given by the repetition argument.
- * @name vs.gl.Canvas#c_createPattern
+ * @name Canvas#c_createPattern
  * @function
  */
 
 /**
- * @name vs.gl.Canvas#c_drawFocusRing
+ * @name Canvas#c_drawFocusRing
  * @function
  */
 
 /**
  * Draws the given image onto the canvas.
- * @name vs.gl.Canvas#c_drawImage
+ * @name Canvas#c_drawImage
  * @function
  */
 
 /**
- * @name vs.gl.Canvas#c_fill
+ * @name Canvas#c_fill
  * @function
  */
 
 /**
  * Paints the given rectangle onto the canvas, using the current fill style.
- * @name vs.gl.Canvas#c_fillRect
+ * @name Canvas#c_fillRect
  * @function
  */
 
 /**
  * Fills the given text at the given position. If a maximum width is provided, 
  * the text will be scaled to fit that width if necessary.
- * @name vs.gl.Canvas#c_fillText
+ * @name Canvas#c_fillText
  * @function
  */
 
 /**
  * Returns an ImageData object containing the image data for the given rectangle 
  * of the canvas.
- * @name vs.gl.Canvas#c_getImageData
+ * @name Canvas#c_getImageData
  * @function
  */
 
 /**
  * Returns true if the given point is in the current path.
- * @name vs.gl.Canvas#c_isPointInPath
+ * @name Canvas#c_isPointInPath
  * @function
  */
 
 /**
  * Adds the given point to the current subpath, connected to the previous one by 
  * a straight line.
- * @name vs.gl.Canvas#c_lineTo
+ * @name Canvas#c_lineTo
  * @function
  */
 
 /**
  * Returns a TextMetrics object with the metrics of the given text in the 
  * current font.
- * @name vs.gl.Canvas#c_measureText
+ * @name Canvas#c_measureText
  * @function
  */
 
 /**
  * Creates a new subpath with the given point.
- * @name vs.gl.Canvas#c_moveTo
+ * @name Canvas#c_moveTo
  * @function
  */
 
 /**
  * Paints the data from the given ImageData object onto the canvas. If a dirty 
  * rectangle is provided, only the pixels from that rectangle are painted.
- * @name vs.gl.Canvas#c_putImageData
+ * @name Canvas#c_putImageData
  * @function
  */
 
 /**
  * Adds the given point to the current subpath, connected to the previous one by 
  * a quadratic Bézier curve with the given control point.
- * @name vs.gl.Canvas#c_quadraticCurveTo
+ * @name Canvas#c_quadraticCurveTo
  * @function
  */
 
 /**
  * Adds a new closed subpath to the path, representing the given rectangle.
- * @name vs.gl.Canvas#c_rect
+ * @name Canvas#c_rect
  * @function
  */
 
 /**
  * Pops the top state on the stack, restoring the context to that state.
- * @name vs.gl.Canvas#c_restore
+ * @name Canvas#c_restore
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply a rotation transformation with the 
  * given characteristics. The angle is in radians.
- * @name vs.gl.Canvas#c_rotate
+ * @name Canvas#c_rotate
  * @function
  */
 
 /**
  * Pushes the current state onto the stack.
- * @name vs.gl.Canvas#c_save
+ * @name Canvas#c_save
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply a scaling transformation with the 
  * given characteristics.
- * @name vs.gl.Canvas#c_scale
+ * @name Canvas#c_scale
  * @function
  */
 
 /**
  * Changes the transformation matrix to the matrix given by the arguments as 
  * described below.
- * @name vs.gl.Canvas#c_setTransform
+ * @name Canvas#c_setTransform
  * @function
  */
 
 /**
  * Strokes the subpaths with the current stroke style.
- * @name vs.gl.Canvas#c_stroke
+ * @name Canvas#c_stroke
  * @function
  */
 
 /**
  * Paints the box that outlines the given rectangle onto the canvas, using the 
  * current stroke style.
- * @name vs.gl.Canvas#c_strokeRect
+ * @name Canvas#c_strokeRect
  * @function
  */
 
 /**
  * Strokes the given text at the given position. If a maximum width is provided, 
  * the text will be scaled to fit that width if necessary.
- * @name vs.gl.Canvas#c_strokeText
+ * @name Canvas#c_strokeText
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply the matrix given by the arguments 
  * as described below.
- * @name vs.gl.Canvas#c_transform
+ * @name Canvas#c_transform
  * @function
  */
 
 /**
  * Changes the transformation matrix to apply a translation transformation with 
  * the given characteristics.
- * @name vs.gl.Canvas#c_translate
+ * @name Canvas#c_translate
  * @function
  */
 
 /**
  * Returns the canvas element.
- * @name vs.gl.Canvas#c_canvas
+ * @name Canvas#c_canvas
  */
 
 /**
  * Can be set, to change the fill style.
  * <br />
  * Returns the current style used for filling shapes.
- * @name vs.gl.Canvas#c_fillStyle
+ * @name Canvas#c_fillStyle
  */
 
 /**
@@ -685,7 +685,7 @@ Canvas.setup ();
  * property; values that cannot be parsed as CSS font values are ignored.
  * <br />
  * Returns the current font settings
- * @name vs.gl.Canvas#c_font
+ * @name Canvas#c_font
  */
 
 /**
@@ -693,28 +693,28 @@ Canvas.setup ();
  * are ignored.
  * <br />
  * Returns the current alpha value applied to rendering operations.
- * @name vs.gl.Canvas#c_globalAlpha
+ * @name Canvas#c_globalAlpha
  */
 
 /**
  * Can be set, to change the composition operation. Unknown values are ignored.
  * <br />
  * Returns the current composition operation, from the list below.
- * @name vs.gl.Canvas#c_globalCompositeOperation
+ * @name Canvas#c_globalCompositeOperation
  */
 
 /**
  * Can be set, to change the line cap style.
  * <br />
  * Returns the current line cap style.
- * @name vs.gl.Canvas#c_lineCap
+ * @name Canvas#c_lineCap
  */
 
 /**
  * Can be set, to change the line join style.
  * <br />
  * Returns the current line join style.
- * @name vs.gl.Canvas#c_lineJoin
+ * @name Canvas#c_lineJoin
  */
 
 /**
@@ -722,14 +722,14 @@ Canvas.setup ();
  * values greater than zero are ignored.
  * <br />
  * Returns the current miter limit ratio.
- * @name vs.gl.Canvas#c_miterLimit
+ * @name Canvas#c_miterLimit
  */
 
 /**
  * Can be set, to change the line width. Values that are not finite values 
  * greater than zero are ignored.
  * Returns the current line width.
- * @name vs.gl.Canvas#c_lineWidth
+ * @name Canvas#c_lineWidth
  */
 
 /**
@@ -737,7 +737,7 @@ Canvas.setup ();
  * are ignored.
  * <br />
  * Returns the current shadow offset.
- * @name vs.gl.Canvas#c_shadowOffsetX
+ * @name Canvas#c_shadowOffsetX
  */
 
 /**
@@ -745,7 +745,7 @@ Canvas.setup ();
  * are ignored.
  * <br />
  * Returns the current shadow offset.
- * @name vs.gl.Canvas#c_shadowOffsetY
+ * @name Canvas#c_shadowOffsetY
  */
 
 /**
@@ -753,7 +753,7 @@ Canvas.setup ();
  * greater than or equal to zero are ignored.
  * <br />
  * Returns the current level of blur applied to shadows.
- * @name vs.gl.Canvas#c_shadowBlur
+ * @name Canvas#c_shadowBlur
  */
 
 /**
@@ -761,21 +761,21 @@ Canvas.setup ();
  * colors are ignored.
  * <br />
  * Returns the current shadow color.
- * @name vs.gl.Canvas#c_shadowColor
+ * @name Canvas#c_shadowColor
  */
 
 /**
  * Can be set, to change the stroke style.
  * <br />
  * Returns the current style used for stroking shapes.
- * @name vs.gl.Canvas#c_strokeStyle
+ * @name Canvas#c_strokeStyle
  */
 
 /**
  * Can be set, to change the alignment. The possible values are start, end, 
  * left, right, and center. Other values are ignored. The default is start.
  * Returns the current text alignment settings.
- * @name vs.gl.Canvas#c_textAlign
+ * @name Canvas#c_textAlign
  */
 
 /**
@@ -784,6 +784,6 @@ Canvas.setup ();
  * alphabetic.
  * <br />
  * Returns the current baseline alignment settings.
- * @name vs.gl.Canvas#c_textBaseline
+ * @name Canvas#c_textBaseline
  */
  

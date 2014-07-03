@@ -17,7 +17,5 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define ("core", ["util"], function (util) {
+define ("class", ["util", "core"], function (util, core) {
 
-  "use strict";
-  

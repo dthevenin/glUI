@@ -62,7 +62,7 @@ function get_extern_component (href, result_clb) {
 
   var node = EXTERN_COMPONENT [href], data, clbs;
   
-  if (!vs.util.isFunction (result_clb)) result_clb = null;
+  if (!util.isFunction (result_clb)) result_clb = null;
 
   if (node) {
     if (result_clb) result_clb (node);
@@ -81,7 +81,7 @@ function get_extern_component (href, result_clb) {
     var clbs = LOADING_CLBS [href];
     if (clbs) {
       clbs.forEach (function (result_clb) {
-        vs.scheduleAction (function () {result_clb (data)});
+        core.scheduleAction (function () {result_clb (data)});
       })
       clbs = [];
       LOADING_CLBS [href] = undefined;
@@ -287,7 +287,7 @@ function _setCompProperties (comp, properties)
       };
     }(value[0], value[1]));
     
-    vs.util.defineProperty (comp, prop_name, desc);
+    util.defineProperty (comp, prop_name, desc);
     comp.__properties__.push (prop_name);
   }
 }
@@ -502,7 +502,7 @@ function declareComponent (className, comp_name, _manage_content,
   
   comp_proto = Object.create (node.constructor.prototype);
   
-  if (vs.util.isFunction (createdCallback)) {
+  if (util.isFunction (createdCallback)) {
     comp_proto.createdCallback = createdCallback;
   }
   else comp_proto.createdCallback = function () {
@@ -570,7 +570,7 @@ function declareComponent (className, comp_name, _manage_content,
     
   };
   
-  if (vs.util.isFunction (attachedCallback)) {
+  if (util.isFunction (attachedCallback)) {
     comp_proto.attachedCallback = attachedCallback;
   }
   else comp_proto.attachedCallback = function () {
@@ -611,7 +611,7 @@ function declareComponent (className, comp_name, _manage_content,
  //   console.log (this.nodeName);
   };
         
-  if (vs.util.isFunction (detachedCallback)) {
+  if (util.isFunction (detachedCallback)) {
     comp_proto.detachedCallback = detachedCallback;
   }
   else comp_proto.detachedCallback = function () {
@@ -672,7 +672,7 @@ window.addEventListener ('WebComponentsReady', function() {
   // show body now that everything is ready
   vs.gl.Application.start ();
   
-  vs.scheduleAction (function () {
+  core.scheduleAction (function () {
     document.body.style.opacity = 1;
   });
 });

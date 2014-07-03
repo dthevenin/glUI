@@ -138,9 +138,9 @@ function isInFrustum (sprite, level, p_size_vec, scroll_vec) {
 }
 
 function calculateViewsInFrustum (now) {
-  var apps = vs.Application_applications, key;
+  var apps = Application_applications, key;
   gl_stack_length = 0;
-  gl_views_index = 0;
+  var gl_views_index = 0;
 
   function _calculateViewsInFrustum (gl_view, p_transform, new_p_matrix, p_alpha, level) {
     var key, i, l, child, children, style, alpha, sprite;
@@ -250,7 +250,7 @@ function initRendering () {
   }
   
   for (var i = 0; i < 256; i ++) {
-    gl_boundaries_stack [i] = new glMatrixArrayType (4);
+    gl_boundaries_stack [i] = new util.glMatrixArrayType (4);
   }
 
   var color_id_array = new Float32Array ([0,0,0,0])
@@ -565,7 +565,7 @@ function initRendering () {
   render_ui = function (now, mode) {
 
     if (mode !== 1 && (!View.__should_render && !View.__nb_animation)) {
-      next_rendering_id = vs.requestAnimationFrame (render_ui);
+      next_rendering_id = requestAnimationFrame (render_ui);
       return
     }
 
@@ -600,20 +600,20 @@ function initRendering () {
 
       gl_ctx.flush();
     }
-//    next_rendering_id = vs.requestAnimationFrame (animate);
-//    if (mode !== 1) vs.scheduleAction(animate, 300);
+//    next_rendering_id = requestAnimationFrame (animate);
+//    if (mode !== 1) scheduleAction(animate, 300);
 
     if (stats) stats.end ();
     
     if (mode !== 1) {
-      next_rendering_id = vs.requestAnimationFrame (render_ui);
+      next_rendering_id = requestAnimationFrame (render_ui);
     }
   }
   
-  next_rendering_id = vs.requestAnimationFrame (render_ui);
+  next_rendering_id = requestAnimationFrame (render_ui);
   
 //  animate (performance.now ());
-//  vs.scheduleAction(animate, 100);
+//  scheduleAction(animate, 100);
 }
 
 function handleContextLost (event) {

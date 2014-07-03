@@ -146,7 +146,7 @@ RotationRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-vs.util.extendClass (RotationRecognizer, vs.ui.PointerRecognizer);
+util.extendClass (RotationRecognizer, vs.ui.PointerRecognizer);
 
 /********************************************************************
                       Export

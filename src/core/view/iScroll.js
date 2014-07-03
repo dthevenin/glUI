@@ -1,6 +1,6 @@
 
 /*! iScroll v5.1.1 ~ (c) 2008-2014 Matteo Spinelli ~ http://cubiq.org/license */
-(function (window, Math) {
+var __iscroll = (function (window, Math) {
 
 var quadratic = function (k) {
   return k * ( 2 - k );
@@ -106,7 +106,7 @@ function __iscroll (el, options) {
   this.directionY = 0;
   this._events = {};
 
-  this.wrapper.addEventListener (vs.POINTER_START, this);
+  this.wrapper.addEventListener (core.POINTER_START, this);
   this.refresh ();
 
   this.enable ();
@@ -116,7 +116,7 @@ __iscroll.prototype = {
   version: '5.1.1',
 
   destroy: function () {
-    this.wrapper.removeEventListener (vs.POINTER_START, this);
+    this.wrapper.removeEventListener (core.POINTER_START, this);
   },
 
   _start: function (e) {
@@ -166,9 +166,9 @@ __iscroll.prototype = {
 
     this._execEvent ('beforeScrollStart');
     
-    vs.addPointerListener (document, vs.POINTER_MOVE, this);
-    vs.addPointerListener (document, vs.POINTER_CANCEL, this);
-    vs.addPointerListener (document, vs.POINTER_END, this);
+    core.addPointerListener (document, core.POINTER_MOVE, this);
+    core.addPointerListener (document, core.POINTER_CANCEL, this);
+    core.addPointerListener (document, core.POINTER_END, this);
 
     this._tap = true;
   },
@@ -272,9 +272,9 @@ __iscroll.prototype = {
       return;
     }
 
-    vs.removePointerListener (document, vs.POINTER_MOVE, this);
-    vs.removePointerListener (document, vs.POINTER_CANCEL, this);
-    vs.removePointerListener (document, vs.POINTER_END, this);
+    core.removePointerListener (document, core.POINTER_MOVE, this);
+    core.removePointerListener (document, core.POINTER_CANCEL, this);
+    core.removePointerListener (document, core.POINTER_END, this);
 
     var point = e.changedTouches ? e.changedTouches[0] : e,
       momentumX,
@@ -518,13 +518,13 @@ __iscroll.prototype = {
   
   handleEvent: function (e) {
     var type = e.type;
-    if (type === vs.POINTER_MOVE) {
+    if (type === core.POINTER_MOVE) {
       this._move(e);
     }
-    else if (type === vs.POINTER_START) {
+    else if (type === core.POINTER_START) {
       this._start(e);
     }
-    else if (type === vs.POINTER_END || type === vs.POINTER_CANCEL) {
+    else if (type === core.POINTER_END || type === core.POINTER_CANCEL) {
       this._end(e);
     }
     else if (type === 'wheel' ||
@@ -538,6 +538,6 @@ __iscroll.prototype = {
   }
 };
 
-gl.__iscroll = __iscroll;
+return __iscroll;
 
 })(window, Math);

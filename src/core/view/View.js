@@ -22,7 +22,7 @@ function View (config)
 }
 util.extend (View.prototype, Group.prototype);
 util.extend (View.prototype, Transform.prototype);
-util.extend (View.prototype, vs.ui.RecognizerManager);
+//util.extend (View.prototype, vs.ui.RecognizerManager);
 
 View.__should_render = true;
 View.__nb_animation = 0;
@@ -216,7 +216,7 @@ View.prototype.show = function (clb)
  */
 View.prototype._show_object = function (clb)
 {
-  vs.scheduleAction (function () {
+  scheduleAction (function () {
     View.__should_render = true;
   });
 
@@ -230,7 +230,7 @@ View.prototype._show_object = function (clb)
 
   if (clb) {
     if (clb) {
-      vs.scheduleAction (function () {clb.call (self);});
+      scheduleAction (function () {clb.call (self);});
     }
   }
 };
@@ -263,7 +263,7 @@ View.prototype.hide = function (clb)
  * @param {Function} clb a function to call a the end of show process
  */
 View.prototype._hide_object= function (clb) {
-  vs.scheduleAction (function () {
+  scheduleAction (function () {
     View.__should_render = true;
   });
 
@@ -275,7 +275,7 @@ View.prototype._hide_object= function (clb) {
   this.__is_hidding = false;
   if (clb) {
     if (clb) {
-      vs.scheduleAction (function () {clb.call (self);});
+      scheduleAction (function () {clb.call (self);});
     }
   }
 };
@@ -317,7 +317,7 @@ View.prototype._setup_scroll = function () {
     config.scrollY = true;
   }
 
-  this.__scroll__ = new gl.__iscroll (this, config);
+  this.__scroll__ = new __iscroll (this, config);
   this.refresh ();
 },
 
@@ -341,7 +341,7 @@ util.extendClass (View, EventSource);
                   Define class properties
 ********************************************************************/
 
-util.defineClassProperties (View, {
+util.addClassProperties (View, {
 
   'size': {
     /**
@@ -490,7 +490,7 @@ util.defineClassProperties (View, {
     /**
      * Rotation angle in degre
      * @name vs.ui.View#style
-     * @type {vs.gl.Style}
+     * @type {Style}
      */
     set : function (v)
     {
@@ -501,7 +501,7 @@ util.defineClassProperties (View, {
 
     /**
      * @ignore
-     * @type {vs.gl.Style}
+     * @type {Style}
      */
     get : function ()
     {
@@ -514,7 +514,7 @@ util.defineClassProperties (View, {
     /**
      * Rotation angle in degre
      * @name vs.ui.View#constraint
-     * @type {vs.gl.Style}
+     * @type {Style}
      */
     set : function (v)
     {
@@ -530,7 +530,7 @@ util.defineClassProperties (View, {
 
     /**
      * @ignore
-     * @type {vs.gl.Style}
+     * @type {Style}
      */
     get : function ()
     {
@@ -542,11 +542,11 @@ util.defineClassProperties (View, {
   }
 });
 
-addClassProperty (View, 'scroll', {
+util.addClassProperty (View, 'scroll', {
   /** 
    * Allow to scroll the view.
    * By default it not allowed
-   * @name vs.gl.View#scroll 
+   * @name View#scroll 
    * @type {boolean|number}
    */ 
   set : function (v)
