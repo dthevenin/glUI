@@ -31,5 +31,5 @@ require (['CurtainDemo', 'CurtainImageDemo', 'FishEyeDemo'], function (CurtainDe
   });
 
   new Test ().init ();
-  vs.ui.Application.start ();
+  vs.gl.Application.start ();
 });

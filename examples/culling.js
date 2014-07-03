@@ -46,5 +46,5 @@ var Text = vs.core.createClass ({
 
 function loadApplication () {
   new Text ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.ui.Application.start ();
+  vs.gl.Application.start ();
 }

@@ -153,5 +153,5 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
   });
 
   new CurtainDemo ().init ();
-  vs.ui.Application.start ();
+  vs.gl.Application.start ();
 });

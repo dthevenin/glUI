@@ -204,5 +204,5 @@ var DATA = [
 
 function loadApplication () {
   new ThingList ({id:"thinglist", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.ui.Application.start ();
+  vs.gl.Application.start ();
 }

@@ -46,5 +46,5 @@ var testPerfAnim = vs.core.createClass ({
 function loadApplication () {
   var app = new testPerfAnim ({id:"test"})
   app.init ();
-  vs.ui.Application.start ();
+  vs.gl.Application.start ();
 }

@@ -22,9 +22,7 @@ var TemplateTest = vs.core.createClass ({
   /** parent class */
   parent: vs.gl.Application,
   
-  applicationStarted : function (event) {  
-    console.log (this.myView);
-    
+  applicationStarted : function (event) {
     window.view = this.myView;
   }
 });

@@ -61,5 +61,5 @@ var Test = vs.core.createClass ({
 
 function loadApplication () {
   new Test ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.ui.Application.start ();
+  vs.gl.Application.start ();
 }
