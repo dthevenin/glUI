@@ -57,9 +57,7 @@ util.extendClass (gl_Image, View);
                   Define class properties
 ********************************************************************/
   
-Object.defineProperty (gl_Image.prototype, 'src', {
-  enumerable: true,
-  
+addClassProperty (gl_Image, 'src', {
   /**
    * Set the image url
    * @name vs.gl.Image#src 

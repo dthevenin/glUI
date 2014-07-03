@@ -545,9 +545,7 @@ util.defineClassProperties (View, {
   }
 });
 
-Object.defineProperty (View.prototype, 'scroll', {
-  enumerable: true,
-  
+addClassProperty (View, 'scroll', {
   /** 
    * Allow to scroll the view.
    * By default it not allowed
