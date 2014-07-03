@@ -4,9 +4,7 @@ var
   util = vs.util,
   core = vs.core,
   ui = vs.ui,
-  gl = vs.gl,
-  VSObject = vs.core.Object;
-
+  gl = vs.gl;
 
 // Fallback for systems that don't support WebGL
 if(typeof Float32Array != 'undefined') {
@@ -35,8 +33,8 @@ function deepArrayClone (data) {
   return result;
 }
 
-function CubicBezier (t,p1x,p1y,p2x,p2y)
-{
+function CubicBezier (t,p1x,p1y,p2x,p2y) {
+  
   var ax=0,bx=0,cx=0,ay=0,by=0,cy=0,epsilon=1.0/200.0;
   function sampleCurveX(t) {return ((ax*t+bx)*t+cx)*t;};
   function sampleCurveY(t) {return ((ay*t+by)*t+cy)*t;};
@@ -109,3 +107,24 @@ function generateCubicBezierFunction (x1, y1, x2, y2) {
     }
   }
 })();
+
+
+function addClassProperty (_class, name, descriptor) {
+  if (!_class || !_class.prototype) {
+    console.error ("addClassProperty: Invalid class");
+    return;
+  }
+  
+  if (!util.isString (name)) {
+    console.error ("addClassProperty: Invalid property name: " + name);
+    return;
+  }
+  if (!descriptor) {
+    console.error ("addClassProperty: Invalid descriptor");
+    return;
+  }
+  
+  descriptor.enumerable = true;
+  Object.defineProperty (_class.prototype, name, descriptor);
+}
+
