@@ -22,7 +22,7 @@
  *  vs.gl.EventSource is an  class that forms the basis of event and command
  *  processing. All class that handles events must inherit form EventSource.
  *
- *  @extends vs.core.Object
+ *  @extends vs.gl.Object
  *  @author David Thevenin
  *
  *  @constructor
@@ -34,7 +34,7 @@
  */
 function EventSource (config)
 {
-  this.parent = VSObject;
+  this.parent = GLObject;
   this.parent (config);
   this.constructor = EventSource;
 
@@ -81,7 +81,7 @@ EventSource.prototype =
 
     delete (this.__bindings__);
 
-    VSObject.prototype.destructor.call (this);
+    GLObject.prototype.destructor.call (this);
   },
 
   _pointer_start : null,
@@ -215,7 +215,7 @@ EventSource.prototype =
    */
   handleEvent : function (event) {}
 };
-util.extendClass (EventSource, VSObject);
+util.extendClass (EventSource, GLObject);
 
 /********************************************************************
                       Export
