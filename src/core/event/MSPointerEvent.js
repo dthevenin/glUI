@@ -531,7 +531,6 @@ function removePointerListener (node, type, listener, useCapture)
   }
 
   node.removeEventListener (type, binding.handler, useCapture);
-  delete (binding);
 }
 
 function createCustomEvent (eventName, target, payload)

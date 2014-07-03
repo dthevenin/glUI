@@ -331,7 +331,6 @@ View.prototype._remove_scroll = function () {
   if (this.__scroll__)
   {
     this.__scroll__.destroy ();
-    delete (this.__scroll__);
     this.__scroll__ = undefined;
   }
 }

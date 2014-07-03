@@ -403,7 +403,6 @@ function removePointerListener (node, type, listener, useCapture)
   else if (node instanceof Document) {
     node.removeEventListener (type, binding.doc_handler, useCapture);
   }
-  delete (binding);
 }
 
 function _dispatch_event (obj, list, e) {

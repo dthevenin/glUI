@@ -526,7 +526,7 @@ Style.restoreGLContext = function () {
     style = Styles [i];
     if (style) {
       if (style.__gl_texture_bck_image) {
-        delete (style.__gl_texture_bck_image);
+        gl_ctx.deleteTexture (style.__gl_texture_bck_image);
         style.__gl_texture_bck_image = gl_ctx.createTexture ();
       }
     }

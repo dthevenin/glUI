@@ -203,7 +203,7 @@ TapRecognizer.prototype = {
           console.log (exp);
         }
         self.__unselect_time_out = 0;
-        delete (self.__unselect_clb);
+        self.__unselect_clb = undefined;
       }
       this.__unselect_time_out = setTimeout (this.__unselect_clb, vs.ui.View.UNSELECT_DELAY);        
     }

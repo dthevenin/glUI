@@ -24,7 +24,6 @@ myView.subView:size = "[10,10]"
 
 var selector_regexp = /(#|@)?(\w*[\.\w*]+)(:(\w*))?\s?=\s?([\w\W]*)$/;
 
-
 var Configurations = {};
 var TemplateConfigurations = {}
 

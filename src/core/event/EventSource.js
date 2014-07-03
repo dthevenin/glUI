@@ -76,10 +76,10 @@ EventSource.prototype =
     for (var spec in this.__bindings__)
     {
       deleteBindings (this.__bindings__ [spec]);
-      delete (this.__bindings__ [spec]);
+      this.__bindings__ [spec] = null;
     }
 
-    delete (this.__bindings__);
+    this.__bindings__ = null;
 
     GLObject.prototype.destructor.call (this);
   },

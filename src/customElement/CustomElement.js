@@ -84,7 +84,7 @@ function get_extern_component (href, result_clb) {
         vs.scheduleAction (function () {result_clb (data)});
       })
       clbs = [];
-      delete (LOADING_CLBS [href]);
+      LOADING_CLBS [href] = undefined;
     }
   }
   
@@ -361,7 +361,7 @@ function LIST_ATTACHED_CALLBACK () {
    
   var href = this.__ext_template, self = this;
   if (href) {
-    delete (this.__ext_template);
+    this.__ext_template = undefined;
     
     get_extern_component (href, function (data) {
       if (!data) return;
