@@ -236,6 +236,64 @@ function underscore (str)
             .toLowerCase ();
 }
 
+/********************************************************************
+                    Array extension
+*********************************************************************/
+
+/**
+ * Removes the elements in the specified interval of this Array.<br/>
+ * Shifts any subsequent elements to the left (subtracts one from their indices).<br/>
+ * This method extends the JavaScript Array prototype.
+ * By John Resig (MIT Licensed)
+ *
+ * @param {int} from Index of the first element to be removed
+ * @param {int} to Index of the last element to be removed
+ */
+Array.prototype._remove = function (from, to) {
+  var rest = this.slice ((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply (this, rest);
+};
+
+/**
+ * Removes the elements in the specified interval of this Array.<br/>
+ * Shifts any subsequent elements to the left (subtracts one from their indices).<br/>
+ * This method extends the JavaScript Array prototype.
+ *
+ * @param {int} from Index of the first element to be removed
+ * @param {int} to Index of the last element to be removed
+ * @return {Array} the modified array
+ */
+Array.prototype.remove = function (from, to) {
+  if ((typeof(from) === "object") || util.isString (from)) {
+    var i = 0;
+    while (i < this.length) {
+      if (this[i] === from) {
+        this._remove (i);
+      }
+      else {
+        i++;
+      }
+    }
+  }
+  else {
+    this._remove (from, to);
+  }
+  return this;
+};
+
+/**
+ * Removes all elements of this Array.<br/>
+ *
+ * @return {Array} the modified array
+ */
+Array.prototype.removeAll = function () {
+  while (this.length > 0) {
+    this._remove (0);
+  }
+  return this;
+};
+
 function deepArrayClone (data) {
   var result, len, i;
   
