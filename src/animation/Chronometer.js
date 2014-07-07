@@ -1,5 +1,29 @@
+
+var Task = {};
+
+/**
+ * The task is started
+ * @const
+ * @name vs.core.Task.STARTED
+ */
+Task.STARTED = 1;
+
+/**
+ * The task is stopped
+ * @const
+ * @name vs.core.Task.STOPPED
+ */
+Task.STOPPED = 0;
+
+/**
+ * The task is paused
+ * @const
+ * @name vs.core.Task.PAUSED
+ */
+Task.PAUSED = 2;
+
 var Chronometer = function (params) {
-  this._state = vs.core.Task.STOPPED;
+  this._state = Task.STOPPED;
   
   if (params.duration) this._duration = params.duration;
   if (params.begin) this._begin = params.begin;
@@ -32,7 +56,7 @@ Chronometer.prototype = {
   /**
    *  Starts the task
    *
-   * @name vs.core.Task#start
+   * @name Task#start
    * @function
    *
    * @param {any} param any parameter (scalar, Array, Object)
@@ -41,7 +65,7 @@ Chronometer.prototype = {
   {
     var delegate = this.delegate, self = this;
     
-    if (this._state === vs.core.Task.STARTED) return;
+    if (this._state === Task.STARTED) return;
 
     // schedule a chronometer cycle
     function _start ()
@@ -53,7 +77,7 @@ Chronometer.prototype = {
     
     this.__param = param;
 
-    if (this._state === vs.core.Task.STOPPED)
+    if (this._state === Task.STOPPED)
     {
       var begin = this._begin || 0;
       this.__time_decl = 0;
@@ -113,7 +137,7 @@ Chronometer.prototype = {
    */
   _clock : function (currTime)
   {
-    if (this._state !== vs.core.Task.STARTED) return;
+    if (this._state !== Task.STARTED) return;
 
     if (currTime >= this.__end_time)
     {
@@ -145,12 +169,12 @@ Chronometer.prototype = {
    */
   _start_clock: function ()
   {
-//     if (this._state === vs.core.Task.PAUSED)
+//     if (this._state === Task.PAUSED)
 //     {
 //       var pause_dur = currTime - this.__pause_time;
 //       this.__start_time += pause_dur;
 //       this.__end_time += pause_dur;
-//       this._state = vs.core.Task.STARTED;
+//       this._state = Task.STARTED;
 //       return;
 //     }
     
@@ -160,7 +184,7 @@ Chronometer.prototype = {
     
     if (util.isFunction (this.__param)) this.__clb = this.__param;
 
-    this._state = vs.core.Task.STARTED;
+    this._state = Task.STARTED;
     this._tick = 0;
     if (this.__clb) this.__clb (this._tick);
   },
@@ -171,7 +195,7 @@ Chronometer.prototype = {
    */
 //   _step : function ()
 //   {
-//     if (this._state !== vs.core.Task.STARTED) return;
+//     if (this._state !== Task.STARTED) return;
 //     
 //     var step = (this._steps - this.__steps)
 //     this.__steps --;
@@ -205,16 +229,16 @@ Chronometer.prototype = {
 //   _start_steps: function ()
 //   {
 //     // step chronometer implement a simplistic time management and pause.
-//     if (this._state === vs.core.Task.PAUSED)
+//     if (this._state === Task.PAUSED)
 //     {
-//       this._state = vs.core.Task.STARTED;
+//       this._state = Task.STARTED;
 //       this._step ();
 //       return;
 //     }
 // 
 //     if (util.isFunction (this.__param)) this.__clb = this.__param;
 // 
-//     this._state = vs.core.Task.STARTED;
+//     this._state = Task.STARTED;
 //     this._tick = 0;
 //     if (this.__clb) this.__clb (this._tick);
 //     
@@ -230,14 +254,14 @@ Chronometer.prototype = {
    *  When the task is stopped, it calls the TaskDelegate.taskDidStop
    *  if it declared.
    *
-   * @name vs.core.Task#stop
+   * @name Task#stop
    * @function
    */
   stop: function ()
   {
     var delegate = this.delegate, self = this;
     
-    this._state = vs.core.Task.STOPPED;
+    this._state = Task.STOPPED;
     this.__pause_time = 0;
     this.__timings__.length = 0;
 
@@ -260,13 +284,13 @@ Chronometer.prototype = {
    *  When the task is paused, it calls the TaskDelegate.taskDidPause
    *  if it declared.
    *
-   * @name vs.core.Task#pause
+   * @name Task#pause
    * @function
    */
   pause: function ()
   {
-    if (!this._state === vs.core.Task.STARTED) return;
-    this._state = vs.core.Task.PAUSED;
+    if (!this._state === Task.STARTED) return;
+    this._state = Task.PAUSED;
     this.__pause_time = performance.now ();
   }
 };
