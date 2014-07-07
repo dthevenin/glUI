@@ -138,6 +138,8 @@ var setupTrajectory = function (trajs, obj, property, traj_values, traj_class)
     throw ("Error with the animation. Unvalid property declaration: " + property);
   }
   
+  var traj;
+  
   if (traj_class) {
     traj = new traj_class (traj_values);
   }
