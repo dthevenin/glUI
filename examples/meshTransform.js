@@ -10,17 +10,18 @@
    }
 });
 
-require (['CurtainDemo', 'CurtainImageDemo', 'FishEyeDemo'], function (CurtainDemo, CurtainImageDemo, FishEyeDemo) {
+require (['CurtainDemo', 'CurtainImageDemo', 'FishEyeDemo', 'class', 'core'],
+  function (CurtainDemo, CurtainImageDemo, FishEyeDemo, klass, core) {
 
-  var Test = vs.gl.createClass ({
+  var Test = klass.createClass ({
 
     /** parent class */
-    parent: vs.gl.Application,
+    parent: core.Application,
 
     initComponent : function () {
       this._super ();
 
-      this.style.backgroundColor = vs.gl.Color.white;
+      this.style.backgroundColor = core.Color.white;
 
       var view = new CurtainDemo ({ position: [10, 10] }).init ();
 //      var view = new CurtainImageDemo ({ position: [50, 50] }).init ();
@@ -31,5 +32,5 @@ require (['CurtainDemo', 'CurtainImageDemo', 'FishEyeDemo'], function (CurtainDe
   });
 
   new Test ().init ();
-  vs.gl.Application.start ();
+  core.Application.start ();
 });

@@ -1,4 +1,4 @@
-　require.config({
+require.config({
   baseUrl: "",
   paths: {
     'Data' : 'data',

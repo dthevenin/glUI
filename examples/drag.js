@@ -1,18 +1,22 @@
-var Text = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var Text = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
 
-    this.view1 = new vs.gl.Text ({
+    this.view1 = new core.Text ({
       size: [100, 100],
       id: 'view1',
       position: [50, 50],
     }).init ();
     
-    this.view1.style.backgroundColor = vs.gl.Color.red;
+    this.view1.style.backgroundColor = core.Color.red;
 
     this.add (this.view1);
     this._tmp_translation = vec3.create ();
@@ -124,6 +128,9 @@ var Text = vs.gl.createClass ({
 });
 
 function loadApplication () {
-  new Text ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Text ({id:"test"}).init ();
+  core.Application.start ();
 }
+
+loadApplication ();
+});

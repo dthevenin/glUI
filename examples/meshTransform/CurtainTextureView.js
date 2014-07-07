@@ -39,10 +39,10 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
     gl_FragColor = shadingVarying * gl_FragColor;\n\
   }";
 
-  var CurtainTextureView = vs.gl.createClass ({
+  var CurtainTextureView = klass.createClass ({
 
     /** parent class */
-    parent: vs.gl.Image,
+    parent: core.Image,
 
     properties : {
       'lightDirection': vs.core.Object.PROPERTY_IN_OUT,

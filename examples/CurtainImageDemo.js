@@ -1,7 +1,7 @@
-define ('CurtainImageDemo', ['CurtainTextureView'], function (CurtainTextureView) {
+define ('CurtainImageDemo', ['CurtainTextureView', 'class', 'core'],
+  function (CurtainTextureView, klass, core) {
 
-
-  var CurtainImageDemo = vs.gl.createClass ({
+  var CurtainImageDemo = klass.createClass ({
 
     /** parent class */
     parent: CurtainTextureView,
@@ -12,7 +12,7 @@ define ('CurtainImageDemo', ['CurtainTextureView'], function (CurtainTextureView
       this.__recognizer = new vs.ui.DragRecognizer (this);
       this.addPointerRecognizer (this.__recognizer);
 
-      this.animation = new vs.gl.Animation (
+      this.animation = new core.Animation (
         {'slide': [0, 0]},
         {'classes': {'slide' : TrajectoryVect2D}}
       );

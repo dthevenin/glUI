@@ -1,8 +1,12 @@
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
 var slider1, slider2;
-var Test = vs.gl.createClass ({
+var Test = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
@@ -21,13 +25,13 @@ var Test = vs.gl.createClass ({
     }).init ();
     document.body.appendChild (slider2.view);
 
-    var glView2 = new vs.gl.View ({
+    var glView2 = new core.View ({
       position: [100, 100],
       size: [150, 100],
       transformOrigin : [75, 50],
 //      scaling: 0.5
     }).init ();
-    glView2.style.backgroundColor = vs.gl.Color.red;
+    glView2.style.backgroundColor = core.Color.red;
     
     this.add (glView2);
    
@@ -49,6 +53,9 @@ var Test = vs.gl.createClass ({
 });
 
 function loadApplication () {
-  new Test ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Test ({id:"test"}).init ();
+  core.Application.start ();
 }
+
+loadApplication ();
+});

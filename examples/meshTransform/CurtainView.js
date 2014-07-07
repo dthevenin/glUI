@@ -31,10 +31,10 @@ define ('CurtainView', [], function () {
     gl_FragColor = shadingVarying * vec4(color.rgb, color.a * uAlpha);\n\
   }";
 
-  var CurtainView = vs.gl.createClass ({
+  var CurtainView = klass.createClass ({
 
     /** parent class */
-    parent: vs.gl.View,
+    parent: core.View,
 
     properties : {
       'lightDirection': vs.core.Object.PROPERTY_IN_OUT,
@@ -160,7 +160,7 @@ define ('CurtainView', [], function () {
       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this._sprite.mesh_vertices_buffer);
       gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, this._sprite.mesh_vertices, gl_ctx.STATIC_DRAW);
 
-      vs.gl.View.__should_render = true;
+      core.View.__should_render = true;
     }
   });
 
@@ -205,7 +205,7 @@ define ('CurtainView', [], function () {
         c_buffer = style._background_color.__gl_array;
       }
       else {
-        c_buffer = vs.gl.Color.default.__gl_array;
+        c_buffer = core.Color.default.__gl_array;
       }
       shaders_program.uniform.color (c_buffer);
       shaders_program.uniform.lightDirection (gl_view._light_direction);

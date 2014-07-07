@@ -1,7 +1,8 @@
-define ('FishEyeDemo', ['FishEyeView'], function (FishEyeView) {
+define ('FishEyeDemo', ['FishEyeView', 'core', 'class'],
+  function (FishEyeView, core, klass) {
 
 
-  var FishEyeDemo = vs.gl.createClass ({
+  var FishEyeDemo = klass.createClass ({
 
     /** parent class */
     parent: FishEyeView,
@@ -12,7 +13,7 @@ define ('FishEyeDemo', ['FishEyeView'], function (FishEyeView) {
       this.__recognizer = new vs.ui.DragRecognizer (this);
       this.addPointerRecognizer (this.__recognizer);
 
-      this.animation = new vs.gl.Animation (
+      this.animation = new core.Animation (
         {'radius': 0},
         {'classes': {'radius' : TrajectoryVect1D}}
       );

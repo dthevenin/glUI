@@ -1,24 +1,28 @@
-var Test = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var Test = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
 
-    var view1 = new vs.gl.View ({
+    var view1 = new core.View ({
       position: [50, 50],
       size: [400, 400]
     }).init ();
     this.add (view1);
-    view1.style.backgroundColor = vs.gl.Color.red;
+    view1.style.backgroundColor = core.Color.red;
 
-    var view2 = new vs.gl.View ({
+    var view2 = new core.View ({
       position: [50, 20],
       size: [200, 100]
     }).init ();
     view1.add (view2);
-    view2.style.backgroundColor = vs.gl.Color.yellow;
+    view2.style.backgroundColor = core.Color.yellow;
 
     var constraint = view2.constraint;
     constraint.bottom = 30;
@@ -29,6 +33,9 @@ var Test = vs.gl.createClass ({
 });
 
 function loadApplication () {
-  new Test ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Test ({id:"test"}).init ();
+  core.Application.start ();
 }
+
+loadApplication ();
+});

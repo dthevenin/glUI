@@ -1,7 +1,7 @@
-define ('CurtainDemo', ['CurtainView'], function (CurtainView) {
+define ('CurtainDemo', ['CurtainView', 'class', 'core'],
+  function (CurtainView, klass, core) {
 
-
-  var CurtainDemo = vs.gl.createClass ({
+  var CurtainDemo = klass.createClass ({
 
     /** parent class */
     parent: CurtainView,
@@ -12,13 +12,13 @@ define ('CurtainDemo', ['CurtainView'], function (CurtainView) {
       this.__recognizer = new vs.ui.DragRecognizer (this);
       this.addPointerRecognizer (this.__recognizer);
 
-      this.animation = new vs.gl.Animation (
+      this.animation = new core.Animation (
         {'slide': [0, 0]},
         {'classes': {'slide' : TrajectoryVect2D}}
       );
       this.animation.duration = 200;
 
-      this.style.backgroundColor = new vs.gl.Color (180, 0, 0);
+      this.style.backgroundColor = new core.Color (180, 0, 0);
       this.size = [300, 450];
     },
 
@@ -40,4 +40,6 @@ define ('CurtainDemo', ['CurtainView'], function (CurtainView) {
   });
 
   return CurtainDemo;
+});
+
 });

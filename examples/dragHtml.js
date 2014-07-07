@@ -1,18 +1,18 @@
-// var Text = vs.gl.createClass ({
+// var Text = klass.createClass ({
 // 
 //   /** parent class */
-//   parent: vs.gl.Application,
+//   parent: core.Application,
 // 
 //   initComponent : function () {
 //     this._super ();
 // 
-//     this.view1 = new vs.gl.Text ({
+//     this.view1 = new core.Text ({
 //       size: [100, 100],
 //       id: 'view1',
 //       position: [50, 50],
 //     }).init ();
 //     
-//     this.view1.style.backgroundColor = vs.gl.Color.red;
+//     this.view1.style.backgroundColor = core.Color.red;
 // 
 //     this.add (this.view1);
 //  

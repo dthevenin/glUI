@@ -1,12 +1,16 @@
-var Text = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var Text = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
 
-    text1 = new vs.gl.Text ({
+    text1 = new core.Text ({
       size: [245, 20],
       position: [20, 5],
       text: "Text 1 Ceci est un titre"
@@ -15,11 +19,11 @@ var Text = vs.gl.createClass ({
     
     text1.style.fontSize = "18px";
     text1.style.fontFamily = "arial";
-    text1.style.color = vs.gl.Color.black;
+    text1.style.color = core.Color.black;
     text1.style.textAlign = "left";
-    text1.style.backgroundColor = new vs.gl.Color (240, 240, 240);
+    text1.style.backgroundColor = new core.Color (240, 240, 240);
 
-    text2 = new vs.gl.Text ({
+    text2 = new core.Text ({
       size: [245, 20],
       position: [20, 55],
       text: "Text 2 Ceci est une description"
@@ -28,11 +32,11 @@ var Text = vs.gl.createClass ({
     
     text2.style.fontSize = "12px";
     text2.style.fontFamily = "arial";
-    text2.style.color = vs.gl.Color.black;
+    text2.style.color = core.Color.black;
     text2.style.textAlign = "right";
-    text2.style.backgroundColor = vs.gl.Color.red;    
+    text2.style.backgroundColor = core.Color.red;    
  
-    text3 = new vs.gl.Text ({
+    text3 = new core.Text ({
       size: [245, 20],
       position: [20, 105],
       text: "Text 3 Ceci est une description"
@@ -41,11 +45,11 @@ var Text = vs.gl.createClass ({
     
     text3.style.fontSize = "12px";
     text3.style.fontFamily = "times";
-    text3.style.color = vs.gl.Color.yellow;
+    text3.style.color = core.Color.yellow;
     text3.style.textAlign = "center";
-    text3.style.backgroundColor = vs.gl.Color.blue;
+    text3.style.backgroundColor = core.Color.blue;
 
-    text4 = new vs.gl.Text ({
+    text4 = new core.Text ({
       size: [245, 50],
       position: [20, 140],
       text: "Text 4 Ceci est une text sur plusieurs\n lignes, alors bon il faut gérer\n cela aussi..."
@@ -55,11 +59,11 @@ var Text = vs.gl.createClass ({
     text4.style.fontSize = "12px";
     text4.style.fontFamily = "times";
     text4.style.fontWeight = "bold";
-    text4.style.color = vs.gl.Color.yellow;
+    text4.style.color = core.Color.yellow;
     text4.style.textAlign = "center";
-    text4.style.backgroundColor = vs.gl.Color.blue;
+    text4.style.backgroundColor = core.Color.blue;
 
-    text5 = new vs.gl.Text ({
+    text5 = new core.Text ({
       size: [245, 20],
       position: [20, 200],
       text: "Text 4 Ceci est une text sur plusieurs\n lignes, alors bon il faut gérer\n cela aussi..."
@@ -68,11 +72,11 @@ var Text = vs.gl.createClass ({
     
     text5.style.fontSize = "12px";
     text5.style.fontFamily = "times";
-    text5.style.color = vs.gl.Color.yellow;
+    text5.style.color = core.Color.yellow;
     text5.style.textAlign = "center";
-    text5.style.backgroundColor = vs.gl.Color.red;
+    text5.style.backgroundColor = core.Color.red;
 
-    text6 = new vs.gl.Text ({
+    text6 = new core.Text ({
       size: [245, 20],
       position: [20, 260],
       text: "SAMURAI DEFENDERがWAKUWAKUプラットフォームに追加されました！さっそくプレイしてクーポンをGETしよう！"
@@ -81,11 +85,11 @@ var Text = vs.gl.createClass ({
     
     text6.style.fontSize = "14px";
     text6.style.fontFamily = "times";
-    text6.style.color = vs.gl.Color.green;
+    text6.style.color = core.Color.green;
     text6.style.textAlign = "left";
-    text6.style.backgroundColor = vs.gl.Color.red;
+    text6.style.backgroundColor = core.Color.red;
 
-    text7 = new vs.gl.Text ({
+    text7 = new core.Text ({
       size: [245, 20],
       position: [20, 320]
     }).init ();
@@ -93,15 +97,17 @@ var Text = vs.gl.createClass ({
     
     text7.style.fontSize = "14px";
     text7.style.fontFamily = "FontAwesome";
-    text7.style.color = vs.gl.Color.black;
+    text7.style.color = core.Color.black;
     text7.style.textAlign = "center";
-    text7.style.backgroundColor = vs.gl.Color.white;
+    text7.style.backgroundColor = core.Color.white;
     
     text7.text = "  " + "\uf013";
   }
 });
 
 function loadApplication () {
-  new Text ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Text ({id:"test"}).init ();
+  core.Application.start ();
 }
+
+});

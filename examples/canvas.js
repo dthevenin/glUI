@@ -1,7 +1,11 @@
-var Test = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var Test = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
@@ -19,7 +23,7 @@ var Test = vs.gl.createClass ({
     }).init ();
     document.body.appendChild (slider2.view);
 
-    this.canvas = new vs.gl.Canvas ({
+    this.canvas = new core.Canvas ({
       position: [100, 100],
       size: [256, 256],
       transformOrigin : [140, 75]
@@ -60,6 +64,9 @@ var Test = vs.gl.createClass ({
 });
 
 function loadApplication () {
-  new Test ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Test ({id:"test"}).init ();
+  core.Application.start ();
 }
+
+loadApplication ();
+});

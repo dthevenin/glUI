@@ -17,19 +17,23 @@
  */
 
 
-var TemplateTest = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var TemplateTest = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
   
   applicationStarted : function (event) { 
   }
 });
 
-var Item = vs.gl.createClass ({
+var Item = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.View,
+  parent: core.View,
   
   properties: {
     "rating": {
@@ -58,4 +62,7 @@ var Item = vs.gl.createClass ({
     
     this.ratingView.text = text;
   }
+});
+
+loadApplication ();
 });

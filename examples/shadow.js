@@ -1,32 +1,36 @@
-var Test = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var Test = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
     
-    this.style.backgroundColor = vs.gl.Color.white;
+    this.style.backgroundColor = core.Color.white;
     
-    var view = new vs.gl.View ({
+    var view = new core.View ({
       position: [50, 80],
       size: [150, 100]
     }).init ();
     this.add (view);
-    view.style.backgroundColor = vs.gl.Color.yellow;
-    view.style.shadowColor = vs.gl.Color.black;
+    view.style.backgroundColor = core.Color.yellow;
+    view.style.shadowColor = core.Color.black;
     
-    view = new vs.gl.View ({
+    view = new core.View ({
       position: [200, 200],
       size: [200, 100]
     }).init ();
     this.add (view);
-    view.style.backgroundColor = vs.gl.Color.red;
+    view.style.backgroundColor = core.Color.red;
     view.opacity = 0.001
     
     view.style.shadowOffset = [0, 0];
     view.style.shadowBlur = 50;
-    view.style.shadowColor = new vs.gl.Color (0, 0, 153, 0.8);
+    view.style.shadowColor = new core.Color (0, 0, 153, 0.8);
     view.style.opacity = 1;
 
     window.view = view
@@ -36,8 +40,8 @@ var Test = vs.gl.createClass ({
 });
 
 function loadApplication () {
-  new Test ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Test ({id:"test"}).init ();
+  core.Application.start ();
 }
 
-ACTIVATE_STATS = true
+});

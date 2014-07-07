@@ -1,21 +1,25 @@
-var testPerfAnim = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var testPerfAnim = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
 
-    this.style.backgroundColor = vs.gl.Color.white;
+    this.style.backgroundColor = core.Color.white;
     this.style.backgroundImage = "background.jpg";
 
-    var animation = new vs.gl.Animation ({'translation': [0,0,0]});
+    var animation = new core.Animation ({'translation': [0,0,0]});
     animation.keyFrame (0, {'translation': [0, 0, 0]});
     animation.keyFrame (0.25, {'translation': [600, 0, 0]});
     animation.keyFrame (0.50, {'translation': [600, 400, 0]});
     animation.keyFrame (0.75, {'translation': [0, 400, 0]});
     animation.duration = 20000;
-    animation.timing = vs.gl.Animation.LINEAR;
+    animation.timing = core.Animation.LINEAR;
     animation.repeat = 200;
 
 
@@ -23,7 +27,7 @@ var testPerfAnim = vs.gl.createClass ({
       var delay = 0;
 //      for (var i = 0; i < 300; i++) {
       for (var i = 0; i < 3; i++) {
-        var img = new vs.gl.Image ({
+        var img = new core.Image ({
           position: [100 + dec, 100 + dec],
           size: [135, 126],
           src: "circle.png",
@@ -46,5 +50,7 @@ var testPerfAnim = vs.gl.createClass ({
 function loadApplication () {
   var app = new testPerfAnim ({id:"test"})
   app.init ();
-  vs.gl.Application.start ();
+  core.Application.start ();
 }
+
+});

@@ -1,8 +1,12 @@
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
 var glImage;
-var Test = vs.gl.createClass ({
+var Test = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
@@ -42,13 +46,13 @@ var Test = vs.gl.createClass ({
 });
 
 function createImage1 () {
-  var glImage = new vs.gl.Image ({
+  var glImage = new core.Image ({
     position: [100, 100],
     size: [500, 250],
     src: "demo.png",
     transformOrigin : [250, 125]
   }).init ();
-  glImage.style.backgroundColor = vs.gl.Color.red;
+  glImage.style.backgroundColor = core.Color.red;
 
   var
     obj_size = glImage._size,
@@ -177,7 +181,7 @@ gl_FragColor.a *= uAlpha;\n\
 }
 
 function createImage2 () {
-  var glImage = new vs.gl.Image ({
+  var glImage = new core.Image ({
     position: [500, 200],
     size: [500, 250],
     src: "demo.png",
@@ -261,6 +265,8 @@ gl_FragColor.a *= uAlpha;\n\
 }
 
 function loadApplication () {
-  new Test ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Test ({id:"test"}).init ();
+  core.Application.start ();
 }
+
+});

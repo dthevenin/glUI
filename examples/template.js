@@ -16,13 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+require.config ({ baseUrl: "../lib" });
 
-var TemplateTest = vs.gl.createClass ({
+require (['core', 'class'], function (core, klass) {
+
+
+var TemplateTest = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
   
   applicationStarted : function (event) {
     window.view = this.myView;
   }
+});
+
 });

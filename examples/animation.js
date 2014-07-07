@@ -1,27 +1,31 @@
-var Test = vs.gl.createClass ({
+require.config ({ baseUrl: "../lib" });
+
+require (['core', 'class'], function (core, klass) {
+
+var Test = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
 
   initComponent : function () {
     this._super ();
     
-    window.v1 = this.glView1 = new vs.gl.View ({
+    window.v1 = this.glView1 = new core.View ({
       position: [50, 70],
       size: [150, 100],
       transformOrigin : [75, 50]
     }).init ();
     this.add (this.glView1);
-    this.glView1.style.backgroundColor = vs.gl.Color.red;
+    this.glView1.style.backgroundColor = core.Color.red;
     
 
-    window.v2 = this.glView2 = new vs.gl.View ({
+    window.v2 = this.glView2 = new core.View ({
       position: [150, 270],
       size: [200, 100],
       transformOrigin : [100, 50]
     }).init ();
     this.add (this.glView2);
-    this.glView2.style.backgroundColor = vs.gl.Color.red;
+    this.glView2.style.backgroundColor = core.Color.red;
     
 //     FadeInLeft.process (v2, function () {
 //       console.log ("c'estfinit");
@@ -46,31 +50,34 @@ var Test = vs.gl.createClass ({
 });
 
 function loadApplication () {
-  new Test ({id:"test", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new Test ({id:"test"}).init ();
+  core.Application.start ();
 }
 
 
 
-// var anim = new vs.gl.Animation (['rotation', [0,0,20]], ['opacity', 1], ['translation', [100, 200]]);
+// var anim = new core.Animation (['rotation', [0,0,20]], ['opacity', 1], ['translation', [100, 200]]);
 // anim.keyFrame (0, [[0,0,0], 1, [0,0]]);
 // anim.keyFrame (0.5, [[0,0,10], 0.5, [50,100]]);
 
 
-var anim = new vs.gl.Animation ({'rotation': [0,0,20]});
+var anim = new core.Animation ({'rotation': [0,0,20]});
 anim.keyFrame (0, {'rotation':[0,0,0]});
 anim.keyFrame (0.5, {'rotation':[0,0,10]});
 
-//   var anim = new vs.gl.Animation (['opacity', 0.1]);
+//   var anim = new core.Animation (['opacity', 0.1]);
 //   anim.keyFrame (0, [1]);
-//    var anim = new vs.gl.Animation (['translation', [100, 200]]);
+//    var anim = new core.Animation (['translation', [100, 200]]);
 anim.duration = 1000;
 //anim.repeat = 3;
 //anim.steps = 10;
 //    anim.keyFrame (0, [[-100, -100]]);
 
 
-var anim2 = new vs.gl.Animation ({'translation': [0,200,0]});
+var anim2 = new core.Animation ({'translation': [0,200,0]});
 anim2.keyFrame (0, {'translation':[0,0,0]});
 anim2.keyFrame (0.5, {'translation':[100,0,10]});
 anim2.duration = 1000;
+
+loadApplication ()
+});
