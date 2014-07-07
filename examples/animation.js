@@ -33,7 +33,7 @@ var Test = klass.createClass ({
 //     FadeOutRight.process (v1);
 
     anim.process (v1,function () {
-      FadeOutRight.process (v1, function () {
+      core.Animation.FadeOutRight.process (v1, function () {
         console.log ("c'est finit");
       });
     });
