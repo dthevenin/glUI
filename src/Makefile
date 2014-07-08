@@ -65,22 +65,32 @@ release :: clean vs_gl_engine.js
 debug :: clean vs_util.js vs_core.js vs_event.js vs_gl_widget.js vs_webcomponent.js vs_class.js
 #	compile-modules convert --type amd --to ../lib/core.js vs_core.js 
 #	$(RM) vs_core.js
+	$(CP) vs_util.js ../demos/lib/util.js
+	$(CP) vs_core.js ../demos/lib/core.js
+	$(CP) vs_event.js ../demos/lib/event.js
+	$(CP) vs_gl_widget.js ../demos/lib/widget.js
+	$(CP) polymer.js ../demos/lib/polymer.js
+	$(CP) vs_webcomponent.js ../demos/lib/webcomponent.js
+	$(CP) vs_class.js ../demos/lib/class.js
 	$(MV) vs_util.js ../lib/util.js
 	$(MV) vs_core.js ../lib/core.js
 	$(MV) vs_event.js ../lib/event.js
 	$(MV) vs_gl_widget.js ../lib/widget.js
+	$(MV) polymer.js ../lib/polymer.js
 	$(MV) vs_webcomponent.js ../lib/webcomponent.js
 	$(MV) vs_class.js ../lib/class.js
 	
 clean ::
 	-$(RM_RF) vs_gl_engine.js
 
-vs_webcomponent.js:
+polymer.js:
 	$(CAT) customElement/polymer/Scope.js >> $@
 	$(CAT) customElement/polymer/Boot.js >> $@
 	$(CAT) customElement/polymer/Observer.js >> $@
 	$(CAT) customElement/polymer/Parser.js >> $@
 	$(CAT) customElement/polymer/CustomElements.js >> $@
+
+vs_webcomponent.js: polymer.js
 	$(CAT) customElement/CustomElement.js >> $@
 
 vs_event.js:
