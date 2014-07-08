@@ -23,7 +23,9 @@ return {
   
   deepArrayClone: deepArrayClone,
   
-  generateCubicBezierFunction: generateCubicBezierFunction  
+  generateCubicBezierFunction: generateCubicBezierFunction,
+  
+  removeAllElementChild: removeAllElementChild
 };
 
 });

@@ -27,7 +27,10 @@ return {
   View: View,
   Application: Application,
   
-  Animation: Animation
+  Animation: Animation,
+  
+  buildConfiguration: buildConfiguration,
+  UNMUTABLE_ATTRIBUTES: UNMUTABLE_ATTRIBUTES
 };
 
 //gl.createCustomEvent = createCustomEvent;

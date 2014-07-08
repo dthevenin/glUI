@@ -1,4 +1,6 @@
 
+var UNMUTABLE_ATTRIBUTES = ["id", "is", "properties", "name"];
+
 var Templates = {};
 
 function INT_DECODER (value) {
@@ -82,7 +84,6 @@ var ATTRIBUTE_DECODERS = {
   "range": ARRAY_DECODER
 }
 
-
 function buildConfiguration (node) {
 
   var
@@ -94,7 +95,7 @@ function buildConfiguration (node) {
   
   while (l--) {
     attribute = attributes.item (l);
-    name = vs.util.camelize (attribute.name);
+    name = util.camelize (attribute.name);
     if (name == "id") {
       config.id = attribute.value;
       continue;

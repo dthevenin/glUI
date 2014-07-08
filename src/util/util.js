@@ -356,6 +356,24 @@ function CubicBezier (t,p1x,p1y,p2x,p2y) {
 }
 
 /**
+ *  Remove all element children
+ *
+ *  @memberOf vs.util
+ *
+ * @param {Element} elem The element
+ **/
+function removeAllElementChild (elem) {
+  if (!elem || !elem.childNodes) {
+    return;
+  }
+
+  var l = elem.childNodes.length;
+  while (l--) {
+    elem.removeChild (elem.firstChild);
+  }
+};
+
+/**
  *  generateCubicBezierFunction(x1, y1, x2, y2) -> Function
  *
  *  Generates a transition easing function that is compatible
