@@ -41,7 +41,7 @@
  * @param {string} type the event type [optional]
 */
 var Application = function (config) {
-  initWebGLRendering ();
+
   this._layout = undefined;
   
   this.parent = View;
