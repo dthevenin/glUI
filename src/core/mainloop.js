@@ -102,81 +102,80 @@ var
  *
  * @private
  */
-var setImmediate, scheduleDoActions;
+var setImmediate, scheduleDoActions, is_actions_are_scheduled = false;
+
+function queueAction (func, ctx) {
+//   var action = Action.retain ();
+//   action.configure (func, ctx);
+
+  _main_actions_queue.push (func);
+
+  if (!is_actions_are_scheduled) {
+    is_actions_are_scheduled = true;
+    scheduleDoActions ();
+  }
+}
+
+/**
+ * @private
+ */
+function doAllActions (now) {
+  var queue = _main_actions_queue;
+
+  is_actions_are_scheduled = false;
+
+  if (queue.length) {
+    if (!now) now = performance.now ();
+  
+    // switch queues
+    _main_actions_queue = _tmp_actions_queue;
+    _tmp_actions_queue = queue;
+  
+    try {
+      // execute actions
+      var i = 0, l = queue.length, func;
+      for (; i < l; i++) {
+        func = queue [i];
+        func.call ();
+//         doOneAction (action, now)
+//         Action.release (action);
+      }
+    }
+    catch (e) {
+      if (e.stack) console.error (e.stack);
+      else console.error (e);
+    }    
+    // clean the queue
+    queue.length = 0;
+  }
+}
+
+/**
+ * doAction, execute one action. This method is called with our setImmediate
+ * implementation.
+ *
+ * @private
+ */
+function installPostMessageImplementation () {
+
+  var MESSAGE_PREFIX = "_scheduler" + Math.random ();
+
+  function onGlobalMessage (event) {
+    if (event.data === MESSAGE_PREFIX) {
+      doAllActions ();
+    }
+  }
+
+  if (window.addEventListener) {
+    window.addEventListener ("message", onGlobalMessage, false);
+  }
+
+  return function () {
+    window.postMessage (MESSAGE_PREFIX, "*");
+  };
+}
+
 if (!window.setImmediate) {
-
-  var is_actions_are_scheduled = false;
-
-  function queueAction (func, ctx) {
-  //   var action = Action.retain ();
-  //   action.configure (func, ctx);
-  
-    _main_actions_queue.push (func);
-  
-    if (!is_actions_are_scheduled) {
-      is_actions_are_scheduled = true;
-      scheduleDoActions ();
-    }
-  }
-
-  /**
-   * @private
-   */
-  function doAllActions (now) {
-    var queue = _main_actions_queue;
-  
-    is_actions_are_scheduled = false;
-  
-    if (queue.length) {
-      if (!now) now = performance.now ();
-    
-      // switch queues
-      _main_actions_queue = _tmp_actions_queue;
-      _tmp_actions_queue = queue;
-    
-      try {
-        // execute actions
-        var i = 0, l = queue.length, func;
-        for (; i < l; i++) {
-          func = queue [i];
-          func.call ();
-  //         doOneAction (action, now)
-  //         Action.release (action);
-        }
-      }
-      catch (e) {
-        if (e.stack) console.error (e.stack);
-        else console.error (e);
-      }    
-      // clean the queue
-      queue.length = 0;
-    }
-  }
-
-  /**
-   * doAction, execute one action. This method is called with our setImmediate
-   * implementation.
-   *
-   * @private
-   */
-  function installPostMessageImplementation () {
-
-    var MESSAGE_PREFIX = "_scheduler" + Math.random ();
-
-    function onGlobalMessage (event) {
-      if (event.data === MESSAGE_PREFIX) {
-        doAllActions ();
-      }
-    }
-  
-    if (window.addEventListener) {
-      window.addEventListener ("message", onGlobalMessage, false);
-    }
-
-    return function () {
-      window.postMessage (MESSAGE_PREFIX, "*");
-    };
-  }
 
   scheduleDoActions = (window.postMessage)?
     installPostMessageImplementation ():

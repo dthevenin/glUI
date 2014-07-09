@@ -146,6 +146,19 @@ EventSource.prototype =
   removeEventListener: function (type, handler, useCapture) {
     if (!type || !handler) { return; }
 
+    function unbind (handler_list) {
+      if (!handler_list) return;
+
+      var handler_obj, i = 0;
+      while (i < handler_list.length) {
+        handler_obj = handler_list [i];
+        if (handler_obj === handler) {
+          handler_list.remove (i);
+        }
+        else { i++; }
+      }
+    };
+
     if (type === POINTER_START) {
       this._pointer_start.remove (handler);
       __gl_deactivate_pointer_start ()
@@ -159,19 +172,6 @@ EventSource.prototype =
       __gl_deactivate_pointer_end ()
     }
     else {
-      function unbind (handler_list) {
-        if (!handler_list) return;
-
-        var handler_obj, i = 0;
-        while (i < handler_list.length) {
-          handler_obj = handler_list [i];
-          if (handler_obj === handler) {
-            handler_list.remove (i);
-          }
-          else { i++; }
-        }
-      };
-
       unbind (this.__bindings__ [type]);
     }
   },
