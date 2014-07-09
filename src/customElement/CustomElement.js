@@ -117,7 +117,6 @@ require (['core', 'util'], function (core, util) {
     xmlRequest = null;
   }
 
-
   function declare_extern_component () {
 
     var
@@ -588,8 +587,8 @@ require (['core', 'util'], function (core, util) {
       this._comp_ = _comp_;
 
       if (this.nodeName == "BODY") {
-        this.style.width = frame_size[0] + "px";
-        this.style.height = frame_size[1] + "px";
+//        this.style.width = frame_size[0] + "px";
+//        this.style.height = frame_size[1] + "px";
         this.style.overflow = "hidden";
       }
 
