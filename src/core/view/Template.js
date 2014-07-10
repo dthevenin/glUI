@@ -73,8 +73,8 @@ function DYNAMIC_DECODER (value, comp, prop_name) {
   if (util.isNumber (old_value)) return INT_DECODER (value);
   if (util.isArray (old_value)) return ARRAY_DECODER (value);
   if (util.isString (old_value)) return STRING_DECODER (value);
-  if (isUndefined (old_value)) return STRING_DECODER (value);
-  if (isObject (old_value)) return OBJECT_DECODER (value);
+  if (util.isUndefined (old_value)) return STRING_DECODER (value);
+  if (util.isObject (old_value)) return OBJECT_DECODER (value);
   
   return STRING_DECODER (value);
 }

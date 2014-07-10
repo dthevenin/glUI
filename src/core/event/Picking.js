@@ -61,7 +61,7 @@ function pickUp (event) {
   var x = event.clientX;
   var y = event.clientY;
   
-  if (vs.util.isUndefined (x) || vs.util.isUndefined (y)) {
+  if (util.isUndefined (x) || util.isUndefined (y)) {
     var list = event.targetPointerList;
     if (!list) list = event.targetTouches;
     if (!list) list = event.touches;
