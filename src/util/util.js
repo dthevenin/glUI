@@ -82,7 +82,7 @@ var _toString = Object.prototype.toString;
  *  util.isString (123);
  *  //-> false
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {Object} object The object to test.
  **/
@@ -93,7 +93,7 @@ function isString (object) {
 /**
  *  Returns `true` if `object` is an Function; `false` otherwise.
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {Object} object The object to test.
  **/
@@ -113,7 +113,7 @@ function isFunction (object)
  *  isArray({ });
  *  //-> false
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {Object} object The object to test.
  **/
@@ -134,7 +134,7 @@ var isArray = Array.isArray ||
  *  util.isNumber ("123");
  *  //-> false
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {Object} object The object to test.
  **/
@@ -143,6 +143,67 @@ function isNumber (object) {
     object instanceof Number;
 };
 
+/**
+ *  Returns `true` if `object` is of type `undefined`; `false` otherwise.
+ *
+ *  @example
+ *
+ *  util.isUndefined ();
+ *  //-> true
+ *
+ *  util.isUndefined (undefined);
+ *  //-> true
+ *
+ *  util.isUndefined (null);
+ *  //-> false
+ *
+ *  util.isUndefined (0);
+ *  //-> false
+ *
+ *  @memberOf util
+ *
+ * @param {Object} object The object to test.
+ **/
+function isUndefined (object) {
+  return typeof object === "undefined";
+};
+
+/**
+ *  Returns `true` if `object` is an "pure" Object; `false` otherwise.
+ *
+ *  @example
+ *
+ *  util.isObject (123);
+ *  //-> false
+ *
+ *  util.isObject ([]);
+ *  //-> false
+ *
+ *  util.isObject ({});
+ *  //-> true
+ *
+ *  util.isObject (document);
+ *  //-> false // YEP !
+ *
+ *  util.isObject (util);
+ *  //-> true
+ *
+ *  util.isObject (new Date);
+ *  //-> false // YEP !
+ *
+ *  @memberOf util
+ *
+ * @param {Object} object The object to test.
+ **/
+function isObject (object) {
+  try {
+    return (Object.getPrototypeOf (object) === Object.prototype);
+  } catch (e) {
+    return false;
+  }
+};
+
+
 /********************************************************************
                     String manipulation
 *********************************************************************/
@@ -150,7 +211,7 @@ function isNumber (object) {
 /**
  * HTML-encodes a string and returns the encoded string.
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {String} str String The string
  */
@@ -165,7 +226,7 @@ function htmlEncode (str)
 /**
  *  Strips all leading and trailing whitespace from a string.
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {String} str String The string
  */
@@ -179,7 +240,7 @@ function strip (str)
 /**
  *  Converts a string separated by dashes into a camelCase equivalent
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {String} str String The string
  * @return {String} the result
@@ -204,7 +265,7 @@ function camelize (str)
 /**
  *  Converts a string separated by dashes into a camelCase equivalent
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {String} str String The string
  * @return {String} the result
@@ -220,7 +281,7 @@ function capitalize (str)
  *  Converts a camelized string into a series of words separated by an
  *  underscore (_).
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {String} str String The string
  * @return {String} the result
@@ -358,7 +419,7 @@ function CubicBezier (t,p1x,p1y,p2x,p2y) {
 /**
  *  Remove all element children
  *
- *  @memberOf vs.util
+ *  @memberOf util
  *
  * @param {Element} elem The element
  **/
@@ -443,7 +504,7 @@ function addClassProperties (_class, descriptors) {
 /**
  * Extends a the prototype of a object
  *
- * @memberOf vs.util
+ * @memberOf util
  *
  * @param {Object} destination The Class to receive the new properties.
  * @param {Object} source The Class whose properties will be duplicated.

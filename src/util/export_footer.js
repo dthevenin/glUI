@@ -14,6 +14,8 @@ return {
   isFunction:              isFunction,
   isString:                isString,
   isNumber:                isNumber,
+  isUndefined:             isUndefined,
+  isObject:                isObject,
 
   // string
   strip:           strip,
