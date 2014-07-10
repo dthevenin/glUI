@@ -78,8 +78,6 @@ function pickUp (event) {
 
 var pickUp_pixelColor = new Uint8Array (4);
 function _pickUp (x, y) {
-  
-  DropTick = 1;
 
   gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, rttFramebuffer);
 

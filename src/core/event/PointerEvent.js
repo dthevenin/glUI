@@ -426,8 +426,8 @@ function dispatch_event (type, obj, event) {
   else if (type === POINTER_END || type === POINTER_END) event_type = "_pointer_end";
 
   var e = buildEvent (type, event, obj);
-  var path = e.path, list;
-  for (i = 0; i < path.length; i ++) {
+  var path = e.path, list, i = 0;
+  for (; i < path.length; i ++) {
     obj = path [i];
     list = obj[event_type];
     if (list && list.length) {
