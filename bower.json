@@ -1,0 +1,22 @@
+{
+  "name": "GLEngine",
+  "homepage": "http://www.vinisketch.com/glUI",
+  "author": {
+    "name": "David Thevenin",
+    "email": "david@igel.co.jp"
+  },
+  "description": "Custom Elements Polyfill",
+  "dependencies": {
+    "CustomElements": "https://github.com/Polymer/CustomElements.git#master"
+  },
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "../",
+    "test",
+    "tests"
+  ]
+}
