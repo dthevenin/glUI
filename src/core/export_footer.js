@@ -30,7 +30,12 @@ return {
   Animation: Animation,
   
   buildConfiguration: buildConfiguration,
-  UNMUTABLE_ATTRIBUTES: UNMUTABLE_ATTRIBUTES
+  UNMUTABLE_ATTRIBUTES: UNMUTABLE_ATTRIBUTES,
+  
+  vec2: vec2,
+  vec3: vec3,
+  mat3: mat3,
+  mat4: mat4,
 };
 
 //gl.createCustomEvent = createCustomEvent;
