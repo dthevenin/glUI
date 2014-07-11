@@ -2,4 +2,3 @@ node_modules
 .DS_Store
 lib
 bower_components
-components
