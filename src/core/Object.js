@@ -113,6 +113,9 @@ GLObject.prototype =
       this.__config__ = null;
     }
 
+    // Call optional end initialization method
+    if (this.didInitialize) this.didInitialize ();
+
     return this;
   },
 
