@@ -184,7 +184,7 @@ glui (null, ['core', 'util'], function (core, util) {
     var properties_str = this.getAttribute ("properties");
     if (properties_str) {
       var comp_properties = parsePropertiesDeclaration (properties_str);
-      _setCompProperties (_comp_, comp_properties);
+      setCompProperties (_comp_, comp_properties);
     }
   */
 
@@ -194,7 +194,7 @@ glui (null, ['core', 'util'], function (core, util) {
     var template_name = this.getAttribute ("name");
   //  buildBinding (this, _comp_);
   //  newTemplate (template_name, _comp_);
-    newTemplate (template_name, this);
+    core.newTemplate (template_name, this);
   
     this.parentNode.removeChild (this);
   };
@@ -244,8 +244,9 @@ glui (null, ['core', 'util'], function (core, util) {
 
     return comp_properties;
   }
-
-  function _setCompProperties (comp, properties)
+  util.__parsePropertiesDeclaration = parsePropertiesDeclaration;
+  
+  function setCompProperties (comp, properties)
   {
     if (!comp || !properties) return;
   
@@ -290,7 +291,7 @@ glui (null, ['core', 'util'], function (core, util) {
       comp.__properties__.push (prop_name);
     }
   }
-
+  util.___setCompProperties = setCompProperties;
 
   function LIST_TEMPLATE_CONTENT (node, config) {
 
@@ -322,7 +323,7 @@ glui (null, ['core', 'util'], function (core, util) {
       // generate the comp
       var config = core.buildConfiguration (item);
       var comp = template.compileView ("core.AbstractListItem", config);
-  //    _setCompProperties (comp, comp_properties);
+  //    setCompProperties (comp, comp_properties);
   //    return comp;
 
   //    return template._shadow_view.__node._comp_;
@@ -374,7 +375,7 @@ glui (null, ['core', 'util'], function (core, util) {
         var properties_str = data.getAttribute ("properties");
         if (properties_str) {
           var comp_properties = parsePropertiesDeclaration (properties_str);
-          _setCompProperties (comp, comp_properties);
+          setCompProperties (comp, comp_properties);
         }
     
         self._comp_.setItemTemplate (comp);
@@ -407,17 +408,25 @@ glui (null, ['core', 'util'], function (core, util) {
   function ALLOW_CHILD_CONTENT (node) {}
 
   var LIST_COMPONENT = [
-    ["Text", "VS-LABEL", TEXT_CONTENT],
-    ["Button", "VS-BUTTON", TEXT_CONTENT],
-    ["Application", "VS-APPLICATION", ALLOW_CHILD_CONTENT],
-    ["Canvas", "VS-CANVAS", NO_CONTENT],
-    ["Image", "VS-IMAGE", NO_CONTENT],
-    ["List", "VS-LIST", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
-    ["View", "VS-VIEW", ALLOW_CHILD_CONTENT],
-    ["View", "VS-TEMPLATE", null, TEMPLATE_CREATED_CALLBACK, TEMPLATE_ATTACHED_CALLBACK],
-    ["Configuration", "VS-CONFIGURATION", CONFIGURATION_CONTENT, CONFIGURATION_CREATED_CALLBACK, CONFIGURATION_ATTACHED_CALLBACK]
+    [core.Text, "VS-LABEL", TEXT_CONTENT],
+    [core.Button, "VS-BUTTON", TEXT_CONTENT],
+    [core.Application, "VS-APPLICATION", ALLOW_CHILD_CONTENT],
+    [core.Canvas, "VS-CANVAS", NO_CONTENT],
+    [core.Image, "VS-IMAGE", NO_CONTENT],
+    [core.List, "VS-LIST", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
+    [core.View, "VS-VIEW", ALLOW_CHILD_CONTENT],
+    [core.View, "VS-TEMPLATE", null, TEMPLATE_CREATED_CALLBACK, TEMPLATE_ATTACHED_CALLBACK],
+    [core.Configuration, "VS-CONFIGURATION", CONFIGURATION_CONTENT, CONFIGURATION_CREATED_CALLBACK, CONFIGURATION_ATTACHED_CALLBACK]
   ]
 
+  util.__getClassFromTagName = function (tagName) {
+    for (var i = 0; i < LIST_COMPONENT.length; i ++) {
+      item = LIST_COMPONENT [i];
+    
+      if (item [1] === tagName) return item[0];
+    }
+  }
+  
   var ONLOAD_METHODS = [];
 
   /**
@@ -531,11 +540,10 @@ glui (null, ['core', 'util'], function (core, util) {
     return div;
   }
 
-  function declareComponent (className, comp_name, _manage_content,
+  function declareComponent (_class, comp_name, _manage_content,
     createdCallback, attachedCallback, detachedCallback) {
 
     var
-      _class = resolveClass (className),
       node,
       comp_proto,
       decl,
@@ -595,7 +603,7 @@ glui (null, ['core', 'util'], function (core, util) {
       var properties_str = this.getAttribute ("properties");
       if (properties_str) {
         var comp_properties = parsePropertiesDeclaration (properties_str);
-        _setCompProperties (_comp_, comp_properties);
+        setCompProperties (_comp_, comp_properties);
       }
     
       _comp_.init ();
@@ -689,11 +697,7 @@ glui (null, ['core', 'util'], function (core, util) {
     };
   
     decl = {prototype: comp_proto};
-  
-    if (className == "core.Application") {
-      decl.extends = "body";
-    }
-  
+
     html_comp = document.registerElement (comp_name, decl);
 
     return html_comp;

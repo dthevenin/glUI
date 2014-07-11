@@ -26,6 +26,7 @@ return {
   Text: Text,
   View: View,
   Application: Application,
+  newTemplate: newTemplate,
   
   Animation: Animation,
   

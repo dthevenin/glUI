@@ -158,9 +158,8 @@ function applyTemplate (template_name, view) {
         }
 
         if (template.comp_properties) {
-          _setCompProperties (obj, template.comp_properties);
+          util.___setCompProperties (obj, template.comp_properties);
         }
-        
       }
     }
     
@@ -184,7 +183,7 @@ function applyTemplate (template_name, view) {
       }
 
       if (template.comp_properties) {
-        _setCompProperties (view, template.comp_properties);
+        util.___setCompProperties (view, template.comp_properties);
       }
 
     }
@@ -202,14 +201,6 @@ function getTemplate (name) {
   return cloneTemplate (template_node);
 }
 
-function getClassFromTagName (tagName) {
-  for (var i = 0; i < LIST_COMPONENT.length; i ++) {
-    item = LIST_COMPONENT [i];
-    
-    if (item [1] === tagName) return item[0];
-  }
-}
-
 function parseTemplate (node) {
   var template = {};
   
@@ -220,37 +211,36 @@ function parseTemplate (node) {
   var class_name = node.getAttribute ("class"), _class;
   
   if (!class_name) {
-    class_name = getClassFromTagName (node.tagName);
-    if (!class_name) {
-      console.log ("ERROR: Unknown tag name: " + node.tagName);
+    _class = util.__getClassFromTagName (node.tagName);
+    if (!_class) {
+      console.error ("Unknown tag name: " + node.tagName);
       return;
     }
   }
-  
-  var
-    namespaces = class_name.split ('.'),
-    i = 0,
-    temp_name = window [namespaces[i++]];
+  else {
+    var
+      namespaces = class_name.split ('.'),
+      i = 0;
     
-  while (temp_name && i < namespaces.length) {
-    temp_name = temp_name [namespaces[i++]];
-  }
-  
-  if (temp_name && i === namespaces.length) {
-    _class = temp_name;
+    _class = glui.__modules [namespaces[i++]];
+    
+    while (_class && i < namespaces.length) {
+      _class = _class [namespaces[i++]];
+    }
+
+    if (!_class || i !== namespaces.length) {
+      console.error ("Unknown class name: " + class_name);
+      return;
+    }
   }
 
-  if (_class) template._class = _class;
-  else {
-    console.log ("ERROR: Unknown class name: " + class_name);
-    return;
-  }
+  template._class = _class;
   
   // Object name
   template.name = node.getAttribute ("name");
 
   // Object properties
-  template.comp_properties = parsePropertiesDeclaration (node.getAttribute ("properties"));
+  template.comp_properties = util.__parsePropertiesDeclaration (node.getAttribute ("properties"));
   
   // Children
   var l = node.childElementCount, child;
