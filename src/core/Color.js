@@ -104,6 +104,7 @@ function initDefaultColors () {
   Color.blue = new Color (0, 0, 255, 1);
   Color.yellow = new Color (255,255,0, 1);
   Color.lightGrey = new Color (200, 200, 200, 1.0);
+  Color.pink = new Color (255, 105, 180, 1.0);
 
   Color.default = Color.transparent;
 }
