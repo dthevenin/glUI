@@ -12,7 +12,7 @@
 // OK propriété non scalaire (Array, object)
 // 3 approches: namespace, dynamic, default string
 
-require (['core', 'util'], function (core, util) {
+glui (null, ['core', 'util'], function (core, util) {
 
   function NO_CONTENT (node) {
     util.removeAllElementChild (node);
@@ -570,7 +570,7 @@ require (['core', 'util'], function (core, util) {
         var
           namespaces = over_class_name.split ('.'),
           i = 0,
-          temp_name = window [namespaces[i++]];
+          temp_name = glui.__modules [namespaces[i++]];
         
         while (temp_name && i < namespaces.length) {
           temp_name = temp_name [namespaces[i++]];

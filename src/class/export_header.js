@@ -17,5 +17,26 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define ("class", ["util", "core"], function (util, core) {
+if (!window.glui) {
+  if (window.requirejs) {
+    window.glui = function (name, dependencies, func) {
+      define (name, dependencies, func);
+    }
+    glui.config = require.config.bind (require);
+  }
+  else {
+    window.glui = function (name, dependencies, func) {
+      var args = [];
+      if (dependencies) dependencies.forEach (function (keys) {
+        args.push (glui.__modules [keys]);
+      })
+      var module = func.apply ({}, args);
+      if (name) window.glui.__modules [name] = module;
+    }
+    glui.__modules = {};
+    glui.config = function () {};
+  }
+}
+
+glui ("class", ["util", "core"], function (util, core) {
 
