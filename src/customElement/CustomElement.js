@@ -702,6 +702,7 @@ glui (null, ['core', 'util'], function (core, util) {
 
     return html_comp;
   }
+  core.declareComponent = declareComponent;
 
   LIST_COMPONENT.forEach (function (item) {
     declareComponent.apply (this, item);
