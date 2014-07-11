@@ -1,4 +1,5 @@
 node_modules
 .DS_Store
 lib
-vs_gl_engine.js
+bower_components
+components

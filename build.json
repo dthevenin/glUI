@@ -1,0 +1,55 @@
+{
+  "core": [
+    "src/core/export_header.js",
+    "src/core/Object.js",
+    "src/core/mainloop.js",
+    "src/core/math/vector.js",
+    "src/core/math/matrix.js",
+    "src/core/meshUtil.js",
+    "src/core/sprite.js",
+    "src/core/spriteUtil.js",
+    "src/core/program.js",
+    "src/core/engineInit.js",
+    "src/core/engine.js",
+    "src/core/texture_util.js",
+    "src/core/Constraint.js",
+    "src/core/Color.js",
+    "src/core/Style.js",
+    "src/core/event/Event.js",
+    "src/core/event/EventSource.js",
+    "src/core/event/Picking.js",
+    "src/core/event/PointerEvent.js",
+    "src/core/event/MouseEvent.js",
+    "src/core/event/TouchEvent.js",
+    "src/core/view/iScroll.js",
+    "src/core/view/Group.js",
+    "src/core/view/Configuration.js",
+    "src/core/view/Transform.js",
+    "src/core/view/View.js",
+    "src/core/view/Template.js",
+    "src/core/view/Application.js",
+    "src/core/view/Text.js",
+    "src/core/view/Image.js",
+    "src/core/view/Canvas.js",
+    "src/animation/Chronometer.js",
+    "src/animation/Trajectories.js",
+    "src/animation/Animation.js",
+    "src/animation/DefaultAnimations.js",
+    "src/animation/engine.js",
+    "src/animation/chainingAPI.js",
+    "src/core/export_footer.js"
+  ],
+  "util": [
+    "src/util/export_header.js",
+    "src/util/util.js",
+    "src/util/export_footer.js"
+  ],
+  "class": [
+    "src/class/export_header.js",
+    "src/class/Class.js",
+    "src/class/export_footer.js"
+  ],
+  "webcomponent": [
+    "src/CustomElement/CustomElement.js"
+  ]
+}

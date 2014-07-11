@@ -1,15 +1,3 @@
-[submodule "submodules/CustomElements"]
-	path = submodules/CustomElements
-	url = https://github.com/Polymer/CustomElements.git
-[submodule "submodules/WeakMap"]
-	path = submodules/WeakMap
-	url = git://github.com/Polymer/WeakMap.git
-[submodule "submodules/MutationObservers"]
-	path = submodules/MutationObservers
-	url = https://github.com/Polymer/MutationObservers.git
-[submodule "submodules/tools"]
-	path = submodules/tools
-	url = https://github.com/Polymer/tools.git
 [submodule "submodules/closure-compiler"]
 	path = submodules/closure-compiler
 	url = https://github.com/google/closure-compiler.git
