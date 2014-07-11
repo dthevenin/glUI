@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, target-densityDpi=160, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     <title>Tempale</title>
 
-    <script type="text/javascript" src="../lib/require.js"></script>
-    <script type="text/javascript" src="template.js"></script>
+    <script type="text/javascript" src="../lib/custom_elements.js"></script>
+    <link rel="import" href="../lib/glengine.html">
+
+    <link rel="import" href="components/templateTest.html">
     
     <style>
-      body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
+      body { margin: 0; padding: 0; overflow: hidden; }
     </style>
   </head>
-  <body is="vs-application" class="TemplateTest">
+  <body>
+
+  <vs-application class="TemplateTest">
 
      <vs-template name="myTemplate" size="[300,80]" properties="image:logoView#src;title:titleView#text;description:descriptionView#text">
       <vs-image name="logoView" position="[0,0]" size="[80,80]" src="image.png"></vs-image>
@@ -27,6 +27,8 @@
     
     <vs-view name="myView" template="myTemplate" title="toto" description="dsalj djakfjdl fadlj"></vs-view>
     <vs-view position="[0,80]" template="myTemplate" title="tata" description="dsalj djakfjdl fadlj bis" image="imageBis.png"></vs-view>
+  
+  </vs-application>
 
   </body>
 </html>

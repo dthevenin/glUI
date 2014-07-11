@@ -16,19 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require.config ({ baseUrl: "../lib" });
 
-require (['core', 'class'], function (core, klass) {
+glui (null, ['core', 'class'], function (core, klass) {
 
+  var TemplateTest = klass.createClass ({
 
-var TemplateTest = klass.createClass ({
-
-  /** parent class */
-  parent: core.Application,
+    /** parent class */
+    parent: core.Application,
   
-  applicationStarted : function (event) {
-    window.view = this.myView;
-  }
-});
+    applicationStarted : function (event) {
+      window.view = this.myView;
+    }
+  });
+
+  return TemplateTest;
 
 });
