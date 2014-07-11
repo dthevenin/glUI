@@ -19,32 +19,39 @@ var Text = klass.createClass ({
     this.view1.style.backgroundColor = core.Color.red;
 
     this.add (this.view1);
-    this._tmp_translation = vec3.create ();
+    this._tmp_translation = core.vec3.create ();
  
-    this.__recognizer = new vs.ui.DragRecognizer (this);
-    this.view1.addPointerRecognizer (this.__recognizer);
+    this.addEventListener (core.POINTER_START, this);
   },
 
-  didDragStart : function () {
-    console.profile("drag");
-    vec3.set (this.view1.translation, this._tmp_translation);
-  },
+  handleEvent : function (e) {
 
-  didDrag : function (drag_info, event) {
-    var
-      dy = drag_info.dy,
-      dx = drag_info.dx;
+    if (e.type === core.POINTER_START) {
+      document.addEventListener (core.POINTER_MOVE, this);
+      document.addEventListener (core.POINTER_END, this);
+
+      this._screenX = e.screenX;
+      this._screenY = e.screenY;
+
+      core.vec3.set (this.view1.translation, this._tmp_translation);
+    }
+    else if (e.type === core.POINTER_MOVE) {
+
+      var
+        dx = e.screenX - this._screenX,
+        dy = e.screenY - this._screenY;
       
-    var t = this.view1.translation;
-    t[0] = this._tmp_translation [0] + dx;
-    t[1] = this._tmp_translation [1] + dy;
+      var t = this.view1.translation;
+      t[0] = this._tmp_translation [0] + dx;
+      t[1] = this._tmp_translation [1] + dy;
 
-    // update position and will force graphic update
-    this.view1.translation = t;
-  },
-
-  didDragEnd : function (drag_info, event) {
-    console.profileEnd("drag");
+      // update position and will force graphic update
+      this.view1.translation = t;
+    }
+    else if (e.type === core.POINTER_END) {
+      document.removeEventListener (core.POINTER_MOVE, this);
+      document.removeEventListener (core.POINTER_END, this);
+    }
   }
 });
 

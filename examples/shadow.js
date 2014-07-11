@@ -44,4 +44,5 @@ function loadApplication () {
   core.Application.start ();
 }
 
+loadApplication ();
 });

@@ -7,9 +7,9 @@ var Test = klass.createClass ({
   /** parent class */
   parent: core.Application,
 
-  initComponent : function () {
-    this._super ();
+  applicationStarted : function () {
 
+    /*
     var slider1 = new vs.ui.Slider ({
       position: [50, 50],
       range: [0, 200]
@@ -22,7 +22,7 @@ var Test = klass.createClass ({
       value: 1
     }).init ();
     document.body.appendChild (slider2.view);
-
+*/
     this.canvas = new core.Canvas ({
       position: [100, 100],
       size: [256, 256],
@@ -56,10 +56,10 @@ var Test = klass.createClass ({
       canvas.draw (0, 0, canvas._size [0], canvas._size [1]);
     }, 100);
     
-    slider1.connect ("value").to (this.canvas, "rotation", function (x) {
-        return [[0, 0, x]];
-      });
-    slider2.connect ("value").to (this.canvas, "scaling");
+//    slider1.connect ("value").to (this.canvas, "rotation", function (x) {
+//        return [[0, 0, x]];
+//      });
+//    slider2.connect ("value").to (this.canvas, "scaling");
   }
 });
 

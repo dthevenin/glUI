@@ -64,5 +64,5 @@ var Item = klass.createClass ({
   }
 });
 
-loadApplication ();
+//loadApplication ();
 });

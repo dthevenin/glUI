@@ -10,12 +10,6 @@ var Test = klass.createClass ({
   initComponent : function () {
     this._super ();
 
-    var slider = new vs.ui.Slider ({
-      position: [50, 50],
-      range: [0, 200]
-    }).init ();
-    this.add (slider);
-
     this.glView1 = new core.View ({
       position: [50, 70],
       size: [150, 100],
@@ -34,13 +28,6 @@ var Test = klass.createClass ({
 
 //    this.glView2.opacity = 0.4;
     this.glView2.style.opacity = 0.4;
-
-    slider.connect ("value").to (this.glView1, "rotation")
-      .to (this.glView1, "translation", function (x) {
-        return [[x, 0]];
-      });
-
-    slider.connect ("value").to (this.glView2, "rotation");
 
 //     for (var i = 0; i < 100; i++) {
 //     index = 10 * i;

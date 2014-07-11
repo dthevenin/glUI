@@ -7,8 +7,7 @@ var Text = klass.createClass ({
   /** parent class */
   parent: core.Application,
 
-  initComponent : function () {
-    this._super ();
+  applicationStarted : function () {
 
     text1 = new core.Text ({
       size: [245, 20],
@@ -109,5 +108,7 @@ function loadApplication () {
   new Text ({id:"test"}).init ();
   core.Application.start ();
 }
+
+loadApplication ();
 
 });

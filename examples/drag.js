@@ -19,20 +19,20 @@ var Text = klass.createClass ({
     this.view1.style.backgroundColor = core.Color.red;
 
     this.add (this.view1);
-    this._tmp_translation = vec3.create ();
+    this._tmp_translation = core.vec3.create ();
  
-    var algo = 3;
+    var algo = 2;
  
     if (algo === 1) {
       // algo1    
       this.handleEvent = this.handleEventAlog1;
-      document.addEventListener (POINTER_START, this);
+      document.addEventListener (core.POINTER_START, this);
     }
     else if (algo === 2) {
       // algo 2
       this.tx=0 ; this.ty =0; this.dx; this.dy;
       this.handleEvent = this.handleEventAlog2;
-      document.addEventListener (POINTER_START, this);
+      document.addEventListener (core.POINTER_START, this);
     }
     else if (algo === 3) {
       // alog 3
@@ -43,16 +43,16 @@ var Text = klass.createClass ({
   
   handleEventAlog1 : function (e) {
 
-    if (e.type === POINTER_START) {
-      document.addEventListener (POINTER_MOVE, this);
-      document.addEventListener (POINTER_END, this);
+    if (e.type === core.POINTER_START) {
+      document.addEventListener (core.POINTER_MOVE, this);
+      document.addEventListener (core.POINTER_END, this);
 
       this._screenX = e.screenX;
       this._screenY = e.screenY;
 
-      vec3.set (this.view1.translation, this._tmp_translation);
+      core.vec3.set (this.view1.translation, this._tmp_translation);
     }
-    else if (e.type === POINTER_MOVE) {
+    else if (e.type === core.POINTER_MOVE) {
 
       var
         dx = e.screenX - this._screenX,
@@ -65,23 +65,23 @@ var Text = klass.createClass ({
       // update position and will force graphic update
       this.view1.translation = t;
     }
-    else if (e.type === POINTER_END) {
-      document.removeEventListener (POINTER_MOVE, this);
-      document.removeEventListener (POINTER_END, this);
+    else if (e.type === core.POINTER_END) {
+      document.removeEventListener (core.POINTER_MOVE, this);
+      document.removeEventListener (core.POINTER_END, this);
     }
   },
   
   handleEventAlog2 : function (e) {
 
-    if (e.type === POINTER_START) {
+    if (e.type === core.POINTER_START) {
       console.profile("drag algo2");
-      document.addEventListener (POINTER_MOVE, this);
-      document.addEventListener (POINTER_END, this);
+      document.addEventListener (core.POINTER_MOVE, this);
+      document.addEventListener (core.POINTER_END, this);
 
       this._screenX = e.screenX;
       this._screenY = e.screenY;
     }
-    else if (e.type === POINTER_MOVE) {
+    else if (e.type === core.POINTER_MOVE) {
 
       this.dx = e.screenX - this._screenX,
       this.dy = e.screenY - this._screenY;
@@ -95,18 +95,18 @@ var Text = klass.createClass ({
       this.view1.translation = t;
 //      window.render_ui (performance.now ());
     }
-    else if (e.type === POINTER_END) {
+    else if (e.type === core.POINTER_END) {
       this.tx += this.dx;
       this.ty += this.dy;
-      document.removeEventListener (POINTER_MOVE, this);
-      document.removeEventListener (POINTER_END, this);
+      document.removeEventListener (core.POINTER_MOVE, this);
+      document.removeEventListener (core.POINTER_END, this);
       console.profileEnd("drag algo2");
     }
   },
 
   didDragStart : function () {
     console.profile("drag algo3");
-    vec3.set (this.view1.translation, this._tmp_translation);
+    core.vec3.set (this.view1.translation, this._tmp_translation);
   },
 
   didDrag : function (drag_info, event) {

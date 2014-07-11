@@ -10,7 +10,7 @@ var Test = klass.createClass ({
 
   initComponent : function () {
     this._super ();
-
+    /*
     slider1 = new vs.ui.Slider ({
       position: [50, 50],
       range: [0, 600],
@@ -24,7 +24,7 @@ var Test = klass.createClass ({
       value: 1.65
     }).init ();
     document.body.appendChild (slider2.view);
-
+*/
     var glView2 = new core.View ({
       position: [100, 100],
       size: [150, 100],
@@ -34,7 +34,7 @@ var Test = klass.createClass ({
     glView2.style.backgroundColor = core.Color.red;
     
     this.add (glView2);
-   
+/*   
     slider2.bind ("continuous_change", this, function (e) {
       mat4.perspective (e.data ,1, -1, 10, jsProjMatrix);
       updateMatrix ();
@@ -49,6 +49,7 @@ var Test = klass.createClass ({
     
     slider1.refresh ();
     slider2.refresh ();
+*/
   }
 });
 

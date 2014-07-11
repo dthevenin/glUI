@@ -11,11 +11,11 @@ var Test = klass.createClass ({
   initComponent : function () {
     this._super ();
 
-    var slider3 = new vs.ui.Slider ({
-      position: [50, 50],
-      range: [0, 100]
-    }).init ();
-    document.body.appendChild (slider3.view);
+//    var slider3 = new vs.ui.Slider ({
+//      position: [50, 50],
+//      range: [0, 100]
+//    }).init ();
+//    document.body.appendChild (slider3.view);
     
     glImage = createImage1 ();
     glImage.rotation = [10, 20, 180];
@@ -29,9 +29,9 @@ var Test = klass.createClass ({
 //    gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, glImage.__gl_vertices_buffer);
 //    gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, vertices, gl_ctx.STATIC_DRAW); 
 
-    slider3.bind ("continuous_change", this , function (event) {
-      glImage.update_vectices (event.data);
-    });
+//    slider3.bind ("continuous_change", this , function (event) {
+//      glImage.update_vectices (event.data);
+//    });
  
 //     glImage2 = createImage2 ();
 //     glImage2.rotation = [10, 210, 10];
@@ -269,4 +269,5 @@ function loadApplication () {
   core.Application.start ();
 }
 
+loadApplication ();
 });

@@ -7,9 +7,7 @@ var Test = klass.createClass ({
   /** parent class */
   parent: core.Application,
 
-  initComponent : function () {
-    this._super ();
-
+  applicationStarted : function () {
     var view1 = new core.View ({
       position: [50, 50],
       size: [400, 400]
