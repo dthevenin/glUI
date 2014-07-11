@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-glui.config ({ baseUrl: "../lib" });
-
 glui ('MyApplication', ['core', 'class'], function (core, klass) {
 
 var MyApplication = klass.createClass ({
@@ -26,7 +24,8 @@ var MyApplication = klass.createClass ({
   parent: core.Application,
   
   applicationStarted : function (event) {
-    window.view = this.iconsView;
+    this.iconsView.position = [0, 0];
+    this.image.size = [300, 300];
   }
 });
 
