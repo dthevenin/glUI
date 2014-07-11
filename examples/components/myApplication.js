@@ -18,17 +18,47 @@
 
 glui ('MyApplication', ['core', 'class'], function (core, klass) {
 
-var MyApplication = klass.createClass ({
+  var MyApplication = klass.createClass ({
 
-  /** parent class */
-  parent: core.Application,
+    /** parent class */
+    parent: core.Application,
   
-  applicationStarted : function (event) {
-    this.iconsView.position = [0, 0];
-    this.image.size = [300, 300];
-  }
+    applicationStarted : function (event) {
+      this.iconsView.position = [0, 0];
+      this.image.size = [300, 300];
+    }
+  });
+
+  return MyApplication;
 });
 
-return MyApplication;
+glui ('MySuperView', ['core', 'class'], function (core, klass) {
 
+  var MySuperView = klass.createClass ({
+
+    /** parent class */
+    parent: core.View,
+  
+    constructor: function (config) {
+
+      if (!config.size) config.size = [100, 100];
+      if (!config.position) config.position = [0, 100];
+    
+      this._super (config);
+    },
+  
+    didInitialize : function () {
+      console.log ("didInitialize MyView");
+
+      if (!this.style.backgroundColor) {
+        this.style.backgroundColor = core.Color.yellow;
+      }
+    }
+  });
+
+  if (core.declareComponent) {
+    core.declareComponent (MySuperView, "MY-SUPER-VIEW");
+  }
+
+  return MySuperView;
 });

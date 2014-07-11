@@ -6,8 +6,8 @@
     <title>Tests page: CustomComponent</title>
 
     <script type="text/javascript" src="../lib/custom_elements.js"></script>
-
     <link rel="import" href="../lib/glengine.html">
+    
     <link rel="import" href="components/myApplication.html">
     
     <style>
@@ -19,6 +19,11 @@
       <vs-view name="iconsView" position="[50,50]" size="[50,60]" style="background-color:red;"></vs-view>
     
       <vs-image name="image" position="[150,150]" style="background-color:blue;"  size="[200,200]" src="demo.png"></vs-image>
+      
+      <vs-view class="MySuperView"  style="background-color:pink;"></vs-view>
+
+      <my-super-view position="[0,300]"></my-super-view>
+      
     <vs-application>
   </body>
 </html>
