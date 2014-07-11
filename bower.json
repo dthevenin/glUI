@@ -7,7 +7,7 @@
   },
   "description": "Custom Elements Polyfill",
   "dependencies": {
-    "CustomElements": "https://github.com/Polymer/CustomElements.git#master"
+    "CustomElements": "https://github.com/Polymer/platform.git#master"
   },
   "license": "MIT",
   "private": true,
@@ -15,8 +15,9 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "components",
     "../",
-    "test",
-    "tests"
+    "demos",
+    "examples"
   ]
 }
