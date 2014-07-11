@@ -32,8 +32,16 @@ module.exports = function(grunt) {
     },
     copy: {
       customElements: {
-        src: 'components/CustomElements/platform.js',
+        src: 'bower_components/CustomElements/platform.js',
         dest: 'lib/custom_elements.js'
+      },
+      requirejs: {
+        src: 'bower_components/requirejs/requirejs.js',
+        dest: 'lib/requirejs.js'
+      },
+      glengine: {
+        src: 'src/glengine.html',
+        dest: 'lib/glengine.html'
       }
     }
   });
@@ -53,6 +61,8 @@ module.exports = function(grunt) {
     'concat:util',
     'concat:class',
     'concat:webcomponent',
-    'copy:customElements'
-  ]);
+    'copy:customElements',
+    'copy:glengine',
+    'copy:requirejs'
+   ]);
 };
