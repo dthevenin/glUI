@@ -24,19 +24,20 @@ glui (null, ['core', 'util'], function (core, util) {
   
     if (text) config.text = text;
   }
+  core.__TEXT_CONTENT = TEXT_CONTENT;
 
   function CONFIGURATION_CONTENT (node, config) {
   }
 
   function CONFIGURATION_CREATED_CALLBACK () {
-    this.parentNode.removeChild (this);
-  };
-
-  function CONFIGURATION_ATTACHED_CALLBACK () {
     var text = this.textContent;
 
-    Configuration.parse (text);
+    this.parentNode.removeChild (this);
+
+    core.Configuration.parse (text);
   };
+
+  function CONFIGURATION_ATTACHED_CALLBACK () { };
 
   function RADIO_CHECK_BUTTON_CONTENT (node, config) {
     var
@@ -293,127 +294,13 @@ glui (null, ['core', 'util'], function (core, util) {
   }
   util.___setCompProperties = setCompProperties;
 
-  function LIST_TEMPLATE_CONTENT (node, config) {
-
-    var template_comp, comp_properties;
-  
-    function buildTemplate (item) {
-    
-      var str_template = "<vs-view";
-      var attributes = item.attributes, l = attributes.length, attribute;
-    
-      // copy attributes
-      while (l--) {
-        attribute = attributes.item (l);
-        if (attribute.name == "properties") {
-          //properties declaration
-          comp_properties = parsePropertiesDeclaration (attribute.value);
-          continue;
-        }
-        if (core.UNMUTABLE_ATTRIBUTES.indexOf (attribute.name) !== -1) continue;
-        str_template += ' ' + attribute.name + "=\"" + attribute.value + "\"";
-      }
-
-      // copy the template content
-      str_template += ">" + item.innerHTML + "</vs-view>";
-
-      // create the template object
-      var template = new core.Template (str_template);
-    
-      // generate the comp
-      var config = core.buildConfiguration (item);
-      var comp = template.compileView ("core.AbstractListItem", config);
-  //    setCompProperties (comp, comp_properties);
-  //    return comp;
-
-  //    return template._shadow_view.__node._comp_;
-    }
-
-    var item = node.firstElementChild;
-  
-  //  while (item) {
-  //   
-  //     if (item.nodeName == "VS-TEMPLATE") {
-  //     
-  //       var href = item.getAttribute ("href");
-  //       if (href) {
-  //         get_extern_component (href);
-  //         node.__ext_template = href;
-  //       }
-  //       else {
-  //         template_comp = buildTemplate (item);
-  //       }
-  //       
-  //       break;
-  //     }
-  //  }
-  
-  //  util.removeAllElementChild (node);
-  
-  //  config.__template_obj = template_comp;
-  }
-
-  function LIST_ATTACHED_CALLBACK () {
-  
-    if (!this._comp_) return;
-  
-    console.log ("LIST attachedCallback");
-   
-    var href = this.__ext_template, self = this;
-    if (href) {
-      this.__ext_template = undefined;
-    
-      get_extern_component (href, function (data) {
-        if (!data) return;
-
-        var config = core.buildConfiguration (data);
-        config.node = document.importNode (data, true);
-
-        var comp = new core.AbstractListItem (config).init ();
-  //      var comp = new vs.ui.AbstractListItem (config);
-      
-        var properties_str = data.getAttribute ("properties");
-        if (properties_str) {
-          var comp_properties = parsePropertiesDeclaration (properties_str);
-          setCompProperties (comp, comp_properties);
-        }
-    
-        self._comp_.setItemTemplate (comp);
-        self._comp_._modelChanged ();
-      });
-    }
-   
-    var parentComp = getParentComp (this), name = this.getAttribute ("name");
-  
-    if (parentComp) {
-      parentComp.add (this._comp_);
-      if (name) {
-        if (parentComp.isProperty && parentComp.isProperty (name)) {
-          console.error (
-            "Impossible to define a child, type \"%s\", with the same name " +
-            "\"%s\" of a property. Change the component name on your template.",
-            this.nodeName, name);
-          console.log (this);
-        }
-        else {
-          parentComp [name] = this._comp_;
-          this.classList.add (name);
-        }
-      }
-    }
-  
-  //   console.log (this.nodeName);
-  }
-
   function ALLOW_CHILD_CONTENT (node) {}
 
   var LIST_COMPONENT = [
     [core.Text, "VS-LABEL", TEXT_CONTENT],
-    [core.Button, "VS-BUTTON", TEXT_CONTENT],
     [core.Application, "VS-APPLICATION", ALLOW_CHILD_CONTENT],
     [core.Canvas, "VS-CANVAS", NO_CONTENT],
     [core.Image, "VS-IMAGE", NO_CONTENT],
-    [core.List, "VS-LIST", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK],
     [core.View, "VS-VIEW", ALLOW_CHILD_CONTENT],
     [core.View, "VS-TEMPLATE", null, TEMPLATE_CREATED_CALLBACK, TEMPLATE_ATTACHED_CALLBACK],
     [core.Configuration, "VS-CONFIGURATION", CONFIGURATION_CONTENT, CONFIGURATION_CREATED_CALLBACK, CONFIGURATION_ATTACHED_CALLBACK]
@@ -492,6 +379,8 @@ glui (null, ['core', 'util'], function (core, util) {
     if (parentNode && parentNode._comp_) return parentNode._comp_;
     else return getParentComp (parentNode);
   }
+  core.__getParentComp = getParentComp;
+  
 
   /**
    *  Safe set inner HTML of a element
