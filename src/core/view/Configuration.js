@@ -68,6 +68,11 @@ Configuration.parse = function (text) {
         Constraint.createObjectFromStringStyle (configuration.value);
     }
   
+    if (property === "style" && util.isString (configuration.value)) {
+      configuration.value =
+        Style.createObjectFromStringStyle (configuration.value);
+    }
+  
 //    var entry = (match [1] || '') + configuration.path [0];
     var entry = configuration.path [0];
     
@@ -107,16 +112,16 @@ Configuration.applyToTemplate = function (template_name, base) {
         if (util.isString (configuration.value)) {
           base.constraint.parseStringStyle (configuration.value)
         }
-        else {
-          base.constraint.parseObjectStyle (configuration.value)
+        else if (configuration.value && configuration.value.copy) {
+          configuration.value.copy (base.constraint);
         }
       }
       else if (configuration.property === "style") {
         if (util.isString (configuration.value)) {
           base.style.parseStringStyle (configuration.value)
         }
-        else {
-          base.style.parseObjectStyle (configuration.value)
+        else if (configuration.value && configuration.value.copy) {
+          configuration.value.copy (base.style);
         }
       }
       else {
@@ -149,16 +154,16 @@ Configuration.applyToApplication = function (base) {
         if (util.isString (configuration.value)) {
           base.constraint.parseStringStyle (configuration.value)
         }
-        else {
-          base.constraint.parseObjectStyle (configuration.value)
+        else if (configuration.value && configuration.value.copy) {
+          configuration.value.copy (base.constraint);
         }
       }
       else if (configuration.property === "style") {
         if (util.isString (configuration.value)) {
           base.style.parseStringStyle (configuration.value)
         }
-        else {
-          base.style.parseObjectStyle (configuration.value)
+        else if (configuration.value && configuration.value.copy) {
+          configuration.value.copy (base.style);
         }
       }
       else {
