@@ -51,5 +51,22 @@
   ],
   "webcomponent": [
     "src/CustomElement/CustomElement.js"
+  ],
+  "recognizers": [
+    "src/recognizers/export_header.js",
+    "src/recognizers/RecognizerManager.js",
+    "src/recognizers/PointerRecognizer.js",
+    "src/recognizers/DragRecognizer.js",
+    "src/recognizers/PinchRecognizer.js",
+    "src/recognizers/RotationRecognizer.js",
+    "src/recognizers/TapRecognizer.js",
+    "src/recognizers/export_footer.js"
+  ],
+  "widget": [
+    "src/widget/export_header.js",
+    "src/widget/AbstractList.js",
+    "src/widget/List.js",
+    "src/widget/Button.js",
+    "src/widget/export_footer.js"
   ]
 }

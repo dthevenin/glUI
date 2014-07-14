@@ -28,6 +28,14 @@ module.exports = function(grunt) {
       webcomponent: {
         src: sources.webcomponent,
         dest: 'lib/webcomponent.js'
+      },
+      recognizers: {
+        src: sources.recognizers,
+        dest: 'lib/recognizers.js'
+      },
+      widget: {
+        src: sources.widget,
+        dest: 'lib/widget.js'
       }
     },
     copy: {
@@ -42,6 +50,10 @@ module.exports = function(grunt) {
       glengine: {
         src: 'src/glengine.html',
         dest: 'lib/glengine.html'
+      },
+      demosLib: {
+        src: 'lib/*',
+        dest: 'demos/lib/'
       }
     }
   });
@@ -61,8 +73,11 @@ module.exports = function(grunt) {
     'concat:util',
     'concat:class',
     'concat:webcomponent',
+    'concat:recognizers',
+    'concat:widget',
     'copy:customElements',
     'copy:glengine',
-    'copy:requirejs'
+    'copy:requirejs',
+//    'copy:demosLib'
    ]);
 };
