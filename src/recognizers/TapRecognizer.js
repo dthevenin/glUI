@@ -17,12 +17,12 @@
 */
 
 /**
- *  The vs.ui.TapRecognizer class
+ *  The recognizer.TapRecognizer class
  *
- *  @extends vs.ui.PointerRecognizer
+ *  @extends recognizer.PointerRecognizer
  *
  *  @class
- *  vs.ui.TapRecognizer is a concrete subclass of vs.ui.PointerRecognizer that
+ *  recognizer.TapRecognizer is a concrete subclass of recognizer.PointerRecognizer that
  *  looks for single or multiple taps/clicks.<br />
  *
  *  The TapRecognizer delegate has to implement following methods:
@@ -39,7 +39,7 @@
  *  <p>
  *
  *  @example
- *  var my_view = new vs.ui.View ({id: "my_view"}).init ();
+ *  var my_view = new core.View ({id: "my_view"}).init ();
  *  var recognizer = new TapRecognizer ({
  *    didTouch : function (comp) {
  *      comp.addClassName ("pressed");
@@ -56,14 +56,14 @@
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.TapRecognizer.
+ *   Creates a new recognizer.TapRecognizer.
  *
- * @name vs.ui.TapRecognizer
+ * @name recognizer.TapRecognizer
  *
  * @param {ReconizerDelegate} delegate the delegate [mandatory]
  */
 function TapRecognizer (delegate) {
-  this.parent = vs.ui.PointerRecognizer;
+  this.parent = PointerRecognizer;
   this.parent (delegate);
   this.constructor = TapRecognizer;
 }
@@ -79,19 +79,19 @@ TapRecognizer.prototype = {
   __tap_mode: 0,
 
   /**
-   * @name vs.ui.TapRecognizer#init
+   * @name recognizer.TapRecognizer#init
    * @function
    * @protected
    */
   init : function (obj) {
-    vs.ui.PointerRecognizer.prototype.init.call (this, obj);
+    PointerRecognizer.prototype.init.call (this, obj);
     
     this.addPointerListener (this.obj, core.POINTER_START, this.obj);
     this.reset ();
   },
 
   /**
-   * @name vs.ui.TapRecognizer#uninit
+   * @name recognizer.TapRecognizer#uninit
    * @function
    * @protected
    */
@@ -100,7 +100,7 @@ TapRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.TapRecognizer#pointerStart
+   * @name recognizer.TapRecognizer#pointerStart
    * @function
    * @protected
    */
@@ -146,7 +146,7 @@ TapRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.TapRecognizer#pointerMove
+   * @name recognizer.TapRecognizer#pointerMove
    * @function
    * @protected
    */
@@ -157,7 +157,7 @@ TapRecognizer.prototype = {
     var dx = e.targetPointerList[0].pageX - this.__start_x;
     var dy = e.targetPointerList[0].pageY - this.__start_y;
     
-    if (Math.abs (dx) + Math.abs (dy) < vs.ui.View.MOVE_THRESHOLD) {
+    if (Math.abs (dx) + Math.abs (dy) < core.View.MOVE_THRESHOLD) {
       // we still in selection mode
       return false;
     }
@@ -177,7 +177,7 @@ TapRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.TapRecognizer#init
+   * @name recognizer.TapRecognizer#init
    * @function
    * @protected
    */
@@ -205,7 +205,7 @@ TapRecognizer.prototype = {
         self.__unselect_time_out = 0;
         self.__unselect_clb = undefined;
       }
-      this.__unselect_time_out = setTimeout (this.__unselect_clb, vs.ui.View.UNSELECT_DELAY);        
+      this.__unselect_time_out = setTimeout (this.__unselect_clb, core.View.UNSELECT_DELAY);        
     }
     
     if (this.delegate && this.delegate.didTap) {
@@ -225,7 +225,7 @@ TapRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.TapRecognizer#pointerCancel
+   * @name recognizer.TapRecognizer#pointerCancel
    * @function
    * @protected
    */
@@ -233,10 +233,4 @@ TapRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-util.extendClass (TapRecognizer, vs.ui.PointerRecognizer);
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.ui.TapRecognizer = TapRecognizer;
+util.extendClass (TapRecognizer, PointerRecognizer);

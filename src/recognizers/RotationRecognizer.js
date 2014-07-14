@@ -18,12 +18,12 @@
 
 
 /**
- *  The vs.ui.RotationRecognizer class
+ *  The recognizer.RotationRecognizer class
  *
- *  @extends vs.ui.PointerRecognizer
+ *  @extends recognizer.PointerRecognizer
  *
  *  @class
- *  vs.ui.RotationRecognizer is a concrete subclass of vs.ui.PointerRecognizer
+ *  recognizer.RotationRecognizer is a concrete subclass of recognizer.PointerRecognizer
  *  that looks for rotation gestures involving two touches. When the user moves
  *  the fingers opposite each other in a circular motion, the underlying view
  *  should rotate in a corresponding direction and speed...<br />
@@ -38,7 +38,7 @@
  *  <p>
  *
  *  @example
- *  var my_view = new vs.ui.View ({id: "my_view"}).init ();
+ *  var my_view = new core.View ({id: "my_view"}).init ();
  *  var recognizer = new RotationRecognizer ({
  *    didRotationChange : function (rotation, event) {
  *      my_view.rotation = rotation;
@@ -49,14 +49,14 @@
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.RotationRecognizer.
+ *   Creates a new recognizer.RotationRecognizer.
  *
- * @name vs.ui.RotationRecognizer
+ * @name recognizer.RotationRecognizer
  *
  * @param {ReconizerDelegate} delegate the delegate [mandatory]
  */
 function RotationRecognizer (delegate) {
-  this.parent = vs.ui.PointerRecognizer;
+  this.parent = PointerRecognizer;
   this.parent (delegate);
   this.constructor = RotationRecognizer;
 }
@@ -64,19 +64,19 @@ function RotationRecognizer (delegate) {
 RotationRecognizer.prototype = {
 
   /**
-   * @name vs.ui.RotationRecognizer#init
+   * @name recognizer.RotationRecognizer#init
    * @function
    * @protected
    */
   init : function (obj) {
-    vs.ui.PointerRecognizer.prototype.init.call (this, obj);
+    PointerRecognizer.prototype.init.call (this, obj);
     
     this.addPointerListener (this.obj, core.GESTURE_START, this.obj);
     this.reset ();
   },
 
   /**
-   * @name vs.ui.RotationRecognizer#uninit
+   * @name recognizer.RotationRecognizer#uninit
    * @function
    * @protected
    */
@@ -85,7 +85,7 @@ RotationRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.RotationRecognizer#gestureStart
+   * @name recognizer.RotationRecognizer#gestureStart
    * @function
    * @protected
    */
@@ -105,7 +105,7 @@ RotationRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.RotationRecognizer#gestureChange
+   * @name recognizer.RotationRecognizer#gestureChange
    * @function
    * @protected
    */
@@ -120,7 +120,7 @@ RotationRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.RotationRecognizer#gestureEnd
+   * @name recognizer.RotationRecognizer#gestureEnd
    * @function
    * @protected
    */
@@ -138,7 +138,7 @@ RotationRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.RotationRecognizer#pointerCancel
+   * @name recognizer.RotationRecognizer#pointerCancel
    * @function
    * @protected
    */
@@ -146,10 +146,4 @@ RotationRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-util.extendClass (RotationRecognizer, vs.ui.PointerRecognizer);
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.ui.RotationRecognizer = RotationRecognizer;
+util.extendClass (RotationRecognizer, PointerRecognizer);

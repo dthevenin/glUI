@@ -18,12 +18,12 @@
 
 
 /**
- *  The vs.ui.PinchRecognizer class
+ *  The recognizer.PinchRecognizer class
  *
- *  @extends vs.ui.PointerRecognizer
+ *  @extends recognizer.PointerRecognizer
  *
  *  @class
- *  The vs.ui.PinchRecognizer is a concrete subclass of vs.ui.PointerRecognizer
+ *  The recognizer.PinchRecognizer is a concrete subclass of recognizer.PointerRecognizer
  *  that looks for pinching gestures involving two touches. When the user moves
  *  the two fingers toward each other, the conventional meaning is zoom-out;<br />
  *  when the user moves the two fingers away from each other, the conventional
@@ -40,7 +40,7 @@
  *  <p>
  *
  *  @example
- *  var my_view = new vs.ui.View ({id: "my_view"}).init ();
+ *  var my_view = new core.View ({id: "my_view"}).init ();
  *  var recognizer = new PinchRecognizer ({
  *    didPinchChange : function (scale, event) {
  *      my_view.scaling = scale;
@@ -57,14 +57,14 @@
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.PinchRecognizer.
+ *   Creates a new recognizer.PinchRecognizer.
  *
- * @name vs.ui.PinchRecognizer
+ * @name recognizer.PinchRecognizer
  *
  * @param {ReconizerDelegate} delegate the delegate [mandatory]
  */
 function PinchRecognizer (delegate) {
-  this.parent = vs.ui.PointerRecognizer;
+  this.parent = PointerRecognizer;
   this.parent (delegate);
   this.constructor = PinchRecognizer;
 }
@@ -72,19 +72,19 @@ function PinchRecognizer (delegate) {
 PinchRecognizer.prototype = {
 
   /**
-   * @name vs.ui.PinchRecognizer#init
+   * @name recognizer.PinchRecognizer#init
    * @function
    * @protected
    */
   init : function (obj) {
-    vs.ui.PointerRecognizer.prototype.init.call (this, obj);
+    PointerRecognizer.prototype.init.call (this, obj);
     
     this.addPointerListener (this.obj, core.GESTURE_START, this.obj);
     this.reset ();
   },
 
   /**
-   * @name vs.ui.PinchRecognizer#uninit
+   * @name recognizer.PinchRecognizer#uninit
    * @function
    * @protected
    */
@@ -93,7 +93,7 @@ PinchRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.PinchRecognizer#gestureStart
+   * @name recognizer.PinchRecognizer#gestureStart
    * @function
    * @protected
    */
@@ -114,7 +114,7 @@ PinchRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.PinchRecognizer#gestureChange
+   * @name recognizer.PinchRecognizer#gestureChange
    * @function
    * @protected
    */
@@ -131,7 +131,7 @@ PinchRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.PinchRecognizer#gestureEnd
+   * @name recognizer.PinchRecognizer#gestureEnd
    * @function
    * @protected
    */
@@ -149,7 +149,7 @@ PinchRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.PinchRecognizer#pointerCancel
+   * @name recognizer.PinchRecognizer#pointerCancel
    * @function
    * @protected
    */
@@ -157,10 +157,4 @@ PinchRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-util.extendClass (PinchRecognizer, vs.ui.PointerRecognizer);
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.ui.PinchRecognizer = PinchRecognizer;
+util.extendClass (PinchRecognizer, PointerRecognizer);

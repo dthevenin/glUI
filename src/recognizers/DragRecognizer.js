@@ -18,12 +18,12 @@
 
 
 /**
- *  The vs.ui.DragRecognizer class
+ *  The recognizer.DragRecognizer class
  *
- *  @extends vs.ui.PointerRecognizer
+ *  @extends recognizer.PointerRecognizer
  *
  *  @class
- *  vs.ui.DragRecognizer is a concrete subclass of vs.ui.PointerRecognizer
+ *  recognizer.DragRecognizer is a concrete subclass of recognizer.PointerRecognizer
  *  that looks for drag gestures. When the user moves
  *  the fingers, the underlying view should translate in a corresponding
  *  direction and speed...<br />
@@ -38,7 +38,7 @@
  *  <p>
  *
  *  @example
- *  var my_view = new vs.ui.View ({id: "my_view"}).init ();
+ *  var my_view = new core.View ({id: "my_view"}).init ();
  *  var recognizer = new DragRecognizer ({
  *    didDrag : function (drag_info, event) {
  *      my_view.translation = [drag_info.dx, drag_info.dy];
@@ -53,14 +53,14 @@
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.ui.DragRecognizer.
+ *   Creates a new recognizer.DragRecognizer.
  *
- * @name vs.ui.DragRecognizer
+ * @name recognizer.DragRecognizer
  *
  * @param {ReconizerDelegate} delegate the delegate [mandatory]
  */
 function DragRecognizer (delegate) {
-  this.parent = vs.ui.PointerRecognizer;
+  this.parent = PointerRecognizer;
   this.parent (delegate);
   this.constructor = DragRecognizer;     
 }
@@ -70,19 +70,19 @@ DragRecognizer.prototype = {
   __is_dragged: false,
   
   /**
-   * @name vs.ui.DragRecognizer#init
+   * @name recognizer.DragRecognizer#init
    * @function
    * @protected
    */
   init : function (obj) {
-    vs.ui.PointerRecognizer.prototype.init.call (this, obj);
+    PointerRecognizer.prototype.init.call (this, obj);
     
     this.addPointerListener (this.obj, core.POINTER_START, this.obj);
     this.reset ();
   },
 
   /**
-   * @name vs.ui.DragRecognizer#uninit
+   * @name recognizer.DragRecognizer#uninit
    * @function
    * @protected
    */
@@ -91,7 +91,7 @@ DragRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.DragRecognizer#pointerStart
+   * @name recognizer.DragRecognizer#pointerStart
    * @function
    * @protected
    */
@@ -121,7 +121,7 @@ DragRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.DragRecognizer#pointerMove
+   * @name recognizer.DragRecognizer#pointerMove
    * @function
    * @protected
    */
@@ -149,7 +149,7 @@ DragRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.DragRecognizer#pointerEnd
+   * @name recognizer.DragRecognizer#pointerEnd
    * @function
    * @protected
    */
@@ -182,7 +182,7 @@ DragRecognizer.prototype = {
   },
 
   /**
-   * @name vs.ui.DragRecognizer#pointerCancel
+   * @name recognizer.DragRecognizer#pointerCancel
    * @function
    * @protected
    */
@@ -190,10 +190,4 @@ DragRecognizer.prototype = {
     return this.pointerEnd (e);
   }
 };
-util.extendClass (DragRecognizer, vs.ui.PointerRecognizer);
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-vs.ui.DragRecognizer = DragRecognizer;
+util.extendClass (DragRecognizer, PointerRecognizer);
