@@ -257,3 +257,5 @@ util.addClassProperties (Button, {
     }
   }
 });
+
+core.declareComponent (Button, "VS-BUTTON", core.__TEXT_CONTENT);
