@@ -72,7 +72,7 @@ Style.prototype = {
 //       this.__gl_bck_image_uv_buffer = null;
 //     }
 
-    core.Object.prototype.destructor.call (this);
+    GLObject.prototype.destructor.call (this);
   },
   
   clone : function () {
