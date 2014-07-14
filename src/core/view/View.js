@@ -22,7 +22,6 @@ function View (config)
 }
 util.extend (View.prototype, Group.prototype);
 util.extend (View.prototype, Transform.prototype);
-//util.extend (View.prototype, vs.ui.RecognizerManager);
 
 View.__should_render = true;
 View.__nb_animation = 0;
@@ -306,6 +305,8 @@ View.prototype._setup_scroll = function () {
   config.scrollY = false;
   config.scrollX = false;
 
+  config.scrollY = true;
+  /*
   if (this._scroll === vs.ui.ScrollView.VERTICAL_SCROLL) {
     config.scrollY = true;
   }
@@ -316,7 +317,8 @@ View.prototype._setup_scroll = function () {
     config.scrollX = true;
     config.scrollY = true;
   }
-
+*/
+  
   this.__scroll__ = new __iscroll (this, config);
   this.refresh ();
 },
