@@ -80,6 +80,7 @@ Application.prototype = {
     View.prototype.initComponent.call (this);
     this.preventScroll = true;
 
+    /*
     var self = this;
     window.addEventListener (ORIENTATION_CHANGE_EVT, function (e) {
       var orientation = window.orientation;
@@ -99,6 +100,7 @@ Application.prototype = {
         self.dispatchEvent (event);
       }
     });
+    */
     
     this.size = [window.innerWidth, window.innerHeight];
   },
