@@ -106,7 +106,7 @@ function __iscroll (el, options) {
   this.directionY = 0;
   this._events = {};
 
-  this.wrapper.addEventListener (core.POINTER_START, this);
+  this.wrapper.addEventListener (POINTER_START, this);
   this.refresh ();
 
   this.enable ();
@@ -116,7 +116,7 @@ __iscroll.prototype = {
   version: '5.1.1',
 
   destroy: function () {
-    this.wrapper.removeEventListener (core.POINTER_START, this);
+    this.wrapper.removeEventListener (POINTER_START, this);
   },
 
   _start: function (e) {
@@ -166,9 +166,9 @@ __iscroll.prototype = {
 
     this._execEvent ('beforeScrollStart');
     
-    core.addPointerListener (document, core.POINTER_MOVE, this);
-    core.addPointerListener (document, core.POINTER_CANCEL, this);
-    core.addPointerListener (document, core.POINTER_END, this);
+    addPointerListener (document, POINTER_MOVE, this);
+    addPointerListener (document, POINTER_CANCEL, this);
+    addPointerListener (document, POINTER_END, this);
 
     this._tap = true;
   },
@@ -272,9 +272,9 @@ __iscroll.prototype = {
       return;
     }
 
-    core.removePointerListener (document, core.POINTER_MOVE, this);
-    core.removePointerListener (document, core.POINTER_CANCEL, this);
-    core.removePointerListener (document, core.POINTER_END, this);
+    removePointerListener (document, POINTER_MOVE, this);
+    removePointerListener (document, POINTER_CANCEL, this);
+    removePointerListener (document, POINTER_END, this);
 
     var point = e.changedTouches ? e.changedTouches[0] : e,
       momentumX,
@@ -518,13 +518,13 @@ __iscroll.prototype = {
   
   handleEvent: function (e) {
     var type = e.type;
-    if (type === core.POINTER_MOVE) {
+    if (type === POINTER_MOVE) {
       this._move(e);
     }
-    else if (type === core.POINTER_START) {
+    else if (type === POINTER_START) {
       this._start(e);
     }
-    else if (type === core.POINTER_END || type === core.POINTER_CANCEL) {
+    else if (type === POINTER_END || type === POINTER_CANCEL) {
       this._end(e);
     }
     else if (type === 'wheel' ||
