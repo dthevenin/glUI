@@ -16,14 +16,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var info_pasquale = "Pasquale is a masculine Italian given name and a surname found all over Italy. It is a cognate of the French name Pascal, the Spanish Pascual, the Portuguese Pascoal and the Catalan Pasqual. Pasquale derives from the Latin paschalis or pashalis, which means \"relating to Easter\", from Latin pascha (\"Easter\"), Greek Πάσχα, Aramaic pasḥā, in turn from the Hebrew פֶּסַח, which means \"to be born on, or to be associated with, Passover day\". Since the Hebrew holiday Passover coincides closely with the later Christian holiday of Easter, the Latin word came to be used for both occasions."
-var info_bar = "Part of the new wave of more eclectic and sophisticated gay hangouts that have steadily been gaining in prevalence and popularity in the Castro, the dapper and convivial Blackbird Bar (2124 Market St., 415-503-0630) is along the hip Church Street corridor (right at the intersection with Market Street). ";
-var info_design = "The Shape of Design is an odd little design book. Instead of talking about typography, grids, or logos, it focuses on storytelling, co-dependency, and craft. It tries to supplement the abundance of technical talk and how-to elsewhere by elevating why great work is done. "
+require.config (
+  { paths: {
+    "data": "data",
+    "ListItem": "ListItem",
+    "core": "../lib/core",
+    "recognizers": "../lib/recognizers",
+    "widget": "../lib/widget",
+    "class": "../lib/class",
+    "util": "../lib/util"
+  } });
 
-var CoverFlow = vs.gl.createClass ({
+require (['core', 'class', 'recognizers', 'widget', 'data', 'ListItem'],
+function (core, klass, recognizers, widget, Data, ListItem) {
+  
+var CoverFlow = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
   
   settings_open: false,
 
@@ -34,23 +44,23 @@ var CoverFlow = vs.gl.createClass ({
   buildList: function () {
     var size = this.size;
   
-    var list = new vs.gl.List ({
+    var list = new widget.List ({
       size : [300, size[1]],
       position: [(size[0] - 300)/2, 0],
       scroll: true
     }).init ();
     
-    var __tap_recognizer = new vs.ui.TapRecognizer (list);
+    var __tap_recognizer = new recognizers.TapRecognizer (list);
     
     list.add = function (item) {
       item.__index = this.__children.length;
-      vs.gl.View.prototype.add.call (list, item);
+      core.View.prototype.add.call (list, item);
       
       item.addPointerRecognizer (__tap_recognizer);
     }
     
     list.refresh = function () {
-      vs.gl.View.prototype.refresh.call (this);
+      core.View.prototype.refresh.call (this);
 
       var children = this.__children;
       if (!children || children.length === 0) return;
@@ -81,9 +91,9 @@ var CoverFlow = vs.gl.createClass ({
     };
     
     var duration = 200;
-    var timing = vs.gl.Animation.LINEAR;
+    var timing = core.Animation.LINEAR;
   
-    var animationPanelShow = new vs.gl.Animation ();
+    var animationPanelShow = new core.Animation ();
     animationPanelShow.keyFrame (0, {
       'rotation': [-40, 0, 0],
       'translation': [0, 0, 0]
@@ -91,18 +101,18 @@ var CoverFlow = vs.gl.createClass ({
     animationPanelShow.duration = duration;
     animationPanelShow.timing = timing;
 
-    var animationPageOut = new vs.gl.Animation ({
+    var animationPageOut = new core.Animation ({
       'rotation': [-40, 0, 0],
       'translation': [0, 0, 0]
     });
     animationPageOut.duration = duration;
     animationPageOut.timing = timing;
     
-    var movebackPanel = new vs.gl.Animation ({'translation': [0,0,0]});
+    var movebackPanel = new core.Animation ({'translation': [0,0,0]});
     movebackPanel.duration = duration;
     movebackPanel.timing = timing;      
 
-    var hidePanelAnim = new vs.gl.Animation ();
+    var hidePanelAnim = new core.Animation ();
     hidePanelAnim.duration = duration;
     hidePanelAnim.timing = timing;
     
@@ -189,8 +199,8 @@ var CoverFlow = vs.gl.createClass ({
     for (var i = 0; i < l * 10; i++) {
 
       var d = Data [i % l];
-      var model = new vs.core.Model ().init ();
-      model.parseData (d)
+//      var model = new vs.core.Model ().init ();
+//      model.parseData (d)
 
       var item = new ListItem ({
         size : [300, 300],
@@ -198,12 +208,13 @@ var CoverFlow = vs.gl.createClass ({
         rotation: [-40, 0, 0]
       }).init ();
       list.add (item);
-      item.configure (model);
+//      item.configure (model);
+      item.configure (d);
 
-      item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
+      item.style.backgroundColor = new core.Color (240, 240, 240);
       item.style.shadowOffset = [0, 0];
       item.style.shadowBlur = 150;
-      item.style.shadowColor = new vs.gl.Color (0, 0, 0, 0.5);;
+      item.style.shadowColor = new core.Color (0, 0, 0, 0.5);;
     }
     
     window.list = list;
@@ -211,78 +222,10 @@ var CoverFlow = vs.gl.createClass ({
   }
 });
 
+function loadApplication () {
+  new CoverFlow ().init ();
+  core.Application.start ();
+}
 
-var Data = [
-  {
-    "imageUrl": "assets/Caslte Clash.png",
-    "title": "Caslte Clash",
-    "description": "Build and battle your way to glory in Castle Clash! With over 30 million clashers worldwide.",
-    "rating": 4.5
-  },
-  {
-    "imageUrl": "assets/Cat War.png",
-    "title": "Cat War",
-    "description": "私は\"ケトピンクス\"と呼ばれる神です。",
-    "rating": 3.5
-  },
-  {
-    "imageUrl": "assets/Dragons Of Atlantis.png",
-    "title": "Dragons Of Atlantis",
-    "description": "ドラゴンズ オブ アトランティス：継承者。",
-    "rating": 4.7
-  },
-  {
-    "imageUrl": "assets/EXP3D.png",
-    "title": "EXP3D",
-    "description": "スクリーンをタッチして船を動かし、敵の弾丸をかわします。",
-    "rating": 5
-  },
-  {
-    "imageUrl": "assets/Football Freekick.png",
-    "title": "Football Freekick",
-    "description": "Free Kick Master is the most addictive football game ever.",
-    "rating": 4.2
-  },
-  {
-    "imageUrl": "assets/Magic of the Unicorn.png",
-    "title": "Magic of the Unicorn",
-    "description": "Magic of the Unicorn",
-    "rating": 3.1
-  },
-  {
-    "imageUrl": "assets/Ninja Run.png",
-    "title": "Ninja Run",
-    "description": "Ninja Run",
-    "rating": 2.5
-  },
-  {
-    "imageUrl": "assets/Pitfall.png",
-    "title": "Pitfall",
-    "description": "On his 30th Anniversary, take control of Pitfall Harry once again in PITFALL!",
-    "rating": 3.5
-  },
-  {
-    "imageUrl": "assets/Samurai Defender.png",
-    "title": "Samurai Defender",
-    "description": "戦国時代を舞台とした単純明快ディフェンス型アクションゲーム迫り来る敵兵からお城を守りきれ！",
-    "rating": 4.1
-  },
-  {
-    "imageUrl": "assets/Sapce Kaeru.png",
-    "title": "Space Kaeru",
-    "description": "憧れの火星を目指してカエル三兄弟が今、宇宙へ旅立つ!!",
-    "rating": 1
-  },
-  {
-    "imageUrl": "assets/Slim vs Mushroom.png",
-    "title": "Slim vs Mushroom",
-    "description": "魔界キノコ軍団が平和なスライムの村を侵略しようとしています。",
-    "rating": 2.4
-  },
-  {
-    "imageUrl": "assets/SummitX Snowboarding.png",
-    "title": "SummitX Snowboarding",
-    "description": "SummitX Snowboarding",
-    "rating": 2.9
-  }
-]
+loadApplication ();
+});
