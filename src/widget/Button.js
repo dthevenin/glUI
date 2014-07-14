@@ -19,11 +19,11 @@
 
 
 /**
- *  The vs.gl.Button class
+ *  The widget.Button class
  *
- *  @extends vs.gl.View
+ *  @extends core.View
  *  @class
- *  The GLButton class is a subclass of vs.gl.View that intercepts pointer-down
+ *  The GLButton class is a subclass of core.View that intercepts pointer-down
  *  events and sends an 'select' event to a target object when it’s clicked
  *  or pressed.
  *
@@ -47,22 +47,22 @@
  *  var config.id = 'mybutton';
  *  var config.text = 'Hello';
  *
- *  var myButton = vs.gl.Button (config);
+ *  var myButton = core.Button (config);
  *  myButton.init ();
  *
  * <p>
  *
  *  @author David Thevenin
- * @name vs.gl.Button
+ * @name widget.Button
  *
  *  @constructor
- *   Creates a new vs.gl.Button.
+ *   Creates a new widget.Button.
  *
  * @param {Object} config the configuration structure [mandatory]
 */
 function Button (config)
 {
-  this.parent = View;
+  this.parent = core.View;
   this.parent (config);
   this.constructor = Button;
 }
@@ -136,7 +136,7 @@ Button.prototype = {
   },
   
   didTap : function () {
-    var event = new vs.gl.Event ('select');
+    var event = new core.Event ('select');
     this.dispatchEvent (event);
   },
   
@@ -149,7 +149,7 @@ Button.prototype = {
       this.removePointerRecognizer (this.__tap_recognizer);
       this.__tap_recognizer = null;
     }
-    View.prototype.destructor.call (this);
+    core.View.prototype.destructor.call (this);
   },
 
   /**
@@ -157,7 +157,7 @@ Button.prototype = {
    * @function
    */
   initComponent : function () {
-    View.prototype.initComponent.call (this);
+    core.View.prototype.initComponent.call (this);
     
     if (!this.__tap_recognizer) {
       this.__tap_recognizer = new vs.ui.TapRecognizer (this);
@@ -177,7 +177,7 @@ Button.prototype = {
   },
 
   refresh: function () {
-    View.prototype.refresh.call (this);
+    core.View.prototype.refresh.call (this);
 
     if (this._text) {
       this.__update_text_view (this._size);
@@ -185,19 +185,19 @@ Button.prototype = {
     }
   }
 };
-util.extend (Button.prototype, __text_management);
-extendClass (Button, View);
+util.extend (Button.prototype, core.__text_management);
+util.extendClass (Button, core.View);
 
 /********************************************************************
                   Define class properties
 ********************************************************************/
 
-util.defineClassProperties (Button, {
+util.addClassProperties (Button, {
   'text': {
     /** 
      * Getter|Setter for text. Allow to get or change the text draw
      * by the button
-     * @name vs.gl.Button#text 
+     * @name core.Button#text 
      * @type String
      */ 
     set : function (v) {
@@ -225,8 +225,8 @@ util.defineClassProperties (Button, {
 
   "size": {
    /** 
-     * Getter|Setter for size. Gives access to the size of the vs.gl.Button
-     * @name vs.gl.Button#size 
+     * Getter|Setter for size. Gives access to the size of the core.Button
+     * @name core.Button#size 
      *
      * @type {Array.<number>}
      */ 
@@ -257,9 +257,3 @@ util.defineClassProperties (Button, {
     }
   }
 });
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-gl.Button = Button;

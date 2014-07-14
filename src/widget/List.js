@@ -23,11 +23,11 @@
 *********************************************************************/
 
 /**
- *  The vs.gl.List class
+ *  The widget.List class
  *
- *  @extends vs.gl.AbstractList
+ *  @extends widget.AbstractList
  *  @class
- *  The vs.gl.List class draw a list of ListItem and allows the user to 
+ *  The widget.List class draw a list of ListItem and allows the user to 
  *  select one object from it.
  *  <p>
  *  Events:
@@ -37,7 +37,7 @@
  *  </ul>
  *  <p>
  *  To reduce performance issues, you can deactivate events handling
- *  for the list, using vs.gl.List#itemsSelectable property.
+ *  for the list, using widget.List#itemsSelectable property.
  *
  * Data can be filtered. The filter he array contains the member to filters
  * and filter:
@@ -45,14 +45,14 @@
  *   list.filters = [{
  *      property:'title',
  *      value:'o',
- *      matching:vs.gl.List.FILTER_CONTAINS,
+ *      matching:widget.List.FILTER_CONTAINS,
  *      strict:true
  *   }];
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.gl.List.
- * @name vs.gl.List
+ *   Creates a new widget.List.
+ * @name widget.List
  *
  * @param {Object} config the configuration structure [mandatory]
  */
@@ -104,9 +104,9 @@ List.prototype = {
   *********************************************************************/
 
   /**
-   * Return the list of items in the vs.gl.List
+   * Return the list of items in the widget.List
    *
-   * @name vs.gl.List#getItems 
+   * @name widget.List#getItems 
    * @function
    * @return {Array} the items
    */
@@ -166,7 +166,7 @@ List.prototype = {
     if (item.didSelect) item.didSelect ();
     
     this.outPropertyChange ();
-    var event = new vs.gl.Event ('itemselect', {
+    var event = new core.Event ('itemselect', {
       index: this._selected_index,
       item: this._selected_item
     });
@@ -174,13 +174,13 @@ List.prototype = {
     this.dispatchEvent (event);
   }
 };
-extendClass (List, AbstractList);
+util.extendClass (List, AbstractList);
 
 /********************************************************************
                   Define class properties
 ********************************************************************/
 
-addClassProperties (List, {
+util.addClassProperties (List, {
   'itemsSelectable': {
     /** 
      * Allow deactivate the list item selection.
@@ -190,7 +190,7 @@ addClassProperties (List, {
      * management
      * which uses processing time.
      * By default its set to true
-     * @name vs.gl.List#itemsSelectable 
+     * @name widget.List#itemsSelectable 
      * @type {boolean}
      */ 
     set : function (v)
@@ -222,7 +222,7 @@ addClassProperties (List, {
   'selectedIndex': {
     /** 
      * Getter for selectedIndex.
-     * @name vs.gl.List#selectedIndex 
+     * @name widget.List#selectedIndex 
      * @type {number}
      */ 
     get : function ()
@@ -235,7 +235,7 @@ addClassProperties (List, {
   'selectedItem': {
     /** 
      * Getter for selectedItem.
-     * @name vs.gl.List#selectedItem 
+     * @name widget.List#selectedItem 
      * @type {Object}
      */ 
     get : function ()
@@ -244,12 +244,6 @@ addClassProperties (List, {
     }
   }
 });
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-gl.List = List;
 
 /**
  * @private

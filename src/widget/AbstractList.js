@@ -18,23 +18,23 @@
 
 
 /**
- *  The vs.gl.AbstractList class
+ *  The widget.AbstractList class
  *
- *  @extends vs.gl.View
+ *  @extends core.View
  *  @class
  *  @author David Thevenin
  *
  *  @constructor
- *   Creates a new vs.gl.AbstractList.
- * @name vs.gl.AbstractList
+ *   Creates a new widget.AbstractList.
+ * @name widget.AbstractList
  *
  * @param {Object} config the configuration structure [mandatory]
  */
 function AbstractList (config)
 {
-  this.parent = View;
+  this.parent = core.View;
   this.parent (config);
-  this.constructor = View;
+  this.constructor = AbstractList;
 }
 
 AbstractList.prototype = {
@@ -94,7 +94,7 @@ AbstractList.prototype = {
    */
   destructor: function ()
   {
-    View.prototype.destructor.call (this);
+    core.View.prototype.destructor.call (this);
     
 //     if (this.__tap_recognizer)
 //     {
@@ -113,12 +113,12 @@ AbstractList.prototype = {
    */
   initComponent: function ()
   {
-    View.prototype.initComponent.call (this);
+    core.View.prototype.initComponent.call (this);
     
-    this._model = new vs.core.Array ();
-    this._model.init ();
-    this._model_allocated = true;
-    this._model.bindChange (null, this, this._modelChanged);
+//     this._model = new vs.core.Array ();
+//     this._model.init ();
+//     this._model_allocated = true;
+//     this._model.bindChange (null, this, this._modelChanged);
     
     // manage list template without x-hag-hole="item_children"
 //     if (!this._holes.item_children) {
@@ -154,7 +154,7 @@ AbstractList.prototype = {
       }
     }
     
-    View.prototype.refresh.call (this);
+    core.View.prototype.refresh.call (this);
   },
 
   /**
@@ -256,7 +256,7 @@ AbstractList.prototype = {
           self._untouchItemFeedback (target);
         }
         self.__list_time_out = 0;
-      }, vs.ui.View.UNSELECT_DELAY);
+      }, core.View.UNSELECT_DELAY);
     }
   },
 
@@ -265,7 +265,7 @@ AbstractList.prototype = {
    * <p>
    * If to time is defined, the default time is set to 200ms.
    *
-   * @name vs.gl.AbstractList#scrollToElementAt 
+   * @name widget.AbstractList#scrollToElementAt 
    * @function
    * @param {Number} index the element index
    * @param {Number} time [Optional] the scroll duration
@@ -288,11 +288,4 @@ AbstractList.prototype = {
 		this.__scroll__.scrollTo (0, pos.top, 200);
   }
 };
-extendClass (AbstractList, View);
-
-
-/********************************************************************
-                      Export
-*********************************************************************/
-/** @private */
-gl.AbstractList = AbstractList;
+util.extendClass (AbstractList, core.View);
