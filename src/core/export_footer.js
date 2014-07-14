@@ -9,6 +9,8 @@ return {
   POINTER_MOVE: POINTER_MOVE,
   POINTER_END: POINTER_END,
   POINTER_CANCEL: POINTER_CANCEL,
+  addPointerListener: addPointerListener,
+  removePointerListener: removePointerListener,
 //  EVENT_SUPPORT_GESTURE,
 //  GESTURE_START,
 //  GESTURE_CHANGE,
@@ -27,6 +29,9 @@ return {
   View: View,
   Application: Application,
   newTemplate: newTemplate,
+  Configuration: Configuration,
+  
+  __text_management: __text_management,
   
   Animation: Animation,
   
