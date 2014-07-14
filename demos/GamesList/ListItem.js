@@ -16,11 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
+glui ('ListItem', ['core', 'class'], function (core, klass) {
 
-var ListItem = vs.gl.createClass ({
+var ListItem = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.View,
+  parent: core.View,
   templateName: "ListItem",
   
   properties: {
@@ -50,4 +51,8 @@ var ListItem = vs.gl.createClass ({
     
     this.ratingView.text = text;
   }
+});
+
+return ListItem;
+
 });

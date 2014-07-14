@@ -16,39 +16,42 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+glui ('GamesList', ['core', 'class', 'data', 'ListItem'],
+function (core, klass, Data, ListItem) {
 
-var GamesList = vs.gl.createClass ({
+var GamesList = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
   
-  applicationStarted : function (event) {  
+  applicationStarted : function (event) {
     this.buildList ();
   },
   
   buildList: function () {
     var size = this.size;
     
-//    console.profile ("list");
     var l = Data.length;
 //    for (var i = 0; i < l * 10; i++) {
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < 2; i++) {
       var d = Data [i % l];
-      var model = new vs.core.Model ().init ();
-      model.parseData (d)
 
       var item = new ListItem ({
         size : [size[0], 70],
         position: [0, 70 * i]
       }).init ();
-      this.gamesList.add (item);
-      item.configure (model);
+      this.list.add (item);
+      item.configure (d);
 
-      item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
+      item.style.backgroundColor = new core.Color (240, 240, 240);
     }
 //    console.profileEnd ("list");
     
     // refresh to for scroll udpate
-    this.gamesList.refresh ();
+    this.list.refresh ();
   }
+});
+
+return GamesList;
+
 });

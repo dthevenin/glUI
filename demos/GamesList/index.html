@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, target-densityDpi=160, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     <title>Games List</title>
 
-    <script type="text/javascript" src="../lib/vs.js"></script>
-    <script type="text/javascript" src="../lib/vs_gl_engine.js"></script>
+    <script type="text/javascript" src="../lib/custom_elements.js"></script>
+    <link rel="import" href="../lib/glengine.html">
+    <link rel="import" href="../lib/widgets.html">
 
-    <script type="text/javascript" src="ListItem.js"></script>
-    <script type="text/javascript" src="List.js"></script>
-    <script type="text/javascript" src="data.js"></script>
+    <link rel="import" href="GameList.html">
     
     <style>
       @font-face {
@@ -25,36 +24,29 @@
         padding: 0;
         overflow: hidden;
       }
+
     </style>
   </head>
-  <body is="vs-application" class="GamesList">
+  <body>
     
-     <vs-configuration>
-  
-       @ListItem.imageView:size = [70,70]
-       
-       @ListItem.titleView:constraint = "right:10;left:75;top:5;bottom:45;"
-       @ListItem.titleView:style = "fontSize:18;fontFamily:arial;"
-       
-       @ListItem.infoView:constraint = "right:10;left:75;top:25;bottom:5;"
-       @ListItem.infoView:style = "fontSize:12;fontFamily:arial;"
-       
-       @ListItem.ratingView:constraint = "right:5;left:75;top:55;bottom:5;"
-       @ListItem.ratingView:style = "textAlign:right;fontFamily:FontAwesome;fontSize:10;"
+    <vs-application class="GamesList">
  
-    </vs-configuration>
-    
-    
-    
-    <vs-list name="gamesList" constraint="right:0;left:0;top:0;bottom:0;">
-    </vs-list>
+      <vs-configuration>
+        @ListItem.imageView:size = [70,70]
 
-    <vs-template name="ListItem" properties="imageUrl:imageView#src;title:titleView#text;description:infoView#text">
-      <vs-image name="imageView"></vs-image>
-      <vs-label name="titleView"></vs-label>
-      <vs-label name="infoView"></vs-label>
-      <vs-label name="ratingView"></vs-label>
-    </vs-template>
+        @ListItem.titleView:constraint = "right:10;left:75;top:5;bottom:45;"
+        @ListItem.titleView:style = "fontSize:18;fontFamily:arial;"
+
+        @ListItem.infoView:constraint = "right:10;left:75;top:25;bottom:5;"
+        @ListItem.infoView:style = "fontSize:12;fontFamily:arial;"
+
+        @ListItem.ratingView:constraint = "right:5;left:75;top:55;bottom:5;"
+        @ListItem.ratingView:style = "textAlign:right;fontFamily:FontAwesome;fontSize:10;"
+      </vs-configuration>
+
+      <vs-list name="list" constraint="right:0;left:0;top:0;bottom:0;"></vs-list>
+    
+    </vs-application>
 
   </body>
 </html>
