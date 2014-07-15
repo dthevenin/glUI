@@ -82,7 +82,7 @@ glui (null, ['core', 'util'], function (core, util) {
       var clbs = LOADING_CLBS [href];
       if (clbs) {
         clbs.forEach (function (result_clb) {
-          scheduleAction (function () {result_clb (data)});
+          core.scheduleAction (function () {result_clb (data)});
         })
         clbs = [];
         LOADING_CLBS [href] = undefined;
@@ -610,7 +610,7 @@ glui (null, ['core', 'util'], function (core, util) {
     // show body now that everything is ready
     core.Application.start ();
   
-    scheduleAction (function () {
+    core.scheduleAction (function () {
       document.body.style.opacity = 1;
     });
   });
