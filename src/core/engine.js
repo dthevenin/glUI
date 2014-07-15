@@ -1,3 +1,7 @@
+function getGLContext () {
+  return gl_ctx;
+}
+
 function update_gl_vertices (sprite, obj_pos, obj_size) {
   var
     x = obj_pos[0],
