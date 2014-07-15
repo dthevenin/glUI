@@ -90,14 +90,16 @@ Style.prototype = {
 
 
     if (this._background_color) {
-      // TODO memory leak
-      style._background_color = new Color ();
+      if (!style._background_color) {
+        style._background_color = new Color ();
+      }
       this._background_color.copy (style._background_color);
     }
     
     if (this._color) {
-      // TODO memory leak
-      style._color = new Color ();
+      if (!style._color) {
+        style._color = new Color ();
+      }
       this._color.copy (style._color);
     }
     
