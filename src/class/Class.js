@@ -159,7 +159,7 @@ function _setProperties (klass, properties)
     if (util.isNumber (value))
     {
       export_value = value; desc = {};
-      _prop_name = '_' + underscore (prop_name);
+      _prop_name = '_' + util.underscore (prop_name);
       if (export_value & core.Object.PROPERTY_IN)
       {
         desc.set = (function (prop_name, _prop_name)
