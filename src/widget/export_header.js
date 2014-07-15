@@ -38,7 +38,8 @@ if (!window.glui) {
   }
 }
 
-glui ("widget", ["core", "class", "util"], function (core, klass, util) {
+glui ("widgets", ["core", "class", "util", "recognizers"],
+function (core, klass, util, recognizers) {
 
   "use strict";
   
