@@ -143,7 +143,12 @@ function applyTemplate (template_name, view) {
   if (!template) return;
   
   function instanciateTemplate (template) {
-    var obj = new template._class (template.config);
+    
+    var config = template.config;
+    if (!config) config = {};
+    config.id = createId ();
+    
+    var obj = new template._class (config);
     obj.init ();
     
     // Clone the view's children
