@@ -241,7 +241,7 @@ var __text_management = {
      
       var self = this;
       requestAnimationFrame (function () {
-        self.__update_text (text);
+        self.__update_text (text, autoresize);
       });
       return;
     }
