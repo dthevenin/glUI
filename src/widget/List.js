@@ -422,4 +422,6 @@ function LIST_TEMPLATE_CONTENT (node, config) {
 
 }
 
-core.declareComponent (List, "VS-LIST", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK)
+if (core.declareComponent) {
+  core.declareComponent (List, "VS-LIST", LIST_TEMPLATE_CONTENT, null, LIST_ATTACHED_CALLBACK)
+}
