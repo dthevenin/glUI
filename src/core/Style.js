@@ -534,3 +534,11 @@ Style.restoreGLContext = function () {
     }
   }
 }
+
+Style.createObjectFromStringStyle = function (str) {
+  var obj = new Style ();
+  
+  obj.parseStringStyle (str);
+  
+  return obj;
+};
