@@ -38,10 +38,32 @@ return {
   buildConfiguration: buildConfiguration,
   UNMUTABLE_ATTRIBUTES: UNMUTABLE_ATTRIBUTES,
   
-  vec2: vec2,
-  vec3: vec3,
-  mat3: mat3,
-  mat4: mat4,
+  // extenstion code TODO Should be better implemented
+  glAddInitFunction: glAddInitFunction,
+  
+  allocateMeshVertices: allocateMeshVertices,
+  allocateNormalVertices: allocateNormalVertices,
+  makeTextureProjection: makeTextureProjection,
+  allocateTriangleFaces: allocateTriangleFaces,
+  initMeshVeticesValues: initMeshVeticesValues,
+  createProgram: createProgram,
+  jsProjMatrix: jsProjMatrix,
+  jsViewMatrix: jsViewMatrix,
+  
+  math: {
+    vec2: vec2,
+    vec3: vec3,
+    mat3: mat3,
+    mat4: mat4
+  },
+  
+  animations: {
+    TrajectoryVect1D: TrajectoryVect1D,
+    TrajectoryVect2D: TrajectoryVect2D,
+    TrajectoryVect3D: TrajectoryVect3D
+  },
+  
+  getGLContext: getGLContext
 };
 
 //gl.createCustomEvent = createCustomEvent;
