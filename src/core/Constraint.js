@@ -89,6 +89,9 @@ Constraint.prototype = {
   },
   
   copy : function (constraint) {
+    
+    if (!constraint) return;
+    
     constraint.top = this.top;
     constraint.bottom = this.bottom;
     constraint.right = this.right;
@@ -99,15 +102,6 @@ Constraint.prototype = {
   
   parseStringStyle: function (str) {    
     parseFromStringStyle (str, this);
-  },
-  
-  parseObjectStyle: function (obj) {
-    
-    if (!obj) return;
-    
-    for (var property in obj) {
-      this [property] = obj [property];
-    }
   },
   
   __update_view : function (view) {
@@ -229,9 +223,9 @@ Constraint.prototype = {
 }
 
 Constraint.createObjectFromStringStyle = function (str) {
-  var obj = {};
+  var obj = new Constraint ();
   
-  parseFromStringStyle (str, obj);
+  obj.parseStringStyle (str);
   
   return obj;
 };
