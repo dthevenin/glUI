@@ -160,7 +160,7 @@ Button.prototype = {
     core.View.prototype.initComponent.call (this);
     
     if (!this.__tap_recognizer) {
-      this.__tap_recognizer = new vs.ui.TapRecognizer (this);
+      this.__tap_recognizer = new recognizers.TapRecognizer (this);
       this.addPointerRecognizer (this.__tap_recognizer);
     }
 

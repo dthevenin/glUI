@@ -88,7 +88,7 @@ Chronometer.prototype = {
       // manage delayed chronometer
       if (begin > 0)
       {
-        vs.scheduleAction (_start.bind (this), begin);
+        scheduleAction (_start.bind (this), begin);
 
         this.__time_decl = 0;
         this.__repeat_dur = this._repeat;
@@ -218,7 +218,7 @@ Chronometer.prototype = {
 //       this._tick = step / (this._steps - 1);
 //       if (this.__clb) this.__clb (this._tick);
 //       var step_dur = this._duration / this._steps
-//       vs.scheduleAction (this._step.bind (this), step_dur);
+//       scheduleAction (this._step.bind (this), step_dur);
 //     }
 //   },
   
@@ -246,7 +246,7 @@ Chronometer.prototype = {
 //     this.__steps = this._steps - 1 - Math.floor (this.__time_decl / step_dur);
 //     this.__time_decl = 0;
 //     
-//     vs.scheduleAction (this._step.bind (this), step_dur);
+//     scheduleAction (this._step.bind (this), step_dur);
 //   },
 
   /**
