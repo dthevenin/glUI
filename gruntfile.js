@@ -4,8 +4,6 @@
  * license that can be found in the LICENSE file.
  */
 module.exports = function(grunt) {
-  var readManifest = require('./submodules/tools/loader/readManifest.js');
-
   var sources = grunt.file.readJSON ('build.json');
   
   grunt.initConfig({
