@@ -62,9 +62,7 @@ app.get('/', function(req, res){
 
 
 app.get ("/openstreetmap", function (req, res, next) {
-
-
-
+  
   console.log ("proxy openstreetmap");
   
       next();
