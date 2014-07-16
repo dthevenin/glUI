@@ -22,11 +22,12 @@ require.config({
     'core' : '../lib/core',
     'class' : '../lib/class',
     'util' : '../lib/util',
+    'profiling' : '../lib/profiling',
     'recognizers' : '../lib/recognizers'
   }
 });
 
-require (["core", "class", "recognizers"],
+require (["core", "class", "recognizers", "profiling"],
   function (core, klass, recognizers) {
 
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
