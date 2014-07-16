@@ -236,7 +236,7 @@ define ('FishEyeView', [], function () {
     );
   }
 
-  glAddInitFunction (createCurtainProgram);
+  core.glAddInitFunction (createCurtainProgram);
 
   function createCurtainProgram () {
 

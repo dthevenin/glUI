@@ -179,7 +179,7 @@ define ('CurtainView', [], function () {
     this.__updateMeshAtPoint ();
   }
 
-  glAddInitFunction (createCurtainProgram);
+  core.glAddInitFunction (createCurtainProgram);
 
   function createCurtainProgram () {
 

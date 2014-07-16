@@ -54,8 +54,6 @@ function loadApplication () {
   core.Application.start ();
 }
 
-
-
 // var anim = new core.Animation (['rotation', [0,0,20]], ['opacity', 1], ['translation', [100, 200]]);
 // anim.keyFrame (0, [[0,0,0], 1, [0,0]]);
 // anim.keyFrame (0.5, [[0,0,10], 0.5, [50,100]]);

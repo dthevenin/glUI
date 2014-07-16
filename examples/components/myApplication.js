@@ -48,8 +48,6 @@ glui ('MySuperView', ['core', 'class'], function (core, klass) {
     },
   
     didInitialize : function () {
-      console.log ("didInitialize MyView");
-
       if (!this.style.backgroundColor) {
         this.style.backgroundColor = core.Color.yellow;
       }

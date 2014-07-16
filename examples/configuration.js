@@ -17,9 +17,7 @@
  */
 
 
-require.config ({ baseUrl: "../lib" });
-
-require (['core', 'class'], function (core, klass) {
+glui (['core', 'class'], function (core, klass) {
 
 var TemplateTest = klass.createClass ({
 
