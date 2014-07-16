@@ -12,7 +12,7 @@ var Stats = function () {
 	var container = document.createElement( 'div' );
 	container.id = 'stats';
 	container.addEventListener( 'mousedown', function ( event ) { event.preventDefault(); setMode( ++ mode % 2 ) }, false );
-	container.style.cssText = 'width:80px;opacity:0.9;cursor:pointer';
+	container.style.cssText = 'width:200px;cursor:pointer';
 
 	var fpsDiv = document.createElement( 'div' );
 	fpsDiv.id = 'fps';
@@ -27,10 +27,10 @@ var Stats = function () {
 
 	var fpsGraph = document.createElement( 'div' );
 	fpsGraph.id = 'fpsGraph';
-	fpsGraph.style.cssText = 'position:relative;width:74px;height:30px;background-color:#0ff';
+	fpsGraph.style.cssText = 'position:relative;width:194px;height:30px;background-color:#0ff';
 	fpsDiv.appendChild( fpsGraph );
 
-	while ( fpsGraph.children.length < 74 ) {
+	while ( fpsGraph.children.length < 194 ) {
 
 		var bar = document.createElement( 'span' );
 		bar.style.cssText = 'width:1px;height:30px;float:left;background-color:#113';
@@ -51,10 +51,10 @@ var Stats = function () {
 
 	var msGraph = document.createElement( 'div' );
 	msGraph.id = 'msGraph';
-	msGraph.style.cssText = 'position:relative;width:74px;height:30px;background-color:#0f0';
+	msGraph.style.cssText = 'position:relative;width:194px;height:30px;background-color:#0f0';
 	msDiv.appendChild( msGraph );
 
-	while ( msGraph.children.length < 74 ) {
+	while ( msGraph.children.length < 194 ) {
 
 		var bar = document.createElement( 'span' );
 		bar.style.cssText = 'width:1px;height:30px;float:left;background-color:#131';
@@ -89,7 +89,7 @@ var Stats = function () {
 
 	var updateGraph = function ( dom, value ) {
 
-		var child = dom.appendChild( dom.firstChild );
+		var child = dom.appendChild (dom.firstChild);
 		child.style.height = value + 'px';
 
 	}
@@ -119,7 +119,7 @@ var Stats = function () {
 			msMax = Math.max( msMax, ms );
 
 			msText.textContent = (ms| 0) + ' MS (' + (msMin | 0) + '-' + (msMax | 0) + ')';
-//			updateGraph( msGraph, Math.min( 30, 30 - ( ms / 200 ) * 30 ) );
+			updateGraph( msGraph, Math.min( 30, 30 - ( ms / 200 ) * 30 ) );
 
 			frames ++;
 
@@ -130,7 +130,7 @@ var Stats = function () {
 				fpsMax = Math.max( fpsMax, fps );
 
 				fpsText.textContent = fps + ' FPS (' + fpsMin + '-' + fpsMax + ')';
-//				updateGraph( fpsGraph, Math.min( 30, 30 - ( fps / 100 ) * 30 ) );
+				updateGraph( fpsGraph, Math.min( 30, 30 - ( fps / 100 ) * 30 ) );
 
 				prevTime = time;
 				frames = 0;
