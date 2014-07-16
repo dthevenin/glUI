@@ -33,26 +33,31 @@ module.exports = function(grunt) {
         src: sources.recognizers,
         dest: 'lib/recognizers.js'
       },
-      widget: {
+      widgets: {
         src: sources.widget,
-        dest: 'lib/widget.js'
+        dest: 'lib/widgets.js'
       }
     },
     copy: {
-      customElements: {
+      platform: {
         src: 'bower_components/CustomElements/platform.js',
         dest: 'lib/custom_elements.js'
       },
       requirejs: {
-        src: 'bower_components/requirejs/requirejs.js',
-        dest: 'lib/requirejs.js'
+        src: 'bower_components/requirejs/require.js',
+        dest: 'lib/require.js'
       },
-      glengine: {
-        src: 'src/glengine.html',
-        dest: 'lib/glengine.html'
+      customElements: {
+        flatten: true,
+        expand: true,
+        src: ['src/glengine.html', 'src/recognizers/recognizers.html', 'src/widget/widgets.html'],
+        dest: 'lib/'
       },
       demosLib: {
-        src: 'lib/*',
+        expand: true,
+        flatten: true,
+        cwd: 'lib/',
+        src: '**',
         dest: 'demos/lib/'
       }
     }
@@ -74,10 +79,10 @@ module.exports = function(grunt) {
     'concat:class',
     'concat:webcomponent',
     'concat:recognizers',
-    'concat:widget',
+    'concat:widgets',
+    'copy:platform',
     'copy:customElements',
-    'copy:glengine',
     'copy:requirejs',
-//    'copy:demosLib'
+    'copy:demosLib'
    ]);
 };
