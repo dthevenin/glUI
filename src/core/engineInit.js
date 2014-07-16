@@ -287,7 +287,7 @@ function initBuffers () {
     gl_ctx.STATIC_DRAW);
 }
 
-var GL_CANVAS, stats;
+var GL_CANVAS;
 var init_functions = [];
 
 function glAddInitFunction (func) {
