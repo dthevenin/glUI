@@ -16,76 +16,83 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
-var ConfigPanel = vs.gl.createClass ({
+define ('ConfigPanel', ["core", "class", "ConfigIcon"],
+  function (core, klass, ConfigIcon) {
 
-  /** parent class */
-  parent: vs.gl.View,
+  var ConfigPanel = klass.createClass ({
 
-  initComponent: function () {
-    this._super ();
+    /** parent class */
+    parent: core.View,
+
+    initComponent: function () {
+      this._super ();
     
-    this.style.backgroundColor = new vs.gl.Color (22, 15, 58, 1);
-    var size = this.__config__.size;
-    if (!size) size = [300, 400];
+      this.style.backgroundColor = new core.Color (22, 15, 58, 1);
+      var size = this.__config__.size;
+      if (!size) size = [300, 400];
 
-    this.titleLabel = new vs.gl.Text ({
-      size : [200, 30],
-      position: [(size[0] - 200)/2, 10],
-      text : "FILTER BY:"
-    }).init ();
+      this.titleLabel = new core.Text ({
+        size : [200, 30],
+        position: [(size[0] - 200)/2, 10],
+        text : "FILTER BY:"
+      }).init ();
     
-    this.titleLabel.style.fontSize = "22px";
-    this.titleLabel.style.fontFamily = "arial";
-    this.titleLabel.style.color = new vs.gl.Color (196,189,233);
-    this.titleLabel.style.textAlign = "center";
+      this.titleLabel.style.fontSize = "22px";
+      this.titleLabel.style.fontFamily = "arial";
+      this.titleLabel.style.color = new core.Color (196,189,233);
+      this.titleLabel.style.textAlign = "center";
 
-    this.add (this.titleLabel);
+      this.add (this.titleLabel);
 
-   var items = [
-      {icon:'assets/bar.png', name: 'Bar'}, {icon:'assets/book.png', name: 'Book'},
-      {icon:'assets/food.png', name: 'Food'}, {icon:'assets/idea.png', name: 'Idea'},
-      {icon:'assets/movie.png', name: 'Movie'}, {icon:'assets/music.png', name: 'Music'},
-      {icon:'assets/person.png', name: 'Person'}, {icon:'assets/place.png', name: 'Place'},
-      {icon:'assets/product.png', name: 'Product'}
-    ], item_view, item;
+     var items = [
+        {icon:'assets/bar.png', name: 'Bar'}, {icon:'assets/book.png', name: 'Book'},
+        {icon:'assets/food.png', name: 'Food'}, {icon:'assets/idea.png', name: 'Idea'},
+        {icon:'assets/movie.png', name: 'Movie'}, {icon:'assets/music.png', name: 'Music'},
+        {icon:'assets/person.png', name: 'Person'}, {icon:'assets/place.png', name: 'Place'},
+        {icon:'assets/product.png', name: 'Product'}
+      ], item_view, item;
     
-    var
-      x = 0; y = 0, cx = 0, cy = 0, icons = [],
-      dx = (size [0] - 280) / 2,
-      dy = (size [1] - 400) / 2;
+      var
+        x = 0; y = 0, cx = 0, cy = 0, icons = [],
+        dx = (size [0] - 280) / 2,
+        dy = (size [1] - 400) / 2;
       
-    for (var i = 0; i < items.length; i++)
-    {
-      item = items[i];
-      this [item.name + '_icon'] = item_view = new ConfigIcon (item).init ();
-      this.add (item_view);
+      for (var i = 0; i < items.length; i++)
+      {
+        item = items[i];
+        this [item.name + '_icon'] = item_view = new ConfigIcon (item).init ();
+        this.add (item_view);
       
-      x = (i % 3) * 100; cx += x;
-      y = 20 + Math.floor (i/3) * 130; cy += y
-      item_view.position = [x + dx, y + dy];
-      icons.push (item_view);
-    };
+        x = (i % 3) * 100; cx += x;
+        y = 20 + Math.floor (i/3) * 130; cy += y
+        item_view.position = [x + dx, y + dy];
+        icons.push (item_view);
+      };
     
-    cx = size [0] / 2;
-    cy = size [1] / 2;
-    this.icons = icons;
-  },
+      cx = size [0] / 2;
+      cy = size [1] / 2;
+      this.icons = icons;
+    },
 
-  show : function () {
-    this._super ();
-    this.icons.forEach (function (icon) {
-      icon.show ();
-    });
-  },
+    show : function () {
+      this._super ();
+      this.icons.forEach (function (icon) {
+        icon.show ();
+      });
+    },
 
-  hide : function () {
-    this.icons.forEach (function (icon) {
-      icon.hide ();
-    });
-    var self = this;
-    vs.scheduleAction (function () {
-//      vs.gl.View.prototype.hide.call (self);
-    }, 300);
+    hide : function () {
+      this.icons.forEach (function (icon) {
+        icon.hide ();
+      });
+      var self = this;
+      core.scheduleAction (function () {
+  //      core.View.prototype.hide.call (self);
+      }, 300);
 
-  }
+    }
+  });
+
+  return ConfigPanel;
+
 });

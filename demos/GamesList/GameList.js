@@ -31,9 +31,10 @@ var GamesList = klass.createClass ({
   buildList: function () {
     var size = this.size;
     
+//    console.profile ("list");
     var l = Data.length;
-//    for (var i = 0; i < l * 10; i++) {
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < l * 10; i++) {
+//    for (var i = 0; i < 1; i++) {
       var d = Data [i % l];
 
       var item = new ListItem ({

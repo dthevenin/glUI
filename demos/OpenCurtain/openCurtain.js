@@ -1,6 +1,11 @@
 require.config({
   baseUrl: "",
   paths: {
+    'core' : '../lib/core',
+    'class' : '../lib/class',
+    'util' : '../lib/util',
+    'widgets' : '../lib/widgets',
+    'recognizers' : '../lib/recognizers',
     'Data' : 'data',
     'ListItem' : 'ListItem',
     'CurtainView' : 'meshTransform/CurtainView',
@@ -8,21 +13,22 @@ require.config({
   }
 });
 
-require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureView, ListItem, Data) {
+require (["core", "class", "widgets", "recognizers", 'CurtainTextureView', 'ListItem', 'Data'],
+function (core, klass, widgets, recognizers, CurtainTextureView, ListItem, Data) {
   
   var demoSize = [window.innerWidth, window.innerHeight];
   var demoPosition = [0, 0];
 
-  var CurtainDemo = vs.gl.createClass ({
+  var CurtainDemo = klass.createClass ({
 
     /** parent class */
-    parent: vs.gl.Application,
+    parent: core.Application,
     startSlide: 0,
 
     initComponent : function () {
       this._super ();
 
-      this.style.backgroundColor = vs.gl.Color.white;
+      this.style.backgroundColor = core.Color.white;
 
       this.intList ();
       this.initCurtain ();
@@ -35,12 +41,12 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
         size : [demoSize [0] + 10, demoSize [1]],
       }).init ();
 
-      this.curtain_recognizer = new vs.ui.DragRecognizer (this);
+      this.curtain_recognizer = new recognizers.DragRecognizer (this);
       view.addPointerRecognizer (this.curtain_recognizer);
 
-      this.curtainAnimation = new vs.gl.Animation (
+      this.curtainAnimation = new core.Animation (
         {'slide': [0, 0]},
-        {'classes': {'slide' : TrajectoryVect2D}}
+        {'classes': {'slide' : core.animations.TrajectoryVect2D}}
       );
       this.curtainAnimation.duration = 200;
   
@@ -50,7 +56,7 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
     
     intList: function () {
       var size = demoSize;
-      var list = new vs.gl.List ({
+      var list = new widgets.List ({
         size : [size [0] - 10, size [1]],
         position: [demoPosition [0] + 10, demoPosition[1]],
         scroll: true,
@@ -59,21 +65,22 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
       }).init ();
       
       this.add (list);
-      list.style.backgroundColor = vs.gl.Color.white;
+      list.style.backgroundColor = core.Color.white;
       var l = Data.length;
       for (var i = 0; i < l * 5; i++) {
         var d = Data [i % l];
-        var model = new vs.core.Model ().init ();
-        model.parseData (d)
+//        var model = new vs.core.Model ().init ();
+//        model.parseData (d)
 
         var item = new ListItem ({size : [size[0], 70]}).init ();
         list.add (item);
-        item.configure (model);
+//        item.configure (model);
+        item.configure (d);
 
-        item.style.backgroundColor = new vs.gl.Color (240, 240, 240);
+        item.style.backgroundColor = new core.Color (240, 240, 240);
       }
       
-      this.listAnimation = new vs.gl.Animation (
+      this.listAnimation = new core.Animation (
         {'scaling' : 0.5}
       );
       this.listAnimation.duration = 200;
@@ -153,5 +160,5 @@ require (['CurtainTextureView', 'ListItem', 'Data'], function (CurtainTextureVie
   });
 
   new CurtainDemo ().init ();
-  vs.gl.Application.start ();
+  core.Application.start ();
 });

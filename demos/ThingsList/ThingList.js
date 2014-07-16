@@ -16,21 +16,35 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+require.config({
+  baseUrl: "",
+  paths: {
+    'core' : '../lib/core',
+    'class' : '../lib/class',
+    'util' : '../lib/util',
+    'widgets' : '../lib/widgets',
+    'recognizers' : '../lib/recognizers'
+  }
+});
+
+require (["core", "class", "widgets", "ConfigPanel", "ListItem"],
+  function (core, klass, widgets, ConfigPanel, ListItem) {
+
 var info_pasquale = "Pasquale is a masculine Italian given name and a surname found all over Italy. It is a cognate of the French name Pascal, the Spanish Pascual, the Portuguese Pascoal and the Catalan Pasqual. Pasquale derives from the Latin paschalis or pashalis, which means \"relating to Easter\", from Latin pascha (\"Easter\"), Greek Πάσχα, Aramaic pasḥā, in turn from the Hebrew פֶּסַח, which means \"to be born on, or to be associated with, Passover day\". Since the Hebrew holiday Passover coincides closely with the later Christian holiday of Easter, the Latin word came to be used for both occasions."
 var info_bar = "Part of the new wave of more eclectic and sophisticated gay hangouts that have steadily been gaining in prevalence and popularity in the Castro, the dapper and convivial Blackbird Bar (2124 Market St., 415-503-0630) is along the hip Church Street corridor (right at the intersection with Market Street). ";
 var info_design = "The Shape of Design is an odd little design book. Instead of talking about typography, grids, or logos, it focuses on storytelling, co-dependency, and craft. It tries to supplement the abundance of technical talk and how-to elsewhere by elevating why great work is done. "
 
-var ThingList = vs.gl.createClass ({
+var ThingList = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.Application,
+  parent: core.Application,
   
   settings_open: false,
 
   applicationStarted : function (event) {
     window.app = this;
     
-    this.style.backgroundColor = vs.gl.Color.white;
+    this.style.backgroundColor = core.Color.white;
   
     this.config_panel = new ConfigPanel ({
       position: [0, 44],
@@ -51,7 +65,7 @@ var ThingList = vs.gl.createClass ({
       list_view.show ();
       this.config_panel.hide ();
       this.show_list_anim.process (list_view);
-      this.nav_bar.style.backgroundColor = new vs.gl.Color (41, 41, 41);
+      this.nav_bar.style.backgroundColor = new core.Color (41, 41, 41);
 
       this.buttonOpen.animate ({
         'rotation' : [0,0,0],
@@ -74,7 +88,7 @@ var ThingList = vs.gl.createClass ({
       this.hide_list_anim.process (list_view, function () {
         list_view.hide ();
       });
-      this.nav_bar.style.backgroundColor = new vs.gl.Color (60, 60, 60);
+      this.nav_bar.style.backgroundColor = new core.Color (60, 60, 60);
       
       this.buttonOpen.animate ({
         'rotation' : [0,0,360],
@@ -97,27 +111,27 @@ var ThingList = vs.gl.createClass ({
   
   buildNavBar : function () {
   
-    this.nav_bar = new vs.gl.View ({
+    this.nav_bar = new core.View ({
       size: [window.innerWidth, 44],
       position: [0,0]
     }).init ();
-    this.nav_bar.style.backgroundColor = new vs.gl.Color (41, 41, 41);
+    this.nav_bar.style.backgroundColor = new core.Color (41, 41, 41);
 
     this.add (this.nav_bar);
     
-    this.titleLabel = new vs.gl.Text ({
+    this.titleLabel = new core.Text ({
       size: [150, 25],
       position: [(window.innerWidth / 2) - 75,10],
       text : "THINGLIST"
     }).init ();
     this.titleLabel.style.fontSize = "22px";
     this.titleLabel.style.fontFamily = "arial";
-    this.titleLabel.style.color = vs.gl.Color.white;
+    this.titleLabel.style.color = core.Color.white;
     this.titleLabel.style.textAlign = "center";
 
     this.nav_bar.add (this.titleLabel);
 
-    var button = new vs.gl.Button ({
+    var button = new widgets.Button ({
       size: [40, 40],
       position: [3, 0],
       transformOrigin : [20, 20]
@@ -131,7 +145,7 @@ var ThingList = vs.gl.createClass ({
     button.addEventListener ('select', this.openSettings.bind (this));
     this.buttonOpen = button;
 
-    button = new vs.gl.Button ({
+    button = new widgets.Button ({
       size: [40, 40],
       position: [3, 3],
       transformOrigin : [20, 20],
@@ -148,7 +162,7 @@ var ThingList = vs.gl.createClass ({
     button.addEventListener ('select', this.openSettings.bind (this));
     this.buttonClose = button;
 
-    var button = new vs.gl.Image ({
+    var button = new core.Image ({
       size: [32, 32],
       src: "assets/question.png"
     }).init ();
@@ -160,14 +174,14 @@ var ThingList = vs.gl.createClass ({
   
   buildList : function () {
     var size = [window.innerWidth, window.innerHeight - 44];
-    var list_view = new vs.gl.List ({
+    var list_view = new widgets.List ({
       position: [0, 44],
       size: size,
       scroll: true
     }).init ();
     
     this.add (list_view);
-    list_view.style.backgroundColor = vs.gl.Color.white;
+    list_view.style.backgroundColor = core.Color.white;
     this.list_view = list_view;
 
     for (var i = 0; i < DATA.length * 2; i++)
@@ -182,11 +196,11 @@ var ThingList = vs.gl.createClass ({
     
     // Hide list animation
     
-    this.hide_list_anim = new vs.gl.Animation ({"translation": [0, size[1]]});
+    this.hide_list_anim = new core.Animation ({"translation": [0, size[1]]});
     this.hide_list_anim.keyFrame (0, {"translation":[0,0]});
     this.hide_list_anim.duration = 200;
     
-    this.show_list_anim = new vs.gl.Animation ({"translation": [0, 0]});
+    this.show_list_anim = new core.Animation ({"translation": [0, 0]});
     this.show_list_anim.keyFrame (0, {"translation":[0, size[1]]});
     this.show_list_anim.duration = 200;
   }
@@ -203,6 +217,9 @@ var DATA = [
 ];
 
 function loadApplication () {
-  new ThingList ({id:"thinglist", layout:vs.ui.View.ABSOLUTE_LAYOUT}).init ();
-  vs.gl.Application.start ();
+  new ThingList ().init ();
+  core.Application.start ();
 }
+
+loadApplication ();
+});

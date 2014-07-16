@@ -1,4 +1,4 @@
-define ('CurtainView', [], function () {
+define ('CurtainView', ["core", "class"], function (core, klass) {
 
   var mesh_resolution = 30;
   var shaders_program = null;
@@ -31,14 +31,14 @@ define ('CurtainView', [], function () {
     gl_FragColor = shadingVarying * vec4(color.rgb, color.a * uAlpha);\n\
   }";
 
-  var CurtainView = vs.gl.createClass ({
+  var CurtainView = klass.createClass ({
 
     /** parent class */
-    parent: vs.gl.View,
+    parent: core.View,
 
     properties : {
-      'lightDirection': vs.core.Object.PROPERTY_IN_OUT,
-      'diffuseFactor': vs.core.Object.PROPERTY_IN_OUT,
+      'lightDirection': core.Object.PROPERTY_IN_OUT,
+      'diffuseFactor': core.Object.PROPERTY_IN_OUT,
       'slide': {
         set: function (array) {
           this._slide [0] = array [0];
@@ -53,9 +53,9 @@ define ('CurtainView', [], function () {
       
       this.setVerticesAllocationFunctions (
         mesh_resolution,
-        allocateMeshVertices,
-        allocateNormalVertices,
-        allocateTriangleFaces,
+        core.allocateMeshVertices,
+        core.allocateNormalVertices,
+        core.allocateTriangleFaces,
         null
       )
     },
@@ -156,11 +156,13 @@ define ('CurtainView', [], function () {
 
       updateMeshes (Math.min (dx, size[0]), dy);
       updateNormals ();
+      
+      var gl_ctx = core.getGLContext ();
 
       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this._sprite.mesh_vertices_buffer);
       gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, this._sprite.mesh_vertices, gl_ctx.STATIC_DRAW);
 
-      vs.gl.View.__should_render = true;
+      core.View.__should_render = true;
     }
   });
 
@@ -173,13 +175,15 @@ define ('CurtainView', [], function () {
 
     this._sprite = sprite;
     
-    initMeshVeticesValues (mesh_resolution, x, y, w, h, sprite.mesh_vertices);
+    core.initMeshVeticesValues (
+      mesh_resolution, x, y, w, h, sprite.mesh_vertices
+    );
     sprite.mesh_vertices_save = new Float32Array (sprite.mesh_vertices);
 
     this.__updateMeshAtPoint ();
   }
 
-  glAddInitFunction (createCurtainProgram);
+  core.glAddInitFunction (createCurtainProgram);
 
   function createCurtainProgram () {
 
@@ -205,7 +209,7 @@ define ('CurtainView', [], function () {
         c_buffer = style._background_color.__gl_array;
       }
       else {
-        c_buffer = vs.gl.Color.default.__gl_array;
+        c_buffer = core.Color.default.__gl_array;
       }
       shaders_program.uniform.color (c_buffer);
       shaders_program.uniform.lightDirection (gl_view._light_direction);

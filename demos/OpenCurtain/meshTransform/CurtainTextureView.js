@@ -1,4 +1,5 @@
-define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
+define ('CurtainTextureView', ["core", "class", 'CurtainView'],
+function (core, klass, CurtainView) {
 
   var image_uv_buffer = null;
   var mesh_resolution = 30;
@@ -39,14 +40,14 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
     gl_FragColor = shadingVarying * gl_FragColor;\n\
   }";
 
-  var CurtainTextureView = vs.gl.createClass ({
+  var CurtainTextureView = klass.createClass ({
 
     /** parent class */
-    parent: vs.gl.Image,
+    parent: core.Image,
 
     properties : {
-      'lightDirection': vs.core.Object.PROPERTY_IN_OUT,
-      'diffuseFactor': vs.core.Object.PROPERTY_IN_OUT,
+      'lightDirection': core.Object.PROPERTY_IN_OUT,
+      'diffuseFactor': core.Object.PROPERTY_IN_OUT,
       'slide': {
         set: function (array) {
           this._slide [0] = array [0];
@@ -61,10 +62,10 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
       
       this.setVerticesAllocationFunctions (
         mesh_resolution,
-        allocateMeshVertices,
-        allocateNormalVertices,
-        allocateTriangleFaces,
-        makeTextureProjection
+        core.allocateMeshVertices,
+        core.allocateNormalVertices,
+        core.allocateTriangleFaces,
+        core.makeTextureProjection
       )
     },
 
@@ -85,6 +86,8 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
     }
   });
 
+  var gl_ctx = core.getGLContext ();
+  
   CurtainTextureView.updateVerticesFunction = function (sprite, obj_pos, obj_size) {
     var
       x = obj_pos[0],
@@ -94,7 +97,7 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
 
     this._sprite = sprite;
     
-    initMeshVeticesValues (
+    core.initMeshVeticesValues (
       mesh_resolution, x, y, w, h, sprite.mesh_vertices
     );
 
@@ -114,16 +117,14 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
 
   CurtainTextureView.prototype.__updateMeshAtPoint = CurtainView.prototype.__updateMeshAtPoint;
 
-  glAddInitFunction (createCurtainProgram);
-
   var shaders_program = null;
   function createCurtainProgram () {
 
     image_uv_buffer = gl_ctx.createBuffer ();
 
-    shaders_program = createProgram (vertex_shader, shader_fragment);
+    shaders_program = core.createProgram (vertex_shader, shader_fragment);
     shaders_program.useIt ();
-    shaders_program.setMatrixes (jsProjMatrix, jsViewMatrix);
+    shaders_program.setMatrixes (core.jsProjMatrix, core.jsViewMatrix);
 
     var normals_buffer = gl_ctx.createBuffer ();;
 
@@ -164,5 +165,8 @@ define ('CurtainTextureView', ['CurtainView'], function (CurtainView) {
     }
   }
 
+  //core.glAddInitFunction (createCurtainProgram);
+  createCurtainProgram ();
+  
   return CurtainTextureView;
 });

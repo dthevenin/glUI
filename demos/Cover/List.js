@@ -22,13 +22,13 @@ require.config (
     "ListItem": "ListItem",
     "core": "../lib/core",
     "recognizers": "../lib/recognizers",
-    "widget": "../lib/widget",
+    "widgets": "../lib/widgets",
     "class": "../lib/class",
     "util": "../lib/util"
   } });
 
-require (['core', 'class', 'recognizers', 'widget', 'data', 'ListItem'],
-function (core, klass, recognizers, widget, Data, ListItem) {
+require (['core', 'class', 'recognizers', 'widgets', 'data', 'ListItem'],
+function (core, klass, recognizers, widgets, Data, ListItem) {
   
 var CoverFlow = klass.createClass ({
 
@@ -44,7 +44,7 @@ var CoverFlow = klass.createClass ({
   buildList: function () {
     var size = this.size;
   
-    var list = new widget.List ({
+    var list = new widgets.List ({
       size : [300, size[1]],
       position: [(size[0] - 300)/2, 0],
       scroll: true

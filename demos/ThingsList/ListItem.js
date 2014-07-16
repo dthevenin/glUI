@@ -16,27 +16,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  
+define ('ListItem', ["core", "class"], function (core, klass) {
+
 var titleStyle, typeStyle;
 function setStyle () {
   if (!titleStyle) {
-    titleStyle = new vs.gl.Style ();
+    titleStyle = new core.Style ();
     titleStyle.fontSize = "22px";
     titleStyle.fontWeight = "bold";
     titleStyle.fontFamily = "Arial";
-    titleStyle.color = vs.gl.Color.black;
+    titleStyle.color = core.Color.black;
 
-    typeStyle = new vs.gl.Style ();
+    typeStyle = new core.Style ();
     typeStyle.fontSize = "17px";
     typeStyle.fontWeight = "100";
     typeStyle.fontFamily = "Arial";
-    typeStyle.color = new vs.gl.Color (128, 128, 128);
+    typeStyle.color = new core.Color (128, 128, 128);
   }
 }
  
-var ListItem = vs.gl.createClass ({
+var ListItem = klass.createClass ({
 
   /** parent class */
-  parent: vs.gl.View,
+  parent: core.View,
   
   properties: {
     "name" : "titleLabel#text",
@@ -51,14 +53,14 @@ var ListItem = vs.gl.createClass ({
 
     this.size = [80, 110]
     
-    this.img = new vs.gl.Image ({
+    this.img = new core.Image ({
       size : [30, 30],
       position: [5, 20],
     }).init ();
     
     this.add (this.img);
     
-    var img = new vs.gl.Image ({
+    var img = new core.Image ({
       size : [30, 33],
       src : "assets/arrow.png"
     }).init ();
@@ -67,29 +69,32 @@ var ListItem = vs.gl.createClass ({
     
     this.add (img);
     
-    this.titleLabel = new vs.gl.Text ({
+    this.titleLabel = new core.Text ({
       size : [300, 20],
       position: [40, 10],
       style : titleStyle
     }).init ();
     this.add (this.titleLabel);
     
-    this.typeLabel = new vs.gl.Text ({
+    this.typeLabel = new core.Text ({
       size : [100, 20],
       position: [40, 35],
       style : typeStyle
     }).init ();
     this.add (this.typeLabel);
     
-    var bar = new vs.gl.View ({
+    var bar = new core.View ({
       size: [1, 1],
       position: [0, 70],
     }).init ();
     bar.constraint.left = 0;
     bar.constraint.right = 0;
 
-    bar.style.backgroundColor = new vs.gl.Color (200, 200, 200);
+    bar.style.backgroundColor = new core.Color (200, 200, 200);
     this.add (bar);
   }
 });
 
+return ListItem;
+
+});
