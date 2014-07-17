@@ -27,7 +27,7 @@ require.config({
   }
 });
 
-require (["core", "class", "recognizers", "profiling"],
+require (["core", "class", "recognizers"],
   function (core, klass, recognizers) {
 
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
