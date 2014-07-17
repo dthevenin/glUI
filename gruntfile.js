@@ -34,6 +34,10 @@ module.exports = function(grunt) {
       widgets: {
         src: sources.widget,
         dest: 'lib/widgets.js'
+      },
+      profiling: {
+        src: sources.profiling,
+        dest: 'lib/profiling.js'
       }
     },
     copy: {
@@ -78,6 +82,7 @@ module.exports = function(grunt) {
     'concat:webcomponent',
     'concat:recognizers',
     'concat:widgets',
+    'concat:profiling',
     'copy:platform',
     'copy:customElements',
     'copy:requirejs',
