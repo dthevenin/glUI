@@ -21,6 +21,10 @@ module.exports = function(grunt) {
         src: sources.core,
         dest: 'lib/core.js'
       },
+      core_release: {
+        src: sources.core,
+        dest: 'lib/core.js'
+      },
       core_debug: {
         src: core_debug,
         dest: 'lib/core.js'
