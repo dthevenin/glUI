@@ -23,8 +23,6 @@ var initPanel = function () {
 	panel.id = 'gl_profiling';
 //	panel.addEventListener ('mousedown', function ( event ) { event.preventDefault(); setMode( ++ mode % 2 ) }, false );
 	panel.style.cssText = panel_css;
-
-  document.body.appendChild (panel);
   
   var
     stats = Stats (),
@@ -36,11 +34,11 @@ var initPanel = function () {
   
   function activateState (v) {
     if (v) {
-      core.profiling.setStats (stats);
+      profiling.setStats (stats);
       stats.domElement.style.display = "block";
     }
     else {
-      core.profiling.setStats (null);
+      profiling.setStats (null);
       stats.domElement.style.display = "none";
     }
   }
@@ -72,7 +70,7 @@ var initPanel = function () {
       "message": "Enable continuous page repainting",
       "action" : function (event) {
         continous_rendering_selected = event.srcElement.checked;
-        core.profiling.setContinousRendering (continous_rendering_selected);
+        profiling.setContinousRendering (continous_rendering_selected);
         activateState (continous_rendering_selected || stats_selected);
       }
     }
@@ -96,8 +94,13 @@ var initPanel = function () {
     panel.appendChild (p);
   });
 
+  document.body.appendChild (panel);
+
 	return {
-
+    panel: panel
 	}
-
 };
+
+window.loadProfiling = function () {
+  return initPanel ();
+}

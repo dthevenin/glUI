@@ -6,6 +6,12 @@
 module.exports = function(grunt) {
   var sources = grunt.file.readJSON ('build.json');
   
+  // create core file list for debuging
+  // Its include the profiling code
+  var core_debug = sources.core.slice (0, sources.core.length - 2);
+  core_debug = core_debug.concat (sources.profiling);
+  core_debug.push (sources.core [sources.core.length - 1]);
+  
   grunt.initConfig({
     concat: {
       options: {
@@ -13,6 +19,10 @@ module.exports = function(grunt) {
       },
       core: {
         src: sources.core,
+        dest: 'lib/core.js'
+      },
+      core_debug: {
+        src: core_debug,
         dest: 'lib/core.js'
       },
       util: {
@@ -34,10 +44,6 @@ module.exports = function(grunt) {
       widgets: {
         src: sources.widget,
         dest: 'lib/widgets.js'
-      },
-      profiling: {
-        src: sources.profiling,
-        dest: 'lib/profiling.js'
       }
     },
     copy: {
@@ -76,13 +82,12 @@ module.exports = function(grunt) {
   // tasks
   // tasks
   grunt.registerTask('default', [
-    'concat:core',
+    'concat:core_debug',
     'concat:util',
     'concat:class',
     'concat:webcomponent',
     'concat:recognizers',
     'concat:widgets',
-    'concat:profiling',
     'copy:platform',
     'copy:customElements',
     'copy:requirejs',

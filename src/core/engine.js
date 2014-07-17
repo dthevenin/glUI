@@ -670,9 +670,3 @@ function handleContextLost (event) {
   //delete (twoTexturesShaderProgram);
   twoTexturesShaderProgram = undefined;
 }
-
-window.loadProfiling = function () {
-  if (window.requirejs) {
-    require (['profiling'], function () {});
-  }
-}

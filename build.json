@@ -70,9 +70,7 @@
     "src/widget/export_footer.js"
   ],
   "profiling": [
-    "src/profiling/export_header.js",
     "src/profiling/stats.js",
-    "src/profiling/profilingPanel.js",
-    "src/profiling/export_footer.js"
+    "src/profiling/profilingPanel.js"
   ]
 }

@@ -63,9 +63,7 @@ return {
     TrajectoryVect3D: TrajectoryVect3D
   },
   
-  getGLContext: getGLContext,
-  
-  profiling: profiling
+  getGLContext: getGLContext
 };
 
 //gl.createCustomEvent = createCustomEvent;
