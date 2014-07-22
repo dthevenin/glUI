@@ -27,7 +27,7 @@ Group.prototype.destructor = function ()
 
   for (i = 0; i < this.__children.length; i++) {
     child = this.__children [i];
-    util.free (child);
+    if (child) child.destructor ();
   }
   this.__children = undefined;
 };
