@@ -1,6 +1,11 @@
 
-initWebGLRendering ();
-  
+if (window.GL_INIT_MANUAL === true) {
+  window.gl_init = initWebGLRendering;
+}
+else {
+  initWebGLRendering (document.body, window.innerWidth, window.innerHeight);
+}
+
 /********************************************************************
                       Export
 *********************************************************************/

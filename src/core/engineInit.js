@@ -294,11 +294,11 @@ function glAddInitFunction (func) {
   init_functions.push (func);
 }
 
-function initWebGLRendering () {
+function initWebGLRendering (node, width, height) {
 
   if (gl_ctx) return;
     
-  frame_size = [window.innerWidth, window.innerHeight];
+  frame_size = [width, height];
   gl_device_pixel_ratio = window.devicePixelRatio || 1;
   
 //  if (deviceConfiguration.browser === vs.core.DeviceConfiguration.BROWSER_FIREFOX) {
@@ -308,8 +308,8 @@ function initWebGLRendering () {
   console.log (gl_device_pixel_ratio);
 
   var canvas = GL_CANVAS = createCanvas (frame_size [0], frame_size [1]);
-  document.body.appendChild (canvas);
-
+  node.appendChild (canvas);
+  node.style.padding = 0;
 
   canvas.addEventListener ("webglcontextlost", handleContextLost, false);
 
