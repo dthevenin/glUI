@@ -102,8 +102,8 @@ AbstractList.prototype = {
 //       this.__tap_recognizer = null;
 //     }
 
-    this._model.unbindChange (null, this, this._modelChanged);
-    if (this._model_allocated) util.free (this._model);
+//    this._model.unbindChange (null, this, this._modelChanged);
+//    if (this._model_allocated) util.free (this._model);
     this._model_allocated = false;
   },
   
