@@ -29,7 +29,7 @@ Group.prototype.destructor = function ()
     child = this.__children [i];
     if (child) child.destructor ();
   }
-  this.__children = undefined;
+  this.__children.length = 0;
 };
 
 /**
