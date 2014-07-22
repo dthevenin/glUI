@@ -185,7 +185,7 @@ GLObject.prototype =
    */
   destructor : function () {
     // remove the current object
-    GLObject._obs [this._id] = undefined;
+    delete (GLObject._obs [this._id]);
   }
 };
 

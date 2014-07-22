@@ -187,7 +187,7 @@ function buildMSPointerList (evt, remove, target_id)
     if (pointer)
     {
       removed_pointers [id] = pointer;
-      all_pointers [id] = undefined;
+      delete (all_pointers [id]);
     }
     else
     {
@@ -280,7 +280,7 @@ function touchEndHandler (event, listener)
   for (; i < l; i++)
   {
     pointer = event.changedTouches [i];
-    pointerEvents [pointer.identifier] = undefined;
+    delete (pointerEvents [pointer.identifier]);
   }
   buildTouchList (event);
   listener (event);
@@ -302,7 +302,7 @@ var msRemovePointer = function (evt) {
   if (pointer)
   {
     removed_pointers [pointer.identifier] = pointer;
-    all_pointers [pointer.identifier] = undefined;
+    delete (all_pointers [pointer.identifier]);
   }
   nbPointerListener --;
 

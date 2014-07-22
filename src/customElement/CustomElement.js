@@ -85,7 +85,7 @@ glui (null, ['core', 'util'], function (core, util) {
           core.scheduleAction (function () {result_clb (data)});
         })
         clbs = [];
-        LOADING_CLBS [href] = undefined;
+        delete (LOADING_CLBS [href]);
       }
     }
   
