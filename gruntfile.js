@@ -8,7 +8,7 @@ module.exports = function(grunt) {
   
   // create core file list for debuging
   // Its include the profiling code
-  var core_debug = sources.core.slice (0, sources.core.length - 2);
+  var core_debug = sources.core.slice (0, sources.core.length - 1);
   core_debug = core_debug.concat (sources.profiling);
   core_debug.push (sources.core [sources.core.length - 1]);
   
