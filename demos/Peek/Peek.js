@@ -22,7 +22,6 @@ require.config({
     'core' : '../lib/core',
     'class' : '../lib/class',
     'util' : '../lib/util',
-    'profiling' : '../lib/profiling',
     'recognizers' : '../lib/recognizers'
   }
 });
