@@ -19,6 +19,7 @@ var Test = klass.createClass ({
     this.add (view);
     view.style.backgroundColor = core.Color.yellow;
     view.style.shadowColor = core.Color.black;
+    view.style.shadowBlur = 10;
     
     view = new core.View ({
       position: [200, 200],
