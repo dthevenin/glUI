@@ -10,6 +10,7 @@
     "src/core/spriteUtil.js",
     "src/core/program.js",
     "src/core/engine/init.js",
+    "src/core/engine/layerGraph.js",
     "src/core/engine/engine.js",
     "src/core/texture_util.js",
     "src/core/Constraint.js",
