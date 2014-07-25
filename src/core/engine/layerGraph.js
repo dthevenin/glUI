@@ -18,12 +18,12 @@ function update_transform_gl_matrix (gl_view, sprite)
     size = gl_view._size,
     rot = gl_view._rotation,
     trans = gl_view._translation,
-    tx = gl_view._transform_origin [0] + pos [0],
-    ty = gl_view._transform_origin [1] + pos [1];
+    tx = gl_view._transform_origin [0],// + pos [0],
+    ty = gl_view._transform_origin [1];// + pos [1];
     
   // apply current transformation
   mat4.identity (matrix);
-  mat4.translateXYZ (matrix, tx + trans[0], ty + trans[1], trans[2]);
+  mat4.translateXYZ (matrix, tx + trans[0] + pos [0], ty + trans[1] + pos [1], trans[2]);
 
   if (rot[0]) mat4.rotateX (matrix, rot[0] * angle2rad);
   if (rot[1]) mat4.rotateY (matrix, rot[1] * angle2rad);
@@ -152,7 +152,8 @@ function calculateLayerGraph (now) {
     }
 
     if (new_p_matrix || gl_view.__invalid_matrixes || gl_view.__is_scrolling) {
-      mat4.translate (m_matrix, gl_view._position, p_matrix);
+      //      mat4.translate (m_matrix, gl_view._position, p_matrix);
+      mat4.set (m_matrix, p_matrix);
     
       if (scroll_vec) {
         gl_view.__gl_update_scroll (now);
@@ -169,7 +170,7 @@ function calculateLayerGraph (now) {
     entry [0] = 1; // normal view to render
     entry [1] = gl_view;
     entry [2] = alpha;
-     // End culling algorithm
+    // End culling algorithm
 
     /*================== Manage children ================== */
     children = gl_view.__children;

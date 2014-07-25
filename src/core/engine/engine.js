@@ -30,7 +30,7 @@ profiling.setContinousRendering = function (value) {
 
 function initRendering () {
   
-  var renderOneView = initRenteringBis (gl_ctx);
+  var renderLayerGraph = initRenteringBis (gl_ctx);
   initLayerGraph ();
 
   var default_faces_activated = false;
@@ -56,24 +56,7 @@ function initRendering () {
 //    console.log (gl_layer_graph_size);
       
     if (gl_layer_graph_size) {
-    
-      gl_ctx.viewport (
-        0.0, 0.0,
-        frame_size[0] * gl_device_pixel_ratio,
-        frame_size[1] * gl_device_pixel_ratio
-      );
-    
-      gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
-
-      for (var i = 0; i < gl_layer_graph_size; i++) {
-        var entry = gl_layer_graph [i];
-        if (entry[0] === 1) {
-          // normal rendering
-          renderOneView (entry[1], entry[2], mode);
-        }
-      }
-
-      gl_ctx.flush ();
+      renderLayerGraph (frame_size, now, mode);
     }
 //    next_rendering_id = requestAnimationFrame (animate);
 //    if (mode !== 1) scheduleAction(animate, 300);

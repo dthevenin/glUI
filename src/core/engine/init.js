@@ -5,6 +5,7 @@ var
   imageShaderProgram,
   oneTextureShaderProgram,
   twoTexturesShaderProgram,
+  drawShaderProgram,
   gl_ctx,
   object_uv_buffer,
   object_bck_image_uv_buffer,
@@ -12,9 +13,9 @@ var
   object_faces_buffer,
   frame_size = [100, 100],
   gl_device_pixel_ratio,
-  default_texture_projection,
   jsProjMatrix,
-  jsViewMatrix;
+  jsViewMatrix,
+  tempMatrix;
 
 
 function createCanvas (width, height) {
@@ -70,21 +71,62 @@ function initPrograms () {
 
   var basic_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
-uniform mat4 Mmatrix;\n\
+uniform mat4 Pmatrix;\n\
 void main(void) { //pre-built function\n\
-  vec4 new_pos = vec4(position, 1.);\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*new_pos;\n\
+  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
 }";
 
   var basic_shader_fragment="\n\
 precision lowp float;\n\
 uniform vec4 color;\n\
+void main(void) {\n\
+  gl_FragColor = vec4(color.rgb, color.a);\n\
+}";
+
+  var image_vertex_shader="\n\
+attribute vec3 position;\n\
+uniform mat4 Vmatrix;\n\
+uniform mat4 Pmatrix;\n\
+attribute vec2 uv;\n\
+varying vec2 vUV;\n\
+void main(void) { //pre-built function\n\
+  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
+  vUV=uv;\n\
+}";
+
+  var image_shader_fragment="\n\
+precision lowp float;\n\
+varying vec2 vUV;\n\
+uniform sampler2D uMainTexture;\n\
+uniform vec4 color;\n\
+void main(void) {\n\
+  vec4 mainTextureColor = texture2D(uMainTexture, vUV);\n\
+  gl_FragColor = mainTextureColor;\n\
+}";
+
+  var draw_vertex_shader="\n\
+attribute vec3 position;\n\
+uniform mat4 Mmatrix;\n\
+uniform mat4 Pmatrix;\n\
+uniform mat4 Vmatrix;\n\
+attribute vec2 bkImageUV;\n\
+varying vec2 vBkImageUV;\n\
+void main(void) { //pre-built function\n\
+  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  vBkImageUV=bkImageUV;\n\
+}";
+
+  var draw_shader_fragment="\n\
+precision lowp float;\n\
+varying vec2 vBkImageUV;\n\
+uniform sampler2D uMainTexture;\n\
 uniform float uAlpha;\n\
 void main(void) {\n\
-  gl_FragColor = vec4(color.rgb, color.a * uAlpha);\n\
+  vec4 mainTextureColor = texture2D(uMainTexture, vBkImageUV);\n\
+  gl_FragColor = vec4(mainTextureColor.rgb, mainTextureColor.a * uAlpha);\n\
 }";
+
 
   var shadow_vertex_shader="\n\
 attribute vec3 position;\n\
@@ -93,8 +135,7 @@ uniform mat4 Vmatrix;\n\
 uniform mat4 Mmatrix;\n\
 varying vec2 vPos;\n\
 void main(void) { //pre-built function\n\
-  vec4 temp_pos = Vmatrix*Mmatrix*vec4(position, 1.);\n\
-  gl_Position = Pmatrix*temp_pos;\n\
+  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
   vPos = position.xy;\n\
 }";
 
@@ -115,39 +156,14 @@ void main(void) {\n\
   gl_FragColor = vec4(color.rgb, shine * color.a * uAlpha);\n\
 }";
 
-  var image_vertex_shader="\n\
-attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
-uniform mat4 Vmatrix;\n\
-uniform mat4 Mmatrix;\n\
-attribute vec2 uv;\n\
-varying vec2 vUV;\n\
-void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
-  vUV=uv;\n\
-}";
-
-  var image_shader_fragment="\n\
-precision lowp float;\n\
-varying vec2 vUV;\n\
-uniform sampler2D uMainTexture;\n\
-uniform vec4 color;\n\
-uniform float uAlpha;\n\
-void main(void) {\n\
-  vec4 mainTextureColor = texture2D(uMainTexture, vUV);\n\
-  gl_FragColor = mainTextureColor;\n\
-  gl_FragColor.a *= uAlpha;\n\
-}";
-
   var one_texture_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
-uniform mat4 Mmatrix;\n\
+uniform mat4 Pmatrix;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vBkImageUV;\n\
 void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
   vBkImageUV=bkImageUV;\n\
 }";
 
@@ -156,7 +172,6 @@ precision lowp float;\n\
 varying vec2 vBkImageUV;\n\
 uniform sampler2D uMainTexture;\n\
 uniform vec4 color;\n\
-uniform float uAlpha;\n\
 void main(void) {\n\
   if (vBkImageUV[0]<0.0 || vBkImageUV[1]<0.0 || vBkImageUV[0]>1.0 || vBkImageUV[1]>1.0) {\n\
     gl_FragColor = color;\n\
@@ -165,20 +180,18 @@ void main(void) {\n\
     gl_FragColor = mix(color, mainTextureColor, mainTextureColor.a);\n\
     gl_FragColor.a = max(color.a, mainTextureColor.a);\n\
   }\n\
-  gl_FragColor.a *= uAlpha;\n\
 }";
 
   var two_textures_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
-uniform mat4 Mmatrix;\n\
+uniform mat4 Pmatrix;\n\
 attribute vec2 uv;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vUV;\n\
 varying vec2 vBkImageUV;\n\
 void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
   vUV=uv;\n\
   vBkImageUV=bkImageUV;\n\
 }";
@@ -191,7 +204,6 @@ uniform sampler2D uBckTexture;\n\
 uniform sampler2D uMainTexture;\n\
 uniform float uTextureFlag;\n\
 uniform vec4 color;\n\
-uniform float uAlpha;\n\
 void main(void) {\n\
   vec4 mainTextureColor = texture2D(uMainTexture, vUV);\n\
   vec4 tmpColor;\n\
@@ -203,15 +215,18 @@ void main(void) {\n\
     tmpColor.a = max(color.a, bckTextureColor.a);\n\
   }\n\
   gl_FragColor = mix(tmpColor, mainTextureColor, mainTextureColor.a);\n\
-  gl_FragColor.a = max(tmpColor.a, mainTextureColor.a) * uAlpha;\n\
+  gl_FragColor.a = max(tmpColor.a, mainTextureColor.a);\n\
 }";
-  
+
   basicShaderProgram = createProgram (basic_vertex_shader, basic_shader_fragment);
-  shadowShaderProgram = createProgram (shadow_vertex_shader, shadow_shader_fragment);
+//  shadowShaderProgram = createProgram (shadow_vertex_shader, shadow_shader_fragment);
   imageShaderProgram = createProgram (image_vertex_shader, image_shader_fragment);
   oneTextureShaderProgram = createProgram (one_texture_vertex_shader, one_texture_shader_fragment);
   twoTexturesShaderProgram = createProgram (two_textures_vertex_shader, two_textures_shader_fragment);
+  drawShaderProgram = createProgram (draw_vertex_shader, draw_shader_fragment);
 }
+
+var mMatrix;
 
 function initMainMatrix () {
   jsProjMatrix = mat4.create ();
@@ -221,22 +236,25 @@ function initMainMatrix () {
   
   jsViewMatrix = mat4.create ();
   mat4.identity (jsViewMatrix)
-  mat4.translate (jsViewMatrix, [-1,1,-600]);
+  mat4.translate (jsViewMatrix, [0,2,-600]);
   mat4.scale (jsViewMatrix, [2/ frame_size[0], -2/ frame_size[1], 1]);
+    
+  tempMatrix = mat4.create ();
+  mat4.identity (tempMatrix);
 }
 
 function updateProgramsMatrix () {
-  imageShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
-  twoTexturesShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
-  oneTextureShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
-  basicShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
-  shadowShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
+  basicShaderProgram.setMatrixes (jsProjMatrix);
+  imageShaderProgram.setMatrixes (jsProjMatrix);
+  oneTextureShaderProgram.setMatrixes (jsProjMatrix);
+  twoTexturesShaderProgram.setMatrixes (jsProjMatrix);
+//  shadowShaderProgram.setMatrixes (jsProjMatrix);
+  
+  drawShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
 }
 
 function initBuffers () {
-
-  default_texture_projection = new Float32Array ([0,0, 0,1, 1,0, 1,1]);
-
+  
   /*========================= UV =========================*/
   if (object_uv_buffer) {
     gl_ctx.deleteBuffer (object_uv_buffer);
@@ -246,7 +264,7 @@ function initBuffers () {
 
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
-    default_texture_projection,
+    new Float32Array ([0,0, 0,1, 1,0, 1,1]),
     gl_ctx.STATIC_DRAW
   );
 
@@ -258,7 +276,7 @@ function initBuffers () {
 
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
-    default_texture_projection,
+    new Float32Array ([0,0, 0,1, 1,0, 1,1]),
     gl_ctx.STATIC_DRAW
   );
     
@@ -269,7 +287,7 @@ function initBuffers () {
   gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, default_object_bck_image_uv_buffer);
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
-    default_texture_projection,
+    new Float32Array ([0,0, 0,1, 1,0, 1,1]),
     gl_ctx.STATIC_DRAW
   );
 
