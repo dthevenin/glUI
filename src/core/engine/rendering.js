@@ -63,8 +63,8 @@ function renderOneViewSave (gl_view, alpha, mode) {
 
     var style = gl_view.style;
 
-    program = shadowShaderProgram;
-    if (previous_program !== shadowShaderProgram) {
+    program = drawShadowShaderProgram;
+    if (previous_program !== drawShadowShaderProgram) {
       program.useIt ();
     }
     program.uniform.color (style._shadow_color.__gl_array);
@@ -296,10 +296,10 @@ function initRenteringBis (gl_ctx) {
     m[9] = x + w; m[10] = y + h; m[11] = 0;
   };
 
-  function update_shadow_gl_vertices (obj_pos, obj_size, offset, blur) {
+  function update_shadow_gl_vertices (obj_size, offset, blur) {
     var
-      x = obj_pos[0] + offset [0] - blur,
-      y = obj_pos[1] + offset [1] - blur,
+      x = offset [0] - blur,
+      y = offset [1] - blur,
       w = obj_size [0] + 2 * blur,
       h = obj_size [1] + 2 * blur,
       m = shadow_vertices;
@@ -591,20 +591,19 @@ function initRenteringBis (gl_ctx) {
     previous_program = program;
   }
 
-  function drawOneView (gl_view, alpha, mode) {
+  function drawOneView (sprite, alpha, mode, gl_view) {
 
     var program;
-    var sprite = SPRITES [gl_view.__gl_id];
     var vertices_buffer;
            
     // determine which vertices buffer to use
     // add update it if it's need.
-//    if (mode === 2) {
-//      vertices_buffer = shadow_buffer;
-//    }
-//    else {
+    if (mode === 2) {
+      vertices_buffer = shadow_buffer;
+    }
+    else {
       vertices_buffer = sprite.mesh_vertices_buffer;
-//    }
+    }
 /*
     // Picking mode rendering
     if (mode === 1) {
@@ -621,14 +620,13 @@ function initRenteringBis (gl_ctx) {
       alpha = 1;
     }
 */
-/*
-    // Shadow mode rendering
-    else if (mode === 2) {
-
+    // Shadow sprite rendering
+    if (mode === 2) {
+      
       var style = gl_view.style;
 
-      program = shadowShaderProgram;
-      if (previous_program !== shadowShaderProgram) {
+      program = drawShadowShaderProgram;
+      if (previous_program !== drawShadowShaderProgram) {
         program.useIt ();
       }
       program.uniform.color (style._shadow_color.__gl_array);
@@ -638,7 +636,7 @@ function initRenteringBis (gl_ctx) {
       else {
         program.uniform.blur (0.001);
       }
-      update_shadow_gl_vertices (gl_view._position, gl_view._size, style._shadow_offset, style._shadow_blur);
+      update_shadow_gl_vertices (gl_view._size, style._shadow_offset, style._shadow_blur);
 
       program.uniform.frame (
         new Float32Array ([
@@ -647,17 +645,10 @@ function initRenteringBis (gl_ctx) {
         ])
       );
     }
-*/
+
     // General mode rendering
-//    else {
-//      var
-//        style = gl_view.style,
-//        c_buffer = Color.default.__gl_array;
+    else {
       
-//      if (style && style._shadow_color) {
-//        drawOneView (gl_view, alpha, 2);
-//      }
-    
       program = drawShaderProgram;
       if (previous_program !== drawShaderProgram) {
         program.useIt ();
@@ -674,7 +665,7 @@ function initRenteringBis (gl_ctx) {
 
       texture1.bindToUnit = bindToUnitTEXTURE0_4;
       program.textures.uMainTexture (texture1, sprite);
-//    }
+    }
 
     program.uniform.Mmatrix (sprite.m_matrix);
     program.uniform.uAlpha (alpha);
@@ -724,7 +715,7 @@ function initRenteringBis (gl_ctx) {
       var entry = gl_layer_graph [i];
       if (entry[0] === 1) {
         // normal rendering
-        paintOneView (entry[1], entry[2], mode);
+        paintOneView (entry[2], entry[3], mode);
       }
     }
 
@@ -741,7 +732,11 @@ function initRenteringBis (gl_ctx) {
       var entry = gl_layer_graph [i];
       if (entry[0] === 1) {
         // normal rendering
-        drawOneView (entry[1], entry[2], mode);
+        drawOneView (entry[1], entry[3], mode);
+      }
+      else if (mode !== 1 && entry[0] === 2) {
+        // normal rendering
+        drawOneView (entry[1], entry[3], 2, entry[2]);
       }
     }
 

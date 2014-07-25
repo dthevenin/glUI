@@ -1,10 +1,10 @@
 
 var
   basicShaderProgram,
-  shadowShaderProgram,
   imageShaderProgram,
   oneTextureShaderProgram,
   twoTexturesShaderProgram,
+  drawShadowShaderProgram,
   drawShaderProgram,
   gl_ctx,
   object_uv_buffer,
@@ -219,7 +219,7 @@ void main(void) {\n\
 }";
 
   basicShaderProgram = createProgram (basic_vertex_shader, basic_shader_fragment);
-//  shadowShaderProgram = createProgram (shadow_vertex_shader, shadow_shader_fragment);
+  drawShadowShaderProgram = createProgram (shadow_vertex_shader, shadow_shader_fragment);
   imageShaderProgram = createProgram (image_vertex_shader, image_shader_fragment);
   oneTextureShaderProgram = createProgram (one_texture_vertex_shader, one_texture_shader_fragment);
   twoTexturesShaderProgram = createProgram (two_textures_vertex_shader, two_textures_shader_fragment);
@@ -248,8 +248,8 @@ function updateProgramsMatrix () {
   imageShaderProgram.setMatrixes (jsProjMatrix);
   oneTextureShaderProgram.setMatrixes (jsProjMatrix);
   twoTexturesShaderProgram.setMatrixes (jsProjMatrix);
-//  shadowShaderProgram.setMatrixes (jsProjMatrix);
   
+  drawShadowShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
   drawShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
 }
 

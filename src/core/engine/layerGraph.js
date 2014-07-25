@@ -103,7 +103,6 @@ function isInFrustum (sprite, level, p_size_vec, scroll_vec) {
   return true;
 }
 
-
 //calculateViewsInFrustum
 function calculateLayerGraph (now) {
   var apps = Application_applications, key;
@@ -166,12 +165,24 @@ function calculateLayerGraph (now) {
     /*================= Culling allgorithm ================= */
     if (!isInFrustum (sprite, level, p_size_vec, scroll_vec)) return;
     
+    /*================= Manage shadow sprite ================= */
+
+    if (style && style._shadow_color) {
+      entry = gl_layer_graph [gl_views_index++];
+      entry [0] = 2; // shadow view
+      entry [1] = sprite;
+      entry [2] = gl_view;
+      entry [3] = alpha;
+    }
+
+    /*================= add view to the layer graph ================= */
+
     var entry = gl_layer_graph [gl_views_index++];
     entry [0] = 1; // normal view to render
-    entry [1] = gl_view;
-    entry [2] = alpha;
-    // End culling algorithm
-
+    entry [1] = sprite;
+    entry [2] = gl_view;
+    entry [3] = alpha;
+    
     /*================== Manage children ================== */
     children = gl_view.__children;
     l = children.length;
@@ -202,8 +213,9 @@ function initLayerGraph () {
   for (var i = 0; i < 1024; i ++) {
     gl_layer_graph [i] = new Array (3);
     // [0] - rendering type
-    // [1] - view to render
-    // [2] - alpha
+    // [1] - sprite
+    // [2] - view to render / style
+    // [3] - alpha
   }
   
   for (var i = 0; i < 256; i ++) {
