@@ -12,8 +12,8 @@ var get_shader = function (type, source, typeString) {
   // Check the compile status
   if (!gl_ctx.getShaderParameter(shader, gl_ctx.COMPILE_STATUS) &&
       !gl_ctx.isContextLost ()) {
-    var infoLog = this.gl_ctx.getShaderInfoLog (shader);
-    vs.error ("Error compiling " + typeString + "shader:\n" + infoLog);
+    var infoLog = gl_ctx.getShaderInfoLog (shader);
+    console.error ("Error compiling " + typeString + "shader:\n" + infoLog);
     gl_ctx.deleteShader (shader);
     return null;
   }
