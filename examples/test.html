@@ -1,31 +1,13 @@
 <!DOCTYPE html>
-<html>
-<body>
+<html id="test" x-hag-ref="test">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, target-densityDpi=160, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>Tests page: Ex2</title>
 
-<canvas id="myCanvas" width="200" height="100" style="border:1px solid #c3c3c3;">
-Your browser does not support the HTML5 canvas tag.
-</canvas>
+    <script type="text/javascript" src="../lib/require.js"></script>
+    <script type="text/javascript" src="test.js"></script>
 
-<script>
-
-var c=document.getElementById("myCanvas");
-var ctx=c.getContext("2d");
-ctx.fillStyle="#FF0000";
-ctx.fillRect(0,0,200,100);
-
-ctx.fillStyle = "#333";
-ctx.strokeStyle = "#333";
-ctx.textAlign = "left";
-ctx.textBaseline = "top";
-ctx.font = "arial";
-
-textString = "huhu";
-
-textInfo = ctx.measureText(textString );
-console.log (textInfo)
-ctx.fillText (textString, 0, 0);
-
-</script>
-
-</body>
+  </head>
+  <body style="margin:0;padding:0;"></body>
 </html>
