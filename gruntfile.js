@@ -71,6 +71,21 @@ module.exports = function(grunt) {
         cwd: 'lib/',
         src: '**',
         dest: 'demos/lib/'
+      },
+      tests: {
+        flatten: false,
+        expand: true,
+        cwd: 'tests/gui',
+        src: '**',
+        dest: 'tests/temp/gui'
+      }
+    },
+    clean: {
+      tests: ["tests/temp"]
+    },
+    shell: {
+      tests: {
+        command: 'open -a Safari http://localhost:8000/tests/temp/gui/index.html'
       }
     }
   });
@@ -79,11 +94,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-closure-tools');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-shell');
   //grunt.loadNpmTasks('grunt-contrib-uglify');
   //grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
-  // tasks
   // tasks
   grunt.registerTask('default', [
     'concat:core_debug',
@@ -96,5 +112,13 @@ module.exports = function(grunt) {
     'copy:customElements',
     'copy:requirejs',
     'copy:demosLib'
-   ]);
+  ]);
+   
+  // tasks
+  grunt.registerTask('tests', [
+    'default',
+    'clean:tests',
+    'copy:tests',
+    'shell:tests',
+  ]);
 };
