@@ -102,13 +102,10 @@ function setupTextureFramebuffer (sprite, width, height) {
   var texture = gl_ctx.createTexture();
   sprite._frametexture = texture;
 
-  gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, texture);
-  gl_ctx.texImage2D (gl_ctx.TEXTURE_2D, 0, gl_ctx.RGBA, framebuffer.width, framebuffer.height, 0, gl_ctx.RGBA, gl_ctx.UNSIGNED_BYTE, null);
-
   function isPowerOfTwo (x) {
     return (x !== 0) && ((x & (x - 1)) === 0);
   }
-
+  
   gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, texture);
   gl_ctx.texImage2D (gl_ctx.TEXTURE_2D, 0, gl_ctx.RGBA, framebuffer.width, framebuffer.height, 0, gl_ctx.RGBA, gl_ctx.UNSIGNED_BYTE, null);
 
