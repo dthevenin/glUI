@@ -87,7 +87,7 @@ function setupTextureFramebuffer (sprite, width, height) {
     gl_ctx.deleteRenderbuffer (sprite._renderbuffer);
   }
   if (sprite._frametexture) {
-    gl_ctx.deleteFramebuffer (sprite._frametexture);
+    gl_ctx.deleteTexture (sprite._frametexture);
   }  
   
   if (width === 0 || height === 0) return;
