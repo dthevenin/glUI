@@ -147,8 +147,8 @@ Program.prototype.useIt = function (pMatrix, vMatrix, mMatrix) {
 
 Program.prototype.setMatrixes = function (projMatrix, viewMatrix) {
   this.useIt ();
-  this.uniform.Pmatrix (projMatrix);
-  this.uniform.Vmatrix (viewMatrix);
+  if (this.uniform.Pmatrix && projMatrix) this.uniform.Pmatrix (projMatrix);
+  if (this.uniform.Vmatrix && viewMatrix) this.uniform.Vmatrix (viewMatrix);
 }
 
 Program.prototype.configureParameters = function (gl_view, style) {}
