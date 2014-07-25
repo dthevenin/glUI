@@ -668,11 +668,9 @@ function initRenteringBis (gl_ctx) {
       attribute.stride = 0;
       attribute.offset = 0;
 
-      attribute.buffer = default_object_bck_image_uv_buffer;
+      attribute.buffer = draw_texture_uv_buffer;
       attribute.numComponents = 2;
       program.attrib.bkImageUV (attribute);
-
-  //    program.uniform.color (c_buffer);
 
       texture1.bindToUnit = bindToUnitTEXTURE0_4;
       program.textures.uMainTexture (texture1, sprite);
