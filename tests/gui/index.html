@@ -22,13 +22,13 @@
       window.GL_INIT_MANUAL = true;
 
       window.tests = [
-        {path: 'simple', image:'simple.png', text:'', result: 0},
-        {path: 'culling', image:'culling.png', text:'', result: 0},
-        {path: 'perspective', image:'perspective.png', text:'', result: 0},
-        {path: 'layout', image:'layout.png', text:'', result: 0},
-        {path: 'shadow', image:'shadows.png', text:'', result: 0},
-        {path: 'images', image:'images.png', text:'', result: 0},
-        {path: 'text', image:'text.png', text:'', result: 0},
+        {path: 'simple', image:'simple.png', text:'Simple test: shows views, inner views and transformations', result: 0},
+        {path: 'culling', image:'culling.png', text:'Culling test: only green squares in the yellow one should appear', result: 0},
+        {path: 'perspective', image:'perspective.png', text:'Perspective test', result: 0},
+        {path: 'layout', image:'layout.png', text:'Constraint tests', result: 0},
+        {path: 'shadow', image:'shadows.png', text:'View shadows (eq to the CSS box-shadow)', result: 0},
+        {path: 'images', image:'images.png', text:'Images tests: png alpha, background image, different texture projection, transformations and opacity', result: 0},
+        {path: 'text', image:'text.png', text:'Text test: text align, size, family, caesura, auto height and web font', result: 0},
       ];
 
       window.index = -1;
@@ -72,6 +72,8 @@
             obj.destructor ();
           }
         });
+        
+        text_view.innerHTML = '<span class="message">' + test.text + '</span>';
       }
 
       function test_not_ok () {

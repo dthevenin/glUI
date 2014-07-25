@@ -59,6 +59,16 @@ body > div {
   background-color: white;
 }
 
+#text_view > .message {
+  padding: 10px;
+  font-weight: bold;
+  color: black;
+  position: absolute;
+  width: 100%;
+  font-size: 1.1em;
+  text-align: left;
+}
+
 #text_view > .result {
   font-weight: bold;
   color: red;
