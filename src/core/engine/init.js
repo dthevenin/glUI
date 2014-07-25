@@ -82,7 +82,7 @@ void main(void) { //pre-built function\n\
 precision lowp float;\n\
 uniform vec4 color;\n\
 void main(void) {\n\
-  gl_FragColor = vec4(color.rgb, color.a);\n\
+  gl_FragColor = color;\n\
 }";
 
   var image_vertex_shader="\n\
@@ -127,7 +127,6 @@ void main(void) {\n\
   vec4 mainTextureColor = texture2D(uMainTexture, vBkImageUV);\n\
   gl_FragColor = vec4(mainTextureColor.rgb, mainTextureColor.a * uAlpha);\n\
 }";
-
 
   var shadow_vertex_shader="\n\
 attribute vec3 position;\n\
