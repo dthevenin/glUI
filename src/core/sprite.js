@@ -135,7 +135,7 @@ function setupTextureFramebuffer (sprite, width, height) {
   }
 
   var renderbuffer = gl_ctx.createRenderbuffer();
-  srite._renderbuffer = renderbuffer;
+  sprite._renderbuffer = renderbuffer;
   
   gl_ctx.bindRenderbuffer(gl_ctx.RENDERBUFFER, renderbuffer);
   gl_ctx.renderbufferStorage(gl_ctx.RENDERBUFFER, gl_ctx.DEPTH_COMPONENT16, framebuffer.width, framebuffer.height);
