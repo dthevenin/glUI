@@ -34,7 +34,7 @@ function update_transform_gl_matrix (gl_view, sprite)
 
   /*====================================================== */
   // Update vertices vectors for the culling algorithm
-  update_envelop_vertices (sprite, pos, size);
+  update_envelop_vertices (sprite, size);
 
   gl_view.__invalid_matrixes = true;
   View.__should_render = true;
@@ -47,20 +47,16 @@ function update_transform_gl_matrix (gl_view, sprite)
  * @protected
  * @function
  */
-function update_envelop_vertices (sprite, obj_pos, obj_size)
-{
+function update_envelop_vertices (sprite, obj_size) {
   var
     matrix = sprite.matrix,
-    x = obj_pos[0],
-    y = obj_pos[1],
-    z = obj_pos[2],
     w = obj_size [0],
     h = obj_size [1];
-
-  mat4.multiplyXYZToVec3 (matrix, x    , y    , z, sprite.vertex_1);
-  mat4.multiplyXYZToVec3 (matrix, x    , y + h, z, sprite.vertex_2);
-  mat4.multiplyXYZToVec3 (matrix, x + w, y    , z, sprite.vertex_3);
-  mat4.multiplyXYZToVec3 (matrix, x + w, y + h, z, sprite.vertex_4);
+    
+  mat4.multiplyXYZToVec3 (matrix, 0, 0, 0, sprite.vertex_1);
+  mat4.multiplyXYZToVec3 (matrix, 0, h, 0, sprite.vertex_2);
+  mat4.multiplyXYZToVec3 (matrix, w, 0, 0, sprite.vertex_3);
+  mat4.multiplyXYZToVec3 (matrix, w, h, 0, sprite.vertex_4);
 } 
 
 function isInFrustum (sprite, level, p_size_vec, scroll_vec) {
@@ -69,7 +65,7 @@ function isInFrustum (sprite, level, p_size_vec, scroll_vec) {
     boundaries = gl_boundaries_stack [level],
     v1 = sprite.vertex_1, v2 = sprite.vertex_2,
     v3 = sprite.vertex_3, v4 = sprite.vertex_4;
-
+    
   if ((v1[0]>boundaries[2] && v2[0]>boundaries[2] &&
        v3[0]>boundaries[2] && v4[0]>boundaries[2]) ||
       (v1[0]<boundaries[0] && v2[0]<boundaries[0] &&
@@ -92,8 +88,7 @@ function isInFrustum (sprite, level, p_size_vec, scroll_vec) {
     boundaries[2] = v_temp [0];
     boundaries[3] = v_temp [1];
   }
-  else 
-  {
+  else {
     boundaries[0] = 0;
     boundaries[1] = 0;
     boundaries[2] = p_size_vec [0];
