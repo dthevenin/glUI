@@ -2,7 +2,7 @@ require.config ({ baseUrl: "../lib" });
 
 require (['core', 'class'], function (core, klass) {
 
-var Test = klass.createClass ({
+var Test1 = klass.createClass ({
 
   /** parent class */
   parent: core.Application,
@@ -51,8 +51,85 @@ var Test = klass.createClass ({
   }
 });
 
+var Test2 = klass.createClass ({
+
+
+  /** parent class */
+  parent: core.Application,
+
+  initComponent : function () {
+    this._super ();
+
+    var glView1 = new core.View ({
+      position: [100, 10],
+      size: [200, 200],
+      rotation: [-90, 0, 0]
+    }).init ();
+    this.add (glView1);
+    glView1.style.backgroundColor = core.Color.red;
+
+    var glView2 = new core.View ({
+      position: [80, 80],
+      size: [40, 40],
+      rotation: [0, 90, 0],
+    }).init ();
+    glView1.add (glView2);
+    glView2.style.backgroundColor = core.Color.yellow;
+
+    glView1 = new core.View ({
+      position: [100, 290],
+      size: [200, 200],
+      rotation: [90, 0, 0],
+      transformOrigin: [0, 200]
+    }).init ();
+    this.add (glView1);
+    glView1.style.backgroundColor = core.Color.red;
+
+    glView2 = new core.View ({
+      position: [80, 80],
+      size: [40, 40],
+      rotation: [0, 90, 0],
+    }).init ();
+    glView1.add (glView2);
+    glView2.style.backgroundColor = core.Color.yellow;
+
+    glView1 = new core.View ({
+      position: [10, 150],
+      size: [200, 200],
+      rotation: [0, 90, 0]
+    }).init ();
+    this.add (glView1);
+    glView1.style.backgroundColor = core.Color.red;
+
+    glView2 = new core.View ({
+      position: [80, 80],
+      size: [40, 40],
+      rotation: [0, -90, 0],
+    }).init ();
+    glView1.add (glView2);
+    glView2.style.backgroundColor = core.Color.yellow;
+
+    glView1 = new core.View ({
+      position: [190, 150],
+      size: [200, 200],
+      rotation: [0, -90, 0],
+      transformOrigin: [200, 0]
+    }).init ();
+    this.add (glView1);
+    glView1.style.backgroundColor = core.Color.red;
+
+    glView2 = new core.View ({
+      position: [80, 80],
+      size: [40, 40],
+      rotation: [0, 90, 0],
+    }).init ();
+    glView1.add (glView2);
+    glView2.style.backgroundColor = core.Color.yellow;
+  }
+});
+
 function loadApplication () {
-  new Test ({id:"test"}).init ();
+  new Test2 ({id:"test"}).init ();
   core.Application.start ();
 }
 
