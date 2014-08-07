@@ -73,9 +73,6 @@ var Test = klass.createClass ({
     }).init ();
     glView1.add (glView2);
     glView2.style.backgroundColor = core.Color.yellow;
-
-
-
   }
 });
 
