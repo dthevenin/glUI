@@ -23,7 +23,7 @@ function update_transform_gl_matrix (gl_view, sprite)
     
   // apply current transformation
   mat4.identity (matrix);
-  mat4.translateXYZ (matrix, tx + trans[0] + pos [0], ty + trans[1] + pos [1], trans[2]);
+  mat4.translateXYZ (matrix, tx + trans[0] + pos [0], ty + trans[1] + pos [1], trans[2] + pos [2]);
 
   if (rot[0]) mat4.rotateX (matrix, rot[0] * angle2rad);
   if (rot[1]) mat4.rotateY (matrix, rot[1] * angle2rad);
