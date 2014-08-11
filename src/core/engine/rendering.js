@@ -525,10 +525,10 @@ function initRenteringBis (gl_ctx) {
       }
     }
 
-    mat4.identity (tempMatrix)
-    mat4.translate (tempMatrix, [-1,1,-600]);
-    mat4.scale (tempMatrix, [2/ gl_view._size[0], -2/ gl_view._size[1], 1]);
-    program.uniform.Vmatrix (tempMatrix);
+    mat4.identity (orthoProjectionMatrix);
+    mat4.translate (orthoProjectionMatrix, [-1,1,0]);
+    mat4.scale (orthoProjectionMatrix, [2/ gl_view._size[0], -2/ gl_view._size[1], 1]);
+    program.uniform.Pmatrix (orthoProjectionMatrix);
 
     attribute.normalize = false;
     attribute.type = gl_ctx.FLOAT;
