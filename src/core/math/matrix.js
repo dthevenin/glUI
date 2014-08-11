@@ -1004,7 +1004,7 @@ mat4.ortho = function(left, right, bottom, top, near, far, dest) {
 };
 
 /*
- * mat4.ortho
+ * mat4.lookAt
  * Generates a look-at matrix with the given eye position, focal point, and up axis
  *
  * Params:
