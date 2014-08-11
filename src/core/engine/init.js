@@ -398,4 +398,6 @@ function setupWebGLStateAndResources () {
   updateProgramsMatrix ();
   
   initRendering ();
+  
+  exportDebug ();
 }
