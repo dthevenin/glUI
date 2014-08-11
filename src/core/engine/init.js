@@ -334,6 +334,7 @@ function initWebGLRendering (node, width, height) {
   console.log (gl_device_pixel_ratio);
 
   var canvas = GL_CANVAS = createCanvas (frame_size [0], frame_size [1]);
+  canvas.id = "webgl_id"
   node.appendChild (canvas);
   node.style.padding = 0;
 
