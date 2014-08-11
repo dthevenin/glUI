@@ -219,7 +219,7 @@ define ('FishEyeView', [], function () {
     this._sprite = sprite;
 
     initMeshVeticesValues (
-      mesh_resolution, x, y, w, h, sprite.mesh_vertices
+      mesh_resolution, x, y, 0, w, h, sprite.mesh_vertices
     );
 
     sprite.mesh_vertices_save =

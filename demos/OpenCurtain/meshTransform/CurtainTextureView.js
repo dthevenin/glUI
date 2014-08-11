@@ -98,7 +98,7 @@ function (core, klass, CurtainView) {
     this._sprite = sprite;
     
     core.initMeshVeticesValues (
-      mesh_resolution, x, y, w, h, sprite.mesh_vertices
+      mesh_resolution, x, y, 0, w, h, sprite.mesh_vertices
     );
 
     sprite.mesh_vertices_save =

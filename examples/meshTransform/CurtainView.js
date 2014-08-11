@@ -173,7 +173,7 @@ define ('CurtainView', [], function () {
 
     this._sprite = sprite;
     
-    initMeshVeticesValues (mesh_resolution, x, y, w, h, sprite.mesh_vertices);
+    initMeshVeticesValues (mesh_resolution, x, y, 0, w, h, sprite.mesh_vertices);
     sprite.mesh_vertices_save = new Float32Array (sprite.mesh_vertices);
 
     this.__updateMeshAtPoint ();
