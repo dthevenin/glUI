@@ -16,7 +16,8 @@ var
   gl_device_pixel_ratio,
   jsProjMatrix,
   jsViewMatrix,
-  tempMatrix;
+  orthoProjectionMatrix,
+  core_export = {};
 
 
 function createCanvas (width, height) {
@@ -72,10 +73,9 @@ function initPrograms () {
 
   var basic_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Vmatrix;\n\
 uniform mat4 Pmatrix;\n\
 void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*vec4(position, 1.);\n\
 }";
 
   var basic_shader_fragment="\n\
@@ -87,12 +87,11 @@ void main(void) {\n\
 
   var image_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Vmatrix;\n\
 uniform mat4 Pmatrix;\n\
 attribute vec2 uv;\n\
 varying vec2 vUV;\n\
 void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*vec4(position, 1.);\n\
   vUV=uv;\n\
 }";
 
@@ -158,12 +157,11 @@ void main(void) {\n\
 
   var one_texture_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Vmatrix;\n\
 uniform mat4 Pmatrix;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vBkImageUV;\n\
 void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*vec4(position, 1.);\n\
   vBkImageUV=bkImageUV;\n\
 }";
 
@@ -184,14 +182,13 @@ void main(void) {\n\
 
   var two_textures_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Vmatrix;\n\
 uniform mat4 Pmatrix;\n\
 attribute vec2 uv;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vUV;\n\
 varying vec2 vBkImageUV;\n\
 void main(void) { //pre-built function\n\
-  gl_Position = Pmatrix*Vmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*vec4(position, 1.);\n\
   vUV=uv;\n\
   vBkImageUV=bkImageUV;\n\
 }";
