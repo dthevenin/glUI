@@ -223,9 +223,7 @@ void main(void) {\n\
   drawShaderProgram = createProgram (draw_vertex_shader, draw_shader_fragment);
 }
 
-var mMatrix;
-
-function initMainMatrix () {
+function initMainMatrix_previous () {
   jsProjMatrix = mat4.create ();
   mat4.identity (jsProjMatrix)
   
@@ -236,15 +234,30 @@ function initMainMatrix () {
   mat4.translate (jsViewMatrix, [0,2,-600]);
   mat4.scale (jsViewMatrix, [2/ frame_size[0], -2/ frame_size[1], 1]);
     
-  tempMatrix = mat4.create ();
-  mat4.identity (tempMatrix);
+  orthoProjectionMatrix = mat4.create ();
+}
+
+function initMainMatrix () {
+  // Paint projection matrix
+  orthoProjectionMatrix = mat4.create ();
+
+  // Draw projection matrix
+  jsProjMatrix = mat4.create ();
+  mat4.identity (jsProjMatrix)
+  mat4.perspective (.191 ,1, -1, 10, jsProjMatrix);
+
+  // Draw View matrix
+  jsViewMatrix = mat4.create ();
+  mat4.identity (jsViewMatrix)  
+  mat4.translate (jsViewMatrix, [0,2,-600]);
+  mat4.scale (jsViewMatrix, [2/ frame_size[0], -2/ frame_size[1], 1]);
 }
 
 function updateProgramsMatrix () {
-  basicShaderProgram.setMatrixes (jsProjMatrix);
-  imageShaderProgram.setMatrixes (jsProjMatrix);
-  oneTextureShaderProgram.setMatrixes (jsProjMatrix);
-  twoTexturesShaderProgram.setMatrixes (jsProjMatrix);
+  // basicShaderProgram.setMatrixes (jsProjMatrix);
+  // imageShaderProgram.setMatrixes (jsProjMatrix);
+  // oneTextureShaderProgram.setMatrixes (jsProjMatrix);
+  // twoTexturesShaderProgram.setMatrixes (jsProjMatrix);
   
   drawShadowShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
   drawShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
