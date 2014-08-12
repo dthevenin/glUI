@@ -330,24 +330,23 @@ function initRenteringBis (gl_ctx) {
     else {
       vertices_buffer = sprite.mesh_vertices_buffer;
     }
-/*
+
     // Picking mode rendering
     if (mode === 1) {
 
-      program = basicShaderProgram;
-      if (previous_program !== basicShaderProgram) {
+      program = pickupShaderProgram;
+      if (previous_program !== pickupShaderProgram) {
         program.useIt ();
       }
 
       // calculate the color ID
-      calculateColorsFromGLID (gl_view.__gl_id);
+      calculateColorsFromGLID (sprite.id);
 
       program.uniform.color (color_id_array);
-      alpha = 1;
     }
-*/
+
     // Shadow sprite rendering
-    if (mode === 2) {
+    else if (mode === 2) {
       
       var style = gl_view.style;
 
@@ -370,6 +369,8 @@ function initRenteringBis (gl_ctx) {
           shadow_vertices[1], shadow_vertices[10]
         ])
       );
+      
+      program.uniform.uAlpha (alpha);
     }
 
     // General mode rendering
@@ -391,10 +392,11 @@ function initRenteringBis (gl_ctx) {
 
       texture1.bindToUnit = bindToUnitTEXTURE0_4;
       program.textures.uMainTexture (texture1, sprite);
+      
+      program.uniform.uAlpha (alpha);
     }
 
     program.uniform.Mmatrix (sprite.m_matrix);
-    program.uniform.uAlpha (alpha);
 
     attribute.normalize = false;
     attribute.type = gl_ctx.FLOAT;
