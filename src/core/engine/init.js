@@ -6,6 +6,7 @@ var
   twoTexturesShaderProgram,
   drawShadowShaderProgram,
   drawShaderProgram,
+  pickupShaderProgram,
   gl_ctx,
   object_uv_buffer,
   object_bck_image_uv_buffer,
@@ -79,6 +80,22 @@ void main(void) { //pre-built function\n\
 }";
 
   var basic_shader_fragment="\n\
+precision lowp float;\n\
+uniform vec4 color;\n\
+void main(void) {\n\
+  gl_FragColor = color;\n\
+}";
+
+  var pickup_vertex_shader="\n\
+attribute vec3 position;\n\
+uniform mat4 Mmatrix;\n\
+uniform mat4 Pmatrix;\n\
+uniform mat4 Vmatrix;\n\
+void main(void) { //pre-built function\n\
+  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+}";
+
+  var pickup_shader_fragment="\n\
 precision lowp float;\n\
 uniform vec4 color;\n\
 void main(void) {\n\
@@ -220,7 +237,9 @@ void main(void) {\n\
   imageShaderProgram = createProgram (image_vertex_shader, image_shader_fragment);
   oneTextureShaderProgram = createProgram (one_texture_vertex_shader, one_texture_shader_fragment);
   twoTexturesShaderProgram = createProgram (two_textures_vertex_shader, two_textures_shader_fragment);
+
   drawShaderProgram = createProgram (draw_vertex_shader, draw_shader_fragment);
+  pickupShaderProgram = createProgram (pickup_vertex_shader, pickup_shader_fragment);
 }
 
 function initMainMatrix () {
@@ -242,6 +261,7 @@ function initMainMatrix () {
 function updateProgramsMatrix () {
   drawShadowShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
   drawShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
+  pickupShaderProgram.setMatrixes (jsProjMatrix, jsViewMatrix);
 }
 
 function initBuffers () {
