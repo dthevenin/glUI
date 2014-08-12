@@ -187,7 +187,6 @@ View.prototype._updateSizeAndPos = function ()
 
 ********************************************************************/
 
-
 /**
  *  Displays the GUI Object
  *
