@@ -720,8 +720,8 @@ function initRenteringBis (gl_ctx) {
     }
 
     gl_ctx.viewport (
-      -frame_size[0] * gl_device_pixel_ratio / 2,
-      -frame_size[1] * gl_device_pixel_ratio / 2,
+      0,
+      0,
       frame_size[0] * gl_device_pixel_ratio,
       frame_size[1] * gl_device_pixel_ratio
     );

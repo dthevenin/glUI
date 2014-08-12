@@ -249,7 +249,7 @@ function initMainMatrix () {
   // Draw View matrix
   jsViewMatrix = mat4.create ();
   mat4.identity (jsViewMatrix)  
-  mat4.translate (jsViewMatrix, [0,2,-600]);
+  mat4.translate (jsViewMatrix, [-1,1,-600]);
   mat4.scale (jsViewMatrix, [2/ frame_size[0], -2/ frame_size[1], 1]);
 }
 
