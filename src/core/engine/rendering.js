@@ -88,6 +88,7 @@ function initRenteringBis (gl_ctx) {
     // determine which vertices buffer to use
   // add update it if it's need.
     if (gl_view.__should_update_gl_vertices) {
+
       setupTextureFramebuffer (sprite, gl_view._size[0], gl_view._size[1])
       if (sprite.__update_gl_vertices) {
         sprite.__update_gl_vertices (sprite, gl_view._position, gl_view._size);
@@ -464,7 +465,7 @@ function initRenteringBis (gl_ctx) {
         drawOneView (entry[1], entry[3], 2, entry[2]);
       }
     }
-
+    
     gl_ctx.flush ();
   }
 

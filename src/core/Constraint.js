@@ -22,8 +22,16 @@
  *  The Constraint class
  *
 */
-function Constraint () {}
-
+function Constraint () {
+  if (Object.observe) {
+    var self = this;
+    Object.observe (this, function (changes) {
+      if (self.__view) {
+        self.__view._updateSizeAndPos ();
+      }
+    })
+  }
+}
 
 function parseFromStringStyle (str, obj) {
   
@@ -187,7 +195,6 @@ Constraint.prototype = {
       if (pHeight) {
         y = pHeight - (h + bottom);
       }
-      
     }
     
     else if (top !== null && middleY !== null && bottom === null) {

@@ -178,9 +178,9 @@ View.prototype._updateSizeAndPos = function ()
   if (this._constraint) {
     this._constraint.__update_view (this);
   }
-
   this.__should_update_gl_vertices = true;
   this.__should_update_gl_matrix = true;
+  View.__should_render = true;
 };
 
 /********************************************************************
@@ -523,10 +523,12 @@ util.addClassProperties (View, {
       if (!(v instanceof Constraint)) return; 
       
       if (this._constraint) {
+        delete (this._constraint.__view)
         delete (this._constraint);
       }
       
       this._constraint = v;
+      this._constraint.__view = this;
       View.__should_render = true;
     },
 
@@ -538,6 +540,7 @@ util.addClassProperties (View, {
     {
       if (!this._constraint) {
         this._constraint = new Constraint ();
+        this._constraint.__view = this;
       }
       return this._constraint;
     }
