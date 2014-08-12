@@ -128,7 +128,11 @@ function initRenteringBis (gl_ctx) {
     
  //   gl_ctx.viewport (gl_view._position[0], gl_view._position[1], gl_view._size[0], gl_view._size[1]);
    
-    gl_ctx.viewport (0, 0, gl_view._size[0], gl_view._size[1]);
+    gl_ctx.viewport (
+      0, 0,
+      gl_view._size[0] * gl_device_pixel_ratio,
+      gl_view._size[1] * gl_device_pixel_ratio
+    );
 
 
     // General mode rendering
