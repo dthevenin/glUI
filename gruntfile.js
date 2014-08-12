@@ -83,6 +83,16 @@ module.exports = function(grunt) {
     clean: {
       tests: ["tests/temp"]
     },
+    watch: {
+      scripts: {
+        files: ['src/*.js', 'src/**/*.js', 'src/**/**/*.js'],
+        tasks: ['build'],
+        options: {
+          spawn: false,
+          livereload: true
+        },
+      },
+    },
     shell: {
       tests: {
         command: 'open -a Safari http://localhost:8000/tests/temp/gui/index.html'
@@ -97,21 +107,30 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   //grunt.loadNpmTasks('grunt-contrib-uglify');
   //grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
   // tasks
-  grunt.registerTask('default', [
+  grunt.registerTask('build', [
     'concat:core_debug',
     'concat:util',
     'concat:class',
     'concat:webcomponent',
     'concat:recognizers',
-    'concat:widgets',
-    'copy:platform',
+    'concat:widgets'
+  ]);
+   
+  grunt.registerTask('copyLibs', [
     'copy:customElements',
     'copy:requirejs',
-    'copy:demosLib'
+    'copy:demosLib',
+  ]);
+   
+  // tasks
+  grunt.registerTask('default', [
+    'build',
+    'copyLibs'
   ]);
    
   // tasks
