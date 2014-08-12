@@ -679,28 +679,28 @@ function initRenteringBis (gl_ctx) {
     attribute.numComponents = 3;
     program.attrib.position (attribute);
         
-      if (!default_faces_activated) {
-        // set default faces
-        gl_ctx.bindBuffer (
-          gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer
-        );
-        gl_ctx.bufferData (
-          gl_ctx.ELEMENT_ARRAY_BUFFER,
-          default_triangle_faces,
-          gl_ctx.STATIC_DRAW);
-      
-        default_faces_activated = true;
-      }
-     
-      if (mode !== 1 && rendering_mode === 1) {
-        gl_ctx.drawElements (gl_ctx.LINE_LOOP, 4, gl_ctx.UNSIGNED_SHORT, 0);
-      }
-      else {
-        gl_ctx.drawElements (
-          gl_ctx.TRIANGLE_STRIP, 4, gl_ctx.UNSIGNED_SHORT, 0
-        );
-      }
+    if (!default_faces_activated) {
+      // set default faces
+      gl_ctx.bindBuffer (
+        gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer
+      );
+      gl_ctx.bufferData (
+        gl_ctx.ELEMENT_ARRAY_BUFFER,
+        default_triangle_faces,
+        gl_ctx.STATIC_DRAW);
     
+      default_faces_activated = true;
+    }
+   
+    if (mode !== 1 && rendering_mode === 1) {
+      gl_ctx.drawElements (gl_ctx.LINE_LOOP, 4, gl_ctx.UNSIGNED_SHORT, 0);
+    }
+    else {
+      gl_ctx.drawElements (
+        gl_ctx.TRIANGLE_STRIP, 4, gl_ctx.UNSIGNED_SHORT, 0
+      );
+    }
+
     previous_program = program;
   }
 
