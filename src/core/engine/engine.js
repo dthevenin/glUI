@@ -45,22 +45,14 @@ function initRendering () {
     }
 
     if (_stats) _stats.begin ();
-    
-//     if (mode === 1 && next_rendering_id) {
-//       cancelAnimationFrame (next_rendering_id);
-//     }
 
     calculateLayerGraph (now);
     View.__should_render = false;
     
-//    console.log (gl_layer_graph_size);
-      
     if (gl_layer_graph_size) {
       renderLayerGraph (frame_size, now, mode);
     }
-//    next_rendering_id = requestAnimationFrame (animate);
-//    if (mode !== 1) scheduleAction(animate, 300);
-
+    
     if (_stats) {
       // force syncrhonisation (not need with chrome because flush => finish)
       gl_ctx.finish ();
@@ -74,9 +66,6 @@ function initRendering () {
   }
   
   next_rendering_id = requestAnimationFrame (render_ui);
-  
-//  animate (performance.now ());
-//  scheduleAction(animate, 100);
 }
 
 function handleContextLost (event) {
