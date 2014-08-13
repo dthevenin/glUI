@@ -107,9 +107,11 @@ function printProfilingData () {
       }
     })
     
+    var average = nb_mesure?total / nb_mesure:0;
+    
     console.log (
       "Measure '" + data.name + "' [" + nb_mesure + "]:  " +
-      (total / nb_mesure) + "ms"
+      average + "ms"
     )
   })
 }
