@@ -120,7 +120,7 @@ profiling.begin = start_profiling_data;
 profiling.end = end_profiling_data;
 
 var RENDER_PROB_ID = getProfilingProbeId ("render");
-var LAYER_GRAPH_PROB_ID = getProfilingProbeId ("layer");
+var LAYER_GRAPH_PROB_ID = getProfilingProbeId ("layer graph gen");
 
 function loadProfiling () {
   
