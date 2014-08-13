@@ -1,7 +1,8 @@
 var
   profiling = {},
   _stats = undefined,
-  _continous_rendering = false,
+  _continous_redrawing = false,
+  _continous_repainting = false,
   _paused_rendering = false,
   _profiling_data = [],
   _profiling_id = 0;
@@ -37,12 +38,21 @@ profiling.setStats = function (stats) {
   }
 }
 
-profiling.setContinousRendering = function (value) {
+profiling.setContinousRepainting = function (value) {
   if (value) {
-    _continous_rendering = true;
+    _continous_repainting = true;
   }
   else {
-    _continous_rendering = false;
+    _continous_repainting = false;
+  }
+}
+
+profiling.setContinousRedrawing = function (value) {
+  if (value) {
+    _continous_redrawing = true;
+  }
+  else {
+    _continous_redrawing = false;
   }
 }
 
@@ -142,10 +152,8 @@ function loadProfiling () {
     if (profiling.collect) profiling.begin (RENDER_PROB_ID);
 
     // If continuous rendering, force full rendering
-    if (_continous_rendering) {
-      glEngine.need_repaint = true;
-      glEngine.need_redraw = true;
-    }
+    if (_continous_repainting) glEngine.need_repaint = true;
+    if (_continous_redrawing) glEngine.need_redraw = true;
 
     // Stats is activated, start data calculation
     if (_stats && mode !== 1) _stats.begin ();

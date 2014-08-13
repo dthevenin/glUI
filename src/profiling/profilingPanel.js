@@ -27,7 +27,8 @@ var initPanel = function () {
   var
     stats = Stats (),
     collect_profile_selected = false,
-    continous_rendering_selected = false,
+    continous_repaiting_selected = false,
+    continous_redrawing_selected = false,
     pause_rendering_selected = false,
     stats_selected = false;
   
@@ -63,7 +64,7 @@ var initPanel = function () {
       "message": "Show FPS meter",
       "action" : function (event) {
         stats_selected = event.target.checked;
-        activateState (continous_rendering_selected || stats_selected);
+        activateState (stats_selected);
       }
     },
 
@@ -71,9 +72,18 @@ var initPanel = function () {
       "name": "Enable continuous page repainting",
       "message": "Enable continuous page repainting",
       "action" : function (event) {
-        continous_rendering_selected = event.target.checked;
-        profiling.setContinousRendering (continous_rendering_selected);
-        activateState (continous_rendering_selected || stats_selected);
+        continous_repaiting_selected = event.target.checked;
+        profiling.setContinousRepainting (continous_repaiting_selected);
+        activateState (stats_selected);
+      }
+    },
+    
+    {
+      "name": "Enable continuous page redrawing",
+      "message": "Enable continuous page redrawing",
+      "action" : function (event) {
+        continous_redrawing_selected = event.target.checked;
+        profiling.setContinousRedrawing (continous_redrawing_selected);
       }
     },
     
