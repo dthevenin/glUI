@@ -8,6 +8,7 @@ glEngine.need_redraw = true;
  */
 glEngine.shouldRepaint = function (gl_view) {
   this.need_repaint = true;
+  glEngine.shouldRedraw (gl_view);
 };
 
 /**
