@@ -114,8 +114,12 @@ function loadProfiling () {
   // save the default render_ui
   var default_render_ui = render_ui;
   
+  _profiling = profiling;
+  
   // patch render_ui
   render_ui = function (now, mode) {
+    
+    if (profiling.collect) profiling.begin (RENDER_PROB_ID);
 
     // If continuous rendering, force full rendering
     if (_continous_rendering) View.__should_render = true;
@@ -132,6 +136,8 @@ function loadProfiling () {
       // end stat
       _stats.end ();
     }
+
+    if (profiling.collect) profiling.end (RENDER_PROB_ID);
   }
   
   return initPanel ();

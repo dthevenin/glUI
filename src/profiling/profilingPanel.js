@@ -26,6 +26,7 @@ var initPanel = function () {
   
   var
     stats = Stats (),
+    collect_profile_selected = false,
     continous_rendering_selected = false,
     stats_selected = false;
   
@@ -72,6 +73,15 @@ var initPanel = function () {
         continous_rendering_selected = event.srcElement.checked;
         profiling.setContinousRendering (continous_rendering_selected);
         activateState (continous_rendering_selected || stats_selected);
+      }
+    },
+    
+    {
+      "name": "Collect CPU/GPU profile",
+      "message": "Collect CPU/GPU profile",
+      "action" : function (event) {
+        collect_profile_selected = event.srcElement.checked;
+        profiling.setCollectProfile (collect_profile_selected);
       }
     }
   ];
