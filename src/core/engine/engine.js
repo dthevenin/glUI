@@ -1,3 +1,5 @@
+var glEngine = {};
+
 function getGLContext () {
   return gl_ctx;
 }

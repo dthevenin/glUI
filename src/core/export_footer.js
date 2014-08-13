@@ -63,6 +63,8 @@ core_export.animations = {
 
 core_export.getGLContext = getGLContext;
 
+core_export.engine = glEngine;
+
 
 return core_export;
 
