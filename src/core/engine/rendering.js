@@ -472,11 +472,12 @@ function getLayerGraphRendered (gl_ctx) {
       frame_size[1] * gl_device_pixel_ratio
     );
   
-    gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
 
     if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
     if (glEngine.need_redraw) {
+      gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
+
       for (var i = 0; i < gl_layer_graph_size; i++) {
         var entry = gl_layer_graph [i];
         if (entry[0] === 1) {
