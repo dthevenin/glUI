@@ -118,6 +118,7 @@ profiling.begin = start_profiling_data;
 profiling.end = end_profiling_data;
 
 var RENDER_PROB_ID = getProfilingProbeId ("render");
+var LAYER_GRAPH_PROB_ID = getProfilingProbeId ("layer");
 
 function loadProfiling () {
   
@@ -158,6 +159,16 @@ function loadProfiling () {
     }
 
     if (profiling.collect) profiling.end (RENDER_PROB_ID);
+  }
+  
+  var default_calculateLayerGraph = calculateLayerGraph;
+  
+  calculateLayerGraph = function (now) {
+    
+    if (profiling.collect) profiling.begin (LAYER_GRAPH_PROB_ID);
+    default_calculateLayerGraph (now);
+    if (profiling.collect) profiling.end (LAYER_GRAPH_PROB_ID);
+
   }
   
   return initPanel ();
