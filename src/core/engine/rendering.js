@@ -1,3 +1,4 @@
+var _profiling;
 
 function getLayerGraphRendered (gl_ctx) {
 
@@ -432,6 +433,10 @@ function getLayerGraphRendered (gl_ctx) {
 
     previous_program = program;
   }
+  
+  var
+    PAINT_PROB_ID = getProfilingProbeId ("paint"),
+    DRAW_PROB_ID = getProfilingProbeId ("draw");
 
   function renderLayerGraph (frame_size, now, mode) {
     gl_ctx.viewport (
@@ -439,6 +444,8 @@ function getLayerGraphRendered (gl_ctx) {
       frame_size[0] * gl_device_pixel_ratio,
       frame_size[1] * gl_device_pixel_ratio
     );
+    
+    if (_profiling && _profiling.collect) _profiling.begin (PAINT_PROB_ID);
           
     if (mode !== 1) for (var i = 0; i < gl_layer_graph_size; i++) {
       var entry = gl_layer_graph [i];
@@ -446,6 +453,13 @@ function getLayerGraphRendered (gl_ctx) {
         // normal rendering
         paintOneView (entry[2], entry[3], mode);
       }
+    }
+
+    // if profiling, force an intermediary flush and finish
+    if (_profiling && _profiling.collect) {
+      gl_ctx.flush ();
+      gl_ctx.finish ();
+      _profiling.end (PAINT_PROB_ID);
     }
 
     gl_ctx.viewport (
@@ -456,6 +470,8 @@ function getLayerGraphRendered (gl_ctx) {
     );
   
     gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
+
+    if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
     for (var i = 0; i < gl_layer_graph_size; i++) {
       var entry = gl_layer_graph [i];
@@ -469,7 +485,15 @@ function getLayerGraphRendered (gl_ctx) {
       }
     }
     
-    gl_ctx.flush ();
+    // if profiling, force a finish with the flush
+    if (_profiling && _profiling.collect) {
+      gl_ctx.flush ();
+      gl_ctx.finish ();
+      _profiling.end (DRAW_PROB_ID);
+    }
+    
+    // normal flush
+    else gl_ctx.flush ();
   }
 
   return renderLayerGraph;
