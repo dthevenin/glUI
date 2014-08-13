@@ -10,10 +10,6 @@ function initRendering () {
   var renderLayerGraph = getLayerGraphRendered (gl_ctx);
   initLayerGraph ();
 
-  var default_faces_activated = false;
-  var previous_program = null;
-  var attribute = {}, texture1 = {}, texture2 = {};
-  
   render_ui = function (now, mode) {
 
     if (mode !== 1 && !View.__should_render && !View.__nb_animation) {
