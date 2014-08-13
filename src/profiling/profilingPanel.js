@@ -61,7 +61,7 @@ var initPanel = function () {
       "name": "Show FPS meter",
       "message": "Show FPS meter",
       "action" : function (event) {
-        stats_selected = event.srcElement.checked;
+        stats_selected = event.target.checked;
         activateState (continous_rendering_selected || stats_selected);
       }
     },
@@ -70,7 +70,7 @@ var initPanel = function () {
       "name": "Enable continuous page repainting",
       "message": "Enable continuous page repainting",
       "action" : function (event) {
-        continous_rendering_selected = event.srcElement.checked;
+        continous_rendering_selected = event.target.checked;
         profiling.setContinousRendering (continous_rendering_selected);
         activateState (continous_rendering_selected || stats_selected);
       }
@@ -80,7 +80,7 @@ var initPanel = function () {
       "name": "Collect CPU/GPU profile",
       "message": "Collect CPU/GPU profile",
       "action" : function (event) {
-        collect_profile_selected = event.srcElement.checked;
+        collect_profile_selected = event.target.checked;
         profiling.setCollectProfile (collect_profile_selected);
       }
     }
