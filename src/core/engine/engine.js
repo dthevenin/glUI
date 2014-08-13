@@ -54,7 +54,7 @@ function initRendering () {
     }
     
     if (_stats) {
-      // force syncrhonisation (not need with chrome because flush => finish)
+      // force synchronisation (not need with chrome because flush => finish)
       gl_ctx.finish ();
       // end stat
       _stats.end ();
