@@ -5,29 +5,6 @@ function getGLContext () {
 var next_rendering_id = 0;
 var render_ui;
 
-
-var _stats = undefined;
-var _continous_rendering = false;
-var profiling = {};
-
-profiling.setStats = function (stats) {
-  if (!stats) {
-    _stats = undefined;
-  }
-  else {
-    _stats = stats;
-  }
-}
-
-profiling.setContinousRendering = function (value) {
-  if (value) {
-    _continous_rendering = true;
-  }
-  else {
-    _continous_rendering = false;
-  }
-}
-
 function initRendering () {
   
   var renderLayerGraph = initRenteringBis (gl_ctx);
@@ -39,12 +16,10 @@ function initRendering () {
   
   render_ui = function (now, mode) {
 
-    if (!_continous_rendering && mode !== 1 && (!View.__should_render && !View.__nb_animation)) {
+    if (mode !== 1 && !View.__should_render && !View.__nb_animation) {
       next_rendering_id = requestAnimationFrame (render_ui);
       return
     }
-
-    if (_stats) _stats.begin ();
 
     calculateLayerGraph (now);
     View.__should_render = false;
@@ -52,14 +27,7 @@ function initRendering () {
     if (gl_layer_graph_size) {
       renderLayerGraph (frame_size, now, mode);
     }
-    
-    if (_stats) {
-      // force synchronisation (not need with chrome because flush => finish)
-      gl_ctx.finish ();
-      // end stat
-      _stats.end ();
-    }
-    
+        
     if (mode !== 1) {
       next_rendering_id = requestAnimationFrame (render_ui);
     }

@@ -100,7 +100,3 @@ var initPanel = function () {
     panel: panel
 	}
 };
-
-window.loadProfiling = function () {
-  return initPanel ();
-}
