@@ -470,7 +470,7 @@ __iscroll.prototype = {
     this.pos [1] = y;
 
     this.wrapper.__invalid_matrixes = true;
-    View.__should_render = true;
+    glEngine.shouldRedraw (this);
   },
   
   __gl_update_scroll : function (now) {
@@ -513,7 +513,8 @@ __iscroll.prototype = {
     }
     this.wrapper.__invalid_matrixes = true;
     this.wrapper.__is_scrolling = true;
-    View.__should_render = true;
+
+    glEngine.shouldRepaint (this.wrapper);
   },
   
   handleEvent: function (e) {

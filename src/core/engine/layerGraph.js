@@ -37,9 +37,9 @@ function update_transform_gl_matrix (gl_view, sprite)
   update_envelop_vertices (sprite, size);
 
   gl_view.__invalid_matrixes = true;
-  View.__should_render = true;
-  
   gl_view.__should_update_gl_matrix = false;
+  
+  glEngine.shouldRedraw (gl_view);
 }
 
 /**

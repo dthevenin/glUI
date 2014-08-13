@@ -75,7 +75,7 @@ util.addClassProperty (Transform, 'translation', {
     this._translation[2] = v[2] || 0;
 
     this.__should_update_gl_matrix = true;
-    View.__should_render = true;
+    glEngine.shouldRedraw (this);
   },
 
   /**
@@ -102,7 +102,7 @@ util.addClassProperty (Transform, 'rotation', {
     this._rotation[2] = v[2] || 0;
 
     this.__should_update_gl_matrix = true;
-    View.__should_render = true;
+    glEngine.shouldRedraw (this);
   },
 
   /**
@@ -125,7 +125,7 @@ util.addClassProperty (Transform, 'scaling', {
     this._scaling = v;
 
     this.__should_update_gl_matrix = true;
-    View.__should_render = true;
+    glEngine.shouldRedraw (this);
   },
 
   /**
@@ -154,7 +154,7 @@ util.addClassProperty (Transform, 'transformOrigin', {
     this._transform_origin [0] = v [0];
     this._transform_origin [1] = v [1];
 
-    View.__should_render = true;
+    glEngine.shouldRedraw (this);
   },
 
   /**

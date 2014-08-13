@@ -23,7 +23,6 @@ function View (config)
 util.extend (View.prototype, Group.prototype);
 util.extend (View.prototype, Transform.prototype);
 
-View.__should_render = true;
 View.__nb_animation = 0;
 
 /********************************************************************
@@ -180,7 +179,7 @@ View.prototype._updateSizeAndPos = function ()
   }
   this.__should_update_gl_vertices = true;
   this.__should_update_gl_matrix = true;
-  View.__should_render = true;
+  glEngine.shouldRepaint (this);
 };
 
 /********************************************************************
@@ -214,8 +213,9 @@ View.prototype.show = function (clb)
  */
 View.prototype._show_object = function (clb)
 {
+  var self = this;
   scheduleAction (function () {
-    View.__should_render = true;
+    glEngine.shouldRepaint (self);
   });
 
   this.__visibility_anim = undefined;
@@ -261,8 +261,9 @@ View.prototype.hide = function (clb)
  * @param {Function} clb a function to call a the end of show process
  */
 View.prototype._hide_object= function (clb) {
+  var self = this;
   scheduleAction (function () {
-    View.__should_render = true;
+    glEngine.shouldRepaint (self);
   });
 
   if (this._visible) { return; }
@@ -449,7 +450,7 @@ util.addClassProperties (View, {
         this._didEnable ();
       }
       
-      View.__should_render = true;
+      glEngine.shouldRepaint (this);
     },
 
     /**
@@ -473,7 +474,7 @@ util.addClassProperties (View, {
     {
       this._style.opacity = v
       
-      View.__should_render = true;
+      glEngine.shouldRedraw (this);
     },
 
     /**
@@ -497,7 +498,7 @@ util.addClassProperties (View, {
     {
       if (!(v instanceof Style)) return; 
       this._style = v;
-      View.__should_render = true;
+      glEngine.shouldRepaint (this);
     },
 
     /**
@@ -528,7 +529,7 @@ util.addClassProperties (View, {
       
       this._constraint = v;
       this._constraint.__view = this;
-      View.__should_render = true;
+      glEngine.shouldRepaint (this);
     },
 
     /**

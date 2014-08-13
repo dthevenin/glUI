@@ -139,7 +139,10 @@ function loadProfiling () {
     if (profiling.collect) profiling.begin (RENDER_PROB_ID);
 
     // If continuous rendering, force full rendering
-    if (_continous_rendering) View.__should_render = true;
+    if (_continous_rendering) {
+      glEngine.need_repaint = true;
+      glEngine.need_redraw = true;
+    }
 
     // Stats is activated, start data calculation
     if (_stats && mode !== 1) _stats.begin ();

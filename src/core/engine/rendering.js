@@ -5,7 +5,7 @@ function getLayerGraphRendered (gl_ctx) {
   var color_id_array = new Float32Array ([0,0,0,0])
   var shadow_buffer = gl_ctx.createBuffer ();
   var shadow_vertices = new Float32Array (12);
-  var rendering_mode = 0;  
+  var rendering_mode = 0;
     
   function update_gl_vertices (sprite, obj_pos, obj_size) {
     var
@@ -447,13 +447,16 @@ function getLayerGraphRendered (gl_ctx) {
     
     if (_profiling && _profiling.collect) _profiling.begin (PAINT_PROB_ID);
           
-    if (mode !== 1) for (var i = 0; i < gl_layer_graph_size; i++) {
-      var entry = gl_layer_graph [i];
-      if (entry[0] === 1) {
-        // normal rendering
-        paintOneView (entry[2], entry[3], mode);
+    if (glEngine.need_repaint && mode !== 1) {
+      for (var i = 0; i < gl_layer_graph_size; i++) {
+        var entry = gl_layer_graph [i];
+        if (entry[0] === 1) {
+          // normal rendering
+          paintOneView (entry[2], entry[3], mode);
+        }
       }
     }
+    glEngine.need_repaint = false;
 
     // if profiling, force an intermediary flush and finish
     if (_profiling && _profiling.collect) {
@@ -473,17 +476,20 @@ function getLayerGraphRendered (gl_ctx) {
 
     if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
-    for (var i = 0; i < gl_layer_graph_size; i++) {
-      var entry = gl_layer_graph [i];
-      if (entry[0] === 1) {
-        // normal rendering
-        drawOneView (entry[1], entry[3], mode);
-      }
-      else if (mode !== 1 && entry[0] === 2) {
-        // normal rendering
-        drawOneView (entry[1], entry[3], 2, entry[2]);
+    if (glEngine.need_redraw) {
+      for (var i = 0; i < gl_layer_graph_size; i++) {
+        var entry = gl_layer_graph [i];
+        if (entry[0] === 1) {
+          // normal rendering
+          drawOneView (entry[1], entry[3], mode);
+        }
+        else if (mode !== 1 && entry[0] === 2) {
+          // normal rendering
+          drawOneView (entry[1], entry[3], 2, entry[2]);
+        }
       }
     }
+    glEngine.need_redraw = false;
     
     // if profiling, force a finish with the flush
     if (_profiling && _profiling.collect) {

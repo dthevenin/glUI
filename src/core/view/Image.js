@@ -80,6 +80,7 @@ util.addClassProperty (gl_Image, 'src', {
         if (self._size [0] === 0 && self._size [1] === 0) {
           self.size = image_size;
         }
+        glEngine.shouldRepaint (self);
       }
     )
   },

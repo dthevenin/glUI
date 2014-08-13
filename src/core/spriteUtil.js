@@ -36,6 +36,7 @@ function update_texture (gl_view, image) {
   var gl_object = SPRITES [gl_view.__gl_id];
   
   gl_object.texture = __copy_image_into_webgl_texture (image, gl_object.texture);
+  glEngine.shouldRepaint (gl_view);
 }
 
 

@@ -200,8 +200,6 @@ function __copy_image_into_webgl_texture (canvas, texture) {
   }
   gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, null);
   
-  View.__should_render = true;
-  
   return texture
 }
 

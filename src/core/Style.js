@@ -81,6 +81,12 @@ Style.prototype = {
     return obj;
   },
   
+  viewsShouldRepaint : function () {
+  },
+  
+  viewsShouldRedraw : function () {
+  },
+  
   copy : function (style) {
     style._opacity = this._opacity;
     style._font_family = this._font_family;
@@ -201,7 +207,7 @@ util.addClassProperties (Style, {
       if (v < 0 || v > 1) return;
 
       this._opacity = v;
-      View.__should_render = true;
+      this.viewsShouldRedraw ();
     },
     
     /**
@@ -222,7 +228,7 @@ util.addClassProperties (Style, {
     {
       if (!(v instanceof Color)) return; 
       this._background_color = v;
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
     
     /**
@@ -243,7 +249,7 @@ util.addClassProperties (Style, {
     {
       if (!(v instanceof Color)) return; 
       this._color = v;
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
     
     /**
@@ -264,7 +270,7 @@ util.addClassProperties (Style, {
     set : function (v) {
       if (!util.isString (v)) return;
       this._font_family = v;
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
     
     /**
@@ -286,7 +292,7 @@ util.addClassProperties (Style, {
       if (util.isString (v)) v = parseInt (v, 10);
       if (!util.isNumber (v)) return;
       this._font_size = v;
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
     
     /**
@@ -311,7 +317,7 @@ util.addClassProperties (Style, {
         return;   
       }
       this._font_weight = v;
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
     
     /**
@@ -332,7 +338,7 @@ util.addClassProperties (Style, {
     set : function (v) {
       if (!util.isString (v)) return;
       this._text_align = v;
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
     
     /**
@@ -353,7 +359,7 @@ util.addClassProperties (Style, {
     set : function (v) {
       if (!util.isString (v)) return;
       this._text_transform = v;
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
     
     /**
@@ -387,6 +393,7 @@ util.addClassProperties (Style, {
         gl_get_texture_from_image_url (
           self._background_image, function (texture) {
             self.__gl_texture_bck_image = texture;
+            self.viewsShouldRepaint ();
             
 //             if (!self.__gl_bck_image_uv_buffer) {
 //               self.backgroundImageUV = [0,1, 0,0, 1,1, 1,0];
@@ -394,7 +401,6 @@ util.addClassProperties (Style, {
           }
         )
       }
-      View.__should_render = true;
     },
 
  
@@ -417,7 +423,7 @@ util.addClassProperties (Style, {
     set : function (v) {
       if (!(v instanceof Color)) return; 
       this._shadow_color = v;
-      View.__should_render = true;
+      this.viewsShouldRedraw ();
     },
     
     /**
@@ -439,7 +445,7 @@ util.addClassProperties (Style, {
       if (!util.isArray (v) || v.length !== 2) return;
       this._shadow_offset[0] = v[0];
       this._shadow_offset[1] = v[0];
-      View.__should_render = true;
+      this.viewsShouldRedraw ();
     },
     
     /**
@@ -460,7 +466,7 @@ util.addClassProperties (Style, {
     set : function (v) {
       if (!util.isNumber (v)) return;
       this._shadow_blur = v;
-      View.__should_render = true;
+      this.viewsShouldRedraw ();
     },
     
     /**
@@ -497,7 +503,7 @@ util.addClassProperties (Style, {
 //       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this.__gl_bck_image_uv_buffer);
 //       console.log (UV)
 //       gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, UV, gl_ctx.STATIC_DRAW);
-      View.__should_render = true;
+      this.viewsShouldRepaint ();
     },
   
     /**

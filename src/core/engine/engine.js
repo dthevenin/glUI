@@ -1,4 +1,22 @@
 var glEngine = {};
+glEngine.need_repaint = true;
+glEngine.need_redraw = true;
+
+/**
+ * @public
+ * @function
+ */
+glEngine.shouldRepaint = function (gl_view) {
+  this.need_repaint = true;
+};
+
+/**
+ * @public
+ * @function
+ */
+glEngine.shouldRedraw = function (gl_view) {
+  this.need_redraw = true;
+};
 
 function getGLContext () {
   return gl_ctx;
@@ -14,13 +32,12 @@ function initRendering () {
 
   render_ui = function (now, mode) {
 
-    if (mode !== 1 && !View.__should_render && !View.__nb_animation) {
+    if (mode !== 1 && !glEngine.need_repaint && !glEngine.need_redraw && !View.__nb_animation) {
       next_rendering_id = requestAnimationFrame (render_ui);
       return
     }
 
     calculateLayerGraph (now);
-    View.__should_render = false;
     
     if (gl_layer_graph_size) {
       renderLayerGraph (frame_size, now, mode);

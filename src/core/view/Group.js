@@ -111,8 +111,9 @@ Group.prototype.add = function (child)
     child.viewDidAdd ();
   }
 
+  var self = this;
   scheduleAction (function () {
-    View.__should_render = true;
+    glEngine.shouldRepaint (self);
   });
 };
 
@@ -136,8 +137,9 @@ Group.prototype.remove = function (child)
   this.__children.remove (child);
   child.__parent = null;
 
+  var self = this;
   scheduleAction (function () {
-    View.__should_render = true;
+    glEngine.shouldRepaint (self);
   });
 };
 
@@ -160,8 +162,9 @@ Group.prototype.removeAllChildren = function ()
     child.__parent = null;
   }
 
+  var self = this;
   scheduleAction (function () {
-    View.__should_render = true;
+    glEngine.shouldRepaint (self);
   });
 }
 
