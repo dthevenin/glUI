@@ -2,6 +2,7 @@ var
   profiling = {},
   _stats = undefined,
   _continous_rendering = false,
+  _paused_rendering = false,
   _profiling_data = [],
   _profiling_id = 0;
 
@@ -15,6 +16,15 @@ profiling.setCollectProfile = function (value) {
     console.log ("Start prolile collect.");
     cleanProfilingData ();
     profiling.collect = true;
+  }
+}
+
+profiling.setPauseRendering = function (value) {
+  if (!value) {
+    profiling._paused_rendering = false;
+  }
+  else {
+    profiling._paused_rendering = true;
   }
 }
 
@@ -118,6 +128,13 @@ function loadProfiling () {
   
   // patch render_ui
   render_ui = function (now, mode) {
+    
+    if (profiling._paused_rendering) {
+      if (mode !== 1) {
+        next_rendering_id = requestAnimationFrame (render_ui);
+      }
+      return;
+    }
     
     if (profiling.collect) profiling.begin (RENDER_PROB_ID);
 

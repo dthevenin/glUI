@@ -28,6 +28,7 @@ var initPanel = function () {
     stats = Stats (),
     collect_profile_selected = false,
     continous_rendering_selected = false,
+    pause_rendering_selected = false,
     stats_selected = false;
   
   panel.appendChild (stats.domElement)
@@ -82,6 +83,15 @@ var initPanel = function () {
       "action" : function (event) {
         collect_profile_selected = event.target.checked;
         profiling.setCollectProfile (collect_profile_selected);
+      }
+    },
+    
+    {
+      "name": "Pause rendering",
+      "message": "Pause rendering",
+      "action" : function (event) {
+        pause_rendering_selected = event.target.checked;
+        profiling.setPauseRendering (pause_rendering_selected);
       }
     }
   ];
