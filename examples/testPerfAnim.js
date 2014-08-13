@@ -25,8 +25,8 @@ var testPerfAnim = klass.createClass ({
 
     function setDiv (parent, dec) {
       var delay = 0;
-//      for (var i = 0; i < 300; i++) {
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 300; i++) {
+//      for (var i = 0; i < 3; i++) {
         var img = new core.Image ({
           position: [100 + dec, 100 + dec],
           size: [135, 126],
