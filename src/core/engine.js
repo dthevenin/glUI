@@ -1,3 +1,5 @@
+var _profiling;
+
 function getGLContext () {
   return gl_ctx;
 }
@@ -238,28 +240,6 @@ var shadow_buffer;
 var shadow_vertices = new Float32Array (12);
 
 var rendering_mode = 0;
-
-var _stats = undefined;
-var _continous_rendering = false;
-var profiling = {};
-
-profiling.setStats = function (stats) {
-  if (!stats) {
-    _stats = undefined;
-  }
-  else {
-    _stats = stats;
-  }
-}
-
-profiling.setContinousRendering = function (value) {
-  if (value) {
-    _continous_rendering = true;
-  }
-  else {
-    _continous_rendering = false;
-  }
-}
 
 function initRendering () {
   
@@ -590,12 +570,10 @@ function initRendering () {
 
   render_ui = function (now, mode) {
 
-    if (!_continous_rendering && mode !== 1 && (!View.__should_render && !View.__nb_animation)) {
+    if (mode !== 1 && !View.__should_render && !View.__nb_animation) {
       next_rendering_id = requestAnimationFrame (render_ui);
       return
     }
-
-    if (_stats) _stats.begin ();
     
 //     if (mode === 1 && next_rendering_id) {
 //       cancelAnimationFrame (next_rendering_id);
@@ -628,13 +606,6 @@ function initRendering () {
     }
 //    next_rendering_id = requestAnimationFrame (animate);
 //    if (mode !== 1) scheduleAction(animate, 300);
-
-    if (_stats) {
-      // force syncrhonisation (not need with chrome because flush => finish)
-      gl_ctx.finish ();
-      // end stat
-      _stats.end ();
-    }
     
     if (mode !== 1) {
       next_rendering_id = requestAnimationFrame (render_ui);
