@@ -475,7 +475,7 @@ function getLayerGraphRendered (gl_ctx) {
 
     if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
-    if (glEngine.need_redraw) {
+    if (mode === 1 || glEngine.need_redraw) {
       gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
 
       for (var i = 0; i < gl_layer_graph_size; i++) {
