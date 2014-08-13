@@ -1,7 +1,22 @@
 var
   profiling = {},
   _stats = undefined,
-  _continous_rendering = false;
+  _continous_rendering = false,
+  _profiling_data = [],
+  _profiling_id = 0;
+
+profiling.setCollectProfile = function (value) {
+  if (!value) {
+    profiling.collect = false;
+    printProfilingData ();
+    console.log ("End prolile collect.");
+  }
+  else {
+    console.log ("Start prolile collect.");
+    cleanProfilingData ();
+    profiling.collect = true;
+  }
+}
 
 profiling.setStats = function (stats) {
   if (!stats) {
@@ -20,6 +35,79 @@ profiling.setContinousRendering = function (value) {
     _continous_rendering = false;
   }
 }
+
+profiling.collect = false;
+function start_profiling_data (id) {
+  var data = _profiling_data [id];
+    
+  if (!data) {
+    _profiling_data [id] = data = {
+      name: "",
+      info: "",
+      measures : []
+    };
+  }
+  data.measures.push ([0, performance.now ()]);
+}
+
+function end_profiling_data (id) {
+  var data = _profiling_data [id];
+    
+  if (!data) {
+    _profiling_data [id] = data = {
+      name: "",
+      info: "",
+      measures : []
+    };
+  }
+  data.measures.push ([1, performance.now ()]);
+}
+
+function getProfilingProbeId (name, info) {
+  
+  _profiling_data [_profiling_id] = {
+    name: name,
+    info: info,
+    measures : []
+  };
+
+  return _profiling_id++;
+}
+
+function cleanProfilingData () {
+  _profiling_data.forEach (function (data) {
+    data.measures.length = 0;
+  })
+}
+
+function printProfilingData () {
+  _profiling_data.forEach (function (data) {
+    
+    var nb_mesure = 0, total = 0, temp = 0;
+    
+    data.measures.forEach (function (measure) {
+      if (measure[0] === 0) {
+        // bigin
+        temp = measure[1];
+      }
+      if (measure[0] === 1 && temp) {
+        total += (measure[1] - temp);
+        temp = 0;
+        nb_mesure ++;
+      }
+    })
+    
+    console.log (
+      "Measure '" + data.name + "' [" + nb_mesure + "]:  " +
+      (total / nb_mesure) + "ms"
+    )
+  })
+}
+
+profiling.begin = start_profiling_data;
+profiling.end = end_profiling_data;
+
+var RENDER_PROB_ID = getProfilingProbeId ("render");
 
 function loadProfiling () {
   
