@@ -7,7 +7,7 @@ var render_ui;
 
 function initRendering () {
   
-  var renderLayerGraph = initRenteringBis (gl_ctx);
+  var renderLayerGraph = getLayerGraphRendered (gl_ctx);
   initLayerGraph ();
 
   var default_faces_activated = false;

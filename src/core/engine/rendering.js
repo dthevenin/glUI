@@ -1,5 +1,5 @@
 
-function initRenteringBis (gl_ctx) {
+function getLayerGraphRendered (gl_ctx) {
 
   var color_id_array = new Float32Array ([0,0,0,0])
   var shadow_buffer = gl_ctx.createBuffer ();
@@ -86,7 +86,7 @@ function initRenteringBis (gl_ctx) {
 
        
     // determine which vertices buffer to use
-  // add update it if it's need.
+    // add update it if it's need.
     if (gl_view.__should_update_gl_vertices) {
 
       setupTextureFramebuffer (sprite, gl_view._size[0], gl_view._size[1])
@@ -125,15 +125,12 @@ function initRenteringBis (gl_ctx) {
 
     gl_ctx.framebufferTexture2D(gl_ctx.FRAMEBUFFER, gl_ctx.COLOR_ATTACHMENT0, gl_ctx.TEXTURE_2D, sprite._frametexture, 0);
     gl_ctx.framebufferRenderbuffer(gl_ctx.FRAMEBUFFER, gl_ctx.DEPTH_ATTACHMENT, gl_ctx.RENDERBUFFER, sprite._renderbuffer);
-    
- //   gl_ctx.viewport (gl_view._position[0], gl_view._position[1], gl_view._size[0], gl_view._size[1]);
-   
+       
     gl_ctx.viewport (
       0, 0,
       gl_view._size[0] * gl_device_pixel_ratio,
       gl_view._size[1] * gl_device_pixel_ratio
     );
-
 
     // General mode rendering
     {
