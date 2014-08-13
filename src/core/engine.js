@@ -574,15 +574,9 @@ function initRendering () {
       next_rendering_id = requestAnimationFrame (render_ui);
       return
     }
-    
-//     if (mode === 1 && next_rendering_id) {
-//       cancelAnimationFrame (next_rendering_id);
-//     }
 
     calculateViewsInFrustum (now);
     View.__should_render = false;
-    
-//    console.log (gl_stack_length);
       
     if (gl_stack_length) {
     
@@ -604,8 +598,6 @@ function initRendering () {
 
       gl_ctx.flush ();
     }
-//    next_rendering_id = requestAnimationFrame (animate);
-//    if (mode !== 1) scheduleAction(animate, 300);
     
     if (mode !== 1) {
       next_rendering_id = requestAnimationFrame (render_ui);
@@ -613,9 +605,6 @@ function initRendering () {
   }
   
   next_rendering_id = requestAnimationFrame (render_ui);
-  
-//  animate (performance.now ());
-//  scheduleAction(animate, 100);
 }
 
 function handleContextLost (event) {
