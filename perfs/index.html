@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../lib/require.js"></script>
     
     <script>
+      var results = [];
       require.config ({
         paths: {
           "core": "../lib/core",
@@ -27,6 +28,28 @@
       ];
 
       window.index = -1;
+      
+      function generateCSVFile (results) {
+        var text = "";
+        
+        results.forEach (function (data) {
+          text += data.name + '\n';
+          text += "functions;nb cycle;Total (ms);Average per cycle (ms);Pourcentage (%)\n";
+          var result = data.result, line;
+          for (var test_name in result) {
+            line = result [test_name];
+            text += test_name + ';';
+            for (var key in line) {
+              text += line[key] + ';';
+            }
+            text += '\n';
+          }
+          text += "\n\n";
+        })
+        
+        console.log ("CSV output:");
+        console.log (text);
+      }
     
       function testResult () {
         test_view.innerHTML = '';
@@ -41,6 +64,8 @@
         text += '</span>';
 
         text_view.innerHTML = text;
+        
+        generateCSVFile (results);
       };
       
       function normalTest (index) {
@@ -61,7 +86,11 @@
           core.profile.setContinousRedrawing (false);
           core.profile.setCollectProfile (true);
           app.startPerf (function () {
-            core.profile.setCollectProfile (false);
+            var data = core.profile.setCollectProfile (false);
+            results.push ({
+              name: test.path,
+              result: data
+            })
             cleanObjects ();
             testWithForcedRedraw (index);
           });
@@ -90,7 +119,11 @@
           core.profile.setContinousRedrawing (true);
           core.profile.setCollectProfile (true);
           app.startPerf (function () {
-            core.profile.setCollectProfile (false);
+            var data = core.profile.setCollectProfile (false);
+            results.push ({
+              name: test.path + "_REDRAW",
+              result: data
+            })
             cleanObjects ();
             testWithForcedRepaintAndRedraw (index);
           });
@@ -119,7 +152,11 @@
           core.profile.setContinousRedrawing (true);
           core.profile.setCollectProfile (true);
           app.startPerf (function () {
-            core.profile.setCollectProfile (false);
+            var data = core.profile.setCollectProfile (false);
+            results.push ({
+              name: test.path + "_REDRAW_REPAINT",
+              result: data
+            })
             cleanObjects ();
             nextTest ();
           });
