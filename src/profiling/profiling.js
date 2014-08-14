@@ -13,7 +13,7 @@ profiling.setCollectProfile = function (value) {
   if (!value) {
     profiling.collect = false;
     _end_profiling_time = performance.now ();
-    printProfilingData ();
+    return printProfilingData ();
   }
   else {
     _start_profiling_time = performance.now ();
@@ -134,13 +134,14 @@ function printProfilingData () {
     // )
     log_table [data.name] = {
       "nb cycle"      : nb_mesure,
-      "Total"   : total.toFixed (2) + "ms",
-      "Average per cycle" : average.toFixed (2) + "ms",
-      "Pourcentage":  Math.floor (total / duration * 100) + "%"
+      "Total (ms)"   : total.toFixed (2),
+      "Average per cycle (ms)" : average.toFixed (2),
+      "Pourcentage (%)":  Math.floor (total / duration * 100)
     };
   })
   
   console.table (log_table);
+  return log_table;
 }
 
 profiling.begin = start_profiling_data;
