@@ -121,11 +121,11 @@ define ('ConfigPanel', ["core", "class", "ConfigIcon"],
       this.add (this.titleLabel);
 
      var items = [
-        {icon:'assets/ThinksList/bar.png', name: 'Bar'}, {icon:'assets/ThinksList/book.png', name: 'Book'},
-        {icon:'assets/ThinksList/food.png', name: 'Food'}, {icon:'assets/ThinksList/idea.png', name: 'Idea'},
-        {icon:'assets/ThinksList/movie.png', name: 'Movie'}, {icon:'assets/ThinksList/music.png', name: 'Music'},
-        {icon:'assets/ThinksList/person.png', name: 'Person'}, {icon:'assets/ThinksList/place.png', name: 'Place'},
-        {icon:'assets/ThinksList/product.png', name: 'Product'}
+        {icon:'assets/ThingsList/bar.png', name: 'Bar'}, {icon:'assets/ThingsList/book.png', name: 'Book'},
+        {icon:'assets/ThingsList/food.png', name: 'Food'}, {icon:'assets/ThingsList/idea.png', name: 'Idea'},
+        {icon:'assets/ThingsList/movie.png', name: 'Movie'}, {icon:'assets/ThingsList/music.png', name: 'Music'},
+        {icon:'assets/ThingsList/person.png', name: 'Person'}, {icon:'assets/ThingsList/place.png', name: 'Place'},
+        {icon:'assets/ThingsList/product.png', name: 'Product'}
       ], item_view, item;
     
       var
@@ -172,7 +172,7 @@ define ('ConfigPanel', ["core", "class", "ConfigIcon"],
   return ConfigPanel;
 });
 
-define ("ThinksList", ["core", "class", "widgets", "ConfigPanel"],
+define ("ThingsList", ["core", "class", "widgets", "ConfigPanel"],
   function (core, klass, widgets, ConfigPanel) {
       
 var testPerfAnim = klass.createClass ({
@@ -279,7 +279,7 @@ var testPerfAnim = klass.createClass ({
     this.nav_bar.add (button);
     
     var button_default_style = button.style;
-    button_default_style.backgroundImage = "assets/ThinksList/setting.png";
+    button_default_style.backgroundImage = "assets/ThingsList/setting.png";
     button_default_style.backgroundImageUV = [-0.2,1.2, -0.2,-0.2, 1.2,1.2, 1.2,-0.2];
     
     this.buttonOpen = button;
@@ -295,14 +295,14 @@ var testPerfAnim = klass.createClass ({
     this.nav_bar.add (button);
     
     button_default_style = button.style;
-    button_default_style.backgroundImage = "assets/ThinksList/x-icon.png";
+    button_default_style.backgroundImage = "assets/ThingsList/x-icon.png";
     button_default_style.backgroundImageUV = [-0.2,1.2, -0.2,-0.2, 1.2,1.2, 1.2,-0.2];
     
     this.buttonClose = button;
 
     var button = new core.Image ({
       size: [32, 32],
-      src: "assets/ThinksList/question.png"
+      src: "assets/ThingsList/question.png"
     }).init ();
     this.nav_bar.add (button);
     
