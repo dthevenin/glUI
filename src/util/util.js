@@ -326,7 +326,7 @@ Array.prototype._remove = function (from, to) {
  * @return {Array} the modified array
  */
 Array.prototype.remove = function (from, to) {
-  if ((typeof(from) === "object") || isString (from)) {
+  if (typeof(from) === "object" || typeof(from) === "function" || isString (from)) {
     var i = 0;
     while (i < this.length) {
       if (this[i] === from) {
