@@ -32,6 +32,8 @@ function Style (config)
   this._shadow_offset = new Float32Array ([0,0]);
   this._color = Color.black;
   Styles.push (this);
+  
+  this.__views = [];
 }
 
 var Styles = [];
@@ -53,6 +55,8 @@ Style.prototype = {
   
   __gl_texture_bck_image: null,
   __gl_bck_image_uv_buffer: null,
+  
+  __views: null,
 
   /**
    * @protected
@@ -82,9 +86,23 @@ Style.prototype = {
   },
   
   viewsShouldRepaint : function () {
+    this.__views.forEach (function (gl_view) {
+      glEngine.shouldRepaint (gl_view);
+    })
   },
   
   viewsShouldRedraw : function () {
+    this.__views.forEach (function (gl_view) {
+      glEngine.shouldRedraw (gl_view);
+    })
+  },
+
+  __set_view : function (gl_view) {
+    this.__views.push (gl_view);
+  },
+  
+  __remove_view : function (gl_view) {
+    this.__views.remove (gl_view);
   },
   
   copy : function (style) {

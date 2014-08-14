@@ -80,6 +80,10 @@ View.prototype._style = null;
  */
 View.prototype.destructor = function ()
 {
+  if (this._style) {
+    this._style.__remove_view (this);
+  }
+
   deleteSprite (this);
 
   this._remove_scroll ();
@@ -111,6 +115,7 @@ View.prototype.initComponent = function ()
   EventSource.prototype.initComponent.call (this);
 
   this._style = new Style ();
+  this._style.__set_view (this);
   this._constraint = null;
 
   if (!this.__config__) this.__config__ = {};
@@ -496,8 +501,12 @@ util.addClassProperties (View, {
      */
     set : function (v)
     {
-      if (!(v instanceof Style)) return; 
+      if (!(v instanceof Style)) return;
+      if (this._style) {
+        this._style.__remove_view (this);
+      }
       this._style = v;
+      this._style.__set_view (this);
       glEngine.shouldRepaint (this);
     },
 
