@@ -9,7 +9,6 @@ var
   _start_profiling_time = 0,
   _end_profiling_time = 0;
 
-
 profiling.setCollectProfile = function (value) {
   if (!value) {
     profiling.collect = false;

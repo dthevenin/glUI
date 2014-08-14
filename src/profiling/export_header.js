@@ -17,7 +17,7 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-function __init_profiling () {
+function __init_profiling (core_export) {
 
   "use strict";
   
