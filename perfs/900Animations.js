@@ -66,5 +66,5 @@ function launchTest (view) {
   return app;
 }
 
-return launchTest ();
+return launchTest;
 });
