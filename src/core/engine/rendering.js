@@ -84,7 +84,6 @@ function getLayerGraphRendered (gl_ctx) {
     var program;
     var sprite = SPRITES [gl_view.__gl_id];
     var vertices_buffer;
-
        
     // determine which vertices buffer to use
     // add update it if it's need.
@@ -480,7 +479,6 @@ function getLayerGraphRendered (gl_ctx) {
       frame_size[0] * gl_device_pixel_ratio,
       frame_size[1] * gl_device_pixel_ratio
     );
-  
 
     if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
@@ -489,12 +487,14 @@ function getLayerGraphRendered (gl_ctx) {
 
       for (var i = 0; i < gl_layer_graph_size; i++) {
         var entry = gl_layer_graph [i];
-        if (entry[0] === 1) {
-          // normal rendering
+        
+        // normal sprite rendering
+        if (entry[0] === 1) {  
           drawOneView (entry[1], entry[3], mode);
         }
+        
+        // shadow object rendering (not render for picking)
         else if (mode !== 1 && entry[0] === 2) {
-          // normal rendering
           drawOneView (entry[1], entry[3], 2, entry[2]);
         }
       }
