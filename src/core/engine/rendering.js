@@ -446,13 +446,22 @@ function getLayerGraphRendered (gl_ctx) {
     );
     
     if (_profiling && _profiling.collect) _profiling.begin (PAINT_PROB_ID);
-          
-    if (glEngine.need_repaint && mode !== 1) {
+    
+    // repaint process (only if no picking)  
+    if (mode !== 1 && glEngine.need_repaint) {
       for (var i = 0; i < gl_layer_graph_size; i++) {
         var entry = gl_layer_graph [i];
         if (entry[0] === 1) {
+          var
+            sprite = entry [1],
+            gl_view = entry [2],
+            alpha = entry [3];
+            
           // normal rendering
-          paintOneView (entry[2], entry[3], mode);
+          if (sprite.invalid_paint) {
+            paintOneView (gl_view, alpha, mode);
+            sprite.invalid_paint = false;
+          }
         }
       }
     }

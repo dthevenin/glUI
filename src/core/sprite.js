@@ -68,6 +68,8 @@ function Sprite (id)
   this.vertex_2 = vec3.create ();
   this.vertex_3 = vec3.create ();
   this.vertex_4 = vec3.create ();
+  
+  this.invalid_paint = true;
 }
 
 function updateSpriteSize (gl_view, width, height) {

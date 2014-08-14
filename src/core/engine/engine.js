@@ -7,8 +7,19 @@ glEngine.need_redraw = true;
  * @function
  */
 glEngine.shouldRepaint = function (gl_view) {
+  if (!gl_view) return;
+  
+  var sprite = SPRITES [gl_view.__gl_id];
+  
+  // not a graphic object
+  if (!sprite) return;
+  
+  // set the rapaint state for the sprite and for global paint
+  sprite.invalid_paint = true;
   this.need_repaint = true;
-  glEngine.shouldRedraw (gl_view);
+  
+  // ask for a global redraw
+  this.need_redraw = true;
 };
 
 /**
