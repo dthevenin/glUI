@@ -5,16 +5,21 @@ var
   _continous_repainting = false,
   _paused_rendering = false,
   _profiling_data = [],
-  _profiling_id = 0;
+  _profiling_id = 0,
+  _start_profiling_time = 0,
+  _end_profiling_time = 0;
+
 
 profiling.setCollectProfile = function (value) {
   if (!value) {
     profiling.collect = false;
+    _end_profiling_time = performance.now ();
     printProfilingData ();
     console.log ("End prolile collect.");
   }
   else {
     console.log ("Start prolile collect.");
+    _start_profiling_time = performance.now ();
     cleanProfilingData ();
     profiling.collect = true;
   }
@@ -57,6 +62,7 @@ profiling.setContinousRedrawing = function (value) {
 }
 
 profiling.collect = false;
+
 function start_profiling_data (id) {
   var data = _profiling_data [id];
     
@@ -101,6 +107,12 @@ function cleanProfilingData () {
 }
 
 function printProfilingData () {
+  var
+    log_table = {},
+    duration = _end_profiling_time - _start_profiling_time;
+  
+  console.log ("Profiling result: duration = " + duration.toFixed (2) + "ms");
+
   _profiling_data.forEach (function (data) {
     
     var nb_mesure = 0, total = 0, temp = 0;
@@ -119,11 +131,19 @@ function printProfilingData () {
     
     var average = nb_mesure?total / nb_mesure:0;
     
-    console.log (
-      "Measure '" + data.name + "' [" + nb_mesure + "]:  " +
-      average + "ms"
-    )
+    // console.log (
+    //   "Measure '" + data.name + "' [" + nb_mesure + "]:  " +
+    //   average.toFixed (2) + "ms [" + Math.floor (total / duration * 100) + "%]."
+    // )
+    log_table [data.name] = {
+      "nb cycle"      : nb_mesure,
+      "Total"   : total.toFixed (2) + "ms",
+      "Average per cycle" : average.toFixed (2) + "ms",
+      "Pourcentage":  Math.floor (total / duration * 100) + "%"
+    };
   })
+  
+  console.table (log_table);
 }
 
 profiling.begin = start_profiling_data;
