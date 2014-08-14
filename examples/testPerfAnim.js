@@ -51,6 +51,8 @@ function loadApplication () {
   var app = new testPerfAnim ({id:"test"})
   app.init ();
   core.Application.start ();
+  
+  loadProfiling ();
 }
 
 loadApplication ();
