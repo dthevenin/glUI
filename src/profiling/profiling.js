@@ -131,6 +131,7 @@ profiling.end = end_profiling_data;
 
 var RENDER_PROB_ID = getProfilingProbeId ("render");
 var LAYER_GRAPH_PROB_ID = getProfilingProbeId ("layer graph gen");
+var ANIMATION_ONE_STEP_PROB_ID = getProfilingProbeId ("do one step animation");
 
 function loadProfiling () {
   
@@ -178,6 +179,16 @@ function loadProfiling () {
     if (profiling.collect) profiling.begin (LAYER_GRAPH_PROB_ID);
     default_calculateLayerGraph (now);
     if (profiling.collect) profiling.end (LAYER_GRAPH_PROB_ID);
+
+  }
+  
+  var default_newStepToAllAnimations = newStepToAllAnimations;
+  
+  newStepToAllAnimations = function (now) {
+    
+    if (profiling.collect) profiling.begin (ANIMATION_ONE_STEP_PROB_ID);
+    default_newStepToAllAnimations (now);
+    if (profiling.collect) profiling.end (ANIMATION_ONE_STEP_PROB_ID);
 
   }
   
