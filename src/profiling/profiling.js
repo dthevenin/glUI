@@ -14,10 +14,8 @@ profiling.setCollectProfile = function (value) {
     profiling.collect = false;
     _end_profiling_time = performance.now ();
     printProfilingData ();
-    console.log ("End prolile collect.");
   }
   else {
-    console.log ("Start prolile collect.");
     _start_profiling_time = performance.now ();
     cleanProfilingData ();
     profiling.collect = true;
@@ -64,7 +62,7 @@ profiling.collect = false;
 
 function start_profiling_data (id) {
   var data = _profiling_data [id];
-    
+
   if (!data) {
     _profiling_data [id] = data = {
       name: "",
@@ -172,8 +170,10 @@ function loadProfiling () {
     if (profiling.collect) profiling.begin (RENDER_PROB_ID);
 
     // If continuous rendering, force full rendering
-    if (_continous_repainting) glEngine.need_repaint = true;
-    if (_continous_redrawing) glEngine.need_redraw = true;
+    if (_continous_repainting) glEngine.forced_repaint = true;
+    else glEngine.forced_repaint = false;
+    if (_continous_redrawing) glEngine.forced_redraw = true;
+    else glEngine.forced_redraw = false;
 
     // Stats is activated, start data calculation
     if (_stats && mode !== 1) _stats.begin ();

@@ -447,7 +447,7 @@ function getLayerGraphRendered (gl_ctx) {
     if (_profiling && _profiling.collect) _profiling.begin (PAINT_PROB_ID);
     
     // repaint process (only if no picking)  
-    if (mode !== 1 && glEngine.need_repaint) {
+    if (mode !== 1 && (glEngine.need_repaint || glEngine.forced_repaint)) {
       for (var i = 0; i < gl_layer_graph_size; i++) {
         var entry = gl_layer_graph [i];
         if (entry[0] === 1) {
@@ -457,7 +457,7 @@ function getLayerGraphRendered (gl_ctx) {
             alpha = entry [3];
             
           // normal rendering
-          if (sprite.invalid_paint) {
+          if (glEngine.forced_repaint || sprite.invalid_paint) {
             paintOneView (gl_view, alpha, mode);
             sprite.invalid_paint = false;
           }
@@ -482,7 +482,7 @@ function getLayerGraphRendered (gl_ctx) {
 
     if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
-    if (mode === 1 || glEngine.need_redraw) {
+    if (mode === 1 || glEngine.need_redraw || glEngine.forced_redraw) {
       gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
 
       for (var i = 0; i < gl_layer_graph_size; i++) {
