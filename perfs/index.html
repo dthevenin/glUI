@@ -22,11 +22,12 @@
       window.GL_INIT_MANUAL = true;
 
       window.tests = [
-        {path: '900Animations', text:'900 objects animated at same time', result: 0}
+      {path: 'ThinksList', text:'Different kind of animations', result: 0},
+      {path: '900Animations', text:'900 objects animated at same time', result: 0}
       ];
 
       window.index = -1;
-
+    
       function testResult () {
         test_view.innerHTML = '';
 
@@ -52,39 +53,36 @@
 
         var test = window.tests [++index];
         require (['core', test.path], function (core, app) {
-        
-          for (var key in core.Object._obs) {
-            var obj = core.Object._obs [key];
-            obj.destructor ();
+          
+          function cleanObjects () {
+            for (var key in core.Object._obs) {
+              var obj = core.Object._obs [key];
+              obj.destructor ();
+            }
           }
+          
+          app.startPerf (function () {
+            console.log ('end');
+            cleanObjects ();
+            nextTest ();
+          });
+        
         });
         
         text_view.innerHTML = '<span class="message">' + test.text + '</span>';
       }
 
-      function test_not_ok () {
-        window.tests [index].result = 0;
-        nextTest ();
-      };
-
-      function test_ok () {
-        window.tests [index].result = 5;
-        nextTest ();
-      };
     </script>
 
   </head>
   <body>
     <div class="perfPanel">
-      <button class="button" id="button_not_ok" onclick="test_not_ok ();">✖</button>
-      <button class="button" id="button_ok" onclick="test_ok ();">✔</button>
-
       <div id="test_view"></div>
       <div id="text_view"></div>
     <div>
     <script>
       require (['core'], function (core) {
-        
+      
         window.test_view = document.getElementById ('test_view');
         window.result_view = document.querySelector ('#result_view img');
         window.text_view = document.getElementById ('text_view');
@@ -97,6 +95,7 @@
        
         window.core = core
         nextTest ();
+        loadProfiling ();
       });
     </script>
   </body>
