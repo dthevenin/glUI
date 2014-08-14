@@ -1,5 +1,3 @@
-require.config ({ baseUrl: "../lib" });
-
 define ("900Animations", ['core', 'class'], function (core, klass) {
 
 var animation, objects = [];

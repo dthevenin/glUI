@@ -1,5 +1,3 @@
-require.config ({ baseUrl: "../lib" });
-
 var
   width = window.test_view.offsetWidth - 6,
   height = window.test_view.offsetHeight - 6;
