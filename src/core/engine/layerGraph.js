@@ -114,9 +114,6 @@ function calculateLayerGraph (now) {
     
     sprite = SPRITES [gl_view.__gl_id];
     
-    // animate view
-    gl_update_animation (gl_view, now);
-
     // Views opacity
     style = gl_view._style;
     if (style) alpha = p_alpha * style._opacity;

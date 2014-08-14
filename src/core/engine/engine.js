@@ -38,6 +38,7 @@ function initRendering () {
       return
     }
 
+    newStepToAllAnimations (now);
     calculateLayerGraph (now);
     
     if (gl_layer_graph_size) {

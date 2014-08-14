@@ -84,6 +84,48 @@ var procesAnimation = function (comp, animation, trajectories, clb, ctx, now) {
   chrono.start ();
 }
 
+function newStepToAllAnimations (now) {
+  var apps = Application_applications, key;
+
+  function _doAnimations (gl_view, p_alpha) {
+    var i, l, child, children, style, alpha, sprite;
+    
+    // Views visibility
+    if (!gl_view._visible && !gl_view.__is_hidding) {
+      return;
+    }
+    
+    sprite = SPRITES [gl_view.__gl_id];
+    
+    // animate view
+    gl_update_animation (gl_view, now);
+
+    // Views opacity
+    style = gl_view._style;
+    if (style) alpha = p_alpha * style._opacity;
+    else alpha = p_alpha;
+
+    if (alpha === 0) {
+      return;
+    }
+    
+    /*================== Manage children ================== */
+    children = gl_view.__children;
+    l = children.length;
+    for (i = 0; i < l; i++) {
+      child = children [i];
+      if (child.__gl_id) {
+        _doAnimations (child, alpha);
+      }
+    }
+  }
+
+  for (key in apps) {
+    var app = apps[key];
+    _doAnimations (app, 1);
+  }
+}
+
 function gl_update_animation (comp, now) {
  
   var
