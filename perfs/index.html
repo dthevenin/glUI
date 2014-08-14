@@ -42,15 +42,12 @@
 
         text_view.innerHTML = text;
       };
-
-      function nextTest () {
-        if (index === tests.length -1) {
-          testResult ();
-          return;
-        }
-
-        var test = window.tests [++index];
-        require (['core', test.path], function (core, app) {
+      
+      function normalTest (index) {
+        var test = window.tests [index];
+        require (['core', test.path], function (core, launchTest) {
+          
+          var app = launchTest ();
           
           function cleanObjects () {
             for (var key in core.Object._obs) {
@@ -59,6 +56,67 @@
             }
           }
           
+          console.log ("Profiling '" + test.path + "' normal mode.");
+          core.profile.setContinousRepainting (false);
+          core.profile.setContinousRedrawing (false);
+          core.profile.setCollectProfile (true);
+          app.startPerf (function () {
+            core.profile.setCollectProfile (false);
+            cleanObjects ();
+            testWithForcedRedraw (index);
+          });
+        
+        });
+        
+        text_view.innerHTML = '<span class="message">NORMAL TEST:' + test.text + '</span>';
+      }
+
+      function testWithForcedRedraw (index) {
+
+        var test = window.tests [index];
+        require (['core', test.path], function (core, launchTest) {
+          
+          var app = launchTest ();
+          
+          function cleanObjects () {
+            for (var key in core.Object._obs) {
+              var obj = core.Object._obs [key];
+              obj.destructor ();
+            }
+          }
+          
+          console.log ("Profiling '" + test.path + "' redraw forced.");
+          core.profile.setContinousRepainting (false);
+          core.profile.setContinousRedrawing (true);
+          core.profile.setCollectProfile (true);
+          app.startPerf (function () {
+            core.profile.setCollectProfile (false);
+            cleanObjects ();
+            testWithForcedRepaintAndRedraw (index);
+          });
+        
+        });
+        
+        text_view.innerHTML = '<span class="message">REDRAW FORCED:' + test.text + '</span>';
+      }
+
+      function testWithForcedRepaintAndRedraw (index) {
+
+        var test = window.tests [index];
+        require (['core', test.path], function (core, launchTest) {
+          
+          var app = launchTest ();
+          
+          function cleanObjects () {
+            for (var key in core.Object._obs) {
+              var obj = core.Object._obs [key];
+              obj.destructor ();
+            }
+          }
+          
+          console.log ("Profiling '" + test.path + "' redraw and repaint forced.");
+          core.profile.setContinousRepainting (true);
+          core.profile.setContinousRedrawing (true);
           core.profile.setCollectProfile (true);
           app.startPerf (function () {
             core.profile.setCollectProfile (false);
@@ -68,7 +126,16 @@
         
         });
         
-        text_view.innerHTML = '<span class="message">' + test.text + '</span>';
+        text_view.innerHTML = '<span class="message">REDRAW & REPAINT FORCED:' + test.text + '</span>';
+      }
+
+
+      function nextTest () {
+        if (index === tests.length -1) {
+          testResult ();
+          return;
+        }
+        normalTest (++index);
       }
 
     </script>
