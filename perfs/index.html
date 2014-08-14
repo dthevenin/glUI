@@ -41,8 +41,6 @@
         text += '</span>';
 
         text_view.innerHTML = text;
-        document.getElementById ('button_not_ok').style.display = "none";
-        document.getElementById ('button_ok').style.display = "none";
       };
 
       function nextTest () {
@@ -61,8 +59,9 @@
             }
           }
           
+          core.profile.setCollectProfile (true);
           app.startPerf (function () {
-            console.log ('end');
+            core.profile.setCollectProfile (false);
             cleanObjects ();
             nextTest ();
           });
