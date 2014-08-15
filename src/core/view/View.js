@@ -268,7 +268,7 @@ View.prototype.hide = function (clb)
 View.prototype._hide_object= function (clb) {
   var self = this;
   scheduleAction (function () {
-    glEngine.shouldRepaint (self);
+    glEngine.shouldRedraw (self);
   });
 
   if (this._visible) { return; }
