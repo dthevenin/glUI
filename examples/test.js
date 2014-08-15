@@ -10,8 +10,6 @@ var Test2 = klass.createClass ({
     
   applicationStarted : function () {
   
-    loadProfiling ();
-
     var view1 = new core.View ({
       position: [10, 10],
       size: [300, 400]
@@ -87,6 +85,8 @@ var Test2 = klass.createClass ({
 function loadApplication () {
   new Test2 ({id:"test"}).init ();
   core.Application.start ();
+
+  loadProfiling ();
 }
 
 loadApplication ();
