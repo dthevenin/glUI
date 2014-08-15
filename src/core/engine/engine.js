@@ -44,7 +44,10 @@ function initRendering () {
 
   render_ui = function (now, mode) {
 
-    if (mode !== 1 && !glEngine.need_repaint && !glEngine.need_redraw && !View.__nb_animation) {
+    if (mode !== 1 &&
+        !glEngine.need_repaint && !glEngine.forced_repaint &&
+        !glEngine.need_redraw && !glEngine.forced_redraw &&
+        !View.__nb_animation) {
       next_rendering_id = requestAnimationFrame (render_ui);
       return
     }
