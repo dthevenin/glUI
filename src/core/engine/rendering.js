@@ -82,6 +82,7 @@ function getLayerGraphRendered (gl_ctx) {
   function paintOneView (gl_view, alpha, mode) {
 
     var program;
+    var viewport;
     var sprite = SPRITES [gl_view.__gl_id];
     var vertices_buffer;
        
@@ -125,12 +126,9 @@ function getLayerGraphRendered (gl_ctx) {
 
     gl_ctx.framebufferTexture2D(gl_ctx.FRAMEBUFFER, gl_ctx.COLOR_ATTACHMENT0, gl_ctx.TEXTURE_2D, sprite._frametexture, 0);
     gl_ctx.framebufferRenderbuffer(gl_ctx.FRAMEBUFFER, gl_ctx.DEPTH_ATTACHMENT, gl_ctx.RENDERBUFFER, sprite._renderbuffer);
-       
-    gl_ctx.viewport (
-      0, 0,
-      gl_view._size[0] * gl_device_pixel_ratio,
-      gl_view._size[1] * gl_device_pixel_ratio
-    );
+    
+    viewport = sprite.__view_port;    
+    gl_ctx.viewport (viewport [0], viewport [1], viewport [2], viewport [3]);
 
     // General mode rendering
     {
@@ -387,7 +385,7 @@ function getLayerGraphRendered (gl_ctx) {
       attribute.stride = 0;
       attribute.offset = 0;
 
-      attribute.buffer = draw_texture_uv_buffer;
+      attribute.buffer = sprite.__texture_uv_buffer;
       attribute.numComponents = 2;
       program.attrib.bkImageUV (attribute);
 

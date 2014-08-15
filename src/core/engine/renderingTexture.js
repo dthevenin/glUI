@@ -1,9 +1,25 @@
 var renderingTexture = {};
 
 (function () {
-
-  function initTexture (frame_size, device_pixel_ratio) {
   
+  var device_pixel_ratio;
+  var draw_texture_uv_buffer;
+  var gl_ctx;
+
+  function initTexture (ctx, frame_size, pixel_ratio) {
+    gl_ctx = ctx;
+    device_pixel_ratio = pixel_ratio;
+
+    if (draw_texture_uv_buffer) {
+      gl_ctx.deleteBuffer (draw_texture_uv_buffer);
+    }
+    draw_texture_uv_buffer = gl_ctx.createBuffer ();
+    gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, draw_texture_uv_buffer);
+    gl_ctx.bufferData (
+      gl_ctx.ARRAY_BUFFER,
+      new Float32Array ([0,1, 0,0, 1,1, 1,0]),
+      gl_ctx.STATIC_DRAW
+    );
   }
 
   function setupSprite (sprite, width, height) {
@@ -18,6 +34,18 @@ var renderingTexture = {};
     }  
   
     if (width === 0 || height === 0) return;
+    
+    // setup texture view port
+    if (!sprite.__view_port) {
+      sprite.__view_port = [];
+    }
+    sprite.__view_port [0] = 0;
+    sprite.__view_port [1] = 0;
+    sprite.__view_port [2] = width * device_pixel_ratio;
+    sprite.__view_port [3] = height * device_pixel_ratio;
+
+    // setup texture projection
+    sprite.__texture_uv_buffer = draw_texture_uv_buffer;
   
     var framebuffer = gl_ctx.createFramebuffer();
     sprite._framebuffer = framebuffer;
@@ -79,5 +107,4 @@ var renderingTexture = {};
   renderingTexture.init = initTexture;
   renderingTexture.setupSprite = setupSprite;
   renderingTexture.removeSprite = removeSprite;
-
 }) ()

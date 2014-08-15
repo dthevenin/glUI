@@ -11,7 +11,7 @@ var
   object_uv_buffer,
   object_bck_image_uv_buffer,
   default_object_bck_image_uv_buffer,
-  draw_texture_uv_buffer,
+
   object_faces_buffer,
   frame_size = [100, 100],
   gl_device_pixel_ratio,
@@ -289,7 +289,7 @@ function initBuffers () {
     gl_ctx.ARRAY_BUFFER,
     new Float32Array ([0,0, 0,1, 1,0, 1,1]),
     gl_ctx.STATIC_DRAW
-  );draw_texture_uv_buffer
+  );
     
   if (default_object_bck_image_uv_buffer) {
     gl_ctx.deleteBuffer (default_object_bck_image_uv_buffer);
@@ -299,17 +299,6 @@ function initBuffers () {
   gl_ctx.bufferData (
     gl_ctx.ARRAY_BUFFER,
     new Float32Array ([0,0, 0,1, 1,0, 1,1]),
-    gl_ctx.STATIC_DRAW
-  );
-
-  if (draw_texture_uv_buffer) {
-    gl_ctx.deleteBuffer (draw_texture_uv_buffer);
-  }
-  draw_texture_uv_buffer = gl_ctx.createBuffer ();
-  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, draw_texture_uv_buffer);
-  gl_ctx.bufferData (
-    gl_ctx.ARRAY_BUFFER,
-    new Float32Array ([0,1, 0,0, 1,1, 1,0]),
     gl_ctx.STATIC_DRAW
   );
 
