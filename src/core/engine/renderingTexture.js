@@ -157,14 +157,21 @@ var renderingTexture = {};
   
   function calculateTextureSize () {
     
-    if (frame_size [0] * device_pixel_ratio > maxTexSize) {
+    var nextPowerOfTwo =
+      Math.pow (2, Math.ceil (
+        Math.log (frame_size [0] * device_pixel_ratio) / Math.log (2)
+      ));
+
+    if (nextPowerOfTwo < 1024 && maxTexSize >= 1024) nextPowerOfTwo = 1024;
+    if (nextPowerOfTwo > maxTexSize) {
       throw 'To small texture size';
     }
     if (frame_size [1] * 3 * device_pixel_ratio > maxTexSize) {
       throw 'To small texture size';
     }
+    
     return [
-      frame_size [0] * device_pixel_ratio,
+      nextPowerOfTwo,
       maxTexSize
      ];
   }
@@ -191,34 +198,19 @@ var renderingTexture = {};
 
     the_frame_texture = gl_ctx.createTexture();
 
-    function isPowerOfTwo (x) {
-      return (x !== 0) && ((x & (x - 1)) === 0);
-    }
-  
     gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, the_frame_texture);
     gl_ctx.texImage2D (gl_ctx.TEXTURE_2D, 0, gl_ctx.RGBA, the_frame_buffer.width, the_frame_buffer.height, 0, gl_ctx.RGBA, gl_ctx.UNSIGNED_BYTE, null);
 
-    // POT images
-    if (isPowerOfTwo (the_texture_size [0]) && isPowerOfTwo (the_texture_size [1])) {
-
-      gl_ctx.texParameteri
+    // POT texture
+    gl_ctx.texParameteri
       (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MAG_FILTER, gl_ctx.LINEAR);
 
-      gl_ctx.texParameteri
+    gl_ctx.texParameteri
       (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MIN_FILTER, gl_ctx.NEAREST_MIPMAP_LINEAR);
 
-      gl_ctx.generateMipmap (gl_ctx.TEXTURE_2D);
-    }
-    // NPOT images
-    else {
-      //gl_ctx.NEAREST is also allowed, instead of gl_ctx.LINEAR, as neither mipmap.
-      gl_ctx.texParameteri (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MIN_FILTER, gl_ctx.LINEAR);
-      //Prevents s-coordinate wrapping (repeating).
-      gl_ctx.texParameteri (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_WRAP_S, gl_ctx.CLAMP_TO_EDGE);
-      //Prevents t-coordinate wrapping (repeating).
-      gl_ctx.texParameteri (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_WRAP_T, gl_ctx.CLAMP_TO_EDGE);
-    }
-
+    gl_ctx.generateMipmap (gl_ctx.TEXTURE_2D);
+    
+    
     the_render_buffer = gl_ctx.createRenderbuffer ();
   
     gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, the_render_buffer);
@@ -230,6 +222,59 @@ var renderingTexture = {};
     gl_ctx.bindTexture(gl_ctx.TEXTURE_2D, null);
     gl_ctx.bindRenderbuffer(gl_ctx.RENDERBUFFER, null);
     gl_ctx.bindFramebuffer(gl_ctx.FRAMEBUFFER, null);
+  }
+  
+  var
+    shelf_nf_alloc_next_shelf_dec_y = 0,
+    shelf_nf_alloc_offset_x = 0,
+    shelf_nf_alloc_offset_y = 0;
+  function shelf_nf_allocation (viewport, width, height) {
+    
+    function isFitCurrentShelf (width, height) {
+      return (
+        (the_texture_size [0] - shelf_nf_alloc_offset_x)
+        > 
+        (width * device_pixel_ratio)
+      );
+    }
+    
+    function openNewShelf () {
+      shelf_nf_alloc_offset_x = 0
+      shelf_nf_alloc_offset_y += shelf_nf_alloc_next_shelf_dec_y;
+      shelf_nf_alloc_next_shelf_dec_y = 0;
+    }
+    
+    function allocateSpaceInCurrentShelf (viewport, width, height) {
+      
+      shelf_nf_alloc_next_shelf_dec_y = Math.max (
+        shelf_nf_alloc_next_shelf_dec_y,
+        height  * device_pixel_ratio
+      );
+      
+      viewport [0] = shelf_nf_alloc_offset_x;
+      viewport [1] = shelf_nf_alloc_offset_y;
+      viewport [2] = width * device_pixel_ratio;
+      viewport [3] = height * device_pixel_ratio;     
+      
+      shelf_nf_alloc_offset_x += width * device_pixel_ratio;
+    }
+    
+    if (!isFitCurrentShelf (width, height)) {
+      openNewShelf ();
+    }
+    
+    allocateSpaceInCurrentShelf (viewport, width, height);
+  }
+  
+  var v_alloc_offset_y = 0;
+  function vertical_allocation (viewport, width, height) {
+
+    viewport [0] = 0;
+    viewport [1] = v_alloc_offset_y;
+    viewport [2] = width * device_pixel_ratio;
+    viewport [3] = height * device_pixel_ratio;
+    
+    v_alloc_offset_y += height * device_pixel_ratio;
   }
   
   function createTextureProjection (sprite) {
@@ -244,7 +289,7 @@ var renderingTexture = {};
     var x2 = (view_p[0] + view_p[2]) / the_texture_size [0];
     var y2 = (view_p[1] + view_p[3]) / the_texture_size [1];
     
-    console.log ([x1,y2, x1,y1, x2,y2, x2,y1]);
+//    console.log ([x1,y2, x1,y1, x2,y2, x2,y1]);
 
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, draw_texture_uv_buffer);
     gl_ctx.bufferData (
@@ -255,8 +300,6 @@ var renderingTexture = {};
 
     sprite.__texture_uv_buffer = draw_texture_uv_buffer;
   }
-  
-  var offsetX = 0, offsetY = 0;
 
   function setupSprite (sprite, width, height) {
     sprite._framebuffer = the_frame_buffer;
@@ -269,15 +312,13 @@ var renderingTexture = {};
     if (!sprite.__view_port) {
       sprite.__view_port = [];
     }
-    sprite.__view_port [0] = offsetX;
-    sprite.__view_port [1] = offsetY;
-    sprite.__view_port [2] = width * device_pixel_ratio;
-    sprite.__view_port [3] = height * device_pixel_ratio;
+    //vertical_allocation (sprite.__view_port, width, height);
+    shelf_nf_allocation (sprite.__view_port, width, height);
     
-    offsetY += height * device_pixel_ratio;
+ //   console.log (sprite.__view_port);
     
     // setup texture projection
-    createTextureProjection (sprite)
+    createTextureProjection (sprite);
   }
 
   function removeSprite (sprite) {
