@@ -41,6 +41,7 @@ function initRendering () {
   
   var renderLayerGraph = getLayerGraphRendered (gl_ctx);
   initLayerGraph ();
+  renderingTexture.init (frame_size, gl_device_pixel_ratio);
 
   render_ui = function (now, mode) {
 

@@ -2,7 +2,7 @@ var renderingTexture = {};
 
 (function () {
 
-  function initTexture () {
+  function initTexture (frame_size, device_pixel_ratio) {
   
   }
 
