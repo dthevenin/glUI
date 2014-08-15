@@ -47,8 +47,9 @@
           text += "\n\n";
         })
         
-        console.log ("CSV output:");
+        console.group ("CSV output:");
         console.log (text);
+        console.groupEnd ();
       }
     
       function testResult () {
@@ -81,12 +82,13 @@
             }
           }
           
-          console.log ("Profiling '" + test.path + "' normal mode.");
+          console.group ("Profiling '" + test.path + "' normal mode.");
           core.profile.setContinousRepainting (false);
           core.profile.setContinousRedrawing (false);
           core.profile.setCollectProfile (true);
           app.startPerf (function () {
             var data = core.profile.setCollectProfile (false);
+            console.groupEnd();
             results.push ({
               name: test.path,
               result: data
@@ -114,12 +116,13 @@
             }
           }
           
-          console.log ("Profiling '" + test.path + "' redraw forced.");
+          console.group ("Profiling '" + test.path + "' redraw forced.");
           core.profile.setContinousRepainting (false);
           core.profile.setContinousRedrawing (true);
           core.profile.setCollectProfile (true);
           app.startPerf (function () {
             var data = core.profile.setCollectProfile (false);
+            console.groupEnd();
             results.push ({
               name: test.path + "_REDRAW",
               result: data
@@ -147,12 +150,13 @@
             }
           }
           
-          console.log ("Profiling '" + test.path + "' redraw and repaint forced.");
+          console.group ("Profiling '" + test.path + "' redraw and repaint forced.");
           core.profile.setContinousRepainting (true);
           core.profile.setContinousRedrawing (true);
           core.profile.setCollectProfile (true);
           app.startPerf (function () {
             var data = core.profile.setCollectProfile (false);
+            console.groupEnd();
             results.push ({
               name: test.path + "_REDRAW_REPAINT",
               result: data
