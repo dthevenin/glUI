@@ -220,7 +220,8 @@ View.prototype._show_object = function (clb)
 {
   var self = this;
   scheduleAction (function () {
-    glEngine.shouldRepaint (self);
+//    glEngine.shouldRepaint (self);
+    glEngine.shouldRedraw (self);
   });
 
   this.__visibility_anim = undefined;
