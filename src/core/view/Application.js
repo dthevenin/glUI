@@ -54,82 +54,80 @@ var Application_applications = {};
 var ORIENTATION_CHANGE_EVT =
   'onorientationchange' in window ? 'orientationchange' : 'resize';
 
-Application.prototype = {
-  
-  /*****************************************************************
-   *                Private members
-   ****************************************************************/
+/*****************************************************************
+ *                Private members
+ ****************************************************************/
 
-  /**
-   * @protected
-   * @type {boolean}
-   */
-  _prevent_scroll : true,
+/**
+ * @protected
+ * @type {boolean}
+ */
+Application.prototype._prevent_scroll = true;
 
-  /*****************************************************************
-   *
-   ****************************************************************/
-  /**
-   * @protected
-   * @function
-   */
-  initComponent : function ()
-  {
-    Application_applications [this.id] = this;
+/*****************************************************************
+ *
+ ****************************************************************/
+/**
+ * @protected
+ * @function
+ */
+Application.prototype.initComponent = function ()
+{
+  Application_applications [this.id] = this;
 
-    View.prototype.initComponent.call (this);
-    this.preventScroll = true;
+  View.prototype.initComponent.call (this);
+  this.preventScroll = true;
 
-    /*
-    var self = this;
-    window.addEventListener (ORIENTATION_CHANGE_EVT, function (e) {
-      var orientation = window.orientation;
-      if (!util.isNumber (orientation)) {
-        if (window.outerWidth >= window.outerHeight) {
-          orientation = 90; // LANDSCAPE
-        }
-        else {
-          orientation = 0; // PORTRAIT
-        }
+  /*
+  var self = this;
+  window.addEventListener (ORIENTATION_CHANGE_EVT, function (e) {
+    var orientation = window.orientation;
+    if (!util.isNumber (orientation)) {
+      if (window.outerWidth >= window.outerHeight) {
+        orientation = 90; // LANDSCAPE
       }
-      
-      var target_id =
-        window.deviceConfiguration.setOrientation (orientation);
-      if (target_id) {
-        var event = new Event ('deviceChanged', target_id);
-        self.dispatchEvent (event);
+      else {
+        orientation = 0; // PORTRAIT
       }
-    });
-    */
+    }
     
-    this.size = [window.innerWidth, window.innerHeight];
-  },
+    var target_id =
+      window.deviceConfiguration.setOrientation (orientation);
+    if (target_id) {
+      var event = new Event ('deviceChanged', target_id);
+      self.dispatchEvent (event);
+    }
+  });
+  */
   
-  /**
-   * Exit and terminate the application.
-   * @name Application#exit 
-   * @function
-   */
-  exit : function () {
-    vs.ui.Application.exit ()
-  },
-  
-  /**
-   * @protected
-   * @name Application#applicationStarted 
-   * @function
-   */
-  applicationStarted : function () { },
-  
-  /**
-   * @protected
-   *
-   * @name Application#orientationWillChange 
-   * @function
-   * @param {number} orientation = {0, 180, -90, 90}
-   */
-  orientationWillChange: function (orientation) { }
+  this.size = [window.innerWidth, window.innerHeight];
 };
+
+/**
+ * Exit and terminate the application.
+ * @name Application#exit 
+ * @function
+ */
+Application.prototype.exit = function () {
+  vs.ui.Application.exit ();
+};
+
+/**
+ * @protected
+ * @name Application#applicationStarted 
+ * @function
+ */
+Application.prototype.applicationStarted = function () { };
+
+/**
+ * @protected
+ *
+ * @name Application#orientationWillChange 
+ * @function
+ * @param {number} orientation = {0, 180, -90, 90}
+ */
+Application.prototype.orientationWillChange = function (orientation) { };
+
 util.extendClass (Application, View);
 
 /********************************************************************
