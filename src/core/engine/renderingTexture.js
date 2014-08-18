@@ -178,16 +178,6 @@ var renderingTexture = {};
   
   function allocateTextureAndBuffers () {
 
-    // if (the_frame_buffer) {
-    //   gl_ctx.deleteFramebuffer (the_frame_buffer);
-    // }
-    // if (the_render_buffer) {
-    //   gl_ctx.deleteRenderbuffer (the_render_buffer);
-    // }
-    // if (the_frame_texture) {
-    //   gl_ctx.deleteTexture (the_frame_texture);
-    // }
-   
     the_frame_buffer = gl_ctx.createFramebuffer();
     
     the_texture_size = calculateTextureSize ()
