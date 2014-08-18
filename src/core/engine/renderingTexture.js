@@ -151,8 +151,8 @@ var renderingTexture = {};
         throw 'Framebuffer incomplete missing attachment';
       default:
     }
-        
-    reallocateTextureAndBuffers ();
+    
+    allocateTextureAndBuffers ();
   }
   
   function calculateTextureSize () {
@@ -175,18 +175,18 @@ var renderingTexture = {};
       maxTexSize
      ];
   }
+  
+  function allocateTextureAndBuffers () {
 
-  function reallocateTextureAndBuffers () {
-
-    if (the_frame_buffer) {
-      gl_ctx.deleteFramebuffer (the_frame_buffer);
-    }
-    if (the_render_buffer) {
-      gl_ctx.deleteRenderbuffer (the_render_buffer);
-    }
-    if (the_frame_texture) {
-      gl_ctx.deleteTexture (the_frame_texture);
-    }
+    // if (the_frame_buffer) {
+    //   gl_ctx.deleteFramebuffer (the_frame_buffer);
+    // }
+    // if (the_render_buffer) {
+    //   gl_ctx.deleteRenderbuffer (the_render_buffer);
+    // }
+    // if (the_frame_texture) {
+    //   gl_ctx.deleteTexture (the_frame_texture);
+    // }
    
     the_frame_buffer = gl_ctx.createFramebuffer();
     
@@ -228,9 +228,18 @@ var renderingTexture = {};
     shelf_nf_alloc_next_shelf_dec_y = 0,
     shelf_nf_alloc_offset_x = 0,
     shelf_nf_alloc_offset_y = 0;
-  function shelf_nf_allocation (viewport, width, height) {
+  function shelf_nf_allocation (sprite, width, height) {
     
+    var viewport = sprite.__view_port;
+ 
     function isFitCurrentShelf (width, height) {
+      
+      // does not fit because to high
+      if (shelf_nf_alloc_offset_y + (height * device_pixel_ratio) > the_texture_size [1]) {
+        return false;
+      }
+      
+      // fit or does not fit because to wide
       return (
         (the_texture_size [0] - shelf_nf_alloc_offset_x)
         > 
@@ -238,10 +247,23 @@ var renderingTexture = {};
       );
     }
     
-    function openNewShelf () {
-      shelf_nf_alloc_offset_x = 0
+    function openNewShelf (height) {
+
+      shelf_nf_alloc_offset_x = 0;
+      
+      // Calculate the new shelft's high
       shelf_nf_alloc_offset_y += shelf_nf_alloc_next_shelf_dec_y;
-      shelf_nf_alloc_next_shelf_dec_y = 0;
+
+      // allocate a new texture if the new sprite does not fit onto the current one
+      if (shelf_nf_alloc_offset_y + (height * device_pixel_ratio) > the_texture_size [1]) {
+        // create new texture
+        allocateTextureAndBuffers ();
+
+        shelf_nf_alloc_offset_y = 0;
+      }
+      // or keep the actual texture and reserve a new shelf
+
+      shelf_nf_alloc_next_shelf_dec_y = height;
     }
     
     function allocateSpaceInCurrentShelf (viewport, width, height) {
@@ -260,10 +282,14 @@ var renderingTexture = {};
     }
     
     if (!isFitCurrentShelf (width, height)) {
-      openNewShelf ();
+      openNewShelf (height);
     }
     
     allocateSpaceInCurrentShelf (viewport, width, height);
+
+    sprite._framebuffer = the_frame_buffer;
+    sprite._renderbuffer = the_render_buffer;
+    sprite._frametexture = the_frame_texture;
   }
   
   var v_alloc_offset_y = 0;
@@ -289,8 +315,6 @@ var renderingTexture = {};
     var x2 = (view_p[0] + view_p[2]) / the_texture_size [0];
     var y2 = (view_p[1] + view_p[3]) / the_texture_size [1];
     
-//    console.log ([x1,y2, x1,y1, x2,y2, x2,y1]);
-
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, draw_texture_uv_buffer);
     gl_ctx.bufferData (
       gl_ctx.ARRAY_BUFFER,
@@ -302,9 +326,9 @@ var renderingTexture = {};
   }
 
   function setupSprite (sprite, width, height) {
-    sprite._framebuffer = the_frame_buffer;
-    sprite._renderbuffer = the_render_buffer;
-    sprite._frametexture = the_frame_texture;
+    sprite._framebuffer = null;
+    sprite._renderbuffer = null;
+    sprite._frametexture = null;
   
     if (width === 0 || height === 0) return;
     
@@ -313,9 +337,7 @@ var renderingTexture = {};
       sprite.__view_port = [];
     }
     //vertical_allocation (sprite.__view_port, width, height);
-    shelf_nf_allocation (sprite.__view_port, width, height);
-    
- //   console.log (sprite.__view_port);
+    shelf_nf_allocation (sprite, width, height);
     
     // setup texture projection
     createTextureProjection (sprite);
