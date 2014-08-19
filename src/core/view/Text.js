@@ -185,7 +185,8 @@ function __copy_image_into_webgl_texture (canvas, texture) {
       (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MAG_FILTER, gl_ctx.LINEAR);
     
     gl_ctx.texParameteri
-      (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MIN_FILTER, gl_ctx.NEAREST_MIPMAP_LINEAR);
+     //(gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MIN_FILTER, gl_ctx.NEAREST_MIPMAP_LINEAR);
+    (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MIN_FILTER, gl_ctx.LINEAR);
 
     gl_ctx.generateMipmap (gl_ctx.TEXTURE_2D);
   }
