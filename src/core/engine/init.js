@@ -75,7 +75,7 @@ function initPrograms () {
   var basic_vertex_shader="\n\
 attribute vec3 position;\n\
 uniform mat4 Pmatrix;\n\
-void main(void) { //pre-built function\n\
+void main(void) {\n\
   gl_Position = Pmatrix*vec4(position, 1.);\n\
 }";
 
@@ -91,7 +91,7 @@ attribute vec3 position;\n\
 uniform mat4 Mmatrix;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
-void main(void) { //pre-built function\n\
+void main(void) {\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
 }";
 
@@ -107,7 +107,7 @@ attribute vec3 position;\n\
 uniform mat4 Pmatrix;\n\
 attribute vec2 uv;\n\
 varying vec2 vUV;\n\
-void main(void) { //pre-built function\n\
+void main(void) {\n\
   gl_Position = Pmatrix*vec4(position, 1.);\n\
   vUV=uv;\n\
 }";
@@ -129,7 +129,7 @@ uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vBkImageUV;\n\
-void main(void) { //pre-built function\n\
+void main(void) {\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
   vBkImageUV=bkImageUV;\n\
 }";
@@ -150,7 +150,7 @@ uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 uniform mat4 Mmatrix;\n\
 varying vec2 vPos;\n\
-void main(void) { //pre-built function\n\
+void main(void) {\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
   vPos = position.xy;\n\
 }";
@@ -177,7 +177,7 @@ attribute vec3 position;\n\
 uniform mat4 Pmatrix;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vBkImageUV;\n\
-void main(void) { //pre-built function\n\
+void main(void) {\n\
   gl_Position = Pmatrix*vec4(position, 1.);\n\
   vBkImageUV=bkImageUV;\n\
 }";
@@ -204,7 +204,7 @@ attribute vec2 uv;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vUV;\n\
 varying vec2 vBkImageUV;\n\
-void main(void) { //pre-built function\n\
+void main(void) {\n\
   gl_Position = Pmatrix*vec4(position, 1.);\n\
   vUV=uv;\n\
   vBkImageUV=bkImageUV;\n\
