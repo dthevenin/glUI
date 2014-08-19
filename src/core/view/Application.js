@@ -100,7 +100,8 @@ Application.prototype.initComponent = function ()
   });
   */
   
-  this.size = [window.innerWidth, window.innerHeight];
+//  this.size = [window.innerWidth, window.innerHeight];
+  this.size = frame_size;
 };
 
 /**
