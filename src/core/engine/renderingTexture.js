@@ -166,7 +166,7 @@ var renderingTexture = {};
     if (nextPowerOfTwo > maxTexSize) {
       throw 'To small texture size';
     }
-    if (frame_size [1] * 3 * device_pixel_ratio > maxTexSize) {
+    if (frame_size [1] * device_pixel_ratio > maxTexSize) {
       throw 'To small texture size';
     }
     
