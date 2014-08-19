@@ -316,6 +316,7 @@ function getLayerGraphRendered (gl_ctx) {
     previous_program = program;
   }
 
+  var previous_rendering_texture = null;
   function drawOneView (sprite, alpha, mode, gl_view) {
 
     var program;
@@ -384,13 +385,17 @@ function getLayerGraphRendered (gl_ctx) {
       attribute.type = gl_ctx.FLOAT;
       attribute.stride = 0;
       attribute.offset = 0;
-
+      
       attribute.buffer = sprite.__texture_uv_buffer;
       attribute.numComponents = 2;
       program.attrib.bkImageUV (attribute);
 
-      texture1.bindToUnit = bindToUnitTEXTURE0_4;
-      program.textures.uMainTexture (texture1, sprite);
+      if (previous_rendering_texture !== sprite._frametexture) {
+        texture1.bindToUnit = bindToUnitTEXTURE0_4;
+        program.textures.uMainTexture (texture1, sprite);
+        
+        previous_rendering_texture = sprite._frametexture;
+      }
       
       program.uniform.uAlpha (alpha);
     }
