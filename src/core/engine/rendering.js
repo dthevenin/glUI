@@ -487,7 +487,9 @@ function getLayerGraphRendered (gl_ctx) {
 
     if (mode === 1 || glEngine.need_redraw || glEngine.forced_redraw) {
       gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
-
+      
+      previous_rendering_texture = null;
+      
       for (var i = 0; i < gl_layer_graph_size; i++) {
         var entry = gl_layer_graph [i];
         

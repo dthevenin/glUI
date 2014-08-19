@@ -306,7 +306,7 @@ var renderingTexture = {};
     //top/left
     var x2 = (view_p[0] + view_p[2]) / the_texture_size [0];
     var y2 = (view_p[1] + view_p[3]) / the_texture_size [1];
-    
+ 
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, draw_texture_uv_buffer);
     gl_ctx.bufferData (
       gl_ctx.ARRAY_BUFFER,
