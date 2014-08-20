@@ -5,7 +5,7 @@ function getLayerGraphRendered (gl_ctx) {
   var color_id_array = new Float32Array ([0,0,0,0])
   var shadow_buffer = gl_ctx.createBuffer ();
   var shadow_vertices = new Float32Array (12);
-  var rendering_mode = 0;
+  glEngine.renderingMode = 0;
     
   function update_gl_vertices (sprite, obj_pos, obj_size) {
     var
@@ -292,7 +292,7 @@ function getLayerGraphRendered (gl_ctx) {
       default_faces_activated = false;
       
       var nb_faces = sprite.triangle_faces.length;
-      if (rendering_mode === 1) {
+      if (glEngine.renderingMode === 1) {
         gl_ctx.drawElements (
           gl_ctx.LINES, nb_faces, gl_ctx.UNSIGNED_SHORT, 0
         );
@@ -318,7 +318,7 @@ function getLayerGraphRendered (gl_ctx) {
         default_faces_activated = true;
       }
      
-      if (rendering_mode === 1) {
+      if (glEngine.renderingMode === 1) {
         gl_ctx.drawElements (gl_ctx.LINE_LOOP, 4, gl_ctx.UNSIGNED_SHORT, 0);
       }
       else {
@@ -439,7 +439,7 @@ function getLayerGraphRendered (gl_ctx) {
       default_faces_activated = true;
     }
    
-    if (mode !== 1 && rendering_mode === 1) {
+    if (mode !== 1 && glEngine.renderingMode === 1) {
       gl_ctx.drawElements (gl_ctx.LINE_LOOP, 4, gl_ctx.UNSIGNED_SHORT, 0);
     }
     else {
