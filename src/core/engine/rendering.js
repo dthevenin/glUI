@@ -79,6 +79,8 @@ function getLayerGraphRendered (gl_ctx) {
     gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, style.__gl_texture_bck_image);
   };
 
+  var previous_framebuffer = null;
+  var previous_renderbuffer = null;
   function paintOneView (gl_view, alpha, mode) {
 
     var program;
@@ -120,9 +122,22 @@ function getLayerGraphRendered (gl_ctx) {
       gl_view.__should_update_gl_vertices = false;
     }
     vertices_buffer = sprite.mesh_vertices_buffer;
+    
+    if (previous_framebuffer !== sprite._framebuffer) {
+      if (previous_framebuffer) {
+        gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, null);
+      }
+      gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, sprite._framebuffer);
+      previous_framebuffer = sprite._framebuffer
+    }
 
-    gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, sprite._framebuffer);
-    gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, sprite._renderbuffer);
+    if (previous_renderbuffer !== sprite._renderbuffer) {
+      if (previous_renderbuffer) {
+        gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, null);
+      }
+      gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, sprite._renderbuffer);
+      previous_renderbuffer = sprite._renderbuffer
+    }
 
     gl_ctx.framebufferTexture2D(gl_ctx.FRAMEBUFFER, gl_ctx.COLOR_ATTACHMENT0, gl_ctx.TEXTURE_2D, sprite._frametexture, 0);
     gl_ctx.framebufferRenderbuffer(gl_ctx.FRAMEBUFFER, gl_ctx.DEPTH_ATTACHMENT, gl_ctx.RENDERBUFFER, sprite._renderbuffer);
@@ -311,7 +326,6 @@ function getLayerGraphRendered (gl_ctx) {
         );
       }
     }
-    gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, null);
     
     previous_program = program;
   }
@@ -465,6 +479,16 @@ function getLayerGraphRendered (gl_ctx) {
             sprite.invalid_paint = false;
           }
         }
+      }
+
+      if (previous_framebuffer) {
+        gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, null);
+        previous_framebuffer = null;
+      }
+
+      if (previous_renderbuffer) {
+        gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, null);
+        previous_renderbuffer = null;
       }
     }
     glEngine.need_repaint = false;
