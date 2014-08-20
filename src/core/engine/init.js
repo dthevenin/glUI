@@ -71,21 +71,11 @@ function create2DCanvas (width, height) {
 // Initialize the shaders, so WebGL knows how to light our scene.
 //
 function initPrograms () {
-
-  var basic_vertex_shader="\n\
-attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
-void main(void) {\n\
-  gl_Position = Pmatrix*vec4(position, 1.);\n\
-}";
-
-  var basic_shader_fragment="\n\
-precision lowp float;\n\
-uniform vec4 color;\n\
-void main(void) {\n\
-  gl_FragColor = color;\n\
-}";
-
+  
+  /**********************************************
+               Picking shaders
+  **********************************************/
+  
   var pickup_vertex_shader="\n\
 attribute vec3 position;\n\
 uniform mat4 Mmatrix;\n\
@@ -102,25 +92,9 @@ void main(void) {\n\
   gl_FragColor = color;\n\
 }";
 
-  var image_vertex_shader="\n\
-attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
-attribute vec2 uv;\n\
-varying vec2 vUV;\n\
-void main(void) {\n\
-  gl_Position = Pmatrix*vec4(position, 1.);\n\
-  vUV=uv;\n\
-}";
-
-  var image_shader_fragment="\n\
-precision lowp float;\n\
-varying vec2 vUV;\n\
-uniform sampler2D uMainTexture;\n\
-uniform vec4 color;\n\
-void main(void) {\n\
-  vec4 mainTextureColor = texture2D(uMainTexture, vUV);\n\
-  gl_FragColor = mainTextureColor;\n\
-}";
+/**********************************************
+             Drawing shaders
+**********************************************/
 
   var draw_vertex_shader="\n\
 attribute vec3 position;\n\
@@ -143,6 +117,10 @@ void main(void) {\n\
   vec4 mainTextureColor = texture2D(uMainTexture, vBkImageUV);\n\
   gl_FragColor = vec4(mainTextureColor.rgb, mainTextureColor.a * uAlpha);\n\
 }";
+
+/**********************************************
+             Paiting shaders
+**********************************************/
 
   var shadow_vertex_shader="\n\
 attribute vec3 position;\n\
@@ -170,6 +148,40 @@ void main(void) {\n\
     smoothstep(frame[3], frame[3] - blur, vPos.y); \n\
 \n\
   gl_FragColor = vec4(color.rgb, shine * color.a * uAlpha);\n\
+}";
+
+  var basic_vertex_shader="\n\
+attribute vec3 position;\n\
+uniform mat4 Pmatrix;\n\
+void main(void) {\n\
+  gl_Position = Pmatrix*vec4(position, 1.);\n\
+}";
+
+  var basic_shader_fragment="\n\
+precision lowp float;\n\
+uniform vec4 color;\n\
+void main(void) {\n\
+  gl_FragColor = color;\n\
+}";
+
+  var image_vertex_shader="\n\
+attribute vec3 position;\n\
+uniform mat4 Pmatrix;\n\
+attribute vec2 uv;\n\
+varying vec2 vUV;\n\
+void main(void) {\n\
+  gl_Position = Pmatrix*vec4(position, 1.);\n\
+  vUV=uv;\n\
+}";
+
+  var image_shader_fragment="\n\
+precision lowp float;\n\
+varying vec2 vUV;\n\
+uniform sampler2D uMainTexture;\n\
+uniform vec4 color;\n\
+void main(void) {\n\
+  vec4 mainTextureColor = texture2D(uMainTexture, vUV);\n\
+  gl_FragColor = mainTextureColor;\n\
 }";
 
   var one_texture_vertex_shader="\n\
