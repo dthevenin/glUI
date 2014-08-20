@@ -455,16 +455,12 @@ function getLayerGraphRendered (gl_ctx) {
     DRAW_PROB_ID = getProfilingProbeId ("draw");
 
   function renderLayerGraph (frame_size, now, mode) {
-    gl_ctx.viewport (
-      0.0, 0.0,
-      frame_size[0] * gl_device_pixel_ratio,
-      frame_size[1] * gl_device_pixel_ratio
-    );
     
     if (_profiling && _profiling.collect) _profiling.begin (PAINT_PROB_ID);
     
     // repaint process (only if no picking)  
     if (mode !== 1 && (glEngine.need_repaint || glEngine.forced_repaint)) {
+
       for (var i = 0; i < gl_layer_graph_size; i++) {
         var entry = gl_layer_graph [i];
         if (entry[0] === 1) {
