@@ -17,7 +17,6 @@ var
   gl_device_pixel_ratio,
   jsProjMatrix,
   jsViewMatrix,
-  orthoProjectionMatrix,
   core_export = {};
 
 
@@ -152,9 +151,15 @@ void main(void) {\n\
 
   var basic_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
+uniform float ratio;\n\
+const float c_precision = 65536.;\n\
+mat4 createProjMatrix () {\n\
+  float ratiox =  2. / mod(ratio, c_precision);\n\
+  float ratioy = -2. / (ratio / c_precision);\n\
+  return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
+}\n\
 void main(void) {\n\
-  gl_Position = Pmatrix*vec4(position, 1.);\n\
+  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
 }";
 
   var basic_shader_fragment="\n\
@@ -166,11 +171,17 @@ void main(void) {\n\
 
   var image_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
 attribute vec2 uv;\n\
 varying vec2 vUV;\n\
+uniform float ratio;\n\
+const float c_precision = 65536.;\n\
+mat4 createProjMatrix () {\n\
+  float ratiox =  2. / mod(ratio, c_precision);\n\
+  float ratioy = -2. / (ratio / c_precision);\n\
+  return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
+}\n\
 void main(void) {\n\
-  gl_Position = Pmatrix*vec4(position, 1.);\n\
+  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
   vUV=uv;\n\
 }";
 
@@ -186,11 +197,17 @@ void main(void) {\n\
 
   var one_texture_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vBkImageUV;\n\
+uniform float ratio;\n\
+const float c_precision = 65536.;\n\
+mat4 createProjMatrix () {\n\
+  float ratiox =  2. / mod(ratio, c_precision);\n\
+  float ratioy = -2. / (ratio / c_precision);\n\
+  return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
+}\n\
 void main(void) {\n\
-  gl_Position = Pmatrix*vec4(position, 1.);\n\
+  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
   vBkImageUV=bkImageUV;\n\
 }";
 
@@ -211,13 +228,19 @@ void main(void) {\n\
 
   var two_textures_vertex_shader="\n\
 attribute vec3 position;\n\
-uniform mat4 Pmatrix;\n\
 attribute vec2 uv;\n\
 attribute vec2 bkImageUV;\n\
 varying vec2 vUV;\n\
 varying vec2 vBkImageUV;\n\
+uniform float ratio;\n\
+const float c_precision = 65536.;\n\
+mat4 createProjMatrix () {\n\
+  float ratiox =  2. / mod(ratio, c_precision);\n\
+  float ratioy = -2. / (ratio / c_precision);\n\
+  return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
+}\n\
 void main(void) {\n\
-  gl_Position = Pmatrix*vec4(position, 1.);\n\
+  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
   vUV=uv;\n\
   vBkImageUV=bkImageUV;\n\
 }";
@@ -255,9 +278,6 @@ void main(void) {\n\
 }
 
 function initMainMatrix () {
-  // Paint projection matrix
-  orthoProjectionMatrix = mat4.create ();
-
   // Draw projection matrix
   jsProjMatrix = mat4.create ();
   mat4.identity (jsProjMatrix)

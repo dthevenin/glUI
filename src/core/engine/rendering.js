@@ -264,12 +264,13 @@ function getLayerGraphRendered (gl_ctx) {
         program.uniform.color (c_buffer);
       }
     }
-
-    mat4.identity (orthoProjectionMatrix);
-    mat4.translate (orthoProjectionMatrix, [-1,1,0]);
-    mat4.scale (orthoProjectionMatrix, [2/ gl_view._size[0], -2/ gl_view._size[1], 1]);
-    program.uniform.Pmatrix (orthoProjectionMatrix);
-
+    
+    // set the ratio vector for the projection matrix.
+    // this x,y ratio values are packed into a 32bit float.
+    // The shader will upacked these values and create
+    // the orthogonal projection matrix
+    program.uniform.ratio (gl_view._size[0] + (gl_view._size[1] << 16));
+    
     attribute.normalize = false;
     attribute.type = gl_ctx.FLOAT;
     attribute.stride = 0;
@@ -486,8 +487,8 @@ function getLayerGraphRendered (gl_ctx) {
         gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, null);
         previous_renderbuffer = null;
       }
+      glEngine.need_repaint = false;
     }
-    glEngine.need_repaint = false;
 
     // if profiling, force an intermediary flush and finish
     if (_profiling && _profiling.collect) {
@@ -496,16 +497,16 @@ function getLayerGraphRendered (gl_ctx) {
       _profiling.end (PAINT_PROB_ID);
     }
 
-    gl_ctx.viewport (
-      0,
-      0,
-      frame_size[0] * gl_device_pixel_ratio,
-      frame_size[1] * gl_device_pixel_ratio
-    );
-
     if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
     if (mode === 1 || glEngine.need_redraw || glEngine.forced_redraw) {
+      gl_ctx.viewport (
+        0,
+        0,
+        frame_size[0] * gl_device_pixel_ratio,
+        frame_size[1] * gl_device_pixel_ratio
+      );
+
       gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
       
       previous_rendering_texture = null;
@@ -523,8 +524,8 @@ function getLayerGraphRendered (gl_ctx) {
           drawOneView (entry[1], entry[3], 2, entry[2]);
         }
       }
+      glEngine.need_redraw = false;
     }
-    glEngine.need_redraw = false;
     
     // if profiling, force a finish with the flush
     if (_profiling && _profiling.collect) {
