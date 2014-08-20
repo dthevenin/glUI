@@ -118,10 +118,6 @@ void main(void) {\n\
   gl_FragColor = vec4(mainTextureColor.rgb, mainTextureColor.a * uAlpha);\n\
 }";
 
-/**********************************************
-             Paiting shaders
-**********************************************/
-
   var shadow_vertex_shader="\n\
 attribute vec3 position;\n\
 uniform mat4 Pmatrix;\n\
@@ -149,6 +145,10 @@ void main(void) {\n\
 \n\
   gl_FragColor = vec4(color.rgb, shine * color.a * uAlpha);\n\
 }";
+
+/**********************************************
+             Paiting shaders
+**********************************************/
 
   var basic_vertex_shader="\n\
 attribute vec3 position;\n\
