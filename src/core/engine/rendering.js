@@ -91,8 +91,10 @@ function getLayerGraphRendered (gl_ctx) {
     // determine which vertices buffer to use
     // add update it if it's need.
     if (gl_view.__should_update_gl_vertices) {
-
-      renderingTexture.setupSprite (sprite, gl_view._size[0], gl_view._size[1])
+      if (gl_view.__should_update_texture) {
+        renderingTexture.updateSpriteSize (sprite, gl_view._size[0], gl_view._size[1])
+        gl_view.__should_update_texture = false;
+      }
       if (sprite.__update_gl_vertices) {
         sprite.__update_gl_vertices (sprite, gl_view._position, gl_view._size);
 

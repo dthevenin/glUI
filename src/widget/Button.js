@@ -239,7 +239,7 @@ util.addClassProperties (Button, {
       this._size [0] = v [0];
       this._size [1] = v [1];
     
-      this._updateSizeAndPos ();
+      this._updateSize (true);
 
       this.__update_text_view (this._size);
       if (this._text != "") {

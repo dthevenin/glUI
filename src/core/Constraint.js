@@ -27,7 +27,7 @@ function Constraint () {
     var self = this;
     Object.observe (this, function (changes) {
       if (self.__view) {
-        self.__view._updateSizeAndPos ();
+        self.__view._updateSize ();
       }
     })
   }
@@ -113,7 +113,9 @@ Constraint.prototype = {
   },
   
   __update_view : function (view) {
-    if (!view) return;
+    var sizeUpdated = false;
+
+    if (!view) return sizeUpdated;
     
     var
       x = view._position [0], y = view._position [1],
@@ -225,7 +227,15 @@ Constraint.prototype = {
     
     // UPDATE VIEW POS AND SIZE
     view._position [0] = x; view._position [1] = y;
-    view._size [0] = w; view._size [1] = h;
+    if (view._size [0] !== w) {
+      view._size [0] = w;
+      sizeUpdated = true;
+    }
+    if (view._size [1] !== h) {
+      view._size [1] = h;
+      sizeUpdated = true;
+    }
+    return sizeUpdated;
   }
 }
 

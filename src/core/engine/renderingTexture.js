@@ -23,7 +23,7 @@ var renderingTexture = {};
     );
   }
 
-  function setupSprite (sprite, width, height) {
+  function updateSpriteSize (sprite, width, height) {
     if (sprite._framebuffer) {
       gl_ctx.deleteFramebuffer (sprite._framebuffer);
     }
@@ -107,7 +107,7 @@ var renderingTexture = {};
   }
 
   // renderingTexture.init = initTexture;
-  // renderingTexture.setupSprite = setupSprite;
+  // renderingTexture.updateSpriteSize = updateSpriteSize;
   // renderingTexture.removeSprite = removeSprite;
 }) ();
 
@@ -126,6 +126,8 @@ var renderingTexture = {};
   var maxTexSize;
   var maxCubeSize;
   var maxRenderbufferSize;
+  
+  var texture_data = [];
 
   function initTexture (ctx, frame_size, pixel_ratio) {
     gl_ctx = ctx;
@@ -284,6 +286,85 @@ var renderingTexture = {};
     sprite._frametexture = the_frame_texture;
   }
   
+
+  function dynamic_size_allocation (sprite, data) {
+     
+    function dynamicTextureAndBuffers () {
+
+      var width_npot = Math.pow (2, Math.ceil (
+        Math.log (data.width * device_pixel_ratio) / Math.log (2)
+      ));
+
+      var height_npot = Math.pow (2, Math.ceil (
+        Math.log (data.height * device_pixel_ratio) / Math.log (2)
+      ));
+    
+      // no need to reallocate texture
+      if (width_npot <= data.text_width && height_npot <= data.text_height) {
+        return;
+      }
+      else {
+        // clean data before allocation/reallocation
+        if (sprite._framebuffer) {
+          gl_ctx.deleteFramebuffer (sprite._framebuffer);
+        }
+        if (sprite._renderbuffer) {
+          gl_ctx.deleteRenderbuffer (sprite._renderbuffer);
+        }
+        if (sprite._frametexture) {
+          gl_ctx.deleteTexture (sprite._frametexture);
+        }
+      }
+      data.text_width = width_npot;
+      data.text_height = height_npot;
+      
+      // data allocation
+      var frame_buffer = gl_ctx.createFramebuffer();
+      var frame_texture = gl_ctx.createTexture();
+      var render_buffer = gl_ctx.createRenderbuffer ();
+      sprite._framebuffer = frame_buffer;
+      sprite._renderbuffer = render_buffer;
+      sprite._frametexture = frame_texture;
+    
+      // Frame buffer configuration
+      gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, frame_buffer);
+      frame_buffer.width = width_npot;
+      frame_buffer.height = height_npot;
+
+      // Frame texture configuration
+      gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, frame_texture);
+      gl_ctx.texImage2D (gl_ctx.TEXTURE_2D, 0, gl_ctx.RGBA, width_npot, height_npot, 0, gl_ctx.RGBA, gl_ctx.UNSIGNED_BYTE, null);
+
+      // POT texture
+      gl_ctx.texParameteri
+        (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MAG_FILTER, gl_ctx.LINEAR);
+
+      gl_ctx.texParameteri
+        (gl_ctx.TEXTURE_2D, gl_ctx.TEXTURE_MIN_FILTER, gl_ctx.LINEAR);
+
+      gl_ctx.generateMipmap (gl_ctx.TEXTURE_2D);    
+    
+      // Render buffer configuration
+      gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, render_buffer);
+      gl_ctx.renderbufferStorage (gl_ctx.RENDERBUFFER, gl_ctx.DEPTH_COMPONENT16, width_npot, height_npot);
+
+      gl_ctx.framebufferTexture2D (gl_ctx.FRAMEBUFFER, gl_ctx.COLOR_ATTACHMENT0, gl_ctx.TEXTURE_2D, frame_texture, 0);
+      gl_ctx.framebufferRenderbuffer (gl_ctx.FRAMEBUFFER, gl_ctx.DEPTH_ATTACHMENT, gl_ctx.RENDERBUFFER, render_buffer);
+
+      gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, null);
+      gl_ctx.bindRenderbuffer (gl_ctx.RENDERBUFFER, null);
+      gl_ctx.bindFramebuffer (gl_ctx.FRAMEBUFFER, null);
+    }
+    
+    dynamicTextureAndBuffers ();
+    
+    var viewport = sprite.__view_port;
+    viewport [0] = 0;
+    viewport [1] = 0;
+    viewport [2] = data.width * device_pixel_ratio;
+    viewport [3] = data.height * device_pixel_ratio; 
+  }
+
   var v_alloc_offset_y = 0;
   function vertical_allocation (viewport, width, height) {
 
@@ -295,18 +376,18 @@ var renderingTexture = {};
     v_alloc_offset_y += height * device_pixel_ratio;
   }
   
-  function createTextureProjection (sprite) {
+  function createTextureProjection (sprite, texture_size) {
     var draw_texture_uv_buffer = gl_ctx.createBuffer ();
     
     var view_p = sprite.__view_port;
     
     //bottom/right
-    var x1 = view_p[0] / the_texture_size [0];
-    var y1 = view_p[1] / the_texture_size [1];
+    var x1 = view_p[0] / texture_size [0];
+    var y1 = view_p[1] / texture_size [1];
     //top/left
-    var x2 = (view_p[0] + view_p[2]) / the_texture_size [0];
-    var y2 = (view_p[1] + view_p[3]) / the_texture_size [1];
- 
+    var x2 = (view_p[0] + view_p[2]) / texture_size [0];
+    var y2 = (view_p[1] + view_p[3]) / texture_size [1];
+    
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, draw_texture_uv_buffer);
     gl_ctx.bufferData (
       gl_ctx.ARRAY_BUFFER,
@@ -317,22 +398,58 @@ var renderingTexture = {};
     sprite.__texture_uv_buffer = draw_texture_uv_buffer;
   }
 
-  function setupSprite (sprite, width, height) {
-    sprite._framebuffer = null;
-    sprite._renderbuffer = null;
-    sprite._frametexture = null;
-  
-    if (width === 0 || height === 0) return;
+  function updateSpriteSize (sprite, width, height) {
     
-    // setup texture view port
-    if (!sprite.__view_port) {
-      sprite.__view_port = [];
+    if (width === 0 || height === 0) {
+      delete texture_data [sprite.id];
+      return;
     }
-    //vertical_allocation (sprite.__view_port, width, height);
-    shelf_nf_allocation (sprite, width, height);
+
+    var data = texture_data [sprite.id];
+    if (data) {
+      if (data.width === width && data.height === height) {
+        return;
+      }
+      
+      // reallocation need (first size changed)
+      if (!data.size_changed) {
+        sprite._framebuffer = null;
+        sprite._renderbuffer = null;
+        sprite._frametexture = null;
+      }
+      
+      data.size_changed = true;
+      data.width = width;
+      data.height = height;            
+    }
+    else {
+      data = {};
+      data.width = width;
+      data.height = height;
+      data.size_changed = false;
+      
+      sprite.__view_port = [];
+      texture_data [sprite.id] = data;
+    }
     
-    // setup texture projection
-    createTextureProjection (sprite);
+    // setup texture and view port
+    
+    // A texture in the normal global texture
+    if (!data.size_changed) {
+      //vertical_allocation (sprite.__view_port, width, height);
+      shelf_nf_allocation (sprite, width, height);
+
+      // setup texture projection
+      createTextureProjection (sprite, the_texture_size);
+    }
+
+    // A specific texture for dynamic object
+    else {
+      dynamic_size_allocation (sprite, data);
+
+      // setup texture projection
+      createTextureProjection (sprite, [data.text_width, data.text_height]);
+    }
   }
 
   function removeSprite (sprite) {
@@ -340,6 +457,6 @@ var renderingTexture = {};
   }
 
   renderingTexture.init = initTexture;
-  renderingTexture.setupSprite = setupSprite;
+  renderingTexture.updateSpriteSize = updateSpriteSize;
   renderingTexture.removeSprite = removeSprite;
 }) ();

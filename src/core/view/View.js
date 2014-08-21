@@ -18,6 +18,7 @@ function View (config)
   Group.call (this);
   Transform.call (this);
 
+  this.__should_update_texture = true;
   createSprite (this);
 }
 util.extend (View.prototype, Group.prototype);
@@ -100,7 +101,7 @@ View.prototype.destructor = function ()
 View.prototype.refresh = function ()
 {
   Group.prototype.refresh.call (this);
-  this._updateSizeAndPos ();
+  this._updateSize ();
   if (this.__scroll__) {
     this.__scroll__.refresh ();
   }
@@ -141,7 +142,7 @@ View.prototype.initComponent = function ()
  */
 View.prototype.viewDidAdd = function () {
   Group.prototype.viewDidAdd.call (this);
-  this._updateSizeAndPos ();
+  this._updateSize ();
 };
 
 View.prototype.setUdpateVerticesFunction= function (update_gl_vertices) {
@@ -169,7 +170,7 @@ makeTextureProjection) {
 ********************************************************************/
 View.prototype.redraw = function (clb)
 {
-  this._updateSizeAndPos ();
+  this._updateSize ();
 };
 
 /**
@@ -177,7 +178,23 @@ View.prototype.redraw = function (clb)
  * @function
  * This function cost a lot!
  */
-View.prototype._updateSizeAndPos = function ()
+View.prototype._updateSize = function (sizeUpdated)
+{
+  if (this._constraint) {
+    sizeUpdated = this._constraint.__update_view (this) || sizeUpdated;
+  }
+  this.__should_update_gl_vertices = true;
+  this.__should_update_gl_matrix = true;
+  this.__should_update_texture = this.__should_update_texture || sizeUpdated;
+  glEngine.shouldRepaint (this);
+};
+
+/**
+ * @protected
+ * @function
+ * This function cost a lot!
+ */
+View.prototype._updatePos = function ()
 {
   if (this._constraint) {
     this._constraint.__update_view (this);
@@ -366,7 +383,7 @@ util.addClassProperties (View, {
       this._size [0] = v [0];
       this._size [1] = v [1];
 
-      this._updateSizeAndPos ();
+      this._updateSize (true);
     },
 
     /**
@@ -396,7 +413,7 @@ util.addClassProperties (View, {
       
       vec3.set (v, this._position);
 
-      this._updateSizeAndPos ();
+      this._updatePos ();
     },
 
     /**

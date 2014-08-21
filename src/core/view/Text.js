@@ -256,7 +256,7 @@ var __text_management = {
     if (autoresize && text_height > this._size [1]) {
       this._size [1] = text_height;
      
-      this._updateSizeAndPos ();
+      this._updateSize (true);
 
       this.__update_text_view (this._size);
       this.__update_text (this._text, false);      
@@ -402,7 +402,7 @@ util.addClassProperties (Text, {
       this._size [0] = v [0];
       this._size [1] = v [1];
     
-      this._updateSizeAndPos ();
+      this._updateSize (true);
       
       this.__update_text_view (this._size);
       if (this._text != "") {

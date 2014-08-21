@@ -107,9 +107,9 @@ Canvas.prototype = {
    * @function
    * This function cost a lot!
    */
-  _updateSizeAndPos : function ()
+  _updateSize : function (sizeUpdated)
   {
-    View.prototype._updateSizeAndPos.call (this);
+    View.prototype._updateSize.call (this, sizeUpdated);
 
     this.__canvas_node.style.width = this._size [0] + "px";
     this.__canvas_node.style.height = this._size [1] + "px";

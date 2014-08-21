@@ -71,14 +71,6 @@ function Sprite (id)
   
   this.invalid_paint = true;
 }
-
-function updateSpriteSize (gl_view, width, height) {
-  if (!gl_view) return;
-  var sprite = new Sprite (gl_view.__gl_id);
-  if (!sprite) return;
-  
-  renderingTexture.setupSprite (sprite, width, height);
-}
   
 function defaultSpriteVerticesAllocation (sprite) {
   
