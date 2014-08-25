@@ -59,7 +59,7 @@ function getLayerGraphRendered (gl_ctx) {
   var previous_program = null;
   var attribute = {}, texture1 = {}, texture2 = {};
   
-  function bindToUnitTEXTURE0_4 (unit, sprite) {
+  function bindToUnitFRAME_TEXTURE (unit, sprite) {
     gl_ctx.activeTexture (gl_ctx.TEXTURE0 + unit);
     gl_ctx.bindTexture (gl_ctx.TEXTURE_2D, sprite._frametexture);
   };
@@ -334,11 +334,13 @@ function getLayerGraphRendered (gl_ctx) {
   }
 
   var previous_rendering_texture = null;
+  var previous_alpha = 0;
+  var attr_bkImageUV_loc, attr_position_loc;
   function drawOneView (sprite, alpha, mode, gl_view) {
 
     var program;
     var vertices_buffer;
-           
+
     // determine which vertices buffer to use
     // add update it if it's need.
     if (mode === 2) {
@@ -354,6 +356,11 @@ function getLayerGraphRendered (gl_ctx) {
       program = pickupShaderProgram;
       if (previous_program !== pickupShaderProgram) {
         program.useIt ();
+        // and force alpha
+        program.uniform.uAlpha (alpha);
+        previous_alpha = alpha;
+        // attrib localisation
+        attr_position_loc = program.attribLoc.position;
       }
 
       // calculate the color ID
@@ -370,6 +377,11 @@ function getLayerGraphRendered (gl_ctx) {
       program = drawShadowShaderProgram;
       if (previous_program !== drawShadowShaderProgram) {
         program.useIt ();
+        // and force alpha
+        program.uniform.uAlpha (alpha);
+        previous_alpha = alpha;
+        // attrib localisation
+        attr_position_loc = program.attribLoc.position;
       }
       program.uniform.color (style._shadow_color.__gl_array);
       if (style._shadow_blur) {
@@ -386,8 +398,6 @@ function getLayerGraphRendered (gl_ctx) {
           shadow_vertices[1], shadow_vertices[10]
         ])
       );
-      
-      program.uniform.uAlpha (alpha);
     }
 
     // General mode rendering
@@ -396,38 +406,39 @@ function getLayerGraphRendered (gl_ctx) {
       program = drawShaderProgram;
       if (previous_program !== drawShaderProgram) {
         program.useIt ();
+        // and force alpha
+        program.uniform.uAlpha (alpha);
+        previous_alpha = alpha;
+        // attrib localisation
+        attr_bkImageUV_loc = program.attribLoc.bkImageUV;
+        attr_position_loc = program.attribLoc.position;
       }
 
-      attribute.normalize = false;
-      attribute.type = gl_ctx.FLOAT;
-      attribute.stride = 0;
-      attribute.offset = 0;
+      // Set up all the vertex attributes for vertices
+      // ATTRIBUTE INDEX 1
+      gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.__texture_uv_buffer);
+      gl_ctx.vertexAttribPointer (attr_bkImageUV_loc, 2, gl_ctx.FLOAT, false, 0, 0);
       
-      attribute.buffer = sprite.__texture_uv_buffer;
-      attribute.numComponents = 2;
-      program.attrib.bkImageUV (attribute);
-
       if (previous_rendering_texture !== sprite._frametexture) {
-        texture1.bindToUnit = bindToUnitTEXTURE0_4;
+        texture1.bindToUnit = bindToUnitFRAME_TEXTURE;
         program.textures.uMainTexture (texture1, sprite);
         
         previous_rendering_texture = sprite._frametexture;
       }
-      
-      program.uniform.uAlpha (alpha);
     }
 
     program.uniform.Mmatrix (sprite.m_matrix);
+    
+    // Set up all the vertex attributes for vertices
+    // ATTRIBUTE INDEX 0
+    gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, vertices_buffer);
+    gl_ctx.vertexAttribPointer (attr_position_loc, 3, gl_ctx.FLOAT,false, 0, 0);
 
-    attribute.normalize = false;
-    attribute.type = gl_ctx.FLOAT;
-    attribute.stride = 0;
-    attribute.offset = 0;
-    attribute.buffer = vertices_buffer;
-
-    attribute.numComponents = 3;
-    program.attrib.position (attribute);
-        
+    if (previous_alpha !== alpha) {
+      program.uniform.uAlpha (alpha);
+      previous_alpha = alpha;
+    }
+    
     if (!default_faces_activated) {
       // set default faces
       gl_ctx.bindBuffer (
@@ -490,6 +501,14 @@ function getLayerGraphRendered (gl_ctx) {
         previous_renderbuffer = null;
       }
       glEngine.need_repaint = false;
+
+      // set the viewport to default one
+      gl_ctx.viewport (
+        0,
+        0,
+        frame_size[0] * gl_device_pixel_ratio,
+        frame_size[1] * gl_device_pixel_ratio
+      );
     }
 
     // if profiling, force an intermediary flush and finish
@@ -502,16 +521,14 @@ function getLayerGraphRendered (gl_ctx) {
     if (_profiling && _profiling.collect) _profiling.begin (DRAW_PROB_ID);
 
     if (mode === 1 || glEngine.need_redraw || glEngine.forced_redraw) {
-      gl_ctx.viewport (
-        0,
-        0,
-        frame_size[0] * gl_device_pixel_ratio,
-        frame_size[1] * gl_device_pixel_ratio
-      );
 
       gl_ctx.clear (gl_ctx.COLOR_BUFFER_BIT);
       
       previous_rendering_texture = null;
+ 
+      // Enable all of the vertex attribute arrays (position and texture)
+      gl_ctx.enableVertexAttribArray (0);
+      gl_ctx.enableVertexAttribArray (1);
       
       for (var i = 0; i < gl_layer_graph_size; i++) {
         var entry = gl_layer_graph [i];
