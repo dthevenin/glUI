@@ -356,9 +356,6 @@ function getLayerGraphRendered (gl_ctx) {
       program = pickupShaderProgram;
       if (previous_program !== pickupShaderProgram) {
         program.useIt ();
-        // and force alpha
-        program.uniform.uAlpha (alpha);
-        previous_alpha = alpha;
         // attrib localisation
         attr_position_loc = program.attribLoc.position;
       }
@@ -392,6 +389,11 @@ function getLayerGraphRendered (gl_ctx) {
       }
       update_shadow_gl_vertices (gl_view._size, style._shadow_offset, style._shadow_blur);
 
+      if (previous_alpha !== alpha) {
+        program.uniform.uAlpha (alpha);
+        previous_alpha = alpha;
+      }
+    
       program.uniform.frame (
         new Float32Array ([
           shadow_vertices[0], shadow_vertices[9],
@@ -418,7 +420,12 @@ function getLayerGraphRendered (gl_ctx) {
       // ATTRIBUTE INDEX 1
       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.__texture_uv_buffer);
       gl_ctx.vertexAttribPointer (attr_bkImageUV_loc, 2, gl_ctx.FLOAT, false, 0, 0);
-      
+ 
+      if (previous_alpha !== alpha) {
+        program.uniform.uAlpha (alpha);
+        previous_alpha = alpha;
+      }
+          
       if (previous_rendering_texture !== sprite._frametexture) {
         texture1.bindToUnit = bindToUnitFRAME_TEXTURE;
         program.textures.uMainTexture (texture1, sprite);
@@ -434,11 +441,6 @@ function getLayerGraphRendered (gl_ctx) {
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, vertices_buffer);
     gl_ctx.vertexAttribPointer (attr_position_loc, 3, gl_ctx.FLOAT,false, 0, 0);
 
-    if (previous_alpha !== alpha) {
-      program.uniform.uAlpha (alpha);
-      previous_alpha = alpha;
-    }
-    
     if (!default_faces_activated) {
       // set default faces
       gl_ctx.bindBuffer (
