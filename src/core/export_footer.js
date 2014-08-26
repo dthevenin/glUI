@@ -28,7 +28,6 @@ core_export.Color = Color;
 core_export.Event = Event;
 core_export.Group = Group;
 core_export.Transform = Transform;
-core_export.Canvas = Canvas;
 core_export.Image = gl_Image;
 core_export.Text = Text;
 core_export.View = View;
@@ -48,6 +47,7 @@ core_export.makeTextureProjection = makeTextureProjection;
 core_export.allocateTriangleFaces = allocateTriangleFaces;
 core_export.initMeshVeticesValues = initMeshVeticesValues;
 core_export.createProgram = createProgram;
+
 core_export.math = {
   vec2: vec2,
   vec3: vec3,
