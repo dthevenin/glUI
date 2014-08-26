@@ -22,6 +22,10 @@ View.NO_USER_PAINT = 0;
 View.CANVAS_USER_PAINT = 1
 View.SHADER_USER_PAINT = 2;
 
+/**
+ * @public
+ * @function
+ */
 View.prototype.activateUserDraw = function (mode, options) {
   switch (mode) {
   case View.CANVAS_USER_PAINT:
@@ -95,6 +99,10 @@ View.prototype.__draw = function (x, y, width, height) {
   this.__update_texture ();
 }
 
+/**
+ * @public
+ * @function
+ */
 View.prototype.redraw = function (x, y, width, height)
 {
   this.__draw (x, y, width, height);
@@ -114,6 +122,15 @@ View.prototype.__update_texture = function () {
   }
 };
 
+/**
+ * @private
+ * @function
+ */
 View.prototype.__canvas_ctx = null;
+
+/**
+ * @private
+ * @function
+ */
 View.prototype.__canvas_node = null;
  
