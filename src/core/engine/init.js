@@ -80,6 +80,7 @@ attribute vec3 position;\n\
 uniform mat4 Mmatrix;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
+\n\
 void main(void) {\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
 }";
@@ -100,8 +101,11 @@ attribute vec3 position;\n\
 uniform mat4 Mmatrix;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
+\n\
 attribute vec2 bkImageUV;\n\
+\n\
 varying vec2 vBkImageUV;\n\
+\n\
 void main(void) {\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
   vBkImageUV=bkImageUV;\n\
@@ -122,7 +126,9 @@ attribute vec3 position;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 uniform mat4 Mmatrix;\n\
+\n\
 varying vec2 vPos;\n\
+\n\
 void main(void) {\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
   vPos = position.xy;\n\
