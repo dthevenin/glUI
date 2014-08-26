@@ -84,11 +84,13 @@ function defaultSpriteVerticesAllocation (sprite) {
   sprite.texture_uv = null;
 }
 
-function initSprite (gl_view) {
+function initSprite (gl_view, program) {
   if (!gl_view) return;
   
-  var sprite = SPRITES [gl_view.__gl_id];
-  if (!sprite) return;
+  var sprite = SPRITES [gl_view.__gl_id];  
+  if (!sprite) {
+    throw new String ("Invalid sprite init, no sprite associed to the view.")
+  }
   
   if (sprite.default_meshes) {
     defaultSpriteVerticesAllocation (sprite);
