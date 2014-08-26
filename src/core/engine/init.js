@@ -1,7 +1,6 @@
 
 var
   basicShaderProgram,
-  imageShaderProgram,
   oneTextureShaderProgram,
   twoTexturesShaderProgram,
   drawShadowShaderProgram,
@@ -102,22 +101,22 @@ uniform mat4 Mmatrix;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 \n\
-attribute vec2 bkImageUV;\n\
+attribute vec2 text_uv;\n\
 \n\
-varying vec2 vBkImageUV;\n\
+varying vec2 v_text_uv;\n\
 \n\
 void main(void) {\n\
   gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
-  vBkImageUV=bkImageUV;\n\
+  v_text_uv = text_uv;\n\
 }";
 
   var draw_shader_fragment="\n\
 precision lowp float;\n\
-varying vec2 vBkImageUV;\n\
-uniform sampler2D uMainTexture;\n\
+varying vec2 v_text_uv;\n\
+uniform sampler2D texture;\n\
 uniform float uAlpha;\n\
 void main(void) {\n\
-  vec4 mainTextureColor = texture2D(uMainTexture, vBkImageUV);\n\
+  vec4 mainTextureColor = texture2D(texture, v_text_uv);\n\
   gl_FragColor = vec4(mainTextureColor.rgb, mainTextureColor.a * uAlpha);\n\
 }";
 
@@ -175,36 +174,10 @@ void main(void) {\n\
   gl_FragColor = color;\n\
 }";
 
-  var image_vertex_shader="\n\
-attribute vec3 position;\n\
-attribute vec2 uv;\n\
-varying vec2 vUV;\n\
-uniform float ratio;\n\
-const float c_precision = 65536.;\n\
-mat4 createProjMatrix () {\n\
-  float ratiox =  2. / mod(ratio, c_precision);\n\
-  float ratioy = -2. / (ratio / c_precision);\n\
-  return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
-}\n\
-void main(void) {\n\
-  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
-  vUV=uv;\n\
-}";
-
-  var image_shader_fragment="\n\
-precision lowp float;\n\
-varying vec2 vUV;\n\
-uniform sampler2D uMainTexture;\n\
-uniform vec4 color;\n\
-void main(void) {\n\
-  vec4 mainTextureColor = texture2D(uMainTexture, vUV);\n\
-  gl_FragColor = mainTextureColor;\n\
-}";
-
   var one_texture_vertex_shader="\n\
 attribute vec3 position;\n\
-attribute vec2 bkImageUV;\n\
-varying vec2 vBkImageUV;\n\
+attribute vec2 text_uv_1;\n\
+varying vec2 v_text_uv_1;\n\
 uniform float ratio;\n\
 const float c_precision = 65536.;\n\
 mat4 createProjMatrix () {\n\
@@ -214,19 +187,19 @@ mat4 createProjMatrix () {\n\
 }\n\
 void main(void) {\n\
   gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
-  vBkImageUV=bkImageUV;\n\
+  v_text_uv_1=text_uv_1;\n\
 }";
 
   var one_texture_shader_fragment="\n\
 precision lowp float;\n\
-varying vec2 vBkImageUV;\n\
-uniform sampler2D uMainTexture;\n\
+varying vec2 v_text_uv_1;\n\
+uniform sampler2D texture_1;\n\
 uniform vec4 color;\n\
 void main(void) {\n\
-  if (vBkImageUV[0]<0.0 || vBkImageUV[1]<0.0 || vBkImageUV[0]>1.0 || vBkImageUV[1]>1.0) {\n\
+  if (v_text_uv_1[0]<0.0 || v_text_uv_1[1]<0.0 || v_text_uv_1[0]>1.0 || v_text_uv_1[1]>1.0) {\n\
     gl_FragColor = color;\n\
   } else {\n\
-    vec4 mainTextureColor = texture2D(uMainTexture, vBkImageUV);\n\
+    vec4 mainTextureColor = texture2D(texture_1, v_text_uv_1);\n\
     gl_FragColor = mix(color, mainTextureColor, mainTextureColor.a);\n\
     gl_FragColor.a = max(color.a, mainTextureColor.a);\n\
   }\n\
@@ -234,10 +207,10 @@ void main(void) {\n\
 
   var two_textures_vertex_shader="\n\
 attribute vec3 position;\n\
-attribute vec2 uv;\n\
-attribute vec2 bkImageUV;\n\
-varying vec2 vUV;\n\
-varying vec2 vBkImageUV;\n\
+attribute vec2 text_uv_1;\n\
+attribute vec2 text_uv_2;\n\
+varying vec2 v_text_uv_1;\n\
+varying vec2 v_text_uv_2;\n\
 uniform float ratio;\n\
 const float c_precision = 65536.;\n\
 mat4 createProjMatrix () {\n\
@@ -247,25 +220,25 @@ mat4 createProjMatrix () {\n\
 }\n\
 void main(void) {\n\
   gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
-  vUV=uv;\n\
-  vBkImageUV=bkImageUV;\n\
+  v_text_uv_2 = text_uv_2;\n\
+  v_text_uv_1 = text_uv_1;\n\
 }";
 
   var two_textures_shader_fragment="\n\
 precision lowp float;\n\
-varying vec2 vUV;\n\
-varying vec2 vBkImageUV;\n\
-uniform sampler2D uBckTexture;\n\
-uniform sampler2D uMainTexture;\n\
+varying vec2 v_text_uv_1;\n\
+varying vec2 v_text_uv_2;\n\
+uniform sampler2D texture_1;\n\
+uniform sampler2D texture_2;\n\
 uniform float uTextureFlag;\n\
 uniform vec4 color;\n\
 void main(void) {\n\
-  vec4 mainTextureColor = texture2D(uMainTexture, vUV);\n\
+  vec4 mainTextureColor = texture2D(texture_1, v_text_uv_1);\n\
   vec4 tmpColor;\n\
-  if (vBkImageUV[0]<0.0 || vBkImageUV[1]<0.0 || vBkImageUV[0]>1.0 || vBkImageUV[1]>1.0) {\n\
+  if (v_text_uv_1[0]<0.0 || v_text_uv_1[1]<0.0 || v_text_uv_1[0]>1.0 || v_text_uv_1[1]>1.0) {\n\
     tmpColor = color;\n\
   } else {\n\
-    vec4 bckTextureColor = texture2D(uBckTexture, vBkImageUV);\n\
+    vec4 bckTextureColor = texture2D(texture_2, v_text_uv_2);\n\
     tmpColor = mix(color, bckTextureColor, bckTextureColor.a);\n\
     tmpColor.a = max(color.a, bckTextureColor.a);\n\
   }\n\
@@ -275,7 +248,6 @@ void main(void) {\n\
 
   basicShaderProgram = createProgram (basic_vertex_shader, basic_shader_fragment);
   drawShadowShaderProgram = createProgram (shadow_vertex_shader, shadow_shader_fragment);
-  imageShaderProgram = createProgram (image_vertex_shader, image_shader_fragment);
   oneTextureShaderProgram = createProgram (one_texture_vertex_shader, one_texture_shader_fragment);
   twoTexturesShaderProgram = createProgram (two_textures_vertex_shader, two_textures_shader_fragment);
 

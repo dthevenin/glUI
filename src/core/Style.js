@@ -53,8 +53,8 @@ Style.prototype = {
   _shadow_offset: null,
   _shadow_blur: 10,
   
-  __gl_texture_bck_image: null,
-  __gl_bck_image_uv_buffer: null,
+  __texture_bck_image: null,
+  __texture_bck_buffer: null,
   
   __views: null,
 
@@ -64,16 +64,16 @@ Style.prototype = {
    */
   destructor : function ()
   {
-    if (this.__gl_texture_bck_image) {
+    if (this.__texture_bck_image) {
       gl_free_texture_image (this._background_image);
-      this.__gl_texture_bck_image = null;
+      this.__texture_bck_image = null;
     }
     
     Styles.remove (this);
     
-//     if (this.__gl_bck_image_uv_buffer) {
-//       gl_ctx.deleteBuffer (this.__gl_bck_image_uv_buffer);
-//       this.__gl_bck_image_uv_buffer = null;
+//     if (this.__texture_bck_buffer) {
+//       gl_ctx.deleteBuffer (this.__texture_bck_buffer);
+//       this.__texture_bck_buffer = null;
 //     }
 
     GLObject.prototype.destructor.call (this);
@@ -401,19 +401,19 @@ util.addClassProperties (Style, {
       this._background_image = v;
       
       if (!v) {
-        if (this.__gl_texture_bck_image) {
+        if (this.__texture_bck_image) {
           gl_free_texture_image (this._background_image);
-          this.__gl_texture_bck_image = null;
+          this.__texture_bck_image = null;
         }
       }
       else {
         var self = this;
         gl_get_texture_from_image_url (
           self._background_image, function (texture) {
-            self.__gl_texture_bck_image = texture;
+            self.__texture_bck_image = texture;
             self.viewsShouldRepaint ();
             
-//             if (!self.__gl_bck_image_uv_buffer) {
+//             if (!self.__texture_bck_buffer) {
 //               self.backgroundImageUV = [0,1, 0,0, 1,1, 1,0];
 //             }
           }
@@ -514,11 +514,11 @@ util.addClassProperties (Style, {
       
 //       var UV = new Float32Array (v);
 // 
-//       if (!this.__gl_bck_image_uv_buffer) {
-//         this.__gl_bck_image_uv_buffer = gl_ctx.createBuffer ();
+//       if (!this.__texture_bck_buffer) {
+//         this.__texture_bck_buffer = gl_ctx.createBuffer ();
 //       }
 // 
-//       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this.__gl_bck_image_uv_buffer);
+//       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, this.__texture_bck_buffer);
 //       console.log (UV)
 //       gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, UV, gl_ctx.STATIC_DRAW);
       this.viewsShouldRepaint ();
@@ -551,9 +551,9 @@ Style.restoreGLContext = function () {
   for (; i < l; i++) {
     style = Styles [i];
     if (style) {
-      if (style.__gl_texture_bck_image) {
-        gl_ctx.deleteTexture (style.__gl_texture_bck_image);
-        style.__gl_texture_bck_image = gl_ctx.createTexture ();
+      if (style.__texture_bck_image) {
+        gl_ctx.deleteTexture (style.__texture_bck_image);
+        style.__texture_bck_image = gl_ctx.createTexture ();
       }
     }
   }
