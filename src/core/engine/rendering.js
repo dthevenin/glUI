@@ -431,8 +431,7 @@ function getLayerGraphRendered (gl_ctx) {
         attr_position_loc = program.attribLoc.position;
       }
 
-      // Set up all the vertex attributes for vertices
-      // ATTRIBUTE INDEX 1
+      // Set attribute texture projection
       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.__texture_uv_buffer);
       gl_ctx.vertexAttribPointer (attr_bkImageUV_loc, 2, gl_ctx.FLOAT, false, 0, 0);
  
@@ -449,10 +448,10 @@ function getLayerGraphRendered (gl_ctx) {
       }
     }
 
+    // Set object position matrix
     program.uniform.Mmatrix (sprite.m_matrix);
     
-    // Set up all the vertex attributes for vertices
-    // ATTRIBUTE INDEX 0
+    // Set attribute vertices
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, vertices_buffer);
     gl_ctx.vertexAttribPointer (attr_position_loc, 3, gl_ctx.FLOAT,false, 0, 0);
 
