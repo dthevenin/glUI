@@ -155,134 +155,131 @@ function getLayerGraphRendered (gl_ctx) {
     viewport = sprite.__view_port;    
     gl_ctx.viewport (viewport [0], viewport [1], viewport [2], viewport [3]);
 
-    // General mode rendering
-    {
-      var style = gl_view.style, c_buffer;
-      if (!style) {
-        style = _default_style;
-      }
+    var style = gl_view.style, c_buffer;
+    if (!style) {
+      style = _default_style;
+    }
 
-      if (style && style._background_color) {
-        c_buffer = style._background_color.__gl_array;
+    if (style && style._background_color) {
+      c_buffer = style._background_color.__gl_array;
+    }
+    else {
+      c_buffer = Color.default.__gl_array;
+    }
+  
+    if (sprite.user_program) {
+      program = sprite.user_program;
+      program.useIt ();
+      
+      if (program.configureParameters) {
+        program.configureParameters (sprite, gl_view, style);
       }
-      else {
-        c_buffer = Color.default.__gl_array;
-      }
-    
-      if (sprite.user_program) {
-        program = sprite.user_program;
+    }
+    else if (sprite.texture && style.__texture_bck_image) {
+      program = twoTexturesShaderProgram;
+      if (previous_program !== twoTexturesShaderProgram) {
         program.useIt ();
-        
-        if (program.configureParameters) {
-          program.configureParameters (sprite, gl_view, style);
-        }
       }
-      else if (sprite.texture && style.__texture_bck_image) {
-        program = twoTexturesShaderProgram;
-        if (previous_program !== twoTexturesShaderProgram) {
-          program.useIt ();
-        }
-   
-        attribute.normalize = false;
-        attribute.type = gl_ctx.FLOAT;
-        attribute.stride = 0;
-        attribute.offset = 0;
+ 
+      attribute.normalize = false;
+      attribute.type = gl_ctx.FLOAT;
+      attribute.stride = 0;
+      attribute.offset = 0;
 
-        // first texture
-        attribute.buffer = object_uv_buffer;
-        attribute.numComponents = 2;
-        program.attrib.text_uv_1 (attribute);
+      // first texture
+      attribute.buffer = object_uv_buffer;
+      attribute.numComponents = 2;
+      program.attrib.text_uv_1 (attribute);
 
-        texture1.bindToUnit = bindToUnitTEXTURE0_1;
-        program.textures.texture_1 (texture1, sprite);
-        
-        // second texture
-        attribute.buffer = object_bck_image_uv_buffer;
-        attribute.numComponents = 2;
-        program.attrib.text_uv_2 (attribute);
-        gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, style._background_image_uv, gl_ctx.STATIC_DRAW);
+      texture1.bindToUnit = bindToUnitTEXTURE0_1;
+      program.textures.texture_1 (texture1, sprite);
+      
+      // second texture
+      attribute.buffer = object_bck_image_uv_buffer;
+      attribute.numComponents = 2;
+      program.attrib.text_uv_2 (attribute);
+      gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, style._background_image_uv, gl_ctx.STATIC_DRAW);
 
-        texture2.bindToUnit = bindToUnitTEXTURE_bck_image;
-        program.textures.texture_2 (texture2, style);
+      texture2.bindToUnit = bindToUnitTEXTURE_bck_image;
+      program.textures.texture_2 (texture2, style);
 
-        // color background
-        program.uniform.color (c_buffer);
+      // color background
+      program.uniform.color (c_buffer);
+    }
+    else if (sprite.image_texture) {
+      program = oneTextureShaderProgram;
+      if (previous_program !== oneTextureShaderProgram) {
+        program.useIt ();
       }
-      else if (sprite.image_texture) {
-        program = oneTextureShaderProgram;
-        if (previous_program !== oneTextureShaderProgram) {
-          program.useIt ();
-        }
 
-        attribute.normalize = false;
-        attribute.type = gl_ctx.FLOAT;
-        attribute.stride = 0;
-        attribute.offset = 0;
+      attribute.normalize = false;
+      attribute.type = gl_ctx.FLOAT;
+      attribute.stride = 0;
+      attribute.offset = 0;
 
-        // first texture
-        attribute.buffer = object_uv_buffer;
-        attribute.numComponents = 2;
-        program.attrib.text_uv_1 (attribute);
+      // first texture
+      attribute.buffer = object_uv_buffer;
+      attribute.numComponents = 2;
+      program.attrib.text_uv_1 (attribute);
 
-        texture1.bindToUnit = bindToUnitTEXTURE0_2;
-        program.textures.texture_1 (texture1, sprite);
+      texture1.bindToUnit = bindToUnitTEXTURE0_2;
+      program.textures.texture_1 (texture1, sprite);
 
-        // color background
-        program.uniform.color (c_buffer);
+      // color background
+      program.uniform.color (c_buffer);
+    }
+    else if (sprite.texture) {
+      program = oneTextureShaderProgram;
+      if (previous_program !== oneTextureShaderProgram) {
+        program.useIt ();
       }
-      else if (sprite.texture) {
-        program = oneTextureShaderProgram;
-        if (previous_program !== oneTextureShaderProgram) {
-          program.useIt ();
-        }
 
-        attribute.normalize = false;
-        attribute.type = gl_ctx.FLOAT;
-        attribute.stride = 0;
-        attribute.offset = 0;
+      attribute.normalize = false;
+      attribute.type = gl_ctx.FLOAT;
+      attribute.stride = 0;
+      attribute.offset = 0;
 
-        // first texture
-        attribute.buffer = default_object_bck_image_uv_buffer;
-        attribute.numComponents = 2;
-        program.attrib.text_uv_1 (attribute);
+      // first texture
+      attribute.buffer = default_object_bck_image_uv_buffer;
+      attribute.numComponents = 2;
+      program.attrib.text_uv_1 (attribute);
 
-        texture1.bindToUnit = bindToUnitTEXTURE0_1;
-        program.textures.texture_1 (texture1, sprite);
+      texture1.bindToUnit = bindToUnitTEXTURE0_1;
+      program.textures.texture_1 (texture1, sprite);
 
-        // color background
-        program.uniform.color (c_buffer);
+      // color background
+      program.uniform.color (c_buffer);
+    }
+    else if (style.__texture_bck_image) {
+      program = oneTextureShaderProgram;
+      if (previous_program !== oneTextureShaderProgram) {
+        program.useIt ();
       }
-      else if (style.__texture_bck_image) {
-        program = oneTextureShaderProgram;
-        if (previous_program !== oneTextureShaderProgram) {
-          program.useIt ();
-        }
 
-        attribute.normalize = false;
-        attribute.type = gl_ctx.FLOAT;
-        attribute.stride = 0;
-        attribute.offset = 0;
+      attribute.normalize = false;
+      attribute.type = gl_ctx.FLOAT;
+      attribute.stride = 0;
+      attribute.offset = 0;
 
-        // first texture
-        attribute.buffer = object_bck_image_uv_buffer;
-        attribute.numComponents = 2;
-        program.attrib.text_uv_1 (attribute);
-        gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, style._background_image_uv, gl_ctx.STATIC_DRAW);
+      // first texture
+      attribute.buffer = object_bck_image_uv_buffer;
+      attribute.numComponents = 2;
+      program.attrib.text_uv_1 (attribute);
+      gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, style._background_image_uv, gl_ctx.STATIC_DRAW);
 
-        texture1.bindToUnit = bindToUnitTEXTURE_bck_image;
-        program.textures.texture_1 (texture1, style);
+      texture1.bindToUnit = bindToUnitTEXTURE_bck_image;
+      program.textures.texture_1 (texture1, style);
 
-        // color background
-        program.uniform.color (c_buffer);
+      // color background
+      program.uniform.color (c_buffer);
+    }
+    else {
+      program = basicShaderProgram;
+      if (previous_program !== basicShaderProgram) {
+        program.useIt ();
       }
-      else {
-        program = basicShaderProgram;
-        if (previous_program !== basicShaderProgram) {
-          program.useIt ();
-        }
 
-        program.uniform.color (c_buffer);
-      }
+      program.uniform.color (c_buffer);
     }
     
     // set the ratio vector for the projection matrix.
@@ -459,11 +456,10 @@ function getLayerGraphRendered (gl_ctx) {
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, vertices_buffer);
     gl_ctx.vertexAttribPointer (attr_position_loc, 3, gl_ctx.FLOAT,false, 0, 0);
 
+    // set up the faces
     if (!default_faces_activated) {
       // set default faces
-      gl_ctx.bindBuffer (
-        gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer
-      );
+      gl_ctx.bindBuffer (gl_ctx.ELEMENT_ARRAY_BUFFER, object_faces_buffer);
       gl_ctx.bufferData (
         gl_ctx.ELEMENT_ARRAY_BUFFER,
         default_triangle_faces,
