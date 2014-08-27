@@ -75,13 +75,13 @@ function initPrograms () {
   **********************************************/
   
   var pickup_vertex_shader="\n\
-attribute vec3 position;\n\
+attribute vec2 position;\n\
 uniform mat4 Mmatrix;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 \n\
 void main(void) {\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 0., 1.);\n\
 }";
 
   var pickup_shader_fragment="\n\
@@ -96,7 +96,7 @@ void main(void) {\n\
 **********************************************/
 
   var draw_vertex_shader="\n\
-attribute vec3 position;\n\
+attribute vec2 position;\n\
 uniform mat4 Mmatrix;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
@@ -106,7 +106,7 @@ attribute vec2 text_uv;\n\
 varying vec2 v_text_uv;\n\
 \n\
 void main(void) {\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 0., 1.);\n\
   v_text_uv = text_uv;\n\
 }";
 
@@ -121,7 +121,7 @@ void main(void) {\n\
 }";
 
   var shadow_vertex_shader="\n\
-attribute vec3 position;\n\
+attribute vec2 position;\n\
 uniform mat4 Pmatrix;\n\
 uniform mat4 Vmatrix;\n\
 uniform mat4 Mmatrix;\n\
@@ -129,7 +129,7 @@ uniform mat4 Mmatrix;\n\
 varying vec2 vPos;\n\
 \n\
 void main(void) {\n\
-  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+  gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 0., 1.);\n\
   vPos = position.xy;\n\
 }";
 
@@ -155,7 +155,7 @@ void main(void) {\n\
 **********************************************/
 
   var basic_vertex_shader="\n\
-attribute vec3 position;\n\
+attribute vec2 position;\n\
 uniform float ratio;\n\
 const float c_precision = 65536.;\n\
 mat4 createProjMatrix () {\n\
@@ -164,7 +164,7 @@ mat4 createProjMatrix () {\n\
   return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
 }\n\
 void main(void) {\n\
-  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
+  gl_Position = createProjMatrix ()*vec4(position, 0., 1.);\n\
 }";
 
   var basic_shader_fragment="\n\
@@ -175,7 +175,7 @@ void main(void) {\n\
 }";
 
   var one_texture_vertex_shader="\n\
-attribute vec3 position;\n\
+attribute vec2 position;\n\
 attribute vec2 text_uv_1;\n\
 varying vec2 v_text_uv_1;\n\
 uniform float ratio;\n\
@@ -186,7 +186,7 @@ mat4 createProjMatrix () {\n\
   return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
 }\n\
 void main(void) {\n\
-  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
+  gl_Position = createProjMatrix ()*vec4(position, 0., 1.);\n\
   v_text_uv_1=text_uv_1;\n\
 }";
 
@@ -206,7 +206,7 @@ void main(void) {\n\
 }";
 
   var two_textures_vertex_shader="\n\
-attribute vec3 position;\n\
+attribute vec2 position;\n\
 attribute vec2 text_uv_1;\n\
 attribute vec2 text_uv_2;\n\
 varying vec2 v_text_uv_1;\n\
@@ -219,7 +219,7 @@ mat4 createProjMatrix () {\n\
   return mat4(ratiox,0.,0.,0., 0.,ratioy,0.,0., 0.,0.,1.,0., -1.,1.,0.,1.);\n\
 }\n\
 void main(void) {\n\
-  gl_Position = createProjMatrix ()*vec4(position, 1.);\n\
+  gl_Position = createProjMatrix ()*vec4(position, 0., 1.);\n\
   v_text_uv_2 = text_uv_2;\n\
   v_text_uv_1 = text_uv_1;\n\
 }";

@@ -4,23 +4,35 @@ function getLayerGraphRendered (gl_ctx) {
 
   var color_id_array = new Float32Array ([0,0,0,0])
   var shadow_buffer = gl_ctx.createBuffer ();
-  var shadow_vertices = new Float32Array (12);
+  var shadow_vertices = new Float32Array (8);
   glEngine.renderingMode = 0;
+
+
+
+  var toto_buffer = gl_ctx.createBuffer ();
+  var toto_vertices = new Float32Array (12);
+  var m = toto_vertices, w = 1, h = 1;
+  m[0] = 0; m[1] = 0; m[2] = 0;
+  m[3] = 0; m[4] = h; m[5] = 0;
+  m[6] = w; m[7] = 0; m[8] = 0;
+  m[9] = w; m[10] = h; m[11] = 0;
+  
+  gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, toto_buffer);
+  gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
     
-  function update_gl_vertices (sprite, obj_pos, obj_size) {
+  function update_gl_vertices (sprite, obj_size) {
     var
-      x = 0,//obj_pos[0],
-      y = 0,//obj_pos[1],
       w = obj_size [0],
       h = obj_size [1],
       m = sprite.mesh_vertices;
         
     // setup position vertices
-    m[0] = x; m[1] = y; m[2] = 0;
-    m[3] = x; m[4] = y + h; m[5] = 0;
-    m[6] = x + w; m[7] = y; m[8] = 0;
-    m[9] = x + w; m[10] = y + h; m[11] = 0;
+    m[0] = 0; m[1] = 0;
+    m[2] = 0; m[3] = h;
+    m[4] = w; m[5] = 0;
+    m[6] = w; m[7] = h;
   };
+  
 
   function update_shadow_gl_vertices (obj_size, offset, blur) {
     var
@@ -31,10 +43,10 @@ function getLayerGraphRendered (gl_ctx) {
       m = shadow_vertices;
         
     // setup position vertices
-    m[0] = x; m[1] = y; m[2] = 0;
-    m[3] = x; m[4] = y + h; m[5] = 0;
-    m[6] = x + w; m[7] = y; m[8] = 0;
-    m[9] = x + w; m[10] = y + h; m[11] = 0;
+    m[0] = x; m[1] = y;
+    m[2] = x; m[3] = y + h;
+    m[4] = x + w; m[5] = y;
+    m[6] = x + w; m[7] = y + h;
   
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, shadow_buffer);
     gl_ctx.bufferData (gl_ctx.ARRAY_BUFFER, m, gl_ctx.STATIC_DRAW);
@@ -107,7 +119,7 @@ function getLayerGraphRendered (gl_ctx) {
         );
       }
       else {
-        update_gl_vertices (sprite, gl_view._position, gl_view._size);
+        update_gl_vertices (sprite, gl_view._size);
 
         gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.mesh_vertices_buffer);
         gl_ctx.bufferData (
@@ -294,7 +306,7 @@ function getLayerGraphRendered (gl_ctx) {
     attribute.offset = 0;
     attribute.buffer = vertices_buffer;
 
-    attribute.numComponents = 3;
+    attribute.numComponents = 2;
     program.attrib.position (attribute);
     
     if (!sprite.default_meshes) {
@@ -363,6 +375,7 @@ function getLayerGraphRendered (gl_ctx) {
     }
     else {
       vertices_buffer = sprite.mesh_vertices_buffer;
+//      vertices_buffer = toto_buffer;
     }
 
     // Picking mode rendering
@@ -411,8 +424,8 @@ function getLayerGraphRendered (gl_ctx) {
     
       program.uniform.frame (
         new Float32Array ([
-          shadow_vertices[0], shadow_vertices[9],
-          shadow_vertices[1], shadow_vertices[10]
+          shadow_vertices[0], shadow_vertices[6],
+          shadow_vertices[1], shadow_vertices[7]
         ])
       );
     }
@@ -455,7 +468,7 @@ function getLayerGraphRendered (gl_ctx) {
     
     // Set attribute vertices
     gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, vertices_buffer);
-    gl_ctx.vertexAttribPointer (attr_position_loc, 3, gl_ctx.FLOAT,false, 0, 0);
+    gl_ctx.vertexAttribPointer (attr_position_loc, 2, gl_ctx.FLOAT,false, 0, 0);
 
     // set up the faces
     if (!default_faces_activated) {

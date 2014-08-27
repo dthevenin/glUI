@@ -74,8 +74,8 @@ function Sprite (id)
   
 function defaultSpriteVerticesAllocation (sprite) {
   
-  // Default mesh allocation: 4 vertices * 3 float values
-  sprite.mesh_vertices = new Float32Array (12);
+  // Default mesh allocation: 4 vertices * 2 float values
+  sprite.mesh_vertices = new Float32Array (8);
   // will use the default_triangle_faces
   sprite.triangle_faces = null;
   // do not use normals
