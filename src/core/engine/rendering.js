@@ -435,11 +435,13 @@ function getLayerGraphRendered (gl_ctx) {
       gl_ctx.bindBuffer (gl_ctx.ARRAY_BUFFER, sprite.__texture_uv_buffer);
       gl_ctx.vertexAttribPointer (attr_bkImageUV_loc, 2, gl_ctx.FLOAT, false, 0, 0);
  
+      // set alpha if its changed
       if (previous_alpha !== alpha) {
         program.uniform.uAlpha (alpha);
         previous_alpha = alpha;
       }
-          
+
+      // Set main texture from to get the paint object
       if (previous_rendering_texture !== sprite._frametexture) {
         texture1.bindToUnit = bindToUnitFRAME_TEXTURE;
         program.textures.texture (texture1, sprite);
