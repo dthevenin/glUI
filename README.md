@@ -1,3 +1,9 @@
+Spec
+====
+
+Here a draft of specs (algo, datastructure, heuristics, etc.):  https://docs.google.com/document/d/1-oTpZB6QdNt53hslE1CBFRRnhcHSRgvntf0ELUV0fC4
+
+
 First clone
 ===========
 
