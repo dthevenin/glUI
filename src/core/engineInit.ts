@@ -3,6 +3,7 @@ import { getGLContext, initRendering } from "./engine";
 import { mat4 } from "gl-matrix";
 import { Sprite } from "./sprite";
 import { Style } from "./Style";
+import { initPickBuffer } from "./event/Picking";
 
 export type GLEngineInitHandle = () => void;
 
@@ -40,7 +41,7 @@ function createCanvas(width: number, height: number): HTMLCanvasElement {
 //       vs.core.DeviceConfiguration.BROWSER_FIREFOX &&
     gl_device_pixel_ratio !== 1) {
   
-    var modes = ["crisp-edges", "-moz-crisp-edges", "-webkit-optimize-contrast"];
+    const modes = ["crisp-edges", "-moz-crisp-edges", "-webkit-optimize-contrast"];
   
     if (canvas.style.imageRendering !== undefined) {
       for (var i = 0; i < modes.length; i++) {
@@ -49,10 +50,6 @@ function createCanvas(width: number, height: number): HTMLCanvasElement {
           break;
         }
       }
-    }
-
-    else if (canvas.style["-ms-interpolation-mode"] !== undefined) {
-      canvas.style["-ms-interpolation-mode"] = "nearest-neighbor";
     }
   }
   
@@ -310,7 +307,7 @@ export function initWebGLRendering(node: HTMLElement, width: number, height: num
 
   var canvas = GL_CANVAS = createCanvas(frame_size [0], frame_size [1]);
   node.appendChild (canvas);
-  node.style.padding = 0;
+  node.style.padding = '0';
 
   canvas.addEventListener ("webglcontextlost", handleContextLost, false);
 

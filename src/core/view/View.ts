@@ -380,8 +380,7 @@ export class BaseView extends GLEventSource {
    *
    * @type Array
    */
-  set position(v: number[] | vec3) {
-    if (v.length !== 2 && v.length !== 3) { return; }
+  set position(v: vec3) {
     vec3.copy(this._position, v);
     this._updateSizeAndPos();
   }
@@ -390,8 +389,8 @@ export class BaseView extends GLEventSource {
    * @ignore
    * @type {Array.<number>}
    */
-  get position(): number[] {
-    return Array.from(this._position);
+  get position(): vec3{
+    return vec3.clone(this._position);
   }
 
   /**
