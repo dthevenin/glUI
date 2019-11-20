@@ -1,6 +1,8 @@
-import { BaseView } from "../core/view";
-import { TrajectoryVect1D, TrajectoryVect3D, TrajectoryEntry } from "./Trajectories";
+import { BaseView, View } from "../core/view";
+import { TrajectoryVect1D, TrajectoryVect3D, TrajectoryEntry, AnimationType, TrajectoriesData } from "./Trajectories";
 import { Style } from "../core/Style";
+import { Animation, AnimationTrajectoryValues, AnimationDefaultOption } from "./Animation";
+import { Chronometer } from "./Chronometer";
 
 /**
   Copyright (C) 2009-2012. David Thevenin, ViniSketch SARL (c), and
@@ -34,7 +36,7 @@ function mixAnimations(animations: Animations, new_anim: Animation) {
   }
 }
 
-export function procesAnimation(comp, animation: Animation, trajectories, clb, ctx, now: number): void {
+export function procesAnimation(comp: BaseView, animation: Animation, trajectories: AnimationTrajectoryValues<AnimationType>, clb: Function, ctx: any, now: number): void {
 
   var data_anim = {};
   for (var key in AnimationDefaultOption) {

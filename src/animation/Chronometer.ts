@@ -23,8 +23,6 @@ export enum TaskState {
   PAUSED = 2,
 }
 
-
-
 export class Chronometer {
   /** @protected */
   protected _duration: number = 300;
@@ -43,10 +41,12 @@ export class Chronometer {
   /** @protected */
   protected __end_time: number = 0;
   /** @protected */
+  protected __repeat_dur: number = 0;
+  /** @protected */
   protected __timings__: number[];
   protected _state: TaskState;
 
-  constructor(params) {
+  constructor(params: any) {
     this._state = TaskState.STOPPED;
 
     if (params.duration) this._duration = params.duration;
@@ -65,7 +65,7 @@ export class Chronometer {
    *
    * @param {any} param any parameter (scalar, Array, Object)
    */
-  start(param) {
+  start(param: any) {
     var delegate = this.delegate, self = this;
     
     if (this._state === TaskState.STARTED) return;

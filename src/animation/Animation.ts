@@ -16,7 +16,7 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {generateCubicBezierFunction, deepArrayClone } from "../util";
+import {generateCubicBezierFunction, deepArrayClone, TimingFunction } from "../util";
 import { BaseView } from "../core/view";
 import { procesAnimation } from "./engine";
 import { TrajectoryEntry, AnimationType, TrajectoryValues } from "./Trajectories";
@@ -27,7 +27,7 @@ type Rec<K extends keyof any, T> = {
 
 export type FrameDeclarations = { [property: string]: AnimationType };
 export type KeyFrame = [number, FrameDeclarations];
-type AnimationTrajectoryValues<T> = { [property: string]: TrajectoryValues<T> };
+export type AnimationTrajectoryValues<T> = { [property: string]: TrajectoryValues<T> };
 
 export class Animation {
 
@@ -128,7 +128,7 @@ export class Animation {
    * @type Function
    * @name Animation#timing
    */
-  timing: null;
+  timing: TimingFunction = null;
 
   /**
    *  Defines the properties to animate.
@@ -156,12 +156,6 @@ export class Animation {
     if (!animations) return;
 
     Object.entries(animations).forEach(([property, value]) => {
-      if (!isString (property)){
-        console.warn ('Animation, invalid constructor argument option: [' +
-          property + ', ' + value + ']');
-        return;
-      }
-      
       const values: TrajectoryValues<AnimationType> = [];
       values.push([1, deepArrayClone(value)]);
       
@@ -254,7 +248,7 @@ export class Animation {
    * @return {String} return the identifier of the animation process. You can
    *       use it to stop the animation for instance.
    */
-  process(comp: BaseView, clb, ctx, now: number): void {
+  process(comp: BaseView, clb: Function, ctx: any, now: number): void {
     return procesAnimation(comp, this, this._trajectories, clb, ctx, now);
   }
 };

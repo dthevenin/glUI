@@ -349,6 +349,8 @@ export function removeAllElementChild (elem) {
   }
 };
 
+export type TimingFunction = (pos: number) => number;
+
 /**
  *  generateCubicBezierFunction(x1, y1, x2, y2) -> Function
  *
@@ -360,7 +362,7 @@ export function removeAllElementChild (elem) {
  *  <a href="http://www.w3.org/TR/css3-transitions/#transition-timing-function_tag">
  *  CSS3 transition timing functions</a>.
  **/
-export function generateCubicBezierFunction(x1: number, y1: number, x2: number, y2: number) {
+export function generateCubicBezierFunction(x1: number, y1: number, x2: number, y2: number): TimingFunction {
   return (function (pos: number) {return CubicBezier (pos,x1,y1,x2,y2);});
 }
 
